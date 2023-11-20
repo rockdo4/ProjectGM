@@ -1,57 +1,45 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class TouchManager : Singleton<TouchManager>
+public class TouchManager : MonoBehaviour
 {
-    public bool IsHold = false;
-    private float holdTime = 0.3f;
-    private float holdTimer = 0f;
-    private float swipeTime = 0.1f;
-    private float swipeTimer = 0f;
-    private float swipeDistance = 0.2f;
+    public static bool IsTap { get; private set; }
+    public static bool IsHold {  get; private set; }
 
-    public Vector3 startPosition;
-    public Vector3 endPosition;
-    public float TouchDistance
-    {
-        get
-        {
-            return Vector3.Distance(startPosition, endPosition);
-        }
-    }
+    [Header("홀드 판정 시간")]
+    public float holdTime = 0.3f;
+    private float holdTimer = 0f;
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0))
         {
-            //startPosition = Input.GetTouch(0).position;
-            startPosition = Input.mousePosition;
+            IsTap = true;
+        }
+
+        if (IsTap)
+        {
             Holding();
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            endPosition = Input.mousePosition;
-        }
+            if (holdTimer < holdTime)
+            {
+                Debug.Log("Tap");
+            }
 
-        if (Input.touchCount == 0)
-        {
-            startPosition = Vector3.zero;
-            endPosition = Vector3.zero;
+            holdTimer = 0f;
+            IsTap = false;
+            IsHold = false;
             return;
         }
     }
 
     private void Holding()
     {
-        if (!Input.GetMouseButtonUp(0))
-        {
-            holdTimer = 0f;
-            IsHold = false;
-            return;
-        }
-
         holdTimer += Time.deltaTime;
-        if (holdTimer > holdTime)
+        if (holdTimer >= holdTime)
         {
             IsHold = true;
         }
