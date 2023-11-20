@@ -33,7 +33,7 @@ public class SaveDataV2 : SaveData
     }
 
     public int Gold { get; set; } = 0;
-    public int HighScore { get; set; } = 0;
+    public int Quest { get; set; } = 1;
 
     public override SaveData VersionUp()
     {

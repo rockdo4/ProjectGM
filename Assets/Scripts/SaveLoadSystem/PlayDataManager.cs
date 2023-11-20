@@ -1,4 +1,4 @@
-using SaveDataVC = SaveDataV1; // Version Change?
+using SaveDataVC = SaveDataV2; // Version Change?
 
 public static class PlayDataManager
 {
@@ -25,11 +25,6 @@ public static class PlayDataManager
         Save();
     }
 
-    public static void Gameover()
-    {
-        Save();
-    }
-
     public static bool Purchase(int pay)
     {
         if (pay > data.Gold)
@@ -40,5 +35,15 @@ public static class PlayDataManager
         data.Gold -= pay;
         Save();
         return true;
+    }
+
+    public static void UnlockQuest(int quest)
+    {
+        if (data.Quest != quest)
+        {
+            return;
+        }
+
+        data.Quest++;
     }
 }
