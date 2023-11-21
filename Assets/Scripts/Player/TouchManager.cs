@@ -1,47 +1,150 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class TouchManager : MonoBehaviour
+public class TouchManager : Singleton<TouchManager>
 {
-    public static bool IsTap { get; private set; }
-    public static bool IsHold {  get; private set; }
+    public enum SwipeDirection
+    {
+        None, Left, Right, Up, Down
+    }
+    public SwipeDirection swipeDirection = SwipeDirection.None;
+    public bool Taped { get; private set; }
+    public bool Holded {  get; private set; }
+    public bool Swiped { get; private set; }
 
-    [Header("홀드 판정 시간")]
+    [Header("홀드 판단 시간")]
     public float holdTime = 0.3f;
     private float holdTimer = 0f;
 
+    [Header("스와이프 판단 시간")]
+    [SerializeField]
+    public float swipeTime = 0.2f;
+
+    [Header("스와이프 판정 거리")]
+    [Range(0f, 1f)]
+    public float swipeDistance = 0.15f;
+
+    private Vector2 startPosition;
+    private Vector2 endPosition;
+    private float startTime;
+
+    public delegate void OnSwipe();
+    public event OnSwipe SwipeListeners;
+
+    public delegate void OnTap();
+    public event OnTap TapListeners;
+
+    public delegate void OnHold();
+    public event OnHold HoldListeners;
+
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            IsTap = true;
-        }
+#if UNITY_EDITOR
+#elif UNITY_ANDROID || UNITY_IOS
+#endif
 
-        if (IsTap)
+        if (Input.touchCount < 1)
         {
-            Holding();
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            if (holdTimer < holdTime)
-            {
-                Debug.Log("Tap");
-            }
-
-            holdTimer = 0f;
-            IsTap = false;
-            IsHold = false;
             return;
         }
-    }
 
-    private void Holding()
-    {
-        holdTimer += Time.deltaTime;
-        if (holdTimer >= holdTime)
+        Vector2 screenSize = new Vector2(Screen.width, Screen.height);
+        Touch touch = Input.GetTouch(0);
+
+        switch(touch.phase)
         {
-            IsHold = true;
+            case TouchPhase.Began:
+                {
+                    startPosition = new Vector2(touch.position.x / screenSize.x, touch.position.y / screenSize.x);
+                    startTime = Time.time;
+                }
+                break;
+            case TouchPhase.Moved:
+                {
+                    Holded = false;
+                    if (Time.time - startTime > swipeTime)
+                    {
+                        return;
+                    }
+                    endPosition = new Vector2(touch.position.x / screenSize.x, touch.position.y / screenSize.x);
+                }
+                break;
+            case TouchPhase.Stationary:
+                {
+                    if (Swiped || Holded)
+                    {
+                        return;
+                    }
+
+                    if (!Swiped)
+                    {
+                        Vector2 swipe = new Vector2(endPosition.x - startPosition.x, endPosition.y - startPosition.y);
+                        if (swipe.magnitude < swipeDistance)
+                        {
+                            return;
+                        }
+
+                        if (Mathf.Abs(swipe.x) > Mathf.Abs(swipe.y))
+                        { // Horizontal
+                            if (swipe.x > 0)
+                            {
+                                swipeDirection = SwipeDirection.Right;
+                            }
+                            else
+                            {
+                                swipeDirection = SwipeDirection.Left;
+                            }
+                        }
+                        else
+                        { // Vertical
+                            if (swipe.y > 0)
+                            {
+                                swipeDirection = SwipeDirection.Up;
+                            }
+                            else
+                            {
+                                swipeDirection = SwipeDirection.Down;
+                            }
+                        }
+                        Swiped = true;
+                    }
+                    if (!Holded)
+                    {
+                        holdTimer += Time.deltaTime;
+                        if (holdTimer >= holdTime)
+                        {
+                            Holded = true;
+                        }
+                    }
+                }
+                break;
+            case TouchPhase.Ended:
+                {
+                    if (!Holded && !Swiped)
+                    {
+                        Taped = true;
+                    }
+
+                    Taped = Holded = Swiped = false;
+                    holdTimer = 0f;
+                }
+                break;
+        }
+
+        if (Swiped && SwipeListeners != null)
+        {
+            Swiped = false;
+            SwipeListeners();
+        }
+        if (Taped && TapListeners != null)
+        {
+            Taped = false;
+            TapListeners();
+        }
+        if (Holded && HoldListeners != null)
+        {
+            Holded = false;
+            HoldListeners();
         }
     }
 }

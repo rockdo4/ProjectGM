@@ -6,7 +6,7 @@ public class SwipeInput : MonoBehaviour
     [SerializeField]
     public float maxSwipeTime = 0.2f;
 
-    [Header("스와이프 판정 비율")]
+    [Header("스와이프 판정 거리")]
     [Range(0f, 1f)]
     public float minSwipeDistance = 0.2f;
     public enum SwipeDirection
@@ -44,7 +44,7 @@ public class SwipeInput : MonoBehaviour
                 {
                     return;
                 }
-
+                
                 Vector2 endPosition = new Vector2(touch.position.x / screenSize.x, touch.position.y / screenSize.x);
                 Vector2 swipe = new Vector2(endPosition.x - startPosition.x, endPosition.y - startPosition.y);
 

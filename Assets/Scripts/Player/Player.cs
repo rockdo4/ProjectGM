@@ -1,27 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     private void Awake()
     {
-        gameObject.AddComponent<SwipeInput>();
-        gameObject.AddComponent<TouchManager>();
     }
 
     private void Start()
     {
-        SwipeInput.SwipeListeners += () =>
-        {
-            Debug.Log($"SwipeDirection: {SwipeInput.swipeDirection.ToString()}");
-        };
+        TouchManager.Instance.TapListeners += Attack;
+        TouchManager.Instance.SwipeListeners += Evade;
+        TouchManager.Instance.HoldListeners += AutoAttack;
     }
-    private void Update()
+
+    private void Evade()
     {
-        if (TouchManager.IsHold)
+        var swipeDirection = TouchManager.Instance.swipeDirection;
+        Debug.Log($"Evade {swipeDirection}");
+        switch (swipeDirection)
         {
-            Debug.Log("Holdddddddd");
+            case TouchManager.SwipeDirection.None:
+                break;
+            case TouchManager.SwipeDirection.Left:
+                break;
+            case TouchManager.SwipeDirection.Right:
+                break;
+            case TouchManager.SwipeDirection.Up:
+                break;
+            case TouchManager.SwipeDirection.Down:
+                break;
         }
+    }
+
+    private void Attack()
+    {
+        Debug.Log("Tap");
+    }
+
+    private void AutoAttack()
+    {
+        Debug.Log("Hold");
     }
 }
