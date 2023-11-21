@@ -41,8 +41,53 @@ public class TouchManager : Singleton<TouchManager>
     private void Update()
     {
 #if UNITY_EDITOR
+        if (Input.GetMouseButtonDown(0))
+        {
+            startPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+            endPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+            startTime = Time.time;
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            if (Holded && HoldListeners != null)
+            {
+                HoldListeners();
+            }
+
+            if (!Holded)
+            {
+                holdTimer += Time.deltaTime;
+                if (holdTimer >= holdTime)
+                {
+                    Holded = true;
+                }
+            }
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            endPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+            SwipeDetected();
+
+            if (!Holded && !Swiped)
+            {
+                Taped = true;
+            }
+
+            if (Swiped && SwipeListeners != null)
+            {
+                Swiped = false;
+                SwipeListeners();
+            }
+            else if (Taped && TapListeners != null)
+            {
+                Taped = false;
+                TapListeners();
+            }
+
+            Taped = Holded = Swiped = false;
+            holdTimer = 0f;
+        }
 #elif UNITY_ANDROID || UNITY_IOS
-#endif
         if (Input.touchCount < 1)
         {
             return;
@@ -69,17 +114,16 @@ public class TouchManager : Singleton<TouchManager>
                 {
                     if (Holded && HoldListeners != null)
                     {
-                        Holded = false;
                         HoldListeners();
                     }
-                    if (Holded)
+
+                    if (!Holded)
                     {
-                        return;
-                    }
-                    holdTimer += Time.deltaTime;
-                    if (holdTimer >= holdTime)
-                    {
-                        Holded = true;
+                        holdTimer += Time.deltaTime;
+                        if (holdTimer >= holdTime)
+                        {
+                            Holded = true;
+                        }
                     }
                 }
                 break;
@@ -98,7 +142,7 @@ public class TouchManager : Singleton<TouchManager>
                         Swiped = false;
                         SwipeListeners();
                     }
-                    if (Taped && TapListeners != null)
+                    else if (Taped && TapListeners != null)
                     {
                         Taped = false;
                         TapListeners();
@@ -109,6 +153,7 @@ public class TouchManager : Singleton<TouchManager>
                 }
                 break;
         }
+#endif
     }
 
     public void SwipeDetected()
