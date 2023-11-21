@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TouchManager : Singleton<TouchManager>
@@ -9,7 +8,7 @@ public class TouchManager : Singleton<TouchManager>
     }
     public SwipeDirection swipeDirection = SwipeDirection.None;
     public bool Taped { get; private set; }
-    public bool Holded {  get; private set; }
+    public bool Holded { get; private set; }
     public bool Swiped { get; private set; }
 
     [Header("홀드 판단 시간")]
@@ -28,6 +27,7 @@ public class TouchManager : Singleton<TouchManager>
     private Vector2 endPosition;
     private float startTime;
 
+    #region Events
     public delegate void OnSwipe();
     public event OnSwipe SwipeListeners;
 
@@ -36,13 +36,13 @@ public class TouchManager : Singleton<TouchManager>
 
     public delegate void OnHold();
     public event OnHold HoldListeners;
+    #endregion
 
     private void Update()
     {
 #if UNITY_EDITOR
 #elif UNITY_ANDROID || UNITY_IOS
 #endif
-
         if (Input.touchCount < 1)
         {
             return;
@@ -51,78 +51,57 @@ public class TouchManager : Singleton<TouchManager>
         Vector2 screenSize = new Vector2(Screen.width, Screen.height);
         Touch touch = Input.GetTouch(0);
 
-        switch(touch.phase)
+        switch (touch.phase)
         {
             case TouchPhase.Began:
                 {
                     startPosition = new Vector2(touch.position.x / screenSize.x, touch.position.y / screenSize.x);
+                    endPosition = new Vector2(touch.position.x / screenSize.x, touch.position.y / screenSize.x);
                     startTime = Time.time;
                 }
                 break;
             case TouchPhase.Moved:
                 {
                     Holded = false;
-                    if (Time.time - startTime > swipeTime)
-                    {
-                        return;
-                    }
-                    endPosition = new Vector2(touch.position.x / screenSize.x, touch.position.y / screenSize.x);
                 }
                 break;
             case TouchPhase.Stationary:
                 {
-                    if (Swiped || Holded)
+                    if (Holded && HoldListeners != null)
+                    {
+                        Holded = false;
+                        HoldListeners();
+                    }
+                    if (Holded)
                     {
                         return;
                     }
-
-                    if (!Swiped)
+                    holdTimer += Time.deltaTime;
+                    if (holdTimer >= holdTime)
                     {
-                        Vector2 swipe = new Vector2(endPosition.x - startPosition.x, endPosition.y - startPosition.y);
-                        if (swipe.magnitude < swipeDistance)
-                        {
-                            return;
-                        }
-
-                        if (Mathf.Abs(swipe.x) > Mathf.Abs(swipe.y))
-                        { // Horizontal
-                            if (swipe.x > 0)
-                            {
-                                swipeDirection = SwipeDirection.Right;
-                            }
-                            else
-                            {
-                                swipeDirection = SwipeDirection.Left;
-                            }
-                        }
-                        else
-                        { // Vertical
-                            if (swipe.y > 0)
-                            {
-                                swipeDirection = SwipeDirection.Up;
-                            }
-                            else
-                            {
-                                swipeDirection = SwipeDirection.Down;
-                            }
-                        }
-                        Swiped = true;
-                    }
-                    if (!Holded)
-                    {
-                        holdTimer += Time.deltaTime;
-                        if (holdTimer >= holdTime)
-                        {
-                            Holded = true;
-                        }
+                        Holded = true;
                     }
                 }
                 break;
             case TouchPhase.Ended:
                 {
+                    endPosition = new Vector2(touch.position.x / screenSize.x, touch.position.y / screenSize.x);
+                    SwipeDetected();
+
                     if (!Holded && !Swiped)
                     {
                         Taped = true;
+                    }
+
+                    if (Swiped && SwipeListeners != null)
+                    {
+                        Swiped = false;
+                        SwipeListeners();
+                    }
+                    if (Taped && TapListeners != null)
+                    {
+                        Taped = false;
+                        TapListeners();
                     }
 
                     Taped = Holded = Swiped = false;
@@ -130,21 +109,42 @@ public class TouchManager : Singleton<TouchManager>
                 }
                 break;
         }
+    }
 
-        if (Swiped && SwipeListeners != null)
+    public void SwipeDetected()
+    {
+        if (Time.time - startTime > swipeTime)
         {
-            Swiped = false;
-            SwipeListeners();
+            return;
         }
-        if (Taped && TapListeners != null)
+        Vector2 swipe = new Vector2(endPosition.x - startPosition.x, endPosition.y - startPosition.y);
+        if (swipe.magnitude < swipeDistance)
         {
-            Taped = false;
-            TapListeners();
+            return;
         }
-        if (Holded && HoldListeners != null)
-        {
-            Holded = false;
-            HoldListeners();
+
+        if (Mathf.Abs(swipe.x) > Mathf.Abs(swipe.y))
+        { // Horizontal
+            if (swipe.x > 0)
+            {
+                swipeDirection = SwipeDirection.Right;
+            }
+            else
+            {
+                swipeDirection = SwipeDirection.Left;
+            }
         }
+        else
+        { // Vertical
+            if (swipe.y > 0)
+            {
+                swipeDirection = SwipeDirection.Up;
+            }
+            else
+            {
+                swipeDirection = SwipeDirection.Down;
+            }
+        }
+        Swiped = true;
     }
 }

@@ -2,10 +2,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private void Awake()
-    {
-    }
-
     private void Start()
     {
         TouchManager.Instance.TapListeners += Attack;
@@ -19,8 +15,6 @@ public class Player : MonoBehaviour
         Debug.Log($"Evade {swipeDirection}");
         switch (swipeDirection)
         {
-            case TouchManager.SwipeDirection.None:
-                break;
             case TouchManager.SwipeDirection.Left:
                 break;
             case TouchManager.SwipeDirection.Right:
