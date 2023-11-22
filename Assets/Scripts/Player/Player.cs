@@ -1,29 +1,131 @@
+using Cinemachine;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    [Header("PlayerStat ¿¬°á")]
+    public PlayerStat stat;
+
+    private GameObject enemy;
+    private Rigidbody rigid;
+
+    private float evadeTimer = 0f;
+    private int evadePoint;
+    private Coroutine coEvade;
+
+    #region TestData
+    public Slider slider;
+    private float attackRange = 10f;
+    private Color evadeColor = Color.white;
+    private Color evadeSuccessColor = Color.yellow;
+    private Color justEvadeSuccessColor = Color.green;
+    private Color hitColor = Color.red;
+    private Color originalColor;
+    private MeshRenderer ren;
+    #endregion
+
+    private void Awake()
+    {
+        rigid = GetComponent<Rigidbody>();
+        ren = GetComponent<MeshRenderer>();
+    }
+
     private void Start()
     {
         TouchManager.Instance.TapListeners += Attack;
         TouchManager.Instance.SwipeListeners += Evade;
         TouchManager.Instance.HoldListeners += AutoAttack;
+
+        originalColor = ren.material.color;
+        enemy = GameObject.FindGameObjectWithTag(Tags.enemy);
+
+        //Look At Enemy
+        CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera.LookAt = enemy.transform;
+    }
+
+    private void Update()
+    {
+        if (enemy == null)
+        {
+            return;
+        }
+
+        //Attack
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (evadeTimer < stat.justEvadeTime)
+            {
+                ren.material.color = justEvadeSuccessColor;
+                evadePoint += stat.justEvadePoint;
+            }
+            else if (evadeTimer >= stat.justEvadeTime && evadeTimer < stat.evadeTime)
+            {
+                ren.material.color = evadeSuccessColor;
+                evadePoint += stat.evadePoint;
+            }
+            else
+            {
+                ren.material.color = hitColor;
+                evadePoint += stat.hitEvadePoint;
+            }
+            slider.value = evadePoint;
+        }
+
+        transform.LookAt(enemy.transform.position);
     }
 
     private void Evade()
     {
-        var swipeDirection = TouchManager.Instance.swipeDirection;
-        Debug.Log($"Evade {swipeDirection}");
-        switch (swipeDirection)
+        var direction = TouchManager.Instance.swipeDirection switch
         {
-            case TouchManager.SwipeDirection.Left:
-                break;
-            case TouchManager.SwipeDirection.Right:
-                break;
-            case TouchManager.SwipeDirection.Up:
-                break;
-            case TouchManager.SwipeDirection.Down:
-                break;
+            TouchManager.SwipeDirection.Left => Vector3.left,
+            TouchManager.SwipeDirection.Right => Vector3.right,
+            TouchManager.SwipeDirection.Down => Vector3.back,
+            TouchManager.SwipeDirection.Up => Vector3.forward,
+            _ => Vector3.zero
+        };
+
+        var distance = Vector3.Distance(transform.position, enemy.transform.position);
+        //if (direction == Vector3.forward && distance > attackRange)
+        //{
+        //    //Move
+        //}
+        //else
+        //{
+        //    //Evade
+        //}
+
+        if (coEvade != null)
+        {
+            StopCoroutine(coEvade);
+            coEvade = null;
         }
+        coEvade = StartCoroutine(CoEvade(direction));
+    }
+
+    private IEnumerator CoMove()
+    {
+        yield return null;
+    }
+
+    private IEnumerator CoEvade(Vector3 direction)
+    {
+        ren.material.color = evadeColor;
+
+        evadeTimer = 0f;
+        while (evadeTimer < stat.evadeTime)
+        {
+            evadeTimer += Time.deltaTime;
+            var position = rigid.position;
+            position += rigid.rotation * direction * stat.MoveSpeed * Time.deltaTime;
+            rigid.MovePosition(position);
+
+            yield return null;
+        }
+
+        ren.material.color = originalColor;
     }
 
     private void Attack()
