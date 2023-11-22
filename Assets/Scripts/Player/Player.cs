@@ -17,7 +17,6 @@ public class Player : MonoBehaviour
 
     #region TestData
     public Slider slider;
-    private float attackRange = 10f;
     private Color evadeColor = Color.white;
     private Color evadeSuccessColor = Color.yellow;
     private Color justEvadeSuccessColor = Color.green;
@@ -87,7 +86,7 @@ public class Player : MonoBehaviour
             _ => Vector3.zero
         };
 
-        var distance = Vector3.Distance(transform.position, enemy.transform.position);
+        //var distance = Vector3.Distance(transform.position, enemy.transform.position);
         //if (direction == Vector3.forward && distance > attackRange)
         //{
         //    //Move
@@ -116,15 +115,13 @@ public class Player : MonoBehaviour
         evadeTimer = 0f;
         while (evadeTimer < stat.evadeTime)
         {
-            evadeTimer += Time.deltaTime;
-
-            // if 최대거리인가? 움직이지 않고 움직이고
+            evadeTimer += Time.fixedDeltaTime;
 
             var position = rigid.position;
             position += rigid.rotation * direction * stat.MoveSpeed * Time.deltaTime;
             rigid.MovePosition(position);
 
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
 
         coEvade = null;
