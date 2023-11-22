@@ -10,9 +10,17 @@ public class Player : MonoBehaviour
 
     private GameObject enemy;
     private Rigidbody rigid;
-
+    private Collider colldier;
+    
     private float evadeTimer = 0f;
     private int evadePoint;
+    private float EvadeDistance
+    {
+        get
+        {
+            return colldier.bounds.size.y * 2;
+        }
+    }
     private Coroutine coEvade;
 
     #region TestData
@@ -27,8 +35,9 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        rigid = GetComponent<Rigidbody>();
         ren = GetComponent<MeshRenderer>();
+        rigid = GetComponent<Rigidbody>();
+        colldier = GetComponent<Collider>();
     }
 
     private void Start()
@@ -37,7 +46,16 @@ public class Player : MonoBehaviour
         TouchManager.Instance.SwipeListeners += Evade;
         TouchManager.Instance.HoldListeners += AutoAttack;
 
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            // Collider의 크기 얻기
+            Vector3 size = collider.bounds.size;
+            Debug.Log("Rigidbody의 Collider 크기: " + size);
+        }
+
         originalColor = ren.material.color;
+
         enemy = GameObject.FindGameObjectWithTag(Tags.enemy);
 
         //Look At Enemy
@@ -112,14 +130,17 @@ public class Player : MonoBehaviour
     {
         ren.material.color = evadeColor;
 
+        var position = rigid.position;
         evadeTimer = 0f;
         while (evadeTimer < stat.evadeTime)
         {
             evadeTimer += Time.fixedDeltaTime;
 
-            var position = rigid.position;
-            position += rigid.rotation * direction * stat.MoveSpeed * Time.deltaTime;
-            rigid.MovePosition(position);
+            Debug.Log(Vector3.Distance(rigid.position, position));
+            if (Vector3.Distance(rigid.position, position) <= EvadeDistance)
+            {
+                rigid.MovePosition(rigid.position + rigid.rotation * direction * stat.MoveSpeed * Time.deltaTime);
+            }
 
             yield return new WaitForFixedUpdate();
         }
