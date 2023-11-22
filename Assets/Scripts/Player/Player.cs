@@ -99,8 +99,7 @@ public class Player : MonoBehaviour
 
         if (coEvade != null)
         {
-            StopCoroutine(coEvade);
-            coEvade = null;
+            return;
         }
         coEvade = StartCoroutine(CoEvade(direction));
     }
@@ -118,6 +117,9 @@ public class Player : MonoBehaviour
         while (evadeTimer < stat.evadeTime)
         {
             evadeTimer += Time.deltaTime;
+
+            // if 최대거리인가? 움직이지 않고 움직이고
+
             var position = rigid.position;
             position += rigid.rotation * direction * stat.MoveSpeed * Time.deltaTime;
             rigid.MovePosition(position);
@@ -125,6 +127,7 @@ public class Player : MonoBehaviour
             yield return null;
         }
 
+        coEvade = null;
         ren.material.color = originalColor;
     }
 
