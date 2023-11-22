@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 public static class SaveLoadSystem
 {
-    public static int RecentlyVersion { get; } = 2; // Version Change?
+    public static int RecentlyVersion { get; } = 3; // Version Change?
 
     public static string SaveDirectory
     {
@@ -23,7 +23,7 @@ public static class SaveLoadSystem
         }
 
         var path = Path.Combine(SaveDirectory, fileName);
-        using (var writer = new JsonTextWriter(new StreamWriter(path))) // Add Converter
+        using (var writer = new JsonTextWriter(new StreamWriter(path))) // Add Converter?
         {
             var serializer = new JsonSerializer();
             serializer.Converters.Add(new Vector3Converter());
@@ -52,7 +52,7 @@ public static class SaveLoadSystem
         }
         using (var reader = new JsonTextReader(new StringReader(json)))
         {
-            var serializer = new JsonSerializer();
+            var serializer = new JsonSerializer(); // Add Converter?
             serializer.Converters.Add(new Vector3Converter());
             serializer.Converters.Add(new QuaternionConverter());
 
@@ -64,6 +64,14 @@ public static class SaveLoadSystem
                 case 2:
                     result = serializer.Deserialize<SaveDataV2>(reader);
                     break;
+                case 3:
+                    result = serializer.Deserialize<SaveDataV3>(reader);
+                    break;
+                    /*
+                case 4:
+                    result = serializer.Deserialize<SaveDataV4>(reader);
+                    break;
+                    */
             }
             while (result.Version < RecentlyVersion)
             {
