@@ -57,7 +57,7 @@ public class SaveDataV3 : SaveData
     public int Gold { get; set; } = 0;
     public int Quest { get; set; } = 1;
     public readonly List<Item> Inventory = new List<Item>();
-    public readonly Dictionary<string, DateTime> Equipment = new Dictionary<string, DateTime>();
+    public readonly Dictionary<Item.ItemType, DateTime> Equipment = new Dictionary<Item.ItemType, DateTime>();
 
     public override SaveData VersionUp()
     {
