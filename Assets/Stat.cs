@@ -4,13 +4,13 @@ using UnityEngine;
 public class Stat : ScriptableObject
 {
     [Header("체력")]
-    public float HP;
+    public int HP;
 
     [Header("공격력")]
-    public float AttackDamage;
+    public int AttackDamage;
 
     [Header("방어력")]
-    public float Defence;
+    public int Defence;
 
     [Header("이동속도")]
     public float MoveSpeed;
