@@ -371,7 +371,9 @@ public class EnemyAI : MonoBehaviour
     {
         if (detectedPlayer != null)
         {
+            animator.SetFloat("MoveSpeed", 0.5f);
             transform.position = Vector3.MoveTowards(transform.position, detectedPlayer.position, Time.deltaTime * movementSpeed);
+            transform.LookAt(detectedPlayer); // Look At Player code
             return INode.EnemyState.Running;
         }
 
@@ -388,6 +390,7 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
+            animator.SetTrigger("BearWalk");
             transform.position = Vector3.MoveTowards(transform.position, originPos, Time.deltaTime * movementSpeed);
             return INode.EnemyState.Running;
         }
