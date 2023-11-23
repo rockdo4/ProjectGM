@@ -1,7 +1,9 @@
+using UnityEngine;
+
 public class StateManager
 {
     private StateBase currentState;
-
+    
     public void ChangeState(StateBase newState)
     {
         if (currentState != null)
@@ -21,4 +23,11 @@ public class StateManager
         }
     }
 
+    public void FixedUpdate()
+    {
+        if (currentState != null)
+        {
+            currentState.FixedUpdate();
+        }
+    }
 }
