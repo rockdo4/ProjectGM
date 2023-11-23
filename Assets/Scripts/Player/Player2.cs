@@ -19,6 +19,8 @@ public class Player2 : MonoBehaviour
     public PlayerController playerController { get; private set; }
     public Animator anim; // animator test code
 
+    public CinemachineVirtualCamera virtualCamera;
+
     public enum States
     {
         Idle,
@@ -29,21 +31,33 @@ public class Player2 : MonoBehaviour
     private List<StateBase> states = new List<StateBase>();
     public States currentState { get; private set; }
 
+    public float EvadeDistance
+    {
+        get
+        {
+            return colldier.bounds.size.y * 2;
+        }
+    }
+    public float DistanceToEnemy
+    {
+        get
+        {
+            if (enemy == null)
+            {
+                return 0f;
+            }
+            return Vector3.Distance(transform.position, enemy.transform.position);
+        }
+    }
+
     #region TestData
     public Slider slider;
-    public Color evadeColor = Color.white;
-    public Color evadeSuccessColor = Color.yellow;
-    public Color justEvadeSuccessColor = Color.green;
-    public Color hitColor = Color.red;
-    public Color originalColor;
-    public MeshRenderer ren { get; private set; }
     #endregion
 
     private void Awake()
     {
         Instance = this;
 
-        ren = GetComponent<MeshRenderer>();
         rigid = GetComponent<Rigidbody>();
         colldier = GetComponent<Collider>();
         playerController = GetComponent<PlayerController>();
@@ -53,10 +67,10 @@ public class Player2 : MonoBehaviour
     private void Start()
     {
         enemy = GameObject.FindGameObjectWithTag(Tags.enemy);
-        //Look At Enemy
-        CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera.LookAt = enemy.transform;
-        originalColor = ren.material.color;
 
+        //Look At Enemy
+        virtualCamera.LookAt = enemy.transform;
+        
         states.Add(new PlayerIdleState(playerController));
         states.Add(new PlayerAttackState(playerController));
         states.Add(new PlayerEvadeState(playerController));

@@ -20,14 +20,22 @@ public class PlayerController : MonoBehaviour
         }
         equipWeapon = PlayDataManager.data.Inventory.Find
             (i => i.instanceID == PlayDataManager.data.Equipment[Item.ItemType.Weapon]);
-        weaponSO.MakeItem(equipWeapon, hand);
+        
+
     }
 
     private void Start()
     {
         TouchManager.Instance.TapListeners += () =>
         {
-            player.anim.SetTrigger("Attack"); // animation test code
+            if (player.DistanceToEnemy > player.EvadeDistance)
+            {
+                player.SetState(Player2.States.Evade);
+            }
+            else
+            { 
+                player.SetState(Player2.States.Attack);
+            }
         };
         TouchManager.Instance.SwipeListeners += () =>
         {
@@ -41,6 +49,9 @@ public class PlayerController : MonoBehaviour
         {
 
         };
+
+        //player.anim.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+        player.anim.SetIKPosition(AvatarIKGoal.RightHand, weaponSO.MakeItem(equipWeapon).transform.position);
     }
 
     private void Update()
@@ -50,20 +61,19 @@ public class PlayerController : MonoBehaviour
         {
             if (player.evadeTimer < player.stat.justEvadeTime)
             {
-                player.ren.material.color = player.justEvadeSuccessColor;
                 player.evadePoint += player.stat.justEvadePoint;
             }
             else if (player.evadeTimer >= player.stat.justEvadeTime && player.evadeTimer < player.stat.evadeTime)
             {
-                player.ren.material.color = player.evadeSuccessColor;
                 player.evadePoint += player.stat.evadePoint;
             }
             else
             {
-                player.ren.material.color = player.hitColor;
                 player.evadePoint += player.stat.hitEvadePoint;
             }
             player.slider.value = player.evadePoint;
         }
+
+
     }
 }

@@ -1,5 +1,9 @@
+using UnityEngine;
+
 public class PlayerAttackState : PlayerStateBase
 {
+
+
     public PlayerAttackState(PlayerController controller) : base(controller)
     {
 
@@ -7,7 +11,7 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void Enter()
     {
-
+        Player2.Instance.anim.SetTrigger("Attack");
     }
 
     public override void Update()
