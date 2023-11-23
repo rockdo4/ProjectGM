@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Data;
 
 public abstract class SaveData
 {
@@ -37,10 +39,14 @@ public class SaveDataV2 : SaveData
 
     public override SaveData VersionUp()
     {
+        var data = new SaveDataV3();
+        data.Gold = Gold;
+        data.Quest = Quest;
+
         return null;
     }
 }
-/*
+
 public class SaveDataV3 : SaveData
 {
     public SaveDataV3()
@@ -48,25 +54,17 @@ public class SaveDataV3 : SaveData
         Version = 3;
     }
 
-    public int HighScore { get; set; } = 0;
     public int Gold { get; set; } = 0;
-    public int Upgrade_HealthUP { get; set; } = 0;
-    public int Upgrade_GoldUP { get; set; } = 0;
-    public int Upgrade_SpeedDown { get; set; } = 0;
+    public int Quest { get; set; } = 1;
+    public readonly List<Item> Inventory = new List<Item>();
+    public readonly Dictionary<string, DateTime> Equipment = new Dictionary<string, DateTime>();
 
     public override SaveData VersionUp()
     {
-        var data = new SaveDataV4();
-        data.HighScore = HighScore;
-        data.Gold = Gold;
-        data.Upgrade_HealthUP = Upgrade_HealthUP;
-        data.Upgrade_GoldUP = Upgrade_GoldUP;
-        data.Upgrade_SpeedDown = Upgrade_SpeedDown;
-
-        return data;
+        return null;
     }
 }
-
+/*
 public class SaveDataV4 : SaveData
 {
     public SaveDataV4()
