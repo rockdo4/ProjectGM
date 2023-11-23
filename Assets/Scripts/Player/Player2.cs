@@ -61,32 +61,13 @@ public class Player2 : Singleton<Player2>
     private void Update()
     {
         stateManager?.Update();
-
-        //피격 테스트
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if (evadeTimer < stat.justEvadeTime)
-            {
-                ren.material.color = justEvadeSuccessColor;
-                evadePoint += stat.justEvadePoint;
-            }
-            else if (evadeTimer >= stat.justEvadeTime && evadeTimer < stat.evadeTime)
-            {
-                ren.material.color = evadeSuccessColor;
-                evadePoint += stat.evadePoint;
-            }
-            else
-            {
-                ren.material.color = hitColor;
-                evadePoint += stat.hitEvadePoint;
-            }
-            slider.value = evadePoint;
-        }
     }
 
     private void FixedUpdate()
     {
-        stateManager?.FixedUpdate();        
+        rigid.transform.LookAt(enemy.transform);
+
+        stateManager?.FixedUpdate();
     }
 
     public void SetState(States newState)

@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     {
         TouchManager.Instance.TapListeners += () =>
         {
-            player.SetState(Player2.States.Idle);
+
         };
         TouchManager.Instance.SwipeListeners += () =>
         {
@@ -31,6 +31,25 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        player.rigid.transform.LookAt(player.enemy.transform);
+        //피격 테스트
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (player.evadeTimer < player.stat.justEvadeTime)
+            {
+                player.ren.material.color = player.justEvadeSuccessColor;
+                player.evadePoint += player.stat.justEvadePoint;
+            }
+            else if (player.evadeTimer >= player.stat.justEvadeTime && player.evadeTimer < player.stat.evadeTime)
+            {
+                player.ren.material.color = player.evadeSuccessColor;
+                player.evadePoint += player.stat.evadePoint;
+            }
+            else
+            {
+                player.ren.material.color = player.hitColor;
+                player.evadePoint += player.stat.hitEvadePoint;
+            }
+            player.slider.value = player.evadePoint;
+        }
     }
 }
