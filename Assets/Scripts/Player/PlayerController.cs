@@ -4,16 +4,30 @@ public class PlayerController : MonoBehaviour
 {
     public Player2 player { get; private set; }
 
+    // equip weapon test
+    private Item equipWeapon = null; 
+    public Transform hand;
+    public ItemSO weaponSO;
+
     private void Awake()
     {
         player = GetComponent<Player2>();
+
+        // equip weapon test
+        if (PlayDataManager.data == null)
+        {
+            PlayDataManager.Init();
+        }
+        equipWeapon = PlayDataManager.data.Inventory.Find
+            (i => i.instanceID == PlayDataManager.data.Equipment[Item.ItemType.Weapon]);
+        weaponSO.MakeItem(equipWeapon, hand);
     }
 
     private void Start()
     {
         TouchManager.Instance.TapListeners += () =>
         {
-
+            player.anim.SetTrigger("Attack"); // animation test code
         };
         TouchManager.Instance.SwipeListeners += () =>
         {

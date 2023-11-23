@@ -17,6 +17,7 @@ public class Player2 : MonoBehaviour
     public Rigidbody rigid { get; private set; }
     public Collider colldier { get; private set; }
     public PlayerController playerController { get; private set; }
+    public Animator anim; // animator test code
 
     public enum States
     {
@@ -46,6 +47,7 @@ public class Player2 : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         colldier = GetComponent<Collider>();
         playerController = GetComponent<PlayerController>();
+        anim = GetComponent<Animator>(); // animator test code
     }
 
     private void Start()
