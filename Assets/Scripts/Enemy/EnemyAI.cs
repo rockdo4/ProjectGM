@@ -27,6 +27,9 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     float health = 100f;
 
+    [SerializeField]
+    private Animator animator;
+
     private bool isTwoPhase;
     float phaseTwoHealthThreshold;
 
@@ -76,6 +79,7 @@ public class EnemyAI : MonoBehaviour
                 //    break;
         }
         originPos = transform.position;
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -94,15 +98,18 @@ public class EnemyAI : MonoBehaviour
             attackTimer += Time.deltaTime;
             if (attackTimer >= attackDuration)
             {
+
                 isAttacking = false;
                 attackTimer = 0f;
             }
         }
+
         if (!isAttacking)
         {
             // 랜덤어택 2번씩 발생하는 오류
             // 1. 오퍼레이트 호출 주기 조절
             // 2. bool변수 많이 추가 하지만?
+            // 3. 
 
             BTRunner.Operate();
         }
@@ -121,6 +128,8 @@ public class EnemyAI : MonoBehaviour
                     (
                         new List<INode>()
                         {
+                            // 공격중에 플레이어가 사거리에서 벗어나면 프레임단위로 공격하는 문제가 발생
+
                             new ConditionNode(IsBearPhaseOne), // 페이즈 1 체크
                             new ActionNode(() => ExecuteAttackPattern(attackPattern1)) // 페이즈 1 공격 패턴
                         }
@@ -134,7 +143,7 @@ public class EnemyAI : MonoBehaviour
                             new ActionNode(() => ExecuteAttackPattern(attackPattern2)) // 페이즈 2 공격 패턴
                         }
                     ),
-            
+
                     new SequenceNode
                     (
                         new List<INode>()
@@ -145,7 +154,7 @@ public class EnemyAI : MonoBehaviour
                     ),
                     new ActionNode(MoveToOriginPosition)
                 }
-        );; ;
+        ); ; ;
     }
 
     #endregion
@@ -161,21 +170,6 @@ public class EnemyAI : MonoBehaviour
             // phaseTwoAttackSequence = 0; // 페이즈 2의 공격 시퀀스 초기화
         }
         return !isTwoPhase; // 페이즈 1로 다시 반환
-
-
-        //if (!isTwoPhase && health <= phaseTwoHealthThreshold)
-        //{
-        //    isTwoPhase = true;
-        //    Debug.Log("페이즈 2로 전환");
-        //    phaseTwoAttackSequence = 0;
-        //}
-        //else if (isTwoPhase && health <= phaseTwoHealthThreshold)
-        //{
-        //    isTwoPhase = false;
-        //    phaseOneAttackSequence = 0;
-        //    Debug.Log("페이즈 1로 전환");
-        //}
-        //return !isTwoPhase; // 페이즈 1로 다시 반환
     }
 
     private INode.EnemyState ExecuteAttackPattern(int[] pattern)
@@ -217,43 +211,144 @@ public class EnemyAI : MonoBehaviour
 
     INode.EnemyState DoMeleeAttack1()
     {
+        //if (isAttacking)
+        //{
+        //    // 공격 중일 때도 플레이어와의 거리를 체크해서
+        //    // 플레이어가 위치를 벗어나면 다시 추격할 수 있게
+        //    // 하지만 이걸 쓰면 난이도가 올라가서 안쓸듯
+        //    if (detectedPlayer == null || Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
+        //    {
+        //        isAttacking = false;
+        //        return INode.EnemyState.Failure;
+        //    }
+        //    return INode.EnemyState.Success;
+        //}
+
+        if (detectedPlayer == null)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
         if (isAttacking)
             return INode.EnemyState.Failure;
+
+        if (Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure; // 플레이어가 사거리 밖이면 추격 상태로 전환
+        }
 
         if (detectedPlayer != null &&
             Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
             isAttacking = true;
+            animator.SetTrigger("MeleeAttack_A");
             return INode.EnemyState.Success;
         }
+
         return INode.EnemyState.Failure;
+
+
+
+
+
+
+
+
+
+
+
+        //if (isAttacking)
+        //    return INode.EnemyState.Failure;
+
+        //if (detectedPlayer != null &&
+        //    Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        //{
+        //    isAttacking = true;
+        //    return INode.EnemyState.Success;
+        //}
+        //return INode.EnemyState.Failure;
     }
 
     INode.EnemyState DoMeleeAttack2()
     {
+        if (detectedPlayer == null)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
         if (isAttacking)
             return INode.EnemyState.Failure;
 
-        if (detectedPlayer != null && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        if (Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure; // 플레이어가 사거리 밖이면 추격 상태로 전환
+        }
+
+        if (detectedPlayer != null &&
+            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
             isAttacking = true;
+            animator.SetTrigger("MeleeAttack_B");
             return INode.EnemyState.Success;
         }
 
         return INode.EnemyState.Failure;
+
+
+        //if (isAttacking)
+        //    return INode.EnemyState.Failure;
+
+        //if (detectedPlayer != null && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        //{
+        //    isAttacking = true;
+        //    return INode.EnemyState.Success;
+        //}
+
+        //return INode.EnemyState.Failure;
     }
 
     INode.EnemyState DoMeleeAttack3()
     {
+
+        if (detectedPlayer == null)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
         if (isAttacking)
             return INode.EnemyState.Failure;
 
-        if (detectedPlayer != null && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        if (Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure; // 플레이어가 사거리 밖이면 추격 상태로 전환
+        }
+
+        if (detectedPlayer != null &&
+            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
             isAttacking = true;
+            animator.SetTrigger("MeleeAttack_C");
             return INode.EnemyState.Success;
         }
+
         return INode.EnemyState.Failure;
+
+
+        //if (isAttacking)
+        //    return INode.EnemyState.Failure;
+
+        //if (detectedPlayer != null && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        //{
+        //    isAttacking = true;
+        //    return INode.EnemyState.Success;
+        //}
+        //return INode.EnemyState.Failure;
     }
     #endregion
 
