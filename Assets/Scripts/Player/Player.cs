@@ -10,14 +10,21 @@ public class Player : MonoBehaviour
 
     private GameObject enemy;
     private Rigidbody rigid;
-
+    private Collider colldier;
+    
     private float evadeTimer = 0f;
     private int evadePoint;
+    private float EvadeDistance
+    {
+        get
+        {
+            return colldier.bounds.size.y * 2;
+        }
+    }
     private Coroutine coEvade;
 
     #region TestData
     public Slider slider;
-    private float attackRange = 10f;
     private Color evadeColor = Color.white;
     private Color evadeSuccessColor = Color.yellow;
     private Color justEvadeSuccessColor = Color.green;
@@ -28,8 +35,9 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        rigid = GetComponent<Rigidbody>();
         ren = GetComponent<MeshRenderer>();
+        rigid = GetComponent<Rigidbody>();
+        colldier = GetComponent<Collider>();
     }
 
     private void Start()
@@ -38,7 +46,16 @@ public class Player : MonoBehaviour
         TouchManager.Instance.SwipeListeners += Evade;
         TouchManager.Instance.HoldListeners += AutoAttack;
 
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            // Collider의 크기 얻기
+            Vector3 size = collider.bounds.size;
+            Debug.Log("Rigidbody의 Collider 크기: " + size);
+        }
+
         originalColor = ren.material.color;
+
         enemy = GameObject.FindGameObjectWithTag(Tags.enemy);
 
         //Look At Enemy
@@ -87,7 +104,7 @@ public class Player : MonoBehaviour
             _ => Vector3.zero
         };
 
-        var distance = Vector3.Distance(transform.position, enemy.transform.position);
+        //var distance = Vector3.Distance(transform.position, enemy.transform.position);
         //if (direction == Vector3.forward && distance > attackRange)
         //{
         //    //Move
@@ -99,8 +116,7 @@ public class Player : MonoBehaviour
 
         if (coEvade != null)
         {
-            StopCoroutine(coEvade);
-            coEvade = null;
+            return;
         }
         coEvade = StartCoroutine(CoEvade(direction));
     }
@@ -114,17 +130,22 @@ public class Player : MonoBehaviour
     {
         ren.material.color = evadeColor;
 
+        var position = rigid.position;
         evadeTimer = 0f;
         while (evadeTimer < stat.evadeTime)
         {
-            evadeTimer += Time.deltaTime;
-            var position = rigid.position;
-            position += rigid.rotation * direction * stat.MoveSpeed * Time.deltaTime;
-            rigid.MovePosition(position);
+            evadeTimer += Time.fixedDeltaTime;
 
-            yield return null;
+            Debug.Log(Vector3.Distance(rigid.position, position));
+            if (Vector3.Distance(rigid.position, position) <= EvadeDistance)
+            {
+                rigid.MovePosition(rigid.position + rigid.rotation * direction * stat.MoveSpeed * Time.deltaTime);
+            }
+
+            yield return new WaitForFixedUpdate();
         }
 
+        coEvade = null;
         ren.material.color = originalColor;
     }
 
