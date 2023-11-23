@@ -2,14 +2,10 @@ public interface INode
 {
     public enum EnemyState
     {
-        Idle,
-        Attack,
-        Trace,
-        Die,
-        Fail,
-        Groggy,
+        Success,
+        Running,
+        Failure,
     }
-
     public EnemyState Evaluate();
     
 }

@@ -12,23 +12,23 @@ public sealed class SequenceNode : INode
     public INode.EnemyState Evaluate()
     {
         if (_childs == null || _childs.Count == 0)
-            return INode.EnemyState.Fail;
+            return INode.EnemyState.Failure;
 
         foreach (var child in _childs)
         {
             switch (child.Evaluate())
             {
-                case INode.EnemyState.Trace:
-                    return INode.EnemyState.Trace;
+                case INode.EnemyState.Running:
+                    return INode.EnemyState.Running;
 
-                case INode.EnemyState.Attack:
+                case INode.EnemyState.Success:
                     continue;
 
-                case INode.EnemyState.Fail:
-                    return INode.EnemyState.Fail;
+                case INode.EnemyState.Failure:
+                    return INode.EnemyState.Failure;
             }
         }
 
-        return INode.EnemyState.Attack;
+        return INode.EnemyState.Success;
     }
 }

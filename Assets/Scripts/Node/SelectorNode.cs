@@ -11,20 +11,20 @@ public sealed class SelectorNode : INode
     public INode.EnemyState Evaluate()
     {
         if (childs == null)
-            return INode.EnemyState.Fail;
+            return INode.EnemyState.Failure;
 
         foreach (var child in childs)
         {
             switch (child.Evaluate())
             {
-                case INode.EnemyState.Trace:
-                    return INode.EnemyState.Trace;
+                case INode.EnemyState.Running:
+                    return INode.EnemyState.Running;
 
-                case INode.EnemyState.Attack:
-                    return INode.EnemyState.Attack;
+                case INode.EnemyState.Success:
+                    return INode.EnemyState.Success;
             }
         }
 
-        return INode.EnemyState.Fail;
+        return INode.EnemyState.Failure;
     }
 }
