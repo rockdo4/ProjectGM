@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     {
         TouchManager.Instance.TapListeners += () =>
         {
-
+            player.anim.SetTrigger("Attack"); // animation test code
         };
         TouchManager.Instance.SwipeListeners += () =>
         {
