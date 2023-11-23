@@ -27,12 +27,14 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     float health = 100f;
 
-    private bool isTwoPhase = false;
+    private bool isTwoPhase;
     float phaseTwoHealthThreshold;
 
+    private int[] attackPattern1 = new int[] { 1, 2 };
     private int bearAttackPatternIndex = 0;
-    private int[] attackPattern = new int[] { 1, 2, 3, 2, 3 };
 
+    private int[] attackPattern2 = new int[] { 1, 2, 3, 2, 3 };
+    private int bearAttackPatternIndex2 = 0;
 
     private int phaseOneAttackSequence = 0;
     private int phaseTwoAttackSequence = 0;
@@ -58,11 +60,12 @@ public class EnemyAI : MonoBehaviour
     private void Awake()
     {
         phaseTwoHealthThreshold = health * 0.5f;
+        isTwoPhase = false;
 
         switch (enemyType)
         {
             case EnemyType.Enemy1:
-                BTRunner = new BehaviorTreeRunner(Enemy1BT());
+                BTRunner = new BehaviorTreeRunner(BearBT());
                 break;
 
                 //case EnemyType.Enemy2:
@@ -77,7 +80,6 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        // 테스트
         if (Input.GetKeyDown(KeyCode.H))
         {
             health /= 2;
@@ -109,7 +111,7 @@ public class EnemyAI : MonoBehaviour
 
     #region 몬스터 종류별 액션
 
-    INode Enemy1BT()
+    INode BearBT()
     {
         return new SelectorNode
         (
@@ -119,41 +121,20 @@ public class EnemyAI : MonoBehaviour
                     (
                         new List<INode>()
                         {
-                            new ConditionNode(IsAttackSequenceOne),
-                            new ActionNode(DoMeleeAttack1), // 그냥 1공격만 함
+                            new ConditionNode(IsBearPhaseOne), // 페이즈 1 체크
+                            new ActionNode(() => ExecuteAttackPattern(attackPattern1)) // 페이즈 1 공격 패턴
                         }
                     ),
+
                     new SequenceNode
                     (
                         new List<INode>()
                         {
-                            new ConditionNode(IsAttackSequenceTwo),
-                            new ActionNode(DoMeleeAttack2),
+                            new InverterNode(new ConditionNode(IsBearPhaseOne)),
+                            new ActionNode(() => ExecuteAttackPattern(attackPattern2)) // 페이즈 2 공격 패턴
                         }
                     ),
-                    new SequenceNode
-                    (
-                        new List<INode>() // 2페이즈
-                        {
-                            //new ConditionNode(IsBearPhaseTwo),
-                            //new ActionNode(EnterBearPhaseTwo),
-
-                            // 순서가 꼬이는 단점
-                            // 스위치문 단점
-                            // 
-
-                            new ConditionNode(IsAttackSequenceOne),
-                            new ActionNode(DoMeleeAttack1),
-                            new ConditionNode(IsAttackSequenceTwo),
-                            new ActionNode(DoMeleeAttack2),
-                            new ConditionNode(IsAttackSequenceTwo),
-                            new ActionNode(DoMeleeAttack3),
-                             new ConditionNode(IsAttackSequenceTwo),
-                            new ActionNode(DoMeleeAttack2),
-                            new ConditionNode(IsAttackSequenceTwo),
-                            new ActionNode(DoMeleeAttack3),
-                        }
-                    ),
+            
                     new SequenceNode
                     (
                         new List<INode>()
@@ -164,22 +145,74 @@ public class EnemyAI : MonoBehaviour
                     ),
                     new ActionNode(MoveToOriginPosition)
                 }
-        );
+        );; ;
     }
 
     #endregion
 
     #region 공격노드
 
-
-    private bool IsAttackSequenceOne()
+    private bool IsBearPhaseOne()
     {
-        return phaseOneAttackSequence == 0;
+        if (!isTwoPhase && health <= phaseTwoHealthThreshold)
+        {
+            isTwoPhase = true;
+            Debug.Log("페이즈 2로 전환");
+            // phaseTwoAttackSequence = 0; // 페이즈 2의 공격 시퀀스 초기화
+        }
+        return !isTwoPhase; // 페이즈 1로 다시 반환
+
+
+        //if (!isTwoPhase && health <= phaseTwoHealthThreshold)
+        //{
+        //    isTwoPhase = true;
+        //    Debug.Log("페이즈 2로 전환");
+        //    phaseTwoAttackSequence = 0;
+        //}
+        //else if (isTwoPhase && health <= phaseTwoHealthThreshold)
+        //{
+        //    isTwoPhase = false;
+        //    phaseOneAttackSequence = 0;
+        //    Debug.Log("페이즈 1로 전환");
+        //}
+        //return !isTwoPhase; // 페이즈 1로 다시 반환
     }
 
-    private bool IsAttackSequenceTwo()
+    private INode.EnemyState ExecuteAttackPattern(int[] pattern)
     {
-        return phaseOneAttackSequence == 1;
+        INode.EnemyState result = INode.EnemyState.Failure;
+
+        // 페이즈에 따라 사용할 시퀀스 인덱스 결정
+        int attackSequence = isTwoPhase ? phaseTwoAttackSequence : phaseOneAttackSequence;
+
+        switch (pattern[attackSequence])
+        {
+            case 1:
+                Debug.Log(isTwoPhase ? "페이즈2 공격A" : "페이즈1 공격A");
+                result = DoMeleeAttack1();
+                break;
+            case 2:
+                Debug.Log(isTwoPhase ? "페이즈2 공격B" : "페이즈1 공격B");
+                result = DoMeleeAttack2();
+                break;
+            case 3:
+                Debug.Log("페이즈2 공격C");
+                result = DoMeleeAttack3();
+                break;
+        }
+
+        if (result == INode.EnemyState.Success)
+        {
+            if (isTwoPhase)
+            {
+                phaseTwoAttackSequence = (phaseTwoAttackSequence + 1) % pattern.Length;
+            }
+            else
+            {
+                phaseOneAttackSequence = (phaseOneAttackSequence + 1) % pattern.Length;
+            }
+        }
+        return result;
     }
 
     INode.EnemyState DoMeleeAttack1()
@@ -190,12 +223,9 @@ public class EnemyAI : MonoBehaviour
         if (detectedPlayer != null &&
             Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
-            Debug.Log("근접 공격 111!");
             isAttacking = true;
-            phaseOneAttackSequence = 1;
             return INode.EnemyState.Success;
         }
-
         return INode.EnemyState.Failure;
     }
 
@@ -206,11 +236,10 @@ public class EnemyAI : MonoBehaviour
 
         if (detectedPlayer != null && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
-            Debug.Log("근접 공격 222!");
             isAttacking = true;
-            phaseOneAttackSequence = 0;
             return INode.EnemyState.Success;
         }
+
         return INode.EnemyState.Failure;
     }
 
@@ -221,7 +250,7 @@ public class EnemyAI : MonoBehaviour
 
         if (detectedPlayer != null && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
-            Debug.Log("근접 공격 333!");
+            isAttacking = true;
             return INode.EnemyState.Success;
         }
         return INode.EnemyState.Failure;
@@ -277,45 +306,5 @@ public class EnemyAI : MonoBehaviour
 
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
-    }
-
-    INode.EnemyState EnterBearPhaseTwo()
-    {
-        // 2페이즈 공격 패턴에 따른 행동 실행
-        // 하지만 인덱스는 별로인듯?
-
-        INode.EnemyState result = INode.EnemyState.Failure; // 페일러 상태로 초기화
-        switch (attackPattern[bearAttackPatternIndex])
-        {
-            case 1:
-                Debug.Log("진짜 2페이즈 공격 스위치문 돌입");
-                result = DoMeleeAttack1();
-                break;
-            case 2:
-                result = DoMeleeAttack2();
-                break;
-            case 3:
-                result = DoMeleeAttack3();
-                break;
-        }
-        
-        if (result == INode.EnemyState.Success) // 공격을 성공할때만 인덱스 업데이트
-        {
-            bearAttackPatternIndex = (bearAttackPatternIndex + 1) % attackPattern.Length;
-        }
-
-        return result;
-    }
-
-    private bool IsBearPhaseTwo()
-    {
-        // 2페이즈 진입 조건 한번만 진입하도록 수정
-        if (!isTwoPhase && health <= phaseTwoHealthThreshold)
-        {
-            isTwoPhase = true; // 2페이즈 상태 전환
-            Debug.Log("페이즈2 진입!!!!");
-            return true;
-        }
-        return false;
     }
 }
