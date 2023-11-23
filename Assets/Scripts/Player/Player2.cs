@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player2 : Singleton<Player2>
+public class Player2 : MonoBehaviour
 {
     [Header("PlayerStat ¿¬°á")]
     public PlayerStat stat;
+
+    public static Player2 Instance;
 
     public float evadeTimer = 0f;
     public int evadePoint = 0;
@@ -38,6 +40,8 @@ public class Player2 : Singleton<Player2>
 
     private void Awake()
     {
+        Instance = this;
+
         ren = GetComponent<MeshRenderer>();
         rigid = GetComponent<Rigidbody>();
         colldier = GetComponent<Collider>();
