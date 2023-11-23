@@ -27,9 +27,12 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     float health = 100f;
 
-    float phaseTwoHealthThreshold = 50f;
+    private bool isTwoPhase = false;
+    float phaseTwoHealthThreshold;
 
-    bool isTwoPhase = false;
+    private int bearAttackPatternIndex = 0;
+    private int[] attackPattern = new int[] { 1, 2, 3, 2, 3 };
+
 
     private int phaseOneAttackSequence = 0;
     private int phaseTwoAttackSequence = 0;
@@ -50,28 +53,12 @@ public class EnemyAI : MonoBehaviour
     {
         Enemy1,
         Enemy2,
-        Enemy3,
-        Enemy4,
-        Enemy5,
-        Enemy6,
-        Enemy7,
-        Enemy8,
-        Enemy9,
-        Enemy10,
-        Enemy11,
-        Enemy12,
-        Enemy13,
-        Enemy14,
-        Enemy15,
-        Enemy16,
-        Enemy17,
-        Enemy18,
-        Enemy19,
-        Enemy20,
     }
 
     private void Awake()
     {
+        phaseTwoHealthThreshold = health * 0.5f;
+
         switch (enemyType)
         {
             case EnemyType.Enemy1:
@@ -90,6 +77,13 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
+        // 테스트
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            health /= 2;
+            Debug.Log("반피로 줄임, 현재 체력 : " + health);
+        }
+
         if (health <= 0)
             return;
 
@@ -139,6 +133,29 @@ public class EnemyAI : MonoBehaviour
                     ),
                     new SequenceNode
                     (
+                        new List<INode>() // 2페이즈
+                        {
+                            //new ConditionNode(IsBearPhaseTwo),
+                            //new ActionNode(EnterBearPhaseTwo),
+
+                            // 순서가 꼬이는 단점
+                            // 스위치문 단점
+                            // 
+
+                            new ConditionNode(IsAttackSequenceOne),
+                            new ActionNode(DoMeleeAttack1),
+                            new ConditionNode(IsAttackSequenceTwo),
+                            new ActionNode(DoMeleeAttack2),
+                            new ConditionNode(IsAttackSequenceTwo),
+                            new ActionNode(DoMeleeAttack3),
+                             new ConditionNode(IsAttackSequenceTwo),
+                            new ActionNode(DoMeleeAttack2),
+                            new ConditionNode(IsAttackSequenceTwo),
+                            new ActionNode(DoMeleeAttack3),
+                        }
+                    ),
+                    new SequenceNode
+                    (
                         new List<INode>()
                         {
                             new ActionNode(DetectPlayer),
@@ -154,60 +171,6 @@ public class EnemyAI : MonoBehaviour
 
     #region 공격노드
 
-    //INode Enemy1AttackPattern()
-    //{
-    //    if (isTwoPhase)
-    //    {
-    //        return PhaseTwoAttackPattern();
-    //    }
-    //    else
-    //    {
-    //        return PhaseOneAttackPattern();
-    //    }
-    //}
-
-    //// 1페이즈 공격 패턴
-    //INode PhaseOneAttackPattern()
-    //{
-        
-
-    //    Debug.Log(phaseOneAttackSequence);
-
-    //    switch (phaseOneAttackSequence)
-    //    {
-            
-    //        case 0:
-    //            phaseOneAttackSequence = 1;
-    //            return new ActionNode(DoMeleeAttack1);
-                
-    //        case 1:
-    //            phaseOneAttackSequence = 0;
-    //            return new ActionNode(DoMeleeAttack2);
-
-    //        default:
-    //            return null;
-    //    }
-    //}
-
-    //// 2페이즈 공격 패턴
-    //INode PhaseTwoAttackPattern()
-    //{
-    //    phaseTwoAttackSequence = (phaseTwoAttackSequence + 1) % 5;
-
-    //    switch (phaseTwoAttackSequence)
-    //    {
-    //        case 0:
-    //        case 3:
-    //            return new ActionNode(DoMeleeAttack1);
-    //        case 1:
-    //        case 4:
-    //            return new ActionNode(DoMeleeAttack2);
-    //        case 2:
-    //            return new ActionNode(DoMeleeAttack3);
-    //        default:
-    //            return null;
-    //    }
-    //}
 
     private bool IsAttackSequenceOne()
     {
@@ -218,10 +181,7 @@ public class EnemyAI : MonoBehaviour
     {
         return phaseOneAttackSequence == 1;
     }
-    /// <summary>
-    /// //////
-    /// </summary>
-    /// <returns></returns>
+
     INode.EnemyState DoMeleeAttack1()
     {
         if (isAttacking)
@@ -317,5 +277,45 @@ public class EnemyAI : MonoBehaviour
 
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
+    }
+
+    INode.EnemyState EnterBearPhaseTwo()
+    {
+        // 2페이즈 공격 패턴에 따른 행동 실행
+        // 하지만 인덱스는 별로인듯?
+
+        INode.EnemyState result = INode.EnemyState.Failure; // 페일러 상태로 초기화
+        switch (attackPattern[bearAttackPatternIndex])
+        {
+            case 1:
+                Debug.Log("진짜 2페이즈 공격 스위치문 돌입");
+                result = DoMeleeAttack1();
+                break;
+            case 2:
+                result = DoMeleeAttack2();
+                break;
+            case 3:
+                result = DoMeleeAttack3();
+                break;
+        }
+        
+        if (result == INode.EnemyState.Success) // 공격을 성공할때만 인덱스 업데이트
+        {
+            bearAttackPatternIndex = (bearAttackPatternIndex + 1) % attackPattern.Length;
+        }
+
+        return result;
+    }
+
+    private bool IsBearPhaseTwo()
+    {
+        // 2페이즈 진입 조건 한번만 진입하도록 수정
+        if (!isTwoPhase && health <= phaseTwoHealthThreshold)
+        {
+            isTwoPhase = true; // 2페이즈 상태 전환
+            Debug.Log("페이즈2 진입!!!!");
+            return true;
+        }
+        return false;
     }
 }
