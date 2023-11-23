@@ -28,18 +28,15 @@ public class PlayerController : MonoBehaviour
     {
         TouchManager.Instance.TapListeners += () =>
         {
-            if (player.DistanceToEnemy > player.EvadeDistance)
+            if (player.currentState == Player2.States.Evade)
             {
-                player.SetState(Player2.States.Evade);
+                return;
             }
-            else
-            { 
-                player.SetState(Player2.States.Attack);
-            }
+            player.SetState(Player2.States.Attack);
         };
         TouchManager.Instance.SwipeListeners += () =>
         {
-            if (player.currentState == Player2.States.Evade)
+            if (player.IsAttack)
             {
                 return;
             }
@@ -47,7 +44,11 @@ public class PlayerController : MonoBehaviour
         };
         TouchManager.Instance.HoldListeners += () =>
         {
-
+            if (player.currentState == Player2.States.Evade)
+            {
+                return;
+            }
+            player.SetState(Player2.States.Attack);
         };
 
         //player.anim.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
@@ -73,7 +74,7 @@ public class PlayerController : MonoBehaviour
             }
             player.slider.value = player.evadePoint;
         }
-
-
     }
+
+
 }

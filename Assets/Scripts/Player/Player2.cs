@@ -52,6 +52,12 @@ public class Player2 : MonoBehaviour
 
     #region TestData
     public Slider slider;
+    public float attackRange = 2f;
+    public int maxComboCount = 4;
+    public int comboCount = 0;
+    public bool comboSuccess = false;
+    public float comboSuccessRate = 0.8f;
+    public bool IsAttack { get; private set; }
     #endregion
 
     private void Awake()
@@ -80,6 +86,7 @@ public class Player2 : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(currentState.ToString());
         stateManager?.Update();
     }
 
@@ -92,7 +99,38 @@ public class Player2 : MonoBehaviour
 
     public void SetState(States newState)
     {
+        if (newState == currentState)
+        {
+            return;
+        }
         currentState = newState;
         stateManager?.ChangeState(states[(int)newState]);
     }
+
+    #region Animation Events
+    private void Attack()
+    {
+        IsAttack = true;
+        Debug.Log("Attack");
+    }
+
+    private void Combo()
+    {
+        IsAttack = false;
+        //if (comboSuccess)
+        //{
+        //    comboSuccess = false;
+        //    IsAttack = false;
+        //    if (comboCount < maxComboCount)
+        //    {
+        //        anim.SetInteger("NewAttack", ++comboCount);
+        //    }
+        //}
+        //else
+        //{
+        //    anim.SetInteger("NewAttack", comboCount = 0);
+        //}
+    }
+    #endregion
+
 }

@@ -19,7 +19,7 @@ public class PlayerEvadeState : PlayerStateBase
             TouchManager.SwipeDirection.Down => Vector3.back,
             TouchManager.SwipeDirection.Left => Vector3.left,
             TouchManager.SwipeDirection.Right => Vector3.right,
-            _ => Vector3.forward
+            _ => Vector3.zero
         };
 
         Player2.Instance.anim.SetFloat("X", direction.x);
