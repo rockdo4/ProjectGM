@@ -5,8 +5,9 @@ public class PlayerController : MonoBehaviour
     public Player player { get; private set; }
 
     // equip weapon test
-    private Item equipWeapon = null; 
-    public Transform hand;
+    private Item equipWeapon = null;
+    public Transform leftHand;
+    public Transform rightHand;
     public ItemSO weaponSO;
 
     private void Awake()
@@ -35,7 +36,7 @@ public class PlayerController : MonoBehaviour
             {
                 return;
             }
-            player.animator.Play("Idle");
+            player.anim.Play("Idle");
             player.SetState(Player.States.Evade);
         };
         TouchManager.Instance.HoldListeners += () =>
@@ -51,8 +52,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("HoldEnd");
         };
 
-        //player.anim.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
-        player.animator.SetIKPosition(AvatarIKGoal.RightHand, weaponSO.MakeItem(equipWeapon).transform.position);
+        weaponSO.MakeItem(equipWeapon, rightHand, player.anim);
     }
 
     private void Update()

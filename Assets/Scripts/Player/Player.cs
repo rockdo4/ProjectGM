@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     public Rigidbody rigid { get; private set; }
     public Collider colldier { get; private set; }
     public PlayerController playerController { get; private set; }
-    public Animator animator; // animator test code
+    public Animator anim; // animator test code
 
     public CinemachineVirtualCamera virtualCamera;
 
@@ -67,7 +67,7 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         colldier = GetComponent<Collider>();
         playerController = GetComponent<PlayerController>();
-        animator = GetComponent<Animator>(); // animator test code
+        anim = GetComponent<Animator>(); // animator test code
     }
 
     private void Start()

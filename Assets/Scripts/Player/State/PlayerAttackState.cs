@@ -18,7 +18,7 @@ public class PlayerAttackState : PlayerStateBase
             return;
         }
 
-        Player.Instance.animator.SetTrigger("Attack");
+        Player.Instance.anim.SetTrigger("Attack");
         isAnimationPlaying = true;
     }
 
@@ -26,13 +26,13 @@ public class PlayerAttackState : PlayerStateBase
     {
         if (isAnimationPlaying)
         {
-            var animatorStateInfo = Player.Instance.animator.GetCurrentAnimatorStateInfo(0);
+            var animatorStateInfo = Player.Instance.anim.GetCurrentAnimatorStateInfo(0);
             
             if (animatorStateInfo.normalizedTime >= Player.Instance.comboSuccessRate)
             {
                 if (TouchManager.Instance.Taped || TouchManager.Instance.Holded)
                 {
-                    Player.Instance.animator.SetTrigger("Attack");
+                    Player.Instance.anim.SetTrigger("Attack");
                 }
                 else if (animatorStateInfo.normalizedTime >= 1.0f)
                 {
