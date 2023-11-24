@@ -137,6 +137,11 @@ public class TouchManager : Singleton<TouchManager>
                 break;
             case TouchPhase.Stationary:
                 {
+                    if (Swiped)
+                    {
+                        return;
+                    }
+
                     if (Holded && HoldListeners != null)
                     {
                         HoldListeners();
@@ -150,31 +155,28 @@ public class TouchManager : Singleton<TouchManager>
                             Holded = true;
                         }
                     }
+
+                    if (!Swiped)
+                    {
+                        endPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+                        SwipeDetected();
+
+                        if (Swiped && SwipeListeners != null)
+                        {
+                            SwipeListeners();
+                        }
+                    }
                 }
                 break;
             case TouchPhase.Ended:
                 {
-                    endPosition = new Vector2(touch.position.x / screenSize.x, touch.position.y / screenSize.x);
-                    SwipeDetected();
-
-                    if (!Holded && !Swiped)
-                    {
-                        Taped = true;
-                    }
-
-                    if (Swiped && SwipeListeners != null)
-                    {
-                        Swiped = false;
-                        SwipeListeners();
-                    }
-                    else if (Taped && TapListeners != null)
-                    {
-                        Taped = false;
-                        TapListeners();
-                    }
-
                     Taped = Holded = Swiped = false;
                     holdTimer = 0f;
+
+                    if (HoldEndListeners != null)
+                    {
+                        HoldEndListeners();
+                    }
                 }
                 break;
         }
