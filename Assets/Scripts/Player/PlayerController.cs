@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         TouchManager.Instance.TapListeners += () =>
         {
+            Debug.Log("Taped");
         };
         TouchManager.Instance.SwipeListeners += () =>
         {

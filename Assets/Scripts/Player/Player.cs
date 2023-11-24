@@ -86,6 +86,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(currentState.ToString());
         stateManager?.Update();
     }
 
@@ -114,11 +115,8 @@ public class Player : MonoBehaviour
     }
     private void Attack()
     {
-        Debug.Log($"{Time.time} : 선딜레이 끝");
         IsAttack = true;
         Debug.Log($"{Time.time} : 공격판정");
-
-        Debug.Log($"{Time.time} : 후딜레이 시작");
     }
     private void AfterAttack()
     {
