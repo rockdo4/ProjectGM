@@ -4,14 +4,6 @@ public class PlayerEvadeState : PlayerStateBase
 {
     private Vector3 direction;
     private Vector3 startPosition;
-    
-    private float EvadeDistance
-    {
-        get
-        {
-            return Player2.Instance.colldier.bounds.size.y * 2;
-        }
-    }
 
     public PlayerEvadeState(PlayerController controller) : base(controller)
     {
@@ -23,14 +15,17 @@ public class PlayerEvadeState : PlayerStateBase
         Player2.Instance.evadeTimer = 0f;
         direction = TouchManager.Instance.swipeDirection switch
         {
+            TouchManager.SwipeDirection.Up => Vector3.forward,
+            TouchManager.SwipeDirection.Down => Vector3.back,
             TouchManager.SwipeDirection.Left => Vector3.left,
             TouchManager.SwipeDirection.Right => Vector3.right,
-            TouchManager.SwipeDirection.Down => Vector3.back,
-            TouchManager.SwipeDirection.Up => Vector3.forward,
             _ => Vector3.zero
         };
 
-        Player2.Instance.ren.material.color = Player2.Instance.evadeColor;
+        Player2.Instance.anim.SetFloat("X", direction.x);
+        Player2.Instance.anim.SetFloat("Z", direction.z);
+        Player2.Instance.anim.SetTrigger("Evade");
+
         startPosition = Player2.Instance.rigid.position;
     }
 
@@ -47,7 +42,7 @@ public class PlayerEvadeState : PlayerStateBase
     public override void FixedUpdate()
     {
         var position = Player2.Instance.rigid.position;
-        if (Vector3.Distance(startPosition, position) < EvadeDistance)
+        if (Vector3.Distance(startPosition, position) < Player2.Instance.EvadeDistance)
         {
             var rotation = Player2.Instance.rigid.rotation;
             var moveSpeed = Player2.Instance.stat.MoveSpeed;
@@ -57,6 +52,5 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Exit()
     {
-        Player2.Instance.ren.material.color = Player2.Instance.originalColor;
     }
 }
