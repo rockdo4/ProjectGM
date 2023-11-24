@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     public Rigidbody rigid { get; private set; }
     public Collider colldier { get; private set; }
     public PlayerController playerController { get; private set; }
-    public Animator anim; // animator test code
+    public Animator animator; // animator test code
 
     public CinemachineVirtualCamera virtualCamera;
 
@@ -67,7 +67,7 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         colldier = GetComponent<Collider>();
         playerController = GetComponent<PlayerController>();
-        anim = GetComponent<Animator>(); // animator test code
+        animator = GetComponent<Animator>(); // animator test code
     }
 
     private void Start()
@@ -86,7 +86,6 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(currentState.ToString());
         stateManager?.Update();
     }
 
@@ -108,29 +107,23 @@ public class Player : MonoBehaviour
     }
 
     #region Animation Events
-    private void Attack()
-    {
-        IsAttack = true;
-        Debug.Log("Attack");
-    }
-
-    private void Combo()
+    private void BeforeAttack()
     {
         IsAttack = false;
-        //anim.SetTrigger("Attack");
-        //if (comboSuccess)
-        //{
-        //    comboSuccess = false;
-        //    IsAttack = false;
-        //    if (comboCount < maxComboCount)
-        //    {
-        //        anim.SetInteger("NewAttack", ++comboCount);
-        //    }
-        //}
-        //else
-        //{
-        //    anim.SetInteger("NewAttack", comboCount = 0);
-        //}
+        Debug.Log($"{Time.time} : 선딜레이");
+    }
+    private void Attack()
+    {
+        Debug.Log($"{Time.time} : 선딜레이 끝");
+        IsAttack = true;
+        Debug.Log($"{Time.time} : 공격판정");
+
+        Debug.Log($"{Time.time} : 후딜레이 시작");
+    }
+    private void AfterAttack()
+    {
+        IsAttack = false;
+        Debug.Log($"{Time.time} : 후딜레이 끝");
     }
     #endregion
 

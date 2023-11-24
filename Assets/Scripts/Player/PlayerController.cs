@@ -28,11 +28,6 @@ public class PlayerController : MonoBehaviour
     {
         TouchManager.Instance.TapListeners += () =>
         {
-            if (player.currentState == Player.States.Evade)
-            {
-                return;
-            }
-            player.SetState(Player.States.Attack);
         };
         TouchManager.Instance.SwipeListeners += () =>
         {
@@ -40,7 +35,7 @@ public class PlayerController : MonoBehaviour
             {
                 return;
             }
-            player.anim.Play("Idle");
+            player.animator.Play("Idle");
             player.SetState(Player.States.Evade);
         };
         TouchManager.Instance.HoldListeners += () =>
@@ -51,9 +46,13 @@ public class PlayerController : MonoBehaviour
             }
             player.SetState(Player.States.Attack);
         };
+        TouchManager.Instance.HoldEndListeners += () =>
+        {
+            Debug.Log("HoldEnd");
+        };
 
         //player.anim.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
-        player.anim.SetIKPosition(AvatarIKGoal.RightHand, weaponSO.MakeItem(equipWeapon).transform.position);
+        player.animator.SetIKPosition(AvatarIKGoal.RightHand, weaponSO.MakeItem(equipWeapon).transform.position);
     }
 
     private void Update()
@@ -73,9 +72,9 @@ public class PlayerController : MonoBehaviour
             {
                 player.evadePoint += player.stat.hitEvadePoint;
             }
+            player.evadePoint = Mathf.Clamp(player.evadePoint, (int)player.slider.minValue, (int)player.slider.maxValue);
             player.slider.value = player.evadePoint;
         }
     }
-
 
 }

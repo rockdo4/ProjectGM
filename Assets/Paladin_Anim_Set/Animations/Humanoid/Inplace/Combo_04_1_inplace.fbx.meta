@@ -68,8 +68,16 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.99607843
-        functionName: Combo
+      - time: 0
+        functionName: BeforeAttack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: b78f411f05c6cef4a865d4d150f23c52,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.5971564
+        functionName: AfterAttack
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: b78f411f05c6cef4a865d4d150f23c52,
           type: 3}

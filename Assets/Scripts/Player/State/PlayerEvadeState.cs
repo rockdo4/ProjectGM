@@ -22,9 +22,9 @@ public class PlayerEvadeState : PlayerStateBase
             _ => Vector3.zero
         };
 
-        Player.Instance.anim.SetFloat("X", direction.x);
-        Player.Instance.anim.SetFloat("Z", direction.z);
-        Player.Instance.anim.SetTrigger("Evade");
+        Player.Instance.animator.SetFloat("X", direction.x);
+        Player.Instance.animator.SetFloat("Z", direction.z);
+        Player.Instance.animator.SetTrigger("Evade");
 
         startPosition = Player.Instance.rigid.position;
     }

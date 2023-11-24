@@ -12,12 +12,12 @@ public class TouchManager : Singleton<TouchManager>
     public bool Swiped { get; private set; }
 
     [Header("홀드 판단 시간")]
-    public float holdTime = 0.3f;
+    public float holdTime = 0.02f;
     private float holdTimer = 0f;
 
     [Header("스와이프 판단 시간")]
     [SerializeField]
-    public float swipeTime = 0.2f;
+    public float swipeTime = 0.3f;
 
     [Header("스와이프 판정 거리")]
     [Range(0f, 1f)]
@@ -36,6 +36,9 @@ public class TouchManager : Singleton<TouchManager>
 
     public delegate void OnHold();
     public event OnHold HoldListeners;
+
+    public delegate void HoldEnd();
+    public event HoldEnd HoldEndListeners;
     #endregion
 
     private void Update()
@@ -49,6 +52,11 @@ public class TouchManager : Singleton<TouchManager>
         }
         else if (Input.GetMouseButton(0))
         {
+            if (Swiped)
+            {
+                return;
+            }
+
             if (Holded && HoldListeners != null)
             {
                 HoldListeners();
@@ -62,9 +70,29 @@ public class TouchManager : Singleton<TouchManager>
                     Holded = true;
                 }
             }
+
+            if (!Swiped)
+            {
+                endPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+                SwipeDetected();
+
+                if (Swiped && SwipeListeners != null)
+                {
+                    SwipeListeners();
+                }
+            }
+
         }
         else if (Input.GetMouseButtonUp(0))
         {
+            Taped = Holded = Swiped = false;
+            holdTimer = 0f;
+
+            if (HoldEndListeners != null)
+            {
+                HoldEndListeners();
+            }
+            return;
             endPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
             SwipeDetected();
 
@@ -83,9 +111,6 @@ public class TouchManager : Singleton<TouchManager>
                 Taped = false;
                 TapListeners();
             }
-
-            Taped = Holded = Swiped = false;
-            holdTimer = 0f;
         }
 #elif UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount < 1)
