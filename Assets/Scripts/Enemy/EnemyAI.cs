@@ -1,12 +1,12 @@
+ï»¿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// ¸ó½ºÅÍ Á¾·ù´ç boolº¯¼ö´Â ÇÏ³ª¿©¾ßÇÑ´Ù
-/// °¢ Çàµ¿ ÆÐÅÏ¸¶´Ù °ø°Ý½Ã°£ÀÌ Á¸ÀçÇÑ´Ù
-/// °ø°Ý½Ã°£ÀÌ ³¡³ª°í ³ª¼­ ´ÙÀ½ Çàµ¿À» ÇÑ´Ù. Áï, °ø°ÝÀ» ´Ù½Ã ÇÏ°Å³ª Æ®·¹ÀÌ½º »óÅÂ¿¡ µ¹ÀÔÇÑ´Ù
-/// ¸ó½ºÅÍÀÇ Ã¼·ÂÀÌ 0ÀÌÇÏ°¡ µÇ¸é ¸ðµç Çàµ¿À» ¸ØÃß°í Á×¾î¾ßÇÑ´Ù.
+/// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ boolï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½
+/// ï¿½ï¿½ ï¿½àµ¿ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ý½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½
+/// ï¿½ï¿½ï¿½Ý½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½àµ¿ï¿½ï¿½ ï¿½Ñ´ï¿½. ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½Ï°Å³ï¿½ Æ®ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ ï¿½àµ¿ï¿½ï¿½ ï¿½ï¿½ï¿½ß°ï¿½ ï¿½×¾ï¿½ï¿½ï¿½Ñ´ï¿½.
 /// </summary>
 
 public class EnemyAI : MonoBehaviour
@@ -15,11 +15,16 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     float detectRange = 10f;
     [SerializeField]
-    float meleeAttackRange = 5f;
+    float meleeAttackRange = 2f;
 
     [Header("Movement")]
     [SerializeField]
     float movementSpeed = 10f;
+
+    [Header("Animation")]
+    [SerializeField]
+    private float roarDuration = 3f;
+    private bool hasRoared = false;
 
     [SerializeField]
     float attackPower = 1f;
@@ -42,6 +47,9 @@ public class EnemyAI : MonoBehaviour
     private int phaseOneAttackSequence = 0;
     private int phaseTwoAttackSequence = 0;
 
+    [SerializeField]
+    private LayerMask playerLayerMask;
+
     Vector3 originPos;
 
     BehaviorTreeRunner BTRunner;
@@ -54,10 +62,67 @@ public class EnemyAI : MonoBehaviour
     private float attackDuration = 2f;
     private float attackTimer = 0f;
 
+    [SerializeField]
+    private float meleeAttackPower = 5f;
+    [SerializeField]
+    private float attackPreparationTime = 2f;
+    [SerializeField]
+    private Material attackRangeMaterial; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+
+    private bool isPreparingAttack = false;
+    private GameObject attackRangeIndicator;
+
+    private Player player;
+
     public enum EnemyType
     {
         Enemy1,
         Enemy2,
+    }
+
+    private void Start()
+    {
+        StartCoroutine(RoarInit());
+    }
+
+    IEnumerator RoarInit()
+    {
+        animator.SetTrigger("Roar");
+        yield return new WaitForSeconds(roarDuration);
+        hasRoared = true;
+    }
+    IEnumerator PrepareMeleeAttack()
+    {
+        isPreparingAttack = true;
+        ShowAttackRange(true);
+
+        yield return new WaitForSeconds(attackPreparationTime);
+
+        ShowAttackRange(false);
+        isPreparingAttack = false;
+    }
+
+    private void ShowAttackRange(bool show)
+    {
+        if (show)
+        {
+            if (attackRangeIndicator == null)
+            {
+                attackRangeIndicator = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+                Destroy(attackRangeIndicator.GetComponent<Collider>()); // ï¿½æµ¹Ã¼ ï¿½ï¿½ï¿½ï¿½
+
+                attackRangeIndicator.transform.localScale = new Vector3(meleeAttackRange * 2, 0.1f, meleeAttackRange * 2);
+                attackRangeIndicator.GetComponent<Renderer>().material = attackRangeMaterial;
+            }
+            attackRangeIndicator.transform.position = transform.position;
+            attackRangeIndicator.SetActive(true);
+        }
+        else
+        {
+            if (attackRangeIndicator != null)
+                attackRangeIndicator.SetActive(false);
+        }
     }
 
     private void Awake()
@@ -84,16 +149,22 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
+        if (!hasRoared)
+            return;
+
         if (Input.GetKeyDown(KeyCode.H))
         {
-            health /= 2;
-            Debug.Log("¹ÝÇÇ·Î ÁÙÀÓ, ÇöÀç Ã¼·Â : " + health);
+            health -= 20;
+            Debug.Log("ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½ : " + health);
         }
 
         if (health <= 0)
+        {
+            animator.SetTrigger("Die");
             return;
+        }
 
-        if (isAttacking)
+        if (isAttacking) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¶ï¿½ ï¿½ï¿½ï¿½ß¸ï¿½ï¿½
         {
             attackTimer += Time.deltaTime;
             if (attackTimer >= attackDuration)
@@ -106,9 +177,9 @@ public class EnemyAI : MonoBehaviour
 
         if (!isAttacking)
         {
-            // ·£´ý¾îÅÃ 2¹ø¾¿ ¹ß»ýÇÏ´Â ¿À·ù
-            // 1. ¿ÀÆÛ·¹ÀÌÆ® È£Ãâ ÁÖ±â Á¶Àý
-            // 2. boolº¯¼ö ¸¹ÀÌ Ãß°¡ ÇÏÁö¸¸?
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
+            // 1. ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½Æ® È£ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½
+            // 2. boolï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
             // 3. 
 
             BTRunner.Operate();
@@ -116,7 +187,7 @@ public class EnemyAI : MonoBehaviour
 
     }
 
-    #region ¸ó½ºÅÍ Á¾·ùº° ¾×¼Ç
+    #region ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¼ï¿½
 
     INode BearBT()
     {
@@ -128,10 +199,10 @@ public class EnemyAI : MonoBehaviour
                     (
                         new List<INode>()
                         {
-                            // °ø°ÝÁß¿¡ ÇÃ·¹ÀÌ¾î°¡ »ç°Å¸®¿¡¼­ ¹þ¾î³ª¸é ÇÁ·¹ÀÓ´ÜÀ§·Î °ø°ÝÇÏ´Â ¹®Á¦°¡ ¹ß»ý
+                            // ï¿½ï¿½ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½î³ªï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ó´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½
 
-                            new ConditionNode(IsBearPhaseOne), // ÆäÀÌÁî 1 Ã¼Å©
-                            new ActionNode(() => ExecuteAttackPattern(attackPattern1)) // ÆäÀÌÁî 1 °ø°Ý ÆÐÅÏ
+                            new ConditionNode(IsBearPhaseOne), // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1 Ã¼Å©
+                            new ActionNode(() => ExecuteAttackPattern(attackPattern1)) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                         }
                     ),
 
@@ -140,7 +211,7 @@ public class EnemyAI : MonoBehaviour
                         new List<INode>()
                         {
                             new InverterNode(new ConditionNode(IsBearPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(attackPattern2)) // ÆäÀÌÁî 2 °ø°Ý ÆÐÅÏ
+                            new ActionNode(() => ExecuteAttackPattern(attackPattern2)) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 2 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                         }
                     ),
 
@@ -159,38 +230,38 @@ public class EnemyAI : MonoBehaviour
 
     #endregion
 
-    #region °ø°Ý³ëµå
+    #region ï¿½ï¿½ï¿½Ý³ï¿½ï¿½
 
     private bool IsBearPhaseOne()
     {
         if (!isTwoPhase && health <= phaseTwoHealthThreshold)
         {
             isTwoPhase = true;
-            Debug.Log("ÆäÀÌÁî 2·Î ÀüÈ¯");
-            // phaseTwoAttackSequence = 0; // ÆäÀÌÁî 2ÀÇ °ø°Ý ½ÃÄö½º ÃÊ±âÈ­
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ ï¿½ï¿½È¯");
+            // phaseTwoAttackSequence = 0; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         }
-        return !isTwoPhase; // ÆäÀÌÁî 1·Î ´Ù½Ã ¹ÝÈ¯
+        return !isTwoPhase; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½È¯
     }
 
     private INode.EnemyState ExecuteAttackPattern(int[] pattern)
     {
         INode.EnemyState result = INode.EnemyState.Failure;
 
-        // ÆäÀÌÁî¿¡ µû¶ó »ç¿ëÇÒ ½ÃÄö½º ÀÎµ¦½º °áÁ¤
+        // ï¿½ï¿½ï¿½ï¿½ï¿½î¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         int attackSequence = isTwoPhase ? phaseTwoAttackSequence : phaseOneAttackSequence;
 
         switch (pattern[attackSequence])
         {
             case 1:
-                Debug.Log(isTwoPhase ? "ÆäÀÌÁî2 °ø°ÝA" : "ÆäÀÌÁî1 °ø°ÝA");
+                Debug.Log(isTwoPhase ? "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2 ï¿½ï¿½ï¿½ï¿½A" : "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1 ï¿½ï¿½ï¿½ï¿½A");
                 result = DoMeleeAttack1();
                 break;
             case 2:
-                Debug.Log(isTwoPhase ? "ÆäÀÌÁî2 °ø°ÝB" : "ÆäÀÌÁî1 °ø°ÝB");
+                Debug.Log(isTwoPhase ? "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2 ï¿½ï¿½ï¿½ï¿½B" : "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1 ï¿½ï¿½ï¿½ï¿½B");
                 result = DoMeleeAttack2();
                 break;
             case 3:
-                Debug.Log("ÆäÀÌÁî2 °ø°ÝC");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2 ï¿½ï¿½ï¿½ï¿½C");
                 result = DoMeleeAttack3();
                 break;
         }
@@ -211,18 +282,10 @@ public class EnemyAI : MonoBehaviour
 
     INode.EnemyState DoMeleeAttack1()
     {
-        //if (isAttacking)
-        //{
-        //    // °ø°Ý ÁßÀÏ ¶§µµ ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸®¸¦ Ã¼Å©ÇØ¼­
-        //    // ÇÃ·¹ÀÌ¾î°¡ À§Ä¡¸¦ ¹þ¾î³ª¸é ´Ù½Ã Ãß°ÝÇÒ ¼ö ÀÖ°Ô
-        //    // ÇÏÁö¸¸ ÀÌ°É ¾²¸é ³­ÀÌµµ°¡ ¿Ã¶ó°¡¼­ ¾È¾µµí
-        //    if (detectedPlayer == null || Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
-        //    {
-        //        isAttacking = false;
-        //        return INode.EnemyState.Failure;
-        //    }
-        //    return INode.EnemyState.Success;
-        //}
+        if (isPreparingAttack || isAttacking)
+            return INode.EnemyState.Failure;
+
+        StartCoroutine(PrepareMeleeAttack());
 
         if (detectedPlayer == null)
         {
@@ -236,7 +299,60 @@ public class EnemyAI : MonoBehaviour
         if (Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
         {
             isAttacking = false;
-            return INode.EnemyState.Failure; // ÇÃ·¹ÀÌ¾î°¡ »ç°Å¸® ¹ÛÀÌ¸é Ãß°Ý »óÅÂ·Î ÀüÈ¯
+            return INode.EnemyState.Failure;
+        }
+
+        if (detectedPlayer != null && // ï¿½ï¿½ if
+            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        {
+            isAttacking = true;
+            animator.SetTrigger("MeleeAttack_A");
+
+            player = detectedPlayer.GetComponent<Player>();
+            if (player != null)
+            {
+                //player.TakeDamage(meleeAttackPower);
+            }
+
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Å½ï¿½ï¿½
+            //Vector3 attackCenter = transform.position + transform.forward * (meleeAttackRange / 2);
+            //Collider[] hitEnemies = Physics.OverlapBox(attackCenter, new Vector3(1, 1, meleeAttackRange / 2), transform.rotation, playerLayerMask);
+            //foreach (var enemyCollider in hitEnemies)
+            //{
+            //    Player player = enemyCollider.GetComponent<Player>();
+            //    if (player != null)
+            //    {
+            //        player.TakeDamage(meleeAttackPower);
+            //    }
+            //}
+            return INode.EnemyState.Success;
+        }
+
+        return INode.EnemyState.Failure;
+
+
+    }
+
+    INode.EnemyState DoMeleeAttack2()
+    {
+        if (isPreparingAttack || isAttacking)
+            return INode.EnemyState.Failure;
+
+        StartCoroutine(PrepareMeleeAttack());
+
+        if (detectedPlayer == null)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
+        if (isAttacking)
+            return INode.EnemyState.Failure;
+
+        if (Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
         }
 
         if (detectedPlayer != null &&
@@ -244,55 +360,30 @@ public class EnemyAI : MonoBehaviour
         {
             isAttacking = true;
             animator.SetTrigger("MeleeAttack_A");
-            return INode.EnemyState.Success;
-        }
 
-        return INode.EnemyState.Failure;
+            player = detectedPlayer.GetComponent<Player>();
+            if (player != null)
+            {
+                //player.TakeDamage(meleeAttackPower);
+            }
 
+            //isAttacking = true;
+            //movementSpeed = 0;
+            //animator.SetTrigger("MeleeAttack_B");
 
-
-
-
-
-
-
-
-
-
-        //if (isAttacking)
-        //    return INode.EnemyState.Failure;
-
-        //if (detectedPlayer != null &&
-        //    Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
-        //{
-        //    isAttacking = true;
-        //    return INode.EnemyState.Success;
-        //}
-        //return INode.EnemyState.Failure;
-    }
-
-    INode.EnemyState DoMeleeAttack2()
-    {
-        if (detectedPlayer == null)
-        {
-            isAttacking = false;
-            return INode.EnemyState.Failure;
-        }
-
-        if (isAttacking)
-            return INode.EnemyState.Failure;
-
-        if (Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
-        {
-            isAttacking = false;
-            return INode.EnemyState.Failure; // ÇÃ·¹ÀÌ¾î°¡ »ç°Å¸® ¹ÛÀÌ¸é Ãß°Ý »óÅÂ·Î ÀüÈ¯
-        }
-
-        if (detectedPlayer != null &&
-            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
-        {
-            isAttacking = true;
-            animator.SetTrigger("MeleeAttack_B");
+            //Collider[] hitEnemies = Physics.OverlapSphere(transform.position, meleeAttackRange, playerLayerMask);
+            //foreach (var enemyCollider in hitEnemies)
+            //{
+            //    Vector3 directionToEnemy = (enemyCollider.transform.position - transform.position).normalized;
+            //    if (Vector3.Angle(transform.forward, directionToEnemy) < 90)
+            //    {
+            //        Player player = enemyCollider.GetComponent<Player>();
+            //        if (player != null)
+            //        {
+            //            player.TakeDamage(meleeAttackPower);
+            //        }
+            //    }
+            //}
             return INode.EnemyState.Success;
         }
 
@@ -314,6 +405,11 @@ public class EnemyAI : MonoBehaviour
     INode.EnemyState DoMeleeAttack3()
     {
 
+        if (isPreparingAttack || isAttacking)
+            return INode.EnemyState.Failure;
+
+        StartCoroutine(PrepareMeleeAttack());
+
         if (detectedPlayer == null)
         {
             isAttacking = false;
@@ -326,8 +422,34 @@ public class EnemyAI : MonoBehaviour
         if (Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
         {
             isAttacking = false;
-            return INode.EnemyState.Failure; // ÇÃ·¹ÀÌ¾î°¡ »ç°Å¸® ¹ÛÀÌ¸é Ãß°Ý »óÅÂ·Î ÀüÈ¯
+            return INode.EnemyState.Failure; // ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ ï¿½ß°Ý»ï¿½ï¿½ï¿½ Ã¼Å©
         }
+
+
+        //Vector3 attackCenter = transform.position + transform.forward * (meleeAttackRange / 2);
+        //Vector3 attackSize = new Vector3(3, 1, 1); // ï¿½ï¿½ï¿½ï¿½ 3Ä­
+
+        //Collider[] hitTargets = Physics.OverlapBox(attackCenter, attackSize / 2, transform.rotation, playerLayerMask);
+
+        //if (hitTargets.Length > 0 && detectedPlayer != null &&
+        //    Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        //{
+
+        //    isAttacking = true;
+        //    animator.SetTrigger("MeleeAttack_C");
+
+        //    foreach (var target in hitTargets)
+        //    {
+        //        Player player = target.GetComponent<Player>();
+        //        if (player != null)
+        //        {
+        //            player.TakeDamage(meleeAttackPower);
+        //        }
+        //    }
+
+        //    return INode.EnemyState.Success;
+
+        //}
 
         if (detectedPlayer != null &&
             Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
@@ -352,7 +474,7 @@ public class EnemyAI : MonoBehaviour
     }
     #endregion
 
-    #region °¨Áö ¹× ÀÌµ¿ ³ëµå
+    #region ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½
     INode.EnemyState DetectPlayer()
     {
         var overlapColliders = Physics.OverlapSphere(transform.position, detectRange, LayerMask.GetMask("Player"));
@@ -370,8 +492,11 @@ public class EnemyAI : MonoBehaviour
     INode.EnemyState TracePlayer()
     {
         if (detectedPlayer != null)
-        {
-            animator.SetFloat("MoveSpeed", 0.5f);
+        {// ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ßµï¿½ ï¿½Ó½ï¿½ï¿½ï¿½
+            // ï¿½ï¿½ï¿½ï¿½?
+
+            animator.SetFloat("MoveSpeed", 0.5f); // 
+
             transform.position = Vector3.MoveTowards(transform.position, detectedPlayer.position, Time.deltaTime * movementSpeed);
             transform.LookAt(detectedPlayer); // Look At Player code
             return INode.EnemyState.Running;
@@ -381,7 +506,7 @@ public class EnemyAI : MonoBehaviour
     }
     #endregion
 
-    #region  Á¦ÀÚ¸® µ¹¾Æ°¡±â ³ªÁß¿¡ ´Ù¸¥°ÍÀ¸·Î ¼öÁ¤
+    #region  ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     INode.EnemyState MoveToOriginPosition()
     {
         if (Vector3.Distance(originPos, transform.position) < 0.01f)

@@ -647,13 +647,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRange: 10
-  meleeAttackRange: 5
+  detectRange: 35
+  meleeAttackRange: 3
   movementSpeed: 10
+  roarDuration: 3
   attackPower: 10
   health: 100
   animator: {fileID: 0}
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
   enemyType: 0
+  meleeAttackPower: 5
+  attackPreparationTime: 2
+  attackRangeMaterial: {fileID: -7974662883447924875, guid: a5ac6998bd0c4b1a87b67e82fb321d4a,
+    type: 3}
 --- !u!65 &1272897317
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -710,10 +718,17 @@ MonoBehaviour:
   detectRange: 10
   meleeAttackRange: 5
   movementSpeed: 10
+  roarDuration: 3
   attackPower: 1
   health: 100
   animator: {fileID: 0}
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   enemyType: 0
+  meleeAttackPower: 5
+  attackPreparationTime: 2
+  attackRangeMaterial: {fileID: 0}
 --- !u!65 &1574443785
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -941,10 +956,17 @@ MonoBehaviour:
   detectRange: 10
   meleeAttackRange: 5
   movementSpeed: 10
+  roarDuration: 3
   attackPower: 1
   health: 100
   animator: {fileID: 0}
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   enemyType: 1
+  meleeAttackPower: 5
+  attackPreparationTime: 2
+  attackRangeMaterial: {fileID: 0}
 --- !u!65 &1775942415
 BoxCollider:
   m_ObjectHideFlags: 0
