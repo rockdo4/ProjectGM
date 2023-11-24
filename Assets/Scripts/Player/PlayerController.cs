@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
             {
                 return;
             }
+            player.anim.Play("Idle");
             player.SetState(Player2.States.Evade);
         };
         TouchManager.Instance.HoldListeners += () =>

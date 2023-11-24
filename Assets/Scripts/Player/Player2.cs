@@ -117,6 +117,7 @@ public class Player2 : MonoBehaviour
     private void Combo()
     {
         IsAttack = false;
+        //anim.SetTrigger("Attack");
         //if (comboSuccess)
         //{
         //    comboSuccess = false;
