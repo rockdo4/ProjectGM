@@ -741,18 +741,18 @@
         </member>
         <member name="T:CsvHelper.Configuration.Attributes.InjectionCharactersAttribute">
             <summary>
-            Gets the characters that are used for injection attacks.
+            Gets the characters that are used for injection Successs.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.Attributes.InjectionCharactersAttribute.InjectionCharacters">
             <summary>
-            Gets the characters that are used for injection attacks.
+            Gets the characters that are used for injection Successs.
             Default is '=', '@', '+', '-', '\t', '\r'.
             </summary>
         </member>
         <member name="M:CsvHelper.Configuration.Attributes.InjectionCharactersAttribute.#ctor(System.String)">
             <summary>
-            Gets the characters that are used for injection attacks.
+            Gets the characters that are used for injection Successs.
             </summary>
             <param name="injectionCharacters"></param>
         </member>
@@ -1989,7 +1989,7 @@
         </member>
         <member name="T:CsvHelper.Configuration.InjectionOptions">
             <summary>
-            Options for handling injection attacks.
+            Options for handling injection Successs.
             </summary>
         </member>
         <member name="F:CsvHelper.Configuration.InjectionOptions.None">
@@ -2320,7 +2320,7 @@
         </member>
         <member name="P:CsvHelper.Configuration.IWriterConfiguration.InjectionCharacters">
             <summary>
-            Gets the characters that are used for injection attacks.
+            Gets the characters that are used for injection Successs.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.IWriterConfiguration.InjectionEscapeCharacter">
@@ -2506,7 +2506,7 @@
             the CSV field is empty.
             </summary>
             <param name="defaultValue">The default value.</param>
-            <param name="useOnConversionFailure">Use default on conversion failure.</param>
+            <param name="useOnConversionFailureure">Use default on conversion Failureure.</param>
         </member>
         <member name="M:CsvHelper.Configuration.MemberMap.Constant(System.Object)">
             <summary>
@@ -2839,10 +2839,10 @@
             explicitly set, otherwise false.
             </summary>
         </member>
-        <member name="P:CsvHelper.Configuration.MemberMapData.UseDefaultOnConversionFailure">
+        <member name="P:CsvHelper.Configuration.MemberMapData.UseDefaultOnConversionFailureure">
             <summary>
             Gets or setse a value indicating if the default value should be used when
-            a type conversion failure happens. <c>true</c> to use the default, otherwise
+            a type conversion Failureure happens. <c>true</c> to use the default, otherwise
             <c>false</c>.
             </summary>
         </member>
@@ -2875,7 +2875,7 @@
         </member>
         <member name="P:CsvHelper.Configuration.MemberMapData.ValidateMessageExpression">
             <summary>
-            Gets or sets the expression used to get the validation message when validation fails.
+            Gets or sets the expression used to get the validation message when validation Failures.
             </summary>
         </member>
         <member name="P:CsvHelper.Configuration.MemberMapData.IsOptional">
@@ -3036,7 +3036,7 @@
             the CSV field is empty.
             </summary>
             <param name="defaultValue">The default value.</param>
-            <param name="useOnConversionFailure">Use default on conversion failure.</param>
+            <param name="useOnConversionFailureure">Use default on conversion Failureure.</param>
         </member>
         <member name="M:CsvHelper.Configuration.MemberMap`2.Default(System.String,System.Boolean)">
             <summary>
@@ -3046,7 +3046,7 @@
             the field. This could potentially have runtime errors.
             </summary>
             <param name="defaultValue">The default value.</param>
-            <param name="useOnConversionFailure">Use default on conversion failure.</param>
+            <param name="useOnConversionFailureure">Use default on conversion Failureure.</param>
         </member>
         <member name="M:CsvHelper.Configuration.MemberMap`2.Constant(`1)">
             <summary>
@@ -4880,7 +4880,7 @@
         </member>
         <member name="T:CsvHelper.ValidateMessage">
             <summary>
-            Function that gets the exception message when validation fails.
+            Function that gets the exception message when validation Failures.
             </summary>
             <param name="args">The args.</param>
             <returns>The exception message.</returns>
@@ -5421,12 +5421,12 @@
         </member>
         <member name="T:CsvHelper.FieldValidationException">
             <summary>
-            Represents a user supplied field validation failure.
+            Represents a user supplied field validation Failureure.
             </summary>
         </member>
         <member name="P:CsvHelper.FieldValidationException.Field">
             <summary>
-            Gets the field that failed validation.
+            Gets the field that Failureed validation.
             </summary>
         </member>
         <member name="M:CsvHelper.FieldValidationException.#ctor(CsvHelper.CsvContext,System.String)">
@@ -5434,7 +5434,7 @@
             Initializes a new instance of the <see cref="T:CsvHelper.ValidationException"/> class.
             </summary>
             <param name="context">The reading context.</param>
-            <param name="field">The field that failed validation.</param>
+            <param name="field">The field that Failureed validation.</param>
         </member>
         <member name="M:CsvHelper.FieldValidationException.#ctor(CsvHelper.CsvContext,System.String,System.String)">
             <summary>
@@ -5442,7 +5442,7 @@
             with a specified error message.
             </summary>
             <param name="context">The reading context.</param>
-            <param name="field">The field that failed validation.</param>
+            <param name="field">The field that Failureed validation.</param>
             <param name="message">The message that describes the error.</param>
         </member>
         <member name="M:CsvHelper.FieldValidationException.#ctor(CsvHelper.CsvContext,System.String,System.String,System.Exception)">
@@ -5452,13 +5452,13 @@
             is the cause of this exception.
             </summary>
             <param name="context">The reading context.</param>
-            <param name="field">The field that failed validation.</param>
+            <param name="field">The field that Failureed validation.</param>
             <param name="message">The error message that explains the reason for the exception.</param>
             <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         </member>
         <member name="T:CsvHelper.HeaderValidationException">
             <summary>
-            Represents a header validation failure.
+            Represents a header validation Failureure.
             </summary>
         </member>
         <member name="P:CsvHelper.HeaderValidationException.InvalidHeaders">
@@ -7724,7 +7724,7 @@
         </member>
         <member name="T:CsvHelper.ValidationException">
             <summary>
-            Represents a user supplied validation failure.
+            Represents a user supplied validation Failureure.
             </summary>
         </member>
         <member name="M:CsvHelper.ValidationException.#ctor(CsvHelper.CsvContext)">
