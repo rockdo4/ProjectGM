@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public Player2 player { get; private set; }
+    public Player player { get; private set; }
 
     // equip weapon test
     private Item equipWeapon = null; 
@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponent<Player2>();
+        player = GetComponent<Player>();
 
         // equip weapon test
         if (PlayDataManager.data == null)
@@ -28,11 +28,11 @@ public class PlayerController : MonoBehaviour
     {
         TouchManager.Instance.TapListeners += () =>
         {
-            if (player.currentState == Player2.States.Evade)
+            if (player.currentState == Player.States.Evade)
             {
                 return;
             }
-            player.SetState(Player2.States.Attack);
+            player.SetState(Player.States.Attack);
         };
         TouchManager.Instance.SwipeListeners += () =>
         {
@@ -41,15 +41,15 @@ public class PlayerController : MonoBehaviour
                 return;
             }
             player.anim.Play("Idle");
-            player.SetState(Player2.States.Evade);
+            player.SetState(Player.States.Evade);
         };
         TouchManager.Instance.HoldListeners += () =>
         {
-            if (player.currentState == Player2.States.Evade)
+            if (player.currentState == Player.States.Evade)
             {
                 return;
             }
-            player.SetState(Player2.States.Attack);
+            player.SetState(Player.States.Attack);
         };
 
         //player.anim.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);

@@ -1,5 +1,5 @@
 using Cinemachine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,154 +8,130 @@ public class Player : MonoBehaviour
     [Header("PlayerStat 연결")]
     public PlayerStat stat;
 
-    private GameObject enemy;
-    private Rigidbody rigid;
-    private Collider colldier;
-    
-    private float evadeTimer = 0f;
-    private int evadePoint;
-    private float EvadeDistance
+    public static Player Instance;
+
+    public float evadeTimer = 0f;
+    public int evadePoint = 0;
+
+    public GameObject enemy { get; private set; }
+    public Rigidbody rigid { get; private set; }
+    public Collider colldier { get; private set; }
+    public PlayerController playerController { get; private set; }
+    public Animator anim; // animator test code
+
+    public CinemachineVirtualCamera virtualCamera;
+
+    public enum States
+    {
+        Idle,
+        Attack,
+        Evade,
+    }
+    private StateManager stateManager = new StateManager();
+    private List<StateBase> states = new List<StateBase>();
+    public States currentState { get; private set; }
+
+    public float EvadeDistance
     {
         get
         {
             return colldier.bounds.size.y * 2;
         }
     }
-    private Coroutine coEvade;
+    public float DistanceToEnemy
+    {
+        get
+        {
+            if (enemy == null)
+            {
+                return 0f;
+            }
+            return Vector3.Distance(transform.position, enemy.transform.position);
+        }
+    }
 
     #region TestData
     public Slider slider;
-    private Color evadeColor = Color.white;
-    private Color evadeSuccessColor = Color.yellow;
-    private Color justEvadeSuccessColor = Color.green;
-    private Color hitColor = Color.red;
-    private Color originalColor;
-    private MeshRenderer ren;
+    public float attackRange = 2f;
+    public int maxComboCount = 4;
+    public int comboCount = 0;
+    public bool comboSuccess = false;
+    public float comboSuccessRate = 0.8f;
+    public bool IsAttack { get; private set; }
     #endregion
 
     private void Awake()
     {
-        ren = GetComponent<MeshRenderer>();
+        Instance = this;
+
         rigid = GetComponent<Rigidbody>();
         colldier = GetComponent<Collider>();
+        playerController = GetComponent<PlayerController>();
+        anim = GetComponent<Animator>(); // animator test code
     }
 
     private void Start()
     {
-        TouchManager.Instance.TapListeners += Attack;
-        TouchManager.Instance.SwipeListeners += Evade;
-        TouchManager.Instance.HoldListeners += AutoAttack;
-
-        Collider collider = GetComponent<Collider>();
-        if (collider != null)
-        {
-            // Collider의 크기 얻기
-            Vector3 size = collider.bounds.size;
-            Debug.Log("Rigidbody의 Collider 크기: " + size);
-        }
-
-        originalColor = ren.material.color;
-
         enemy = GameObject.FindGameObjectWithTag(Tags.enemy);
 
         //Look At Enemy
-        CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera.LookAt = enemy.transform;
+        virtualCamera.LookAt = enemy.transform;
+        
+        states.Add(new PlayerIdleState(playerController));
+        states.Add(new PlayerAttackState(playerController));
+        states.Add(new PlayerEvadeState(playerController));
+
+        SetState(States.Idle);
     }
 
     private void Update()
     {
-        if (enemy == null)
+        Debug.Log(currentState.ToString());
+        stateManager?.Update();
+    }
+
+    private void FixedUpdate()
+    {
+        rigid.transform.LookAt(enemy.transform);
+
+        stateManager?.FixedUpdate();
+    }
+
+    public void SetState(States newState)
+    {
+        if (newState == currentState)
         {
             return;
         }
-
-        //Attack
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if (evadeTimer < stat.justEvadeTime)
-            {
-                ren.material.color = justEvadeSuccessColor;
-                evadePoint += stat.justEvadePoint;
-            }
-            else if (evadeTimer >= stat.justEvadeTime && evadeTimer < stat.evadeTime)
-            {
-                ren.material.color = evadeSuccessColor;
-                evadePoint += stat.evadePoint;
-            }
-            else
-            {
-                ren.material.color = hitColor;
-                evadePoint += stat.hitEvadePoint;
-            }
-            slider.value = evadePoint;
-        }
-
-        transform.LookAt(enemy.transform.position);
+        currentState = newState;
+        stateManager?.ChangeState(states[(int)newState]);
     }
 
-    private void Evade()
+    #region Animation Events
+    private void Attack()
     {
-        var direction = TouchManager.Instance.swipeDirection switch
-        {
-            TouchManager.SwipeDirection.Left => Vector3.left,
-            TouchManager.SwipeDirection.Right => Vector3.right,
-            TouchManager.SwipeDirection.Down => Vector3.back,
-            TouchManager.SwipeDirection.Up => Vector3.forward,
-            _ => Vector3.zero
-        };
+        IsAttack = true;
+        Debug.Log("Attack");
+    }
 
-        //var distance = Vector3.Distance(transform.position, enemy.transform.position);
-        //if (direction == Vector3.forward && distance > attackRange)
+    private void Combo()
+    {
+        IsAttack = false;
+        //anim.SetTrigger("Attack");
+        //if (comboSuccess)
         //{
-        //    //Move
+        //    comboSuccess = false;
+        //    IsAttack = false;
+        //    if (comboCount < maxComboCount)
+        //    {
+        //        anim.SetInteger("NewAttack", ++comboCount);
+        //    }
         //}
         //else
         //{
-        //    //Evade
+        //    anim.SetInteger("NewAttack", comboCount = 0);
         //}
-
-        if (coEvade != null)
-        {
-            return;
-        }
-        coEvade = StartCoroutine(CoEvade(direction));
     }
+    #endregion
 
-    private IEnumerator CoMove()
-    {
-        yield return null;
-    }
-
-    private IEnumerator CoEvade(Vector3 direction)
-    {
-        ren.material.color = evadeColor;
-
-        var position = rigid.position;
-        evadeTimer = 0f;
-        while (evadeTimer < stat.evadeTime)
-        {
-            evadeTimer += Time.fixedDeltaTime;
-
-            Debug.Log(Vector3.Distance(rigid.position, position));
-            if (Vector3.Distance(rigid.position, position) <= EvadeDistance)
-            {
-                rigid.MovePosition(rigid.position + rigid.rotation * direction * stat.MoveSpeed * Time.deltaTime);
-            }
-
-            yield return new WaitForFixedUpdate();
-        }
-
-        coEvade = null;
-        ren.material.color = originalColor;
-    }
-
-    private void Attack()
-    {
-        Debug.Log("Tap");
-    }
-
-    private void AutoAttack()
-    {
-        Debug.Log("Hold");
-    }
 }

@@ -11,14 +11,14 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void Enter()
     {
-        if (Player2.Instance.DistanceToEnemy - Player2.Instance.attackRange > Player2.Instance.EvadeDistance)
+        if (Player.Instance.DistanceToEnemy - Player.Instance.attackRange > Player.Instance.EvadeDistance)
         {
             TouchManager.Instance.swipeDirection = TouchManager.SwipeDirection.Up;
-            Player2.Instance.SetState(Player2.States.Evade);
+            Player.Instance.SetState(Player.States.Evade);
             return;
         }
 
-        Player2.Instance.anim.SetTrigger("Attack");
+        Player.Instance.anim.SetTrigger("Attack");
         isAnimationPlaying = true;
     }
 
@@ -26,17 +26,17 @@ public class PlayerAttackState : PlayerStateBase
     {
         if (isAnimationPlaying)
         {
-            var animatorStateInfo = Player2.Instance.anim.GetCurrentAnimatorStateInfo(0);
+            var animatorStateInfo = Player.Instance.anim.GetCurrentAnimatorStateInfo(0);
             
-            if (animatorStateInfo.normalizedTime >= Player2.Instance.comboSuccessRate)
+            if (animatorStateInfo.normalizedTime >= Player.Instance.comboSuccessRate)
             {
                 if (TouchManager.Instance.Taped || TouchManager.Instance.Holded)
                 {
-                    Player2.Instance.anim.SetTrigger("Attack");
+                    Player.Instance.anim.SetTrigger("Attack");
                 }
                 else if (animatorStateInfo.normalizedTime >= 1.0f)
                 {
-                    Player2.Instance.SetState(Player2.States.Idle);
+                    Player.Instance.SetState(Player.States.Idle);
                 }
             }
         }

@@ -12,7 +12,7 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Enter()
     {
-        Player2.Instance.evadeTimer = 0f;
+        Player.Instance.evadeTimer = 0f;
         direction = TouchManager.Instance.swipeDirection switch
         {
             TouchManager.SwipeDirection.Up => Vector3.forward,
@@ -22,31 +22,31 @@ public class PlayerEvadeState : PlayerStateBase
             _ => Vector3.zero
         };
 
-        Player2.Instance.anim.SetFloat("X", direction.x);
-        Player2.Instance.anim.SetFloat("Z", direction.z);
-        Player2.Instance.anim.SetTrigger("Evade");
+        Player.Instance.anim.SetFloat("X", direction.x);
+        Player.Instance.anim.SetFloat("Z", direction.z);
+        Player.Instance.anim.SetTrigger("Evade");
 
-        startPosition = Player2.Instance.rigid.position;
+        startPosition = Player.Instance.rigid.position;
     }
 
     public override void Update()
     {
-        Player2.Instance.evadeTimer += Time.deltaTime;
+        Player.Instance.evadeTimer += Time.deltaTime;
 
-        if (Player2.Instance.evadeTimer > Player2.Instance.stat.evadeTime)
+        if (Player.Instance.evadeTimer > Player.Instance.stat.evadeTime)
         {
-            Player2.Instance.SetState(Player2.States.Idle);
+            Player.Instance.SetState(Player.States.Idle);
         }
     }
 
     public override void FixedUpdate()
     {
-        var position = Player2.Instance.rigid.position;
-        if (Vector3.Distance(startPosition, position) < Player2.Instance.EvadeDistance)
+        var position = Player.Instance.rigid.position;
+        if (Vector3.Distance(startPosition, position) < Player.Instance.EvadeDistance)
         {
-            var rotation = Player2.Instance.rigid.rotation;
-            var moveSpeed = Player2.Instance.stat.MoveSpeed;
-            Player2.Instance.rigid.MovePosition(position + rotation * direction * moveSpeed * Time.deltaTime);
+            var rotation = Player.Instance.rigid.rotation;
+            var moveSpeed = Player.Instance.stat.MoveSpeed;
+            Player.Instance.rigid.MovePosition(position + rotation * direction * moveSpeed * Time.deltaTime);
         }
     }
 
