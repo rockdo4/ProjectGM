@@ -23,6 +23,8 @@ public class Player : MonoBehaviour
     }
     private Coroutine coEvade;
 
+    private float HP = 1000;
+
     #region TestData
     public Slider slider;
     private Color evadeColor = Color.white;
@@ -157,5 +159,12 @@ public class Player : MonoBehaviour
     private void AutoAttack()
     {
         Debug.Log("Hold");
+    }
+
+    public void TakeDamage(float damage)
+    {
+        HP -= damage;
+
+        Debug.Log("플레이어 HP : " + HP);
     }
 }
