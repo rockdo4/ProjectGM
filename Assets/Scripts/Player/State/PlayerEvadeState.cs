@@ -12,6 +12,7 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Enter()
     {
+        Player.Instance.anim.Play("Idle");
         Player.Instance.evadeTimer = 0f;
         direction = TouchManager.Instance.swipeDirection switch
         {

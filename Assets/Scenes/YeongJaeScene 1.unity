@@ -1310,12 +1310,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
---- !u!1 &1634773411 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3721337743071715051, guid: ab82f6376adb4834cb7ff7cafa84688e,
-    type: 3}
-  m_PrefabInstance: {fileID: 4105652240791735837}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1650208992
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,31 +1622,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3721337743081106609, guid: ab82f6376adb4834cb7ff7cafa84688e,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 22100000, guid: 4f3cb8b40bb081a4da746efaff4e1c33,
-        type: 2}
-    - target: {fileID: 4210107733728082813, guid: ab82f6376adb4834cb7ff7cafa84688e,
+    - target: {fileID: 8756553535002015961, guid: ab82f6376adb4834cb7ff7cafa84688e,
         type: 3}
       propertyPath: slider
       value: 
       objectReference: {fileID: 1003162907}
-    - target: {fileID: 4210107733728082813, guid: ab82f6376adb4834cb7ff7cafa84688e,
+    - target: {fileID: 8756553535002015961, guid: ab82f6376adb4834cb7ff7cafa84688e,
         type: 3}
       propertyPath: virtualCamera
       value: 
       objectReference: {fileID: 307348588}
-    m_RemovedComponents:
-    - {fileID: 4210107733728082813, guid: ab82f6376adb4834cb7ff7cafa84688e, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3721337743071715051, guid: ab82f6376adb4834cb7ff7cafa84688e,
-        type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 4105652240791735850}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab82f6376adb4834cb7ff7cafa84688e, type: 3}
 --- !u!4 &4105652240791735844 stripped
 Transform:
@@ -1660,29 +1643,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4105652240791735837}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4105652240791735850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1634773411}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd29835da891a9b4abb8d68e406bbd4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stat: {fileID: 11400000, guid: 1476a0f1e8a5a484ebd7763a74a8c651, type: 2}
-  evadeTimer: 0
-  evadePoint: 0
-  anim: {fileID: 0}
-  virtualCamera: {fileID: 307348588}
-  slider: {fileID: 1003162907}
-  attackRange: 2
-  maxComboCount: 4
-  comboCount: 0
-  comboSuccess: 0
-  comboSuccessRate: 0.8
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

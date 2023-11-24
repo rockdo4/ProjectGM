@@ -86,14 +86,12 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(currentState.ToString());
         stateManager?.Update();
     }
 
     private void FixedUpdate()
     {
         rigid.transform.LookAt(enemy.transform);
-
         stateManager?.FixedUpdate();
     }
 
@@ -103,6 +101,7 @@ public class Player : MonoBehaviour
         {
             return;
         }
+        Debug.Log($"State: {newState}");
         currentState = newState;
         stateManager?.ChangeState(states[(int)newState]);
     }

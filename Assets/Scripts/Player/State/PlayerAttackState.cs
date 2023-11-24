@@ -30,7 +30,7 @@ public class PlayerAttackState : PlayerStateBase
             
             if (animatorStateInfo.normalizedTime >= Player.Instance.comboSuccessRate)
             {
-                if (TouchManager.Instance.Taped || TouchManager.Instance.Holded)
+                if (TouchManager.Instance.Holded)
                 {
                     Player.Instance.anim.SetTrigger("Attack");
                 }
