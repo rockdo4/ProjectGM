@@ -93,24 +93,6 @@ public class TouchManager : Singleton<TouchManager>
                 HoldEndListeners();
             }
             return;
-            endPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
-            SwipeDetected();
-
-            if (!Holded && !Swiped)
-            {
-                Taped = true;
-            }
-
-            if (Swiped && SwipeListeners != null)
-            {
-                Swiped = false;
-                SwipeListeners();
-            }
-            else if (Taped && TapListeners != null)
-            {
-                Taped = false;
-                TapListeners();
-            }
         }
 #elif UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount < 1)

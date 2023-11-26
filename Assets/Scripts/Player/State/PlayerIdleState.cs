@@ -9,7 +9,7 @@ public class PlayerIdleState : PlayerStateBase
 
     public override void Enter()
     {
-        
+        //controller.player.anim.Play("Idle");
     }
 
     public override void Update()

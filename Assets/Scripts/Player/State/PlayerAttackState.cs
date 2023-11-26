@@ -1,44 +1,56 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttackState : PlayerStateBase
 {
+    private enum ComboAnimation
+    {
+        None,
+        Combo_04_1,
+        Combo_04_2,
+        Combo_04_3,
+        Combo_04_4,
+        Count,
+    }
+    private ComboAnimation currentCombo = ComboAnimation.None;
     private bool isAnimationPlaying = false;
 
     public PlayerAttackState(PlayerController controller) : base(controller)
     {
-
     }
 
     public override void Enter()
     {
-        if (Player.Instance.DistanceToEnemy - Player.Instance.attackRange > Player.Instance.EvadeDistance)
-        {
-            TouchManager.Instance.swipeDirection = TouchManager.SwipeDirection.Up;
-            Player.Instance.SetState(Player.States.Evade);
-            return;
-        }
+        currentCombo = ComboAnimation.None;
+        controller.player.canCombo = true;
+        isAnimationPlaying = false;
 
-        Player.Instance.anim.SetTrigger("Attack");
-        isAnimationPlaying = true;
+        SetCombo(ComboAnimation.Combo_04_1);
     }
 
     public override void Update()
     {
         if (isAnimationPlaying)
         {
-            var animatorStateInfo = Player.Instance.anim.GetCurrentAnimatorStateInfo(0);
-            
-            if (animatorStateInfo.normalizedTime >= Player.Instance.comboSuccessRate)
+            var animatorStateInfo = controller.player.anim.GetCurrentAnimatorClipInfo(0);
+            var clip = animatorStateInfo[0].clip;
+            if (controller.player.anim.GetCurrentAnimatorStateInfo(0).IsName(currentCombo.ToString()))
             {
-                if (TouchManager.Instance.Holded)
+                if (controller.player.canCombo && controller.player.isAttack)
                 {
-                    Player.Instance.anim.SetTrigger("Attack");
-                }
-                else if (animatorStateInfo.normalizedTime >= 1.0f)
-                {
-                    Player.Instance.SetState(Player.States.Idle);
+                    if (currentCombo == ComboAnimation.Count - 1)
+                    {
+                        currentCombo = ComboAnimation.None;
+                    }
+                    SetCombo(currentCombo + 1);
                 }
             }
+        }
+
+        if (!controller.player.canCombo)
+        {
+            controller.SetState(PlayerController.State.Idle);
+            return;
         }
     }
 
@@ -51,5 +63,15 @@ public class PlayerAttackState : PlayerStateBase
     {
 
     }
-
+    
+    private void SetCombo(ComboAnimation newCombo)
+    {
+        if (currentCombo == newCombo)
+        {
+            return;
+        }
+        controller.player.anim.SetTrigger("Attack");
+        currentCombo = newCombo;
+        isAnimationPlaying = true;
+    }
 }
