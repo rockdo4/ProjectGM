@@ -40,17 +40,17 @@ public class WeaponInventory : MonoBehaviour
 
     private IEnumerator tester()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 8; i++)
         {
-            var weapon = new Item(Item.ItemType.Weapon, UnityEngine.Random.Range((int)Item.WeaponID.Simple_Hammer, (int)Item.WeaponID.Gold_Spear));
+            var weapon = new Item(Item.ItemType.Weapon, (int)Item.WeaponID.Simple_Hammer + i);
             PlayDataManager.data.Inventory.Add(weapon);
 
             yield return new WaitForEndOfFrame();
         }
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 3; i++)
         {
-            var armor = new Item(Item.ItemType.Armor, UnityEngine.Random.Range((int)Item.ArmorID.test1, (int)Item.ArmorID.test3));
+            var armor = new Item(Item.ItemType.Armor, (int)Item.ArmorID.test1 + i);
             PlayDataManager.data.Inventory.Add(armor);
 
             yield return new WaitForEndOfFrame();
@@ -178,6 +178,7 @@ public class WeaponInventory : MonoBehaviour
                     return;
                 }
                 equipWeapon.isEquip = false;
+                PlayDataManager.data.Equipment.Remove(Item.ItemType.Weapon);
 
                 break;
 
@@ -187,6 +188,7 @@ public class WeaponInventory : MonoBehaviour
                     return;
                 }
                 equipArmor.isEquip = false;
+                PlayDataManager.data.Equipment.Remove(Item.ItemType.Armor);
 
                 break;
 
