@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
         {
             PlayDataManager.Init();
         }
-        equipWeapon = PlayDataManager.data.Inventory.Find
+        equipWeapon = PlayDataManager.data.Inventory[Item.ItemType.Weapon].Find
             (i => i.instanceID == PlayDataManager.data.Equipment[Item.ItemType.Weapon]);
         
 
