@@ -59,19 +59,18 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     private float attackPreparationTime = 2f;
     [SerializeField]
-    private Material attackRangeMaterial; // ���� ������ ǥ���� ����
+    private Material attackRangeMaterial;
 
     private bool isPreparingAttack = false;
 
-    public GameObject attackEffectPrefab;
-    private GameObject attackEffectInstance;
-    private Material attackEffectMaterial;
+    [Header("범위 공격의 시각화")]
+    [SerializeField]
+    public GameObject attackRangePrefab;
+    private GameObject attackRangeInstance;
 
     private Player player;
 
     private Rigidbody rigidbody;
-    private bool shouldMove = false;
-    private Vector3 targetPosition;
 
 
     public enum EnemyType
@@ -105,28 +104,11 @@ public class EnemyAI : MonoBehaviour
         }
         originPos = transform.position;
         animator = GetComponent<Animator>();
-        rigidbody = GetComponent<Rigidbody>();
+        // rigidbody = GetComponent<Rigidbody>();
+        GetMonsterSize();
     }
 
     private void Update()
-    {
-
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            health -= 20;
-            Debug.Log("현재 체력 : " + health);
-        }
-
-        if (health <= 0)
-        {
-            animator.SetTrigger("Die");
-            return;
-        }
-
-        
-    }
-
-    private void FixedUpdate()
     {
         if (!hasRoared) // 다시 추가
             return;
@@ -140,15 +122,39 @@ public class EnemyAI : MonoBehaviour
                 attackTimer = 0f;
             }
         }
+
         if (isAttacking)
         {
             return;
         }
 
-            if (!isAttacking)
+        if (isPreparingAttack)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            health -= 20;
+            Debug.Log("현재 체력 : " + health);
+        }
+
+        if (health <= 0)
+        {
+            animator.SetTrigger("Die");
+            return;
+        }
+
+        if (!isAttacking)
         {
             BTRunner.Operate();
         }
+
+
+    }
+
+    private void FixedUpdate()
+    {
     }
 
     #region
@@ -187,7 +193,6 @@ public class EnemyAI : MonoBehaviour
                         }
                     ),
                     
-                    //new ActionNode(MoveToOriginPosition)
                 }
         ); ;
     }
@@ -206,20 +211,6 @@ public class EnemyAI : MonoBehaviour
         return !isTwoPhase;
     }
 
-    bool IsAnimationRunning(string stateName)
-    {
-        if (animator != null)
-        {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName(stateName))
-            {
-                var normalizedTime = animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-
-                return normalizedTime != 0 && normalizedTime < 1f;
-            }
-        }
-
-        return false;
-    }
 
     private INode.EnemyState ExecuteAttackPattern(int[] pattern)
     {
@@ -256,49 +247,51 @@ public class EnemyAI : MonoBehaviour
         return result;
     }
 
-    IEnumerator PrepareMeleeAttack(float delay)
+    IEnumerator PrepareMeleeAttack()
     {
         isPreparingAttack = true;
-        animator.SetTrigger("MeleeAttack_A");
+        ShowAttackRange(true);
+
         yield return new WaitForSeconds(attackPreparationTime);
 
-        if (isAttacking && detectedPlayer != null &&
-            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
-        {
-            player = detectedPlayer.GetComponent<Player>();
-            if (player != null)
-            {
-                player.TakeDamage(meleeAttackPower);
-                isAttacking = false; // 데미지를 적용한 후 무조건 바로 펄스해줘야됨
-                isPreparingAttack = false;
-            }
-        }
-
-        //yield return new WaitForSeconds(delay);
-
-        //if (detectedPlayer != null &&
-        //    Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
-        //{
-        //    player = detectedPlayer.GetComponent<Player>();
-        //    if (player != null)
-        //    {
-        //        player.TakeDamage(meleeAttackPower);
-        //    }
-        //}
-        //isAttacking = false;
-    }
-
-
-    IEnumerator ApplyDamageAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-       
+        ShowAttackRange(false);
+        isPreparingAttack = false;
     }
 
     private void ShowAttackRange(bool show)
     {
+        if (show)
+        {
+            if (attackRangeInstance == null)
+            {
+                attackRangeInstance = Instantiate(attackRangePrefab, transform.position, Quaternion.identity);
+                Vector3 monsterSize = GetMonsterSize();
+
+                float rangeSize = Mathf.Max(monsterSize.x, monsterSize.z); // 가로와 세로 중 더 큰 값을 사용
+                attackRangeInstance.transform.localScale = new Vector3((rangeSize * 0.1f), 0.1f, (rangeSize * 0.1f));
+            }
+            attackRangeInstance.SetActive(true);
+        }
+        else
+        {
+            if (attackRangeInstance != null)
+                attackRangeInstance.SetActive(false);
+        }
 
     }
+
+    private Vector3 GetMonsterSize()
+    {
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            Vector3 size = collider.bounds.size;
+            Debug.Log("Monster Size: " + size);
+            return size;
+        }
+        return Vector3.one; // 기본 크기 반환
+    }
+
 
     INode.EnemyState DoMeleeAttack1()
     {
@@ -311,14 +304,24 @@ public class EnemyAI : MonoBehaviour
             return INode.EnemyState.Failure;
         }
 
-        if (!isPreparingAttack && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        if (detectedPlayer != null && // 이 if
+            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange && !isAttacking)
         {
             Debug.Log(isTwoPhase ? "페이즈2 공격A" : "페이즈1 공격A");
-            isAttacking = true;
-            StartCoroutine(PrepareMeleeAttack(attackPreparationTime));
 
-            //animator.SetTrigger("MeleeAttack_A");
-            StartCoroutine(ApplyDamageAfterDelay(attackPreparationTime));
+            isAttacking = true;
+
+            StartCoroutine(PrepareMeleeAttack());
+
+            player = detectedPlayer.GetComponent<Player>();
+            if (player != null)
+            {
+                // 애니메이션 출력 시간동안은 멈추다가, 그 후에 isAttacking를 false변환
+                animator.SetTrigger("MeleeAttack_A");
+                isAttacking = false;
+                player.TakeDamage(meleeAttackPower);
+            }
+
             return INode.EnemyState.Success;
         }
 
@@ -337,27 +340,26 @@ public class EnemyAI : MonoBehaviour
             return INode.EnemyState.Failure;
         }
 
-        if (!isPreparingAttack && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
-        {
-            Debug.Log(isTwoPhase ? "페이즈2 공격B" : "페이즈1 공격A");
-            isAttacking = true;
-            StartCoroutine(PrepareMeleeAttack(attackPreparationTime));
+        Debug.Log(isTwoPhase ? "페이즈2 공격B" : "페이즈1 공격B");
 
-            animator.SetTrigger("MeleeAttack_A");
-            StartCoroutine(ApplyDamageAfterDelay(attackPreparationTime));
-            return INode.EnemyState.Success;
-        }
 
-        if (detectedPlayer != null &&
+        if (detectedPlayer != null && // 이 if
             Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange && !isAttacking)
         {
-            Debug.Log(isTwoPhase ? "페이즈2 공격A" : "페이즈1 공격A");
             isAttacking = true;
 
-            animator.SetTrigger("MeleeAttack_A"); // 애니메이터 1번
-            StartCoroutine(PrepareMeleeAttack(attackPreparationTime)); // 코루틴 2번
-            player.TakeDamage(meleeAttackPower); // 데미지 주는거 3번
-            return INode.EnemyState.Success; // 석세스 4번
+            StartCoroutine(PrepareMeleeAttack());
+
+            animator.SetTrigger("MeleeAttack_B");
+
+            player = detectedPlayer.GetComponent<Player>();
+            if (player != null)
+            {
+                isAttacking = false;
+                player.TakeDamage(meleeAttackPower);
+            }
+
+            return INode.EnemyState.Success;
         }
 
         return INode.EnemyState.Failure;
@@ -382,7 +384,7 @@ public class EnemyAI : MonoBehaviour
         {
             isAttacking = true;
 
-            StartCoroutine(PrepareMeleeAttack(attackPreparationTime));
+            StartCoroutine(PrepareMeleeAttack());
 
             animator.SetTrigger("MeleeAttack_C");
 
@@ -417,6 +419,22 @@ public class EnemyAI : MonoBehaviour
 
     INode.EnemyState TracePlayer()
     {
+
+        if (detectedPlayer != null)
+        {
+            animator.SetFloat("MoveSpeed", 0.5f);
+
+            Vector3 direction = (detectedPlayer.position - transform.position).normalized;
+            transform.position += direction * movementSpeed * Time.deltaTime;
+
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * movementSpeed);
+
+            return INode.EnemyState.Running;
+        }
+
+        return INode.EnemyState.Failure;
+
         if (detectedPlayer != null)
         {
             animator.SetFloat("MoveSpeed", 0.5f);
@@ -441,10 +459,10 @@ public class EnemyAI : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
+        Gizmos.color =  Color.green;
         Gizmos.DrawWireSphere(transform.position, detectRange);
 
-        Gizmos.color = Color.blue;
+        Gizmos.color =  Color.blue;
         Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
     }
 

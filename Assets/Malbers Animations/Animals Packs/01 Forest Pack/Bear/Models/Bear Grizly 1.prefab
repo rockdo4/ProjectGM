@@ -1658,7 +1658,7 @@ GameObject:
   - component: {fileID: 7419941498188861280}
   m_Layer: 0
   m_Name: Bear Grizly 1
-  m_TagString: Animal
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1673,7 +1673,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.47, y: 0, z: 10.74}
-  m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7752656143209276923}
@@ -1695,7 +1695,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: c679a1e19ccfed8439ac15b215232c1b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1722,7 +1722,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 2.1772552}
+  m_Size: {x: 2, y: 2, z: 3}
   m_Center: {x: 0, y: 0.78, z: 0.5886268}
 --- !u!114 &7419941498188861280
 MonoBehaviour:
@@ -1738,7 +1738,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detectRange: 35
   meleeAttackRange: 3
-  movementSpeed: 10
+  movementSpeed: 1
   roarDuration: 3
   attackPower: 10
   health: 100
@@ -1751,6 +1751,7 @@ MonoBehaviour:
   attackPreparationTime: 2
   attackRangeMaterial: {fileID: -7974662883447924875, guid: a5ac6998bd0c4b1a87b67e82fb321d4a,
     type: 3}
+  attackEffectPrefab: {fileID: 0}
 --- !u!1 &8570982625879845167
 GameObject:
   m_ObjectHideFlags: 0
