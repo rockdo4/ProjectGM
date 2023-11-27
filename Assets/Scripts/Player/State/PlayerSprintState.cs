@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerSprintState : PlayerStateBase
@@ -46,5 +47,6 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void Exit()
     {
+        controller.player.animator.ResetTrigger("Sprint");
     }
 }

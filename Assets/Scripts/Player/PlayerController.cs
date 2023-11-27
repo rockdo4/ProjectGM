@@ -122,7 +122,6 @@ public class PlayerController : MonoBehaviour
 
         if (player.DistanceToEnemy < player.attackRange)
         {
-            player.canCombo = true;
             SetState(State.Attack);
         }
         else
@@ -160,7 +159,6 @@ public class PlayerController : MonoBehaviour
     }
     private void EndAttack()
     {
-        player.isAttack = false;
         player.canCombo = false;
         SetState(State.Idle);
     }

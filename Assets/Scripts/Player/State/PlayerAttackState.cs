@@ -19,6 +19,7 @@ public class PlayerAttackState : PlayerStateBase
     {
         if (controller.player.enemy.GetComponent<TempEnemy>().isGroggy)
         {
+            controller.player.isAttack = true;
             controller.player.animator.SetTrigger("SuperAttack");
             isSuperAttack = true;
             return;
@@ -62,6 +63,8 @@ public class PlayerAttackState : PlayerStateBase
             controller.player.enemy.GetComponent<TempEnemy>().isGroggy = false;
             isSuperAttack = false;
         }
+
+        controller.player.animator.ResetTrigger("Attack");
     }
     
     private void SetCombo(ComboAnimation newCombo)
