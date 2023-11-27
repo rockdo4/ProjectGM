@@ -12,7 +12,7 @@ public class TouchManager : Singleton<TouchManager>
     public bool Swiped { get; private set; }
 
     [Header("홀드 판단 시간")]
-    public float holdTime = 0.04f;
+    public float holdTime = 0.02f;
     private float holdTimer = 0f;
 
     [Header("스와이프 판단 시간")]

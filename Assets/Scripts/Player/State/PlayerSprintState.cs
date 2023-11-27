@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class PlayerSprintState : PlayerStateBase
@@ -13,7 +12,7 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void Enter()
     {
-        controller.player.anim.SetTrigger("Sprint");
+        controller.player.animator.SetTrigger("Sprint");
 
         startPosition = controller.player.rigid.position;
     }
@@ -36,7 +35,7 @@ public class PlayerSprintState : PlayerStateBase
 
             if (controller.player.DistanceToEnemy < controller.player.attackRange)
             {
-                controller.SetState(PlayerController.State.Idle);
+                controller.SetState(PlayerController.State.Attack);
             }
         }
         else

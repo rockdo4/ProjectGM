@@ -12,7 +12,7 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Enter()
     {
-        controller.player.anim.Play("Idle");
+        controller.player.animator.Play("Idle");
         controller.player.evadeTimer = 0f;
         direction = TouchManager.Instance.swipeDirection switch
         {
@@ -23,9 +23,9 @@ public class PlayerEvadeState : PlayerStateBase
             _ => Vector3.zero
         };
 
-        controller.player.anim.SetFloat("X", direction.x);
-        controller.player.anim.SetFloat("Z", direction.z);
-        controller.player.anim.SetTrigger("Evade");
+        controller.player.animator.SetFloat("X", direction.x);
+        controller.player.animator.SetFloat("Z", direction.z);
+        controller.player.animator.SetTrigger("Evade");
 
         startPosition = controller.player.rigid.position;
     }
@@ -54,7 +54,5 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Exit()
     {
-        controller.player.anim.SetFloat("X", 0);
-        controller.player.anim.SetFloat("Z", 0);
     }
 }

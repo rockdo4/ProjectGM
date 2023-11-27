@@ -1,5 +1,4 @@
 using Cinemachine;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,19 +8,18 @@ public class Player : MonoBehaviour
     public PlayerStat stat;
 
     public float evadeTimer = 0f;
-    public int evadePoint = 0;
-    public bool canEvade = false;
-    public bool canCombo = false;
-    public bool isAttack = false;
+    public float evadePoint { get; set; } = 0;
+
+    public bool isGroggyAttack { get; set; }
+
+    public bool canCombo { get; set; }
+    public bool isAttack { get; set; }
 
     public GameObject enemy { get; private set; }
     public Rigidbody rigid { get; private set; }
-    public Collider colldier { get; private set; }
-    public Animator anim; // animator test code
-
+    public BoxCollider colldier { get; private set; }
     public CinemachineVirtualCamera virtualCamera;
-
-
+    public Animator animator { get; private set; }// animator test code
 
     public float MoveDistance
     {
@@ -49,13 +47,17 @@ public class Player : MonoBehaviour
     public int comboCount = 0;
     public bool comboSuccess = false;
     public float comboSuccessRate = 0.8f;
+    public enum playerAttackState
+    {
+        before, 
+    }
     #endregion
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
-        colldier = GetComponent<Collider>();
-        anim = GetComponent<Animator>(); // animator test code
+        colldier = GetComponent<BoxCollider>();
+        animator = GetComponent<Animator>(); // animator test code
     }
 
     private void Start()

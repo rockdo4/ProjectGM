@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        weaponSO.MakeItem(equipWeapon, rightHand, player.anim);
+        weaponSO.MakeItem(equipWeapon, rightHand, player.animator);
 
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
@@ -61,8 +61,6 @@ public class PlayerController : MonoBehaviour
 
         Vector3 relativePos = player.enemy.transform.position - transform.position;
         Quaternion rotation = Quaternion.LookRotation(relativePos);
-
-        // Y축 회전을 무시한 새로운 로테이션을 설정
         transform.rotation = Quaternion.Euler(0f, rotation.eulerAngles.y, 0f);
 
         //피격 테스트
@@ -80,9 +78,25 @@ public class PlayerController : MonoBehaviour
             {
                 player.evadePoint += player.stat.hitEvadePoint;
             }
-            player.evadePoint = Mathf.Clamp(player.evadePoint, (int)player.slider.minValue, (int)player.slider.maxValue);
-            player.slider.value = player.evadePoint;
+            player.evadePoint = Mathf.Clamp(player.evadePoint, player.slider.minValue, player.slider.maxValue);
         }
+
+        //Groggy
+        if (player.evadePoint >= player.stat.maxEvadePoint)
+        {
+            player.isGroggyAttack = true;
+        }
+        if (player.isGroggyAttack)
+        {
+            player.evadePoint -= Time.deltaTime * (player.stat.maxEvadePoint / player.stat.groggyTime);
+            if (player.evadePoint <= 0f)
+            {
+                player.evadePoint = 0f;
+                player.isGroggyAttack = false;
+            }
+        }
+
+        player.slider.value = player.evadePoint;
     }
 
     private void FixedUpdate()
@@ -93,7 +107,7 @@ public class PlayerController : MonoBehaviour
     #region Touch Event
     private void OnSwipe()
     {
-        if (currentState == State.Attack)
+        if (player.isAttack)
         {
             return;
         }
@@ -108,6 +122,7 @@ public class PlayerController : MonoBehaviour
 
         if (player.DistanceToEnemy < player.attackRange)
         {
+            player.canCombo = true;
             SetState(State.Attack);
         }
         else
@@ -118,11 +133,10 @@ public class PlayerController : MonoBehaviour
     private void HoldEnd()
     {
         player.canCombo = false;
-        //SetState(State.Idle);
     }
     #endregion
 
-    #region Animation Events
+    #region Animation Event
     private void BeforeAttack()
     {
         player.isAttack = false;
@@ -130,17 +144,25 @@ public class PlayerController : MonoBehaviour
     }
     private void Attack()
     {
+        //if (player.enemy.OnAttack(Attack, player.isGroggyAttack))
+        if (player.isGroggyAttack)
+        {
+            player.enemy.GetComponent<TempEnemy>().isGroggy = true;
+            player.isGroggyAttack = false;
+            player.evadePoint = 0f;
+        }
         player.isAttack = true;
     }
     private void AfterAttack()
     {
+        player.isAttack = false;
         player.canCombo = true;
     }
     private void EndAttack()
     {
-        Debug.Log("EndAttack");
         player.isAttack = false;
         player.canCombo = false;
+        SetState(State.Idle);
     }
     #endregion
 
