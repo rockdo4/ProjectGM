@@ -256,41 +256,49 @@ public class EnemyAI : MonoBehaviour
         return result;
     }
 
-    IEnumerator PrepareMeleeAttack()
+    IEnumerator PrepareMeleeAttack(float delay)
     {
         isPreparingAttack = true;
-        ShowAttackRange(true);
+        animator.SetTrigger("MeleeAttack_A");
+        yield return new WaitForSeconds(attackPreparationTime);
 
-        yield return new WaitForSeconds(attackPreparationTime); // 임시
-        // 나중에 패턴따라서 시간초 매개변수 넘겨서 하면 될듯
-        Debug.Log("코루틴 끝남");
-        ShowAttackRange(false);
-        isPreparingAttack = false;
+        if (isAttacking && detectedPlayer != null &&
+            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        {
+            player = detectedPlayer.GetComponent<Player>();
+            if (player != null)
+            {
+                player.TakeDamage(meleeAttackPower);
+                isAttacking = false; // 데미지를 적용한 후 무조건 바로 펄스해줘야됨
+                isPreparingAttack = false;
+            }
+        }
+
+        //yield return new WaitForSeconds(delay);
+
+        //if (detectedPlayer != null &&
+        //    Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        //{
+        //    player = detectedPlayer.GetComponent<Player>();
+        //    if (player != null)
+        //    {
+        //        player.TakeDamage(meleeAttackPower);
+        //    }
+        //}
+        //isAttacking = false;
+    }
+
+
+    IEnumerator ApplyDamageAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+       
     }
 
     private void ShowAttackRange(bool show)
     {
-        //if (show)
-        //{
-        //    if (attackRangeIndicator == null)
-        //    {
-        //        attackRangeIndicator = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-        //        Destroy(attackRangeIndicator.GetComponent<Collider>()); // �浹ü ����
-
-        //        attackRangeIndicator.transform.localScale = new Vector3(meleeAttackRange * 2, 0.1f, meleeAttackRange * 2);
-        //        attackRangeIndicator.GetComponent<Renderer>().material = attackRangeMaterial;
-        //    }
-        //    attackRangeIndicator.transform.position = transform.position;
-        //    attackRangeIndicator.SetActive(true);
-        //}
-        //else
-        //{
-        //    if (attackRangeIndicator != null)
-        //        attackRangeIndicator.SetActive(false);
-        //}
     }
-
 
     INode.EnemyState DoMeleeAttack1()
     {
@@ -303,30 +311,14 @@ public class EnemyAI : MonoBehaviour
             return INode.EnemyState.Failure;
         }
 
-        if (detectedPlayer != null && // 이 if
-            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange && !isAttacking)
+        if (!isPreparingAttack && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
             Debug.Log(isTwoPhase ? "페이즈2 공격A" : "페이즈1 공격A");
-
             isAttacking = true;
+            StartCoroutine(PrepareMeleeAttack(attackPreparationTime));
 
-            StartCoroutine(PrepareMeleeAttack());
-
-            // 애니메이션이 시작하기 전에 코루틴 줘야되고
-
-            
-
-            // 애니메이션이 시작하고 나서 플레이어에게 데미지 처리
-
-            player = detectedPlayer.GetComponent<Player>();
-            if (player != null)
-            {
-                // 애니메이션 출력 시간동안은 멈추다가, 그 후에 isAttacking를 false변환
-                animator.SetTrigger("MeleeAttack_A");
-                isAttacking = false;
-                player.TakeDamage(meleeAttackPower);
-            }
-            
+            //animator.SetTrigger("MeleeAttack_A");
+            StartCoroutine(ApplyDamageAfterDelay(attackPreparationTime));
             return INode.EnemyState.Success;
         }
 
@@ -345,26 +337,27 @@ public class EnemyAI : MonoBehaviour
             return INode.EnemyState.Failure;
         }
 
-        Debug.Log(isTwoPhase ? "페이즈2 공격B" : "페이즈1 공격B");
+        if (!isPreparingAttack && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        {
+            Debug.Log(isTwoPhase ? "페이즈2 공격B" : "페이즈1 공격A");
+            isAttacking = true;
+            StartCoroutine(PrepareMeleeAttack(attackPreparationTime));
 
+            animator.SetTrigger("MeleeAttack_A");
+            StartCoroutine(ApplyDamageAfterDelay(attackPreparationTime));
+            return INode.EnemyState.Success;
+        }
 
-        if (detectedPlayer != null && // 이 if
+        if (detectedPlayer != null &&
             Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange && !isAttacking)
         {
+            Debug.Log(isTwoPhase ? "페이즈2 공격A" : "페이즈1 공격A");
             isAttacking = true;
 
-            StartCoroutine(PrepareMeleeAttack());
-
-            animator.SetTrigger("MeleeAttack_B");
-
-            player = detectedPlayer.GetComponent<Player>();
-            if (player != null)
-            {
-                isAttacking = false;
-                player.TakeDamage(meleeAttackPower);
-            }
-
-            return INode.EnemyState.Success;
+            animator.SetTrigger("MeleeAttack_A"); // 애니메이터 1번
+            StartCoroutine(PrepareMeleeAttack(attackPreparationTime)); // 코루틴 2번
+            player.TakeDamage(meleeAttackPower); // 데미지 주는거 3번
+            return INode.EnemyState.Success; // 석세스 4번
         }
 
         return INode.EnemyState.Failure;
@@ -389,7 +382,7 @@ public class EnemyAI : MonoBehaviour
         {
             isAttacking = true;
 
-            StartCoroutine(PrepareMeleeAttack());
+            StartCoroutine(PrepareMeleeAttack(attackPreparationTime));
 
             animator.SetTrigger("MeleeAttack_C");
 
