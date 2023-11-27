@@ -462,7 +462,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100154, guid: bdd7a03fd93bf2d4cb6babd63ceabee8,
         type: 3}
       insertIndex: 1
-      addedObject: {fileID: 957933169394031530}
+      addedObject: {fileID: 6405403367828451622}
     - targetCorrespondingSourceObject: {fileID: 100154, guid: bdd7a03fd93bf2d4cb6babd63ceabee8,
         type: 3}
       insertIndex: 2
@@ -482,7 +482,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3721337743071680977}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &957933169394031530
+--- !u!114 &6405403367828451622
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -491,16 +491,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3721337743071715051}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b78f411f05c6cef4a865d4d150f23c52, type: 3}
+  m_Script: {fileID: 11500000, guid: bd29835da891a9b4abb8d68e406bbd4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   stat: {fileID: 11400000, guid: 1476a0f1e8a5a484ebd7763a74a8c651, type: 2}
   evadeTimer: 0
-  evadePoint: 0
-  canEvade: 0
-  canCombo: 0
-  isAttack: 0
-  anim: {fileID: 0}
   virtualCamera: {fileID: 0}
   slider: {fileID: 0}
   attackRange: 2
