@@ -195,6 +195,7 @@ public class WeaponInventory : MonoBehaviour
             default:
                 break;
         }
+        PlayDataManager.Save();
 
         UpdateUI();
     }
