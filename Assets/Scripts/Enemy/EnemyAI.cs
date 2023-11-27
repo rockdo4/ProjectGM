@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class EnemyAI : MonoBehaviour
 {
     [Header("Range")]
@@ -33,7 +35,7 @@ public class EnemyAI : MonoBehaviour
     private bool isTwoPhase;
     float phaseTwoHealthThreshold;
 
-    private int[] attackPattern1 = new int[] { 1, 2 };
+    private int[] attackPattern1 = new int[] { 1 };
     private int[] attackPattern2 = new int[] { 1, 2, 3, 2, 3 };
 
     private int phaseOneAttackSequence = 0;
@@ -72,6 +74,9 @@ public class EnemyAI : MonoBehaviour
 
     private Rigidbody rigidbody;
 
+    private bool testAniPlaying = false;
+    private bool testani;
+
 
     public enum EnemyType
     {
@@ -105,7 +110,7 @@ public class EnemyAI : MonoBehaviour
         originPos = transform.position;
         animator = GetComponent<Animator>();
         // rigidbody = GetComponent<Rigidbody>();
-        GetMonsterSize();
+        //GetMonsterSize();
     }
 
     private void Update()
@@ -113,15 +118,8 @@ public class EnemyAI : MonoBehaviour
         if (!hasRoared) // 다시 추가
             return;
 
-        if (isAttacking) // 밀리어택에서 별도로 관리하기로 수정
-        {
-            attackTimer += Time.deltaTime;
-            if (attackTimer >= attackDuration)
-            {
-                isAttacking = false;
-                attackTimer = 0f;
-            }
-        }
+        //if (testAniPlaying)
+        //    return;
 
         if (isAttacking)
         {
@@ -132,6 +130,19 @@ public class EnemyAI : MonoBehaviour
         {
             return;
         }
+        //if (isAttacking) // 밀리어택에서 별도로 관리하기로 수정
+        //{
+        //    attackTimer += Time.deltaTime;
+        //    if (attackTimer >= attackDuration)
+        //    {
+        //        isAttacking = false;
+        //        attackTimer = 0f;
+        //    }
+        //}
+
+
+
+
 
         if (Input.GetKeyDown(KeyCode.H))
         {
@@ -153,11 +164,7 @@ public class EnemyAI : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
-    {
-    }
-
-    #region
+    #region 곰 행동트리
 
     INode BearBT()
     {
@@ -192,7 +199,7 @@ public class EnemyAI : MonoBehaviour
                             new ActionNode(TracePlayer),
                         }
                     ),
-                    
+
                 }
         ); ;
     }
@@ -256,7 +263,40 @@ public class EnemyAI : MonoBehaviour
 
         ShowAttackRange(false);
         isPreparingAttack = false;
+
+        player = detectedPlayer.GetComponent<Player>();
+
+        if (player != null)
+        {
+            StartCoroutine(IsAnimationRunning("MeleeAttack_A"));
+        }
     }
+
+    private IEnumerator IsAnimationRunning(string stateName)
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger(stateName);
+
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
+
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+            if (stateInfo.IsName(stateName))
+            {
+                player.TakeDamage(meleeAttackPower);
+                Debug.Log(stateInfo.length);
+                Debug.Log(stateInfo.IsName(stateName));
+                yield return new WaitForSeconds(stateInfo.length);
+            }
+
+            isAttacking = false;
+        }
+    }
+
 
     private void ShowAttackRange(bool show)
     {
@@ -277,10 +317,9 @@ public class EnemyAI : MonoBehaviour
             if (attackRangeInstance != null)
                 attackRangeInstance.SetActive(false);
         }
-
     }
 
-    private Vector3 GetMonsterSize()
+    private Vector3 GetMonsterSize() // 임시
     {
         Collider collider = GetComponent<Collider>();
         if (collider != null)
@@ -305,23 +344,12 @@ public class EnemyAI : MonoBehaviour
         }
 
         if (detectedPlayer != null && // 이 if
-            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange && !isAttacking)
+            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
             Debug.Log(isTwoPhase ? "페이즈2 공격A" : "페이즈1 공격A");
 
             isAttacking = true;
-
             StartCoroutine(PrepareMeleeAttack());
-
-            player = detectedPlayer.GetComponent<Player>();
-            if (player != null)
-            {
-                // 애니메이션 출력 시간동안은 멈추다가, 그 후에 isAttacking를 false변환
-                animator.SetTrigger("MeleeAttack_A");
-                isAttacking = false;
-                player.TakeDamage(meleeAttackPower);
-            }
-
             return INode.EnemyState.Success;
         }
 
@@ -377,7 +405,6 @@ public class EnemyAI : MonoBehaviour
         }
 
         Debug.Log(isTwoPhase ? "페이즈2 공격C" : "이상함");
-
 
         if (detectedPlayer != null &&
             Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
@@ -454,15 +481,14 @@ public class EnemyAI : MonoBehaviour
 
     #region
 
-
     #endregion
 
     private void OnDrawGizmos()
     {
-        Gizmos.color =  Color.green;
+        Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectRange);
 
-        Gizmos.color =  Color.blue;
+        Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
     }
 
