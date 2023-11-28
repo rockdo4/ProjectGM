@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
@@ -59,23 +60,23 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     private float meleeAttackPower = 5f;
     [SerializeField]
-    private float attackPreparationTime = 2f;
+    private float attackPreparationTime = 3f;
     [SerializeField]
     private Material attackRangeMaterial;
+
+    private Player player;
+    private Rigidbody rigidbody;
 
     private bool isPreparingAttack = false;
 
     [Header("범위 공격의 시각화")]
     [SerializeField]
+
     public GameObject attackRangePrefab;
     private GameObject attackRangeInstance;
 
-    private Player player;
-
-    private Rigidbody rigidbody;
-
-    private bool testAniPlaying = false;
-    private bool testani;
+    public bool[,] attackGrid = new bool[3, 3];
+    List<Vector3Int> currentAttackPattern = new List<Vector3Int>();
 
 
     public enum EnemyType
@@ -130,6 +131,7 @@ public class EnemyAI : MonoBehaviour
         {
             return;
         }
+
         //if (isAttacking) // 밀리어택에서 별도로 관리하기로 수정
         //{
         //    attackTimer += Time.deltaTime;
@@ -160,7 +162,6 @@ public class EnemyAI : MonoBehaviour
         {
             BTRunner.Operate();
         }
-
 
     }
 
@@ -200,11 +201,32 @@ public class EnemyAI : MonoBehaviour
                         }
                     ),
 
+                    // new SequenceNode
+                    //(
+                    //    new List<INode>()
+                    //    {
+                    //        new ActionNode(UpdateAttackPattern),
+                    //    }
+                    //),
+
                 }
         ); ;
     }
 
     #endregion
+
+    #region 어택 패턴 업데이트
+
+    //INode.EnemyState UpdateAttackPattern()
+    //{
+
+
+
+
+    //    return;
+    //}
+
+    #endregion 공격 노드 함수
 
     #region
 
@@ -287,7 +309,7 @@ public class EnemyAI : MonoBehaviour
 
             if (stateInfo.IsName(stateName))
             {
-                player.TakeDamage(meleeAttackPower);
+                // player.TakeDamage(meleeAttackPower); // 애니메이션 이벤트로 변경
                 Debug.Log(stateInfo.length);
                 Debug.Log(stateInfo.IsName(stateName));
                 yield return new WaitForSeconds(stateInfo.length);
@@ -296,7 +318,6 @@ public class EnemyAI : MonoBehaviour
             isAttacking = false;
         }
     }
-
 
     private void ShowAttackRange(bool show)
     {
@@ -343,12 +364,16 @@ public class EnemyAI : MonoBehaviour
             return INode.EnemyState.Failure;
         }
 
-        if (detectedPlayer != null && // 이 if
+        if (detectedPlayer != null &&
             Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
             Debug.Log(isTwoPhase ? "페이즈2 공격A" : "페이즈1 공격A");
 
             isAttacking = true;
+
+            // 공격 패턴의 범위를 결정하는부분은 여기에
+            // 어차피 공격상태 전환하고 코루틴 시작하면 바로 쇼어택레인지 메서드도 호출하니까
+
             StartCoroutine(PrepareMeleeAttack());
             return INode.EnemyState.Success;
         }
@@ -490,6 +515,34 @@ public class EnemyAI : MonoBehaviour
 
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
+
+        if (attackGrid != null)
+        {
+            for (int i = 0; i < attackGrid.GetLength(0); i++)
+            {
+                for (int j = 0; j < attackGrid.GetLength(1); j++)
+                {
+                    Gizmos.color = attackGrid[i, j] ? Color.red : Color.green;
+                    // 적절한 위치와 크기를 계산하여 그리드를 그립니다.
+                    Gizmos.DrawCube(CalculateCellPosition(i, j), new Vector3(1, 0.1f, 1));
+                }
+            }
+        }
     }
 
+    private Vector3 CalculateCellPosition(int i, int j)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void Test() // 임시 데미지 애니메이션 이벤트
+    {
+        if (detectedPlayer != null)
+        {
+            if (Vector3.Distance(detectedPlayer.position, transform.position) <= meleeAttackRange)
+            {
+                player.TakeDamage(meleeAttackPower);
+            }
+        }
+    }
 }
