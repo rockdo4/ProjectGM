@@ -53,7 +53,7 @@ public class Player : MonoBehaviour
         {
             // Collider의 크기 얻기
             Vector3 size = collider.bounds.size;
-            Debug.Log("Rigidbody의 Collider 크기: " + size);
+            //Debug.Log("Rigidbody의 Collider 크기: " + size);
         }
 
         originalColor = ren.material.color;
