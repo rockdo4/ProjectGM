@@ -13,9 +13,9 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void Enter()
     {
-        controller.player.animator.SetTrigger("Sprint");
+        controller.player.Animator.SetTrigger("Sprint");
 
-        startPosition = controller.player.rigid.position;
+        startPosition = controller.player.Rigid.position;
     }
 
     public override void Update()
@@ -25,14 +25,14 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void FixedUpdate()
     {
-        var position = controller.player.rigid.position;
+        var position = controller.player.Rigid.position;
         if (Vector3.Distance(startPosition, position) < controller.player.MoveDistance)
         {
-            var rotation = controller.player.rigid.rotation;
+            var rotation = controller.player.Rigid.rotation;
             rotation.x = 0f;
 
             var moveSpeed = controller.player.stat.MoveSpeed;
-            controller.player.rigid.MovePosition(position + rotation * direction * moveSpeed * Time.deltaTime);
+            controller.player.Rigid.MovePosition(position + rotation * direction * moveSpeed * Time.deltaTime);
 
             if (controller.player.DistanceToEnemy < controller.player.attackRange)
             {
@@ -47,6 +47,6 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void Exit()
     {
-        controller.player.animator.ResetTrigger("Sprint");
+        controller.player.Animator.ResetTrigger("Sprint");
     }
 }

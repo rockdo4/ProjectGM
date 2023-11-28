@@ -1,15 +1,7 @@
+using UnityEngine;
+
 public class PlayerAttackState : PlayerStateBase
 {
-    private enum ComboAnimation
-    {
-        None,
-        Combo_04_1,
-        Combo_04_2,
-        Combo_04_3,
-        Combo_04_4,
-        Count,
-    }
-    private ComboAnimation currentCombo = ComboAnimation.None;
     private bool isSuperAttack = false;
     private bool isFirst = false;
 
@@ -19,18 +11,16 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void Enter()
     {
-        if (controller.player.enemy.GetComponent<TempEnemy>().isGroggy)
+        if (controller.player.Enemy.GetComponent<TempEnemy>().isGroggy)
         {
             controller.player.isAttack = true;
             controller.player.canCombo = true;
-            controller.player.animator.SetTrigger("SuperAttack");
+            controller.player.Animator.SetTrigger("SuperAttack");
             isSuperAttack = true;
             return;
         }
 
-        currentCombo = ComboAnimation.None;
         isFirst = true;
-        //SetCombo(ComboAnimation.Combo_04_1);
     }
 
     public override void Update()
@@ -40,15 +30,14 @@ public class PlayerAttackState : PlayerStateBase
             controller.SetState(PlayerController.State.Idle);
         }
 
-        if (currentCombo == ComboAnimation.None || (controller.player.canCombo && !controller.player.isAttack))
+        if (isFirst || (controller.player.canCombo && !controller.player.isAttack))
         {
-            if (currentCombo == ComboAnimation.Count - 1)
+            if (isFirst)
             {
-                currentCombo = ComboAnimation.None;
+                isFirst = false;
             }
-            SetCombo(currentCombo + 1);
+            controller.player.Animator.SetTrigger("Attack");
         }
-
     }
 
     public override void FixedUpdate()
@@ -60,24 +49,10 @@ public class PlayerAttackState : PlayerStateBase
     {
         if (isSuperAttack)
         {
-            controller.player.enemy.GetComponent<TempEnemy>().isGroggy = false;
+            controller.player.Enemy.GetComponent<TempEnemy>().isGroggy = false;
             isSuperAttack = false;
         }
 
-        controller.player.animator.ResetTrigger("Attack");
-    }
-    
-    private void SetCombo(ComboAnimation newCombo)
-    {
-        if (isFirst)
-        {
-            isFirst = false;
-        }
-        if (currentCombo == newCombo)
-        {
-            return;
-        }
-        controller.player.animator.SetTrigger("Attack");
-        currentCombo = newCombo;
+        controller.player.Animator.ResetTrigger("Attack");
     }
 }

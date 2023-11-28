@@ -33,4 +33,9 @@ public class PlayerStat : Stat
 
     [Header("피격 시 무적 시간(sec)")]
     public float hitInvincibleTime;
+
+    public override Attack CreateAttack(LivingObject attacker, LivingObject defender)
+    {
+        return base.CreateAttack(attacker, defender);
+    }
 }

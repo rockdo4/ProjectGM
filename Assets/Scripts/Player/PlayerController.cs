@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public Transform leftHand;
     public Transform rightHand;
     public ItemSO weaponSO;
+    private Weapon currentWeapon;
 
     private void Awake()
     {
@@ -41,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        weaponSO.MakeItem(equipWeapon, rightHand, player.animator);
+        currentWeapon = weaponSO.MakeItem(equipWeapon, rightHand, player.Animator);
 
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
@@ -59,7 +60,7 @@ public class PlayerController : MonoBehaviour
     {
         stateManager?.Update();
 
-        Vector3 relativePos = player.enemy.transform.position - transform.position;
+        Vector3 relativePos = player.Enemy.transform.position - transform.position;
         Quaternion rotation = Quaternion.LookRotation(relativePos);
         transform.rotation = Quaternion.Euler(0f, rotation.eulerAngles.y, 0f);
 
@@ -67,29 +68,29 @@ public class PlayerController : MonoBehaviour
         //피격 테스트
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (player.evadeTimer < player.stat.justEvadeTime)
+            if (player.evadeTimer < player.Stat.justEvadeTime)
             {
-                player.evadePoint += player.stat.justEvadePoint;
+                player.evadePoint += player.Stat.justEvadePoint;
             }
-            else if (player.evadeTimer >= player.stat.justEvadeTime && player.evadeTimer < player.stat.evadeTime)
+            else if (player.evadeTimer >= player.Stat.justEvadeTime && player.evadeTimer < player.Stat.evadeTime)
             {
-                player.evadePoint += player.stat.evadePoint;
+                player.evadePoint += player.Stat.evadePoint;
             }
             else
             {
-                player.evadePoint += player.stat.hitEvadePoint;
+                player.evadePoint += player.Stat.hitEvadePoint;
             }
             player.evadePoint = Mathf.Clamp(player.evadePoint, player.slider.minValue, player.slider.maxValue);
         }
 
         //Groggy
-        if (player.evadePoint >= player.stat.maxEvadePoint)
+        if (player.evadePoint >= player.Stat.maxEvadePoint)
         {
             player.isGroggyAttack = true;
         }
         if (player.isGroggyAttack)
         {
-            player.evadePoint -= Time.deltaTime * (player.stat.maxEvadePoint / player.stat.groggyTime);
+            player.evadePoint -= Time.deltaTime * (player.Stat.maxEvadePoint / player.Stat.groggyTime);
             if (player.evadePoint <= 0f)
             {
                 player.evadePoint = 0f;
@@ -144,14 +145,19 @@ public class PlayerController : MonoBehaviour
     }
     private void Attack()
     {
+        player.isAttack = true;
         //if (player.enemy.OnAttack(Attack, player.isGroggyAttack))
         if (player.isGroggyAttack)
         {
-            player.enemy.GetComponent<TempEnemy>().isGroggy = true;
+            player.Enemy.isGroggy = true;
             player.isGroggyAttack = false;
             player.evadePoint = 0f;
         }
-        player.isAttack = true;
+        if (currentWeapon == null)
+        {
+            return;
+        }
+        ExecuteAttack(player, player.Enemy);
     }
     private void AfterAttack()
     {
@@ -184,5 +190,17 @@ public class PlayerController : MonoBehaviour
         states.Add(new PlayerSprintState(this));
 
         SetState(State.Idle);
+    }
+
+    private void ExecuteAttack(LivingObject attacker, LivingObject defender)
+    {
+        Attack attack = player.Stat.CreateAttack(attacker, defender);
+
+        var attackables = defender.GetComponents<IAttackable>();
+        foreach (var attackable in attackables)
+        {
+            Debug.Log("Call OnAttack");
+            attackable.OnAttack(player.gameObject, attack);
+        }
     }
 }

@@ -15,6 +15,8 @@ public class Weapon : MonoBehaviour, IEquip
     public Item item = null;
     public AttackType type = AttackType.None;
     public PlayerAnimationSO animationSO;
+    public float Attack;
+    public float WeakDamage;
 
     public void OnEquip()
     {
