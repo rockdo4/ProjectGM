@@ -18,10 +18,14 @@ public class InventoryManager : MonoBehaviour
 
     [Header("장식주")]
     public GameObject decoPanel;
-    private List<Item> sellList = new List<Item>();
 
     [Header("재료")]
     public GameObject matPanel;
+
+    [Header("일괄판매")]
+    public GameObject sellPanel;
+    private List<Item> sellList = new List<Item>();
+    private bool sellMode = false;
 
     private void Start()
     {
@@ -67,16 +71,24 @@ public class InventoryManager : MonoBehaviour
         var weapons = PlayDataManager.data.Inventory[Item.ItemType.Weapon];
         foreach (var weapon in weapons)
         {
-            var go = Instantiate(buttonPrefab);
-            go.transform.SetParent(inventoryPanel.transform);
+            var go = Instantiate(buttonPrefab, inventoryPanel.transform);
 
             var button = go.GetComponent<Button>();
             button.onClick.AddListener(() => 
             {
-                itemPanel.SetActive(true);
-                itemPanelInfoText.text = ((Item.WeaponID)weapon.id).ToString();
+                if (sellMode)
+                {
+                    //sellList.Add(weapon);
 
-                curItem = weapon;
+                }
+                else
+                {
+                    itemPanel.SetActive(true);
+                    itemPanelInfoText.text = ((Item.WeaponID)weapon.id).ToString();
+
+                    curItem = weapon;
+                }
+                
             });
 
             var text = go.GetComponentInChildren<TextMeshProUGUI>();
@@ -91,16 +103,23 @@ public class InventoryManager : MonoBehaviour
         var armors = PlayDataManager.data.Inventory[Item.ItemType.Armor];
         foreach (var armor in armors)
         {
-            var go = Instantiate(buttonPrefab);
-            go.transform.SetParent(inventoryPanel.transform);
+            var go = Instantiate(buttonPrefab, inventoryPanel.transform);
 
             var button = go.GetComponent<Button>();
             button.onClick.AddListener(() =>
             {
-                itemPanel.SetActive(true);
-                itemPanelInfoText.text = ((Item.ArmorID)armor.id).ToString();
+                if (sellMode)
+                {
 
-                curItem = armor;
+                }
+                else
+                {
+                    itemPanel.SetActive(true);
+                    itemPanelInfoText.text = ((Item.ArmorID)armor.id).ToString();
+
+                    curItem = armor;
+                }
+                
             });
 
             var text = go.GetComponentInChildren<TextMeshProUGUI>();
@@ -144,5 +163,13 @@ public class InventoryManager : MonoBehaviour
         PlayDataManager.WearItem(curItem);
     }
 
-    
+    public void SellMode()
+    {
+        if (!sellMode)
+        {
+            sellMode = true;
+
+            sellPanel.SetActive(true);
+        }
+    }
 }
