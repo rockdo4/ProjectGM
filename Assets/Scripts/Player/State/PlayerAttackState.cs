@@ -1,45 +1,54 @@
-using UnityEngine;
-
 public class PlayerAttackState : PlayerStateBase
 {
-    private bool isAnimationPlaying = false;
+    private enum ComboAnimation
+    {
+        None,
+        Combo_04_1,
+        Combo_04_2,
+        Combo_04_3,
+        Combo_04_4,
+        Count,
+    }
+    private ComboAnimation currentCombo = ComboAnimation.None;
+    private bool isSuperAttack = false;
+    private bool isFirst = false;
 
     public PlayerAttackState(PlayerController controller) : base(controller)
     {
-
     }
 
     public override void Enter()
     {
-        if (Player.Instance.DistanceToEnemy - Player.Instance.attackRange > Player.Instance.EvadeDistance)
+        if (controller.player.enemy.GetComponent<TempEnemy>().isGroggy)
         {
-            TouchManager.Instance.swipeDirection = TouchManager.SwipeDirection.Up;
-            Player.Instance.SetState(Player.States.Evade);
+            controller.player.isAttack = true;
+            controller.player.canCombo = true;
+            controller.player.animator.SetTrigger("SuperAttack");
+            isSuperAttack = true;
             return;
         }
 
-        Player.Instance.anim.SetTrigger("Attack");
-        isAnimationPlaying = true;
+        currentCombo = ComboAnimation.None;
+        isFirst = true;
+        //SetCombo(ComboAnimation.Combo_04_1);
     }
 
     public override void Update()
     {
-        if (isAnimationPlaying)
+        if (!TouchManager.Instance.Holded)
         {
-            var animatorStateInfo = Player.Instance.anim.GetCurrentAnimatorStateInfo(0);
-            
-            if (animatorStateInfo.normalizedTime >= Player.Instance.comboSuccessRate)
-            {
-                if (TouchManager.Instance.Taped || TouchManager.Instance.Holded)
-                {
-                    Player.Instance.anim.SetTrigger("Attack");
-                }
-                else if (animatorStateInfo.normalizedTime >= 1.0f)
-                {
-                    Player.Instance.SetState(Player.States.Idle);
-                }
-            }
+            controller.SetState(PlayerController.State.Idle);
         }
+
+        if (currentCombo == ComboAnimation.None || (controller.player.canCombo && !controller.player.isAttack))
+        {
+            if (currentCombo == ComboAnimation.Count - 1)
+            {
+                currentCombo = ComboAnimation.None;
+            }
+            SetCombo(currentCombo + 1);
+        }
+
     }
 
     public override void FixedUpdate()
@@ -49,7 +58,26 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void Exit()
     {
+        if (isSuperAttack)
+        {
+            controller.player.enemy.GetComponent<TempEnemy>().isGroggy = false;
+            isSuperAttack = false;
+        }
 
+        controller.player.animator.ResetTrigger("Attack");
     }
-
+    
+    private void SetCombo(ComboAnimation newCombo)
+    {
+        if (isFirst)
+        {
+            isFirst = false;
+        }
+        if (currentCombo == newCombo)
+        {
+            return;
+        }
+        controller.player.animator.SetTrigger("Attack");
+        currentCombo = newCombo;
+    }
 }
