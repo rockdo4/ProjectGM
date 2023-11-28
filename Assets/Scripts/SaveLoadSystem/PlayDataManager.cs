@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+using static UnityEditor.Progress;
 using SaveDataVC = SaveDataV3; // Version Change?
 
 public static class PlayDataManager
@@ -45,5 +47,39 @@ public static class PlayDataManager
         }
 
         data.Quest++;
+        Save();
+    }
+
+    public static void WearItem(Item item)
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        if (data.Equipment[item.type] == null)
+        {
+            item.isEquip = true;
+            data.Equipment.Add(item.type, item.instanceID);
+            Save();
+
+            return;
+        }
+
+        var eqiup = GetCurrentItem(item.type);
+        if (eqiup != null)
+        {
+            eqiup.isEquip = false;
+        }
+
+        data.Equipment[item.type] = item.instanceID;
+        item.isEquip = true;
+
+        Save();
+    }
+
+    public static Item GetCurrentItem(Item.ItemType type)
+    {
+        return data.Inventory[type].Find(x => x.instanceID == data.Equipment[type]);
     }
 }

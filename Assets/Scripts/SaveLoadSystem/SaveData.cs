@@ -56,6 +56,9 @@ public class SaveDataV3 : SaveData
 
         Inventory.Add(Item.ItemType.Weapon, new List<Item>());
         Inventory.Add(Item.ItemType.Armor, new List<Item>());
+
+        Equipment.Add(Item.ItemType.Weapon, new DateTime());
+        Equipment.Add(Item.ItemType.Armor, new DateTime());
     }
 
     public int Gold { get; set; } = 0;

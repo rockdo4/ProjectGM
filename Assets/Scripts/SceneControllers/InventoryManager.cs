@@ -10,6 +10,11 @@ public class InventoryManager : MonoBehaviour
 
     public GameObject buttonPrefab;
 
+    [Header("무기/방어구")]
+    public GameObject itemPanel;
+    public TextMeshProUGUI itemPanelInfoText;
+    private Item curItem = null;
+
     private void Start()
     {
         if (PlayDataManager.data == null)
@@ -38,7 +43,7 @@ public class InventoryManager : MonoBehaviour
 
         for (int i = 0; i < 3; i++)
         {
-            var armor = new Item(Item.ItemType.Armor, (int)Item.ArmorID.test1 + i);
+            var armor = new Item(Item.ItemType.Armor, (int)Item.ArmorID.HMD + i);
             PlayDataManager.data.Inventory[Item.ItemType.Armor].Add(armor);
 
             yield return new WaitForEndOfFrame();
@@ -57,6 +62,15 @@ public class InventoryManager : MonoBehaviour
             var go = Instantiate(buttonPrefab);
             go.transform.SetParent(inventoryPanel.transform);
 
+            var button = go.GetComponent<Button>();
+            button.onClick.AddListener(() => 
+            {
+                itemPanel.SetActive(true);
+                itemPanelInfoText.text = ((Item.WeaponID)weapon.id).ToString();
+
+                curItem = weapon;
+            });
+
             var text = go.GetComponentInChildren<TextMeshProUGUI>();
             text.text = ((Item.WeaponID)weapon.id).ToString();
         }
@@ -71,6 +85,15 @@ public class InventoryManager : MonoBehaviour
         {
             var go = Instantiate(buttonPrefab);
             go.transform.SetParent(inventoryPanel.transform);
+
+            var button = go.GetComponent<Button>();
+            button.onClick.AddListener(() =>
+            {
+                itemPanel.SetActive(true);
+                itemPanelInfoText.text = ((Item.ArmorID)armor.id).ToString();
+
+                curItem = armor;
+            });
 
             var text = go.GetComponentInChildren<TextMeshProUGUI>();
             text.text = ((Item.ArmorID)armor.id).ToString();
@@ -91,6 +114,8 @@ public class InventoryManager : MonoBehaviour
 
     public void ClearItemButton()
     {
+        curItem = null;
+
         var arr = inventoryPanel.GetComponentsInChildren<Button>();
         if (arr != null)
         {
@@ -99,6 +124,16 @@ public class InventoryManager : MonoBehaviour
                 Destroy(item.gameObject);
             }
         }
+    }
+
+    public void EquipItem()
+    {
+        if (curItem == null)
+        {
+            return;
+        }
+
+        PlayDataManager.WearItem(curItem);
     }
 
     /*
@@ -128,6 +163,7 @@ public class InventoryManager : MonoBehaviour
         UpdateUI();
     }
 
+    
     public void UnequipItem(int type)
     {
         switch ((Item.ItemType)type)

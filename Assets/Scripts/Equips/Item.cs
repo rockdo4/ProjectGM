@@ -32,15 +32,22 @@ public class Item
     {
         None = -1,
 
-        test1,
-        test2,
-        test3,
+        HMD = 100001,
+
+        Ballistic_Vest,
+
+        Tactical_pants,
+
+        Utility_belt,
+
+        GM_Watch,
     }
 
     public DateTime instanceID;
     public ItemType type = ItemType.None;
     public int id = -1;
     public bool isEquip = false;
+    public string setName = string.Empty;
 
     public Item(ItemType type = ItemType.None, int id = -1, bool isEquip = false)
     {
