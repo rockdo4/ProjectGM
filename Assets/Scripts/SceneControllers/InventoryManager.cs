@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,13 @@ public class InventoryManager : MonoBehaviour
     public GameObject itemPanel;
     public TextMeshProUGUI itemPanelInfoText;
     private Item curItem = null;
+
+    [Header("장식주")]
+    public GameObject decoPanel;
+    private List<Item> sellList = new List<Item>();
+
+    [Header("재료")]
+    public GameObject matPanel;
 
     private void Start()
     {
@@ -136,64 +144,5 @@ public class InventoryManager : MonoBehaviour
         PlayDataManager.WearItem(curItem);
     }
 
-    /*
-    public void EquipItem(Item item)
-    {
-        if (PlayDataManager.data.Equipment.TryGetValue(item.type, out DateTime value)) // 장착중인 장비가 있고
-        {
-            if (item.instanceID != value) // 동일하지 않은 객체일 때
-            {
-                // Inventory isEquip Unlock
-                PlayDataManager.data.Inventory.Find(i => i.instanceID == value).isEquip = false;
-
-                // Equipment Change
-                PlayDataManager.data.Equipment[item.type] = item.instanceID;
-                item.isEquip = true;
-            }
-
-        }
-        else // 장착중인 장비가 없을 때
-        {
-            PlayDataManager.data.Equipment.Add(item.type, item.instanceID);
-            item.isEquip = true;
-        }
-
-        PlayDataManager.Save();
-
-        UpdateUI();
-    }
-
     
-    public void UnequipItem(int type)
-    {
-        switch ((Item.ItemType)type)
-        {
-            case Item.ItemType.Weapon:
-                if (equipWeapon == null)
-                {
-                    return;
-                }
-                equipWeapon.isEquip = false;
-                PlayDataManager.data.Equipment.Remove(Item.ItemType.Weapon);
-
-                break;
-
-            case Item.ItemType.Armor:
-                if (equipArmor == null)
-                {
-                    return;
-                }
-                equipArmor.isEquip = false;
-                PlayDataManager.data.Equipment.Remove(Item.ItemType.Armor);
-
-                break;
-
-            default:
-                break;
-        }
-        PlayDataManager.Save();
-
-        UpdateUI();
-    }
-    */
 }
