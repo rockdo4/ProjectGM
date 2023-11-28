@@ -11,6 +11,7 @@ public class PlayerAttackState : PlayerStateBase
     }
     private ComboAnimation currentCombo = ComboAnimation.None;
     private bool isSuperAttack = false;
+    private bool isFirst = false;
 
     public PlayerAttackState(PlayerController controller) : base(controller)
     {
@@ -28,12 +29,13 @@ public class PlayerAttackState : PlayerStateBase
         }
 
         currentCombo = ComboAnimation.None;
+        isFirst = true;
         //SetCombo(ComboAnimation.Combo_04_1);
     }
 
     public override void Update()
     {
-        if (!TouchManager.Instance.Holded && currentCombo != ComboAnimation.None)
+        if (!TouchManager.Instance.Holded)
         {
             controller.SetState(PlayerController.State.Idle);
         }
@@ -67,6 +69,10 @@ public class PlayerAttackState : PlayerStateBase
     
     private void SetCombo(ComboAnimation newCombo)
     {
+        if (isFirst)
+        {
+            isFirst = false;
+        }
         if (currentCombo == newCombo)
         {
             return;

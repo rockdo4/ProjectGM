@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4c2131fd49fc45639647defb5bb453fb
+guid: efc05938aa7747aa9785388a2fc59c6d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -434,7 +434,7 @@ ModelImporter:
     second: STYLIZED-BASEMESH-BIGMALE-OBJ
   - first:
       74: 7400000
-    second: Combo_Stings_01
+    second: Combo_Stings
   - first:
       95: 9500000
     second: //RootNode
@@ -471,11 +471,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Combo_Stings_01
-      takeName: Combo_Stings_01
+      name: Combo_Stings
+      takeName: Combo_Stings
       internalID: 0
       firstFrame: 0
-      lastFrame: 17
+      lastFrame: 52
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -496,7 +496,23 @@ ModelImporter:
       curves: []
       events:
       - time: 0
-        functionName: BeginAttack
+        functionName: BeforeAttack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 6f7e69d905b99ec4088b79ebb3e985bb,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.97435063
+        functionName: Attack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 6f7e69d905b99ec4088b79ebb3e985bb,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: EndAttack
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 6f7e69d905b99ec4088b79ebb3e985bb,
           type: 3}

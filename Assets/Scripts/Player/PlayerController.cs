@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
         Quaternion rotation = Quaternion.LookRotation(relativePos);
         transform.rotation = Quaternion.Euler(0f, rotation.eulerAngles.y, 0f);
 
+        #region Test
         //피격 테스트
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -95,8 +96,8 @@ public class PlayerController : MonoBehaviour
                 player.isGroggyAttack = false;
             }
         }
-
         player.slider.value = player.evadePoint;
+        #endregion  
     }
 
     private void FixedUpdate()

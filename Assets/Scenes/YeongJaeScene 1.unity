@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1401,6 +1401,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGroggy: 0
+--- !u!1 &1297577924 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3721337743071715051, guid: ab82f6376adb4834cb7ff7cafa84688e,
+    type: 3}
+  m_PrefabInstance: {fileID: 4105652240791735837}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1516650549
 GameObject:
   m_ObjectHideFlags: 0
@@ -2095,9 +2101,14 @@ PrefabInstance:
       objectReference: {fileID: 307348588}
     m_RemovedComponents:
     - {fileID: 8756553535002015961, guid: ab82f6376adb4834cb7ff7cafa84688e, type: 3}
+    - {fileID: 6405403367828451622, guid: ab82f6376adb4834cb7ff7cafa84688e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3721337743071715051, guid: ab82f6376adb4834cb7ff7cafa84688e,
+        type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 4105652240791735849}
   m_SourcePrefab: {fileID: 100100000, guid: ab82f6376adb4834cb7ff7cafa84688e, type: 3}
 --- !u!4 &4105652240791735844 stripped
 Transform:
@@ -2105,6 +2116,27 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4105652240791735837}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4105652240791735849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297577924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b78f411f05c6cef4a865d4d150f23c52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stat: {fileID: 11400000, guid: 1476a0f1e8a5a484ebd7763a74a8c651, type: 2}
+  evadeTimer: 0
+  virtualCamera: {fileID: 307348588}
+  slider: {fileID: 1003162907}
+  attackRange: 2
+  maxComboCount: 4
+  comboCount: 0
+  comboSuccess: 0
+  comboSuccessRate: 0.8
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
