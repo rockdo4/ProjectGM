@@ -92,6 +92,11 @@ public class TouchManager : Singleton<TouchManager>
             {
                 HoldEndListeners();
             }
+
+            if (TapListeners != null)
+            {
+                TapListeners();
+            }
             return;
         }
 #elif UNITY_ANDROID || UNITY_IOS
