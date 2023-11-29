@@ -42,16 +42,13 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
         switch (evade)
         {
             case EvadeSuccesss.None:
-                Debug.Log("피격");
                 player.HP -= attack.Damage;
                 player.IsGroggy = attack.IsGroggy;
                 break;
             case EvadeSuccesss.Normal:
-                Debug.Log("일반 회피");
                 player.HP -= (int)(attack.Damage * player.Stat.evadeDamageRate);
                 break;
             case EvadeSuccesss.Just:
-                Debug.Log("저스트 회피");
                 break;
         }
 

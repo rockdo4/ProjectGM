@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class Player : LivingObject
 {
+    [HideInInspector]
     public float evadeTimer = 0f;
     public float evadePoint { get; set; } = 0;
     public bool GroggyAttack { get; set; }
@@ -14,6 +15,7 @@ public class Player : LivingObject
     public LivingObject Enemy { get; private set; }
     public Rigidbody Rigid { get; private set; }
     public BoxCollider Colldier { get; private set; }
+    [Header("가상 카메라 연결")]
     public CinemachineVirtualCamera virtualCamera;
     public Animator Animator { get; private set; }// animator test code
     public WeaponPrefab CurrentWeapon { get; set; }
@@ -57,6 +59,7 @@ public class Player : LivingObject
     }
 
     #region TestData
+    [Header("슬라이더 연결")]
     public Slider slider;
     public int comboCount { get; set; } = 0;
     #endregion
