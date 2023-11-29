@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,8 +28,6 @@ public class EnemyAI : MonoBehaviour
 
     [SerializeField]
     float health = 100f;
-
-    private float mindistance = 2.5f;
 
     [SerializeField]
     private Animator animator;
@@ -79,9 +78,9 @@ public class EnemyAI : MonoBehaviour
 
     int attackIndex = -1;
 
-    GameObject cellInstance;
-    private GameObject cellParent;
     private List<GameObject> cellInstances = new List<GameObject>(); // 셀 인스턴스들을 저장할 리스트
+
+    private List<GameObject> colliderObjects = new List<GameObject>();
 
     public enum EnemyType
     {
@@ -260,8 +259,6 @@ public class EnemyAI : MonoBehaviour
         {
             string animationTrigger = "MeleeAttack_" + attackType;
             StartCoroutine(IsAnimationRunning(animationTrigger));
-            //// 기존 방식
-            // StartCoroutine(IsAnimationRunning("MeleeAttack_A"));
         }
     }
 
@@ -280,7 +277,6 @@ public class EnemyAI : MonoBehaviour
 
             if (stateInfo.IsName(stateName))
             {
-                //player.TakeDamage(meleeAttackPower); // 애니메이션 이벤트인 OnAttack로 변경
                 //Debug.Log(stateInfo.length);
                 //Debug.Log(stateInfo.IsName(stateName));
                 yield return new WaitForSeconds(stateInfo.length);
@@ -290,15 +286,31 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void ShowAttackRange(bool show /*, int attackIndex*/) // 인덱스 굳이? 공격패턴에서 지정해주기
+    private void ShowAttackRange(bool show)
     {
-
         if (show)
         {
             if (attackRangeInstance == null)
             {
                 attackRangeInstance = Instantiate(attackRangePrefab, transform.position, Quaternion.identity);
             }
+
+            foreach (GameObject cell in cellInstances) // 리스트의 모든 셀 인스턴스를 순회
+            {
+                if (cell != null)
+                {
+                    Destroy(cell);
+                }
+            }
+
+            foreach (GameObject colliderObject in colliderObjects)
+            {
+                if (colliderObject != null)
+                {
+                    Destroy(colliderObject);
+                }
+            }
+            colliderObjects.Clear();
 
             AttackPattern currentPattern = savedPatterns[attackIndex];
             cellInstances.Clear(); // 리스트 초기화
@@ -310,106 +322,43 @@ public class EnemyAI : MonoBehaviour
                     Vector3 cellPosition = CalculateCellPosition(i);
                     GameObject cell = Instantiate(attackRangeInstance, cellPosition, Quaternion.identity);
                     cell.SetActive(true);
-                    cellInstances.Add(cell); // 생성된 셀 인스턴스를 리스트에 추가
+                    cellInstances.Add(cell);
+
+                    // 별개의 콜라이더 똑같은 위치에 하나 더 만들기
+                    GameObject colliderObject = new GameObject("AttackCollider");
+                    colliderObject.AddComponent<AttackCell>();
+                    BoxCollider collider = colliderObject.AddComponent<BoxCollider>();
+
+
+                    collider.size = new Vector3(1, 0.1f, 1);
+                    collider.isTrigger = true;
+                    colliderObject.transform.position = cellPosition;
+
+                    colliderObjects.Add(colliderObject);
                 }
             }
 
             attackRangeInstance.SetActive(false);
+
         }
         else
         {
             foreach (GameObject cell in cellInstances) // 리스트의 모든 셀 인스턴스를 순회
             {
                 if (cell != null)
-                    cell.SetActive(false);
+                {
+                    cell.SetActive(false); // 삭제는 조금 있다
+                }
             }
-
-
         }
-
-
-        //// 부모 오브젝트 끄는방법
-        //if (show)
-        //{
-        //    if (attackRangeInstance == null)
-        //    {
-        //        attackRangeInstance = Instantiate(attackRangePrefab, transform.position, Quaternion.identity);
-        //    }
-
-        //    AttackPattern currentPattern = savedPatterns[attackIndex];
-
-        //    for (int i = 0; i < currentPattern.pattern.Length; i++)
-        //    {
-        //        if (currentPattern.pattern[i]) // 9개의 타일 순회하면서 트루 타일일때
-        //        {
-        //            Vector3 cellPosition = CalculateCellPosition(i);
-        //            cellInstance = Instantiate(attackRangeInstance, cellPosition, Quaternion.identity);
-        //            cellInstance.SetActive(true);
-        //        }
-        //    }
-
-        //    // Debug.Log($"! INDEX : {attackIndex} / COUNT : {i} \n True/false : {savedPatterns[attackIndex].pattern[i]}");
-
-        //    attackRangeInstance.SetActive(false); // 기존꺼는 끄고
-        //}
-        //else
-        //{
-        //    foreach (var cell in cellInstance)
-        //    {
-        //        cell.SetActive(false);
-        //    }
-
-        //    // cellInstance라는 변수는 하나하나 일일히 추적하지 않아서 마지막껏만 꺼짐
-
-        //    // 태그방식은 씬을 다 순회해서 별로임
-
-        //    // 부모를 액티브 펄스 해주는게 더 좋다
-        //    for (int i = 0; i < attackGrid.Length; i++)
-        //    {
-        //        if (cellInstance != null)
-        //            cellInstance.SetActive(false);
-        //    }
-        //}
-
-    }
-
-    private void ClearAttackRangeInstances()
-    {
-        // 기존에 생성된 공격 범위 인스턴스들을 제거
-        foreach (var instance in GameObject.FindGameObjectsWithTag("AttackRange"))
-        {
-            Destroy(instance);
-        }
-    }
-
-    bool IsPlayerInCell(int index)
-    {
-        Vector3 cellPosition = CalculateCellPosition(index);
-        return Vector3.Distance(detectedPlayer.position, cellPosition) < 1.5f; // 어느 정도 거리 내에 있는지
     }
 
     Vector3 CalculateCellPosition(int index)
     {
-        //for (int i = 0; i < 3; i++)
-        //{
-        //    for (int j = 0; j < 3; j++)
-        //    {
-        //        int index = i * 3 + j;
-        //        Gizmos.color = attackGrid[index] ? Color.red : Color.green;
-
-        //        Vector3 cellPosition = transform.position + transform.forward + new Vector3(j + 0.5f, 0, i - 1);
-        //        Gizmos.DrawCube(cellPosition, new Vector3(1, 0.1f, 1));
-        //    }
-        //}
-
-
-
-        int x = index % 3; // 가, 세
+        int x = index % 3;
         int z = index / 3;
 
         return transform.position + transform.forward + new Vector3(x - 1 + 0.5f, 0, z - 1);
-
-        // 기즈모에 표시된 범위와 일치해야하니까 수정하긴했는데
     }
 
     INode.EnemyState DoMeleeAttack1()
@@ -547,17 +496,29 @@ public class EnemyAI : MonoBehaviour
 
     private void OnAttack()
     {
-        if (detectedPlayer != null)
+        foreach (GameObject cell in colliderObjects)
         {
-            // 그리드 형태의 공격
-            for (int i = 0; i < savedPatterns[attackIndex].pattern.Length; i++)
+            if (cell != null)
             {
-                if (savedPatterns[attackIndex].pattern[i] && IsPlayerInCell(i))
+                Debug.Log(colliderObjects);
+                AttackCell attackCell = cell.GetComponent<AttackCell>();
+
+                // 어택셀이 없다면 펄스 // 근데 펄스가 출력되어서 쇼어택레인지에서
+                // 어택셀 컴포넌트를 추가함
+                // 그래서 당연히 콜라이더가 겹치더라도 플레이어 인사이드는 펄스가 나옴
+
+                Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
+
+
+                if (attackCell != null && attackCell.playerInside)
                 {
+                    Debug.Log(attackCell);
+
                     player.TakeDamage(meleeAttackPower);
                     break;
                 }
             }
         }
+
     }
 }
