@@ -12,9 +12,8 @@ public class InventoryManager : MonoBehaviour
     public GameObject buttonPrefab;
 
     [Header("무기/방어구")]
-    public GameObject itemPanel;
+    public ItemPanel itemPanel;
     public TextMeshProUGUI itemPanelInfoText;
-    private Item curItem = null;
 
     [Header("장식주")]
     public GameObject decoPanel;
@@ -67,7 +66,8 @@ public class InventoryManager : MonoBehaviour
     public void ShowWeapons()
     {
         ClearItemButton();
-
+         
+        // Object Pool로 최적화할 것
         var weapons = PlayDataManager.data.Inventory[Item.ItemType.Weapon];
         foreach (var weapon in weapons)
         {
@@ -83,10 +83,8 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    itemPanel.SetActive(true);
-                    itemPanelInfoText.text = ((Item.WeaponID)weapon.id).ToString();
-
-                    curItem = weapon;
+                    itemPanel.SetItem(weapon);
+                    itemPanel.Renewal();
                 }
                 
             });
@@ -100,6 +98,7 @@ public class InventoryManager : MonoBehaviour
     {
         ClearItemButton();
 
+        // Object Pool로 최적화할 것
         var armors = PlayDataManager.data.Inventory[Item.ItemType.Armor];
         foreach (var armor in armors)
         {
@@ -114,10 +113,8 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    itemPanel.SetActive(true);
-                    itemPanelInfoText.text = ((Item.ArmorID)armor.id).ToString();
-
-                    curItem = armor;
+                    itemPanel.SetItem(armor);
+                    itemPanel.Renewal();
                 }
                 
             });
@@ -141,8 +138,6 @@ public class InventoryManager : MonoBehaviour
 
     public void ClearItemButton()
     {
-        curItem = null;
-
         var arr = inventoryPanel.GetComponentsInChildren<Button>();
         if (arr != null)
         {
@@ -151,16 +146,6 @@ public class InventoryManager : MonoBehaviour
                 Destroy(item.gameObject);
             }
         }
-    }
-
-    public void EquipItem()
-    {
-        if (curItem == null)
-        {
-            return;
-        }
-
-        PlayDataManager.WearItem(curItem);
     }
 
     public void SellMode()
