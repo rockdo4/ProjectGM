@@ -21,7 +21,7 @@ public class Stat : ScriptableObject
     [Header("치명타 배율")]
     public float CriticalDamage;
 
-    public virtual Attack CreateAttack(LivingObject attacker, LivingObject defender)
+    public virtual Attack CreateAttack(LivingObject attacker, LivingObject defender, bool groogy = false)
     {
         float damage = attacker.stat.AttackDamage;
 
@@ -36,6 +36,6 @@ public class Stat : ScriptableObject
             damage -= defender.stat.Defence;
         }
 
-        return new Attack((int)damage, critical);
+        return new Attack((int)damage, critical, groogy);
     }
 }

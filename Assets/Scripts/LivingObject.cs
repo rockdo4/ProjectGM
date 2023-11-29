@@ -5,9 +5,11 @@ public abstract class LivingObject : MonoBehaviour
     [Header("Stat ¿¬°á")]
     public Stat stat;
     public int HP { get; set; }
+    public bool IsGroggy { get; set; }
 
     protected virtual void Awake()
     {
         HP = stat.HP;
+        IsGroggy = false;
     }
 }

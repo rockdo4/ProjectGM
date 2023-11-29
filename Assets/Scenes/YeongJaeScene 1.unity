@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 1101380708}
+  m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60.000004
     OrthographicSize: 10
@@ -456,7 +456,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.044828378, y: 0, z: 0, w: 0.9989947}
   m_LocalPosition: {x: 0, y: 2, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1226,7 +1226,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 0.2784314, b: 0.60784316, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1252,12 +1252,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!4 &1101380708 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3721337743071806155, guid: ab82f6376adb4834cb7ff7cafa84688e,
-    type: 3}
-  m_PrefabInstance: {fileID: 2103818646}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1127115888
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,6 +1266,7 @@ GameObject:
   - component: {fileID: 1127115889}
   - component: {fileID: 1127115893}
   - component: {fileID: 1127115894}
+  - component: {fileID: 1127115897}
   - component: {fileID: 1127115895}
   - component: {fileID: 1127115896}
   m_Layer: 0
@@ -1409,7 +1404,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stat: {fileID: 11400000, guid: 2871ea0a10c98ae488d110ce1a93a938, type: 2}
-  isGroggy: 0
 --- !u!114 &1127115895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1432,6 +1426,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b59855fe2b90eb46a69c469ea05fafe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1127115897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127115888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae8fd83196764641b9a0db9ae1c691c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1516650549
@@ -2041,16 +2047,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -711843997012959887, guid: ab82f6376adb4834cb7ff7cafa84688e,
-        type: 3}
-      propertyPath: slider
-      value: 
-      objectReference: {fileID: 1003162907}
-    - target: {fileID: -711843997012959887, guid: ab82f6376adb4834cb7ff7cafa84688e,
-        type: 3}
-      propertyPath: virtualCamera
-      value: 
-      objectReference: {fileID: 307348588}
     - target: {fileID: 3721337743071715051, guid: ab82f6376adb4834cb7ff7cafa84688e,
         type: 3}
       propertyPath: m_Name
@@ -2106,6 +2102,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5523914363443443269, guid: ab82f6376adb4834cb7ff7cafa84688e,
+        type: 3}
+      propertyPath: slider
+      value: 
+      objectReference: {fileID: 1003162907}
+    - target: {fileID: 5523914363443443269, guid: ab82f6376adb4834cb7ff7cafa84688e,
+        type: 3}
+      propertyPath: virtualCamera
+      value: 
+      objectReference: {fileID: 307348588}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

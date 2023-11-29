@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     {
         Idle,
         Attack,
+        SuperAttack,
         Evade,
         Sprint,
     }
@@ -22,7 +23,6 @@ public class PlayerController : MonoBehaviour
     public Transform leftHand;
     public Transform rightHand;
     public ItemSO weaponSO;
-    private Weapon currentWeapon;
 
     private void Awake()
     {
@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        currentWeapon = weaponSO.MakeItem(equipWeapon, rightHand, player.Animator);
+        player.CurrentWeapon = weaponSO.MakeItem(equipWeapon, rightHand, player.Animator);
 
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
@@ -59,7 +59,10 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         stateManager?.Update();
-
+        if (player.Enemy == null)
+        {
+            return;
+        }
         Vector3 relativePos = player.Enemy.transform.position - transform.position;
         Quaternion rotation = Quaternion.LookRotation(relativePos);
         transform.rotation = Quaternion.Euler(0f, rotation.eulerAngles.y, 0f);
@@ -86,15 +89,15 @@ public class PlayerController : MonoBehaviour
         //Groggy
         if (player.evadePoint >= player.Stat.maxEvadePoint)
         {
-            player.isGroggyAttack = true;
+            player.GroggyAttack = true;
         }
-        if (player.isGroggyAttack)
+        if (player.GroggyAttack)
         {
             player.evadePoint -= Time.deltaTime * (player.Stat.maxEvadePoint / player.Stat.groggyTime);
             if (player.evadePoint <= 0f)
             {
                 player.evadePoint = 0f;
-                player.isGroggyAttack = false;
+                player.GroggyAttack = false;
             }
         }
         player.slider.value = player.evadePoint;
@@ -122,9 +125,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (player.DistanceToEnemy < player.attackRange)
+        if (player.DistanceToEnemy < player.CurrentWeapon.attackRange && player.Enemy != null)
         {
-            SetState(State.Attack);
+            SetState((player.Enemy.IsGroggy) ? State.SuperAttack : State.Attack);
         }
         else
         {
@@ -146,18 +149,21 @@ public class PlayerController : MonoBehaviour
     private void Attack()
     {
         player.isAttack = true;
-        //if (player.enemy.OnAttack(Attack, player.isGroggyAttack))
-        if (player.isGroggyAttack)
-        {
-            player.Enemy.isGroggy = true;
-            player.isGroggyAttack = false;
-            player.evadePoint = 0f;
-        }
-        if (currentWeapon == null)
+
+        if (player.CurrentWeapon == null)
         {
             return;
         }
-        ExecuteAttack(player, player.Enemy);
+
+        if (player.DistanceToEnemy < player.CurrentWeapon.attackRange)
+        {
+            ExecuteAttack(player, player.Enemy);
+            if (player.GroggyAttack)
+            {
+                player.GroggyAttack = false;
+                player.evadePoint = 0f;
+            }
+        }
     }
     private void AfterAttack()
     {
@@ -177,7 +183,9 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+#if UNITY_EDITOR
         Debug.Log($"--------- ChangeState: {newState} ---------");
+#endif
         currentState = newState;
         stateManager?.ChangeState(states[(int)newState]);
     }
@@ -186,6 +194,7 @@ public class PlayerController : MonoBehaviour
     {
         states.Add(new PlayerIdleState(this));
         states.Add(new PlayerAttackState(this));
+        states.Add(new PlayerSuperAttackState(this));
         states.Add(new PlayerEvadeState(this));
         states.Add(new PlayerSprintState(this));
 
@@ -194,12 +203,11 @@ public class PlayerController : MonoBehaviour
 
     private void ExecuteAttack(LivingObject attacker, LivingObject defender)
     {
-        Attack attack = player.Stat.CreateAttack(attacker, defender);
+        Attack attack = player.Stat.CreateAttack(attacker, defender, player.GroggyAttack);
 
         var attackables = defender.GetComponents<IAttackable>();
         foreach (var attackable in attackables)
         {
-            Debug.Log("Call OnAttack");
             attackable.OnAttack(player.gameObject, attack);
         }
     }

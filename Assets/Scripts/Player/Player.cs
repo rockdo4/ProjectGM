@@ -6,7 +6,7 @@ public class Player : LivingObject
 {
     public float evadeTimer = 0f;
     public float evadePoint { get; set; } = 0;
-    public bool isGroggyAttack { get; set; }
+    public bool GroggyAttack { get; set; }
 
     public bool canCombo { get; set; }
     public bool isAttack { get; set; }
@@ -16,6 +16,7 @@ public class Player : LivingObject
     public BoxCollider Colldier { get; private set; }
     public CinemachineVirtualCamera virtualCamera;
     public Animator Animator { get; private set; }// animator test code
+    public Weapon CurrentWeapon { get; set; }
 
     public float MoveDistance
     {
@@ -35,6 +36,17 @@ public class Player : LivingObject
             return Vector3.Distance(transform.position, Enemy.transform.position);
         }
     }
+    public bool CanAttack
+    {
+        get
+        {
+            if (Enemy == null || CurrentWeapon == null)
+            {
+                return false;
+            }
+            return DistanceToEnemy < CurrentWeapon.attackRange;
+        }
+    }
 
     public PlayerStat Stat
     {
@@ -46,7 +58,6 @@ public class Player : LivingObject
 
     #region TestData
     public Slider slider;
-    public float attackRange { get; set; } = 2f;
     public int comboCount { get; set; } = 0;
     #endregion
 
@@ -62,6 +73,7 @@ public class Player : LivingObject
     private void Start()
     {
         Enemy = GameObject.FindGameObjectWithTag(Tags.enemy).GetComponent<TempEnemy>();
+        virtualCamera.Follow = transform;
     }
 
 }

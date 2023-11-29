@@ -1,6 +1,9 @@
+using System.Collections;
+using UnityEngine;
+
 public class TempEnemy : LivingObject
 {
-    public bool isGroggy = false;
+
     public EnemyStat Stat
     {
         get

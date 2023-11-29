@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerAttackState : PlayerStateBase
 {
-    private bool isSuperAttack = false;
+    private const string triggerName = "Attack";
     private bool isFirst = false;
 
     public PlayerAttackState(PlayerController controller) : base(controller)
@@ -11,15 +11,6 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void Enter()
     {
-        if (controller.player.Enemy.GetComponent<TempEnemy>().isGroggy)
-        {
-            controller.player.isAttack = true;
-            controller.player.canCombo = true;
-            controller.player.Animator.SetTrigger("SuperAttack");
-            isSuperAttack = true;
-            return;
-        }
-
         isFirst = true;
     }
 
@@ -36,7 +27,7 @@ public class PlayerAttackState : PlayerStateBase
             {
                 isFirst = false;
             }
-            controller.player.Animator.SetTrigger("Attack");
+            controller.player.Animator.SetTrigger(triggerName);
         }
     }
 
@@ -47,12 +38,6 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void Exit()
     {
-        if (isSuperAttack)
-        {
-            controller.player.Enemy.GetComponent<TempEnemy>().isGroggy = false;
-            isSuperAttack = false;
-        }
-
-        controller.player.Animator.ResetTrigger("Attack");
+        controller.player.Animator.ResetTrigger(triggerName);
     }
 }

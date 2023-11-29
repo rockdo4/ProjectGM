@@ -2,35 +2,31 @@ using UnityEngine;
 
 public class TakeAttack : MonoBehaviour, IAttackable
 {
-    private Stat stat;
-    private LivingObject livingObject;
+    private LivingObject attackTarget;
 
     private void Awake()
     {
-        //stat = GetComponent<ILivingObject>().GetStat();
-        stat = GetComponent<LivingObject>().stat;
-        livingObject = GetComponent<LivingObject>();
+        attackTarget = GetComponent<LivingObject>();
     }
 
     public void OnAttack(GameObject attacker, Attack attack)
     {
-        Debug.Log($"{attacker.name} / {attack.Damage}");
-        Debug.Log(livingObject.HP);
-
-        if (stat == null || attacker == null)
+        if (attackTarget == null || attacker == null)
         {
             return;
         }
-        livingObject.HP -= attack.Damage;
-        if (livingObject.HP <= 0)
+
+        attackTarget.HP -= attack.Damage;
+        attackTarget.IsGroggy = attack.IsGroggy;
+
+        if (attackTarget.HP <= 0)
         {
-            livingObject.HP = 0;
+            attackTarget.HP = 0;
+            var destructables = attackTarget.GetComponents<IDestructable>();
+            foreach(var destructable in destructables)
+            {
+                destructable.OnDestruction(attacker);
+            }
         }
-        //stat.HP -= attack.Damage;
-        //if (stat.HP <= 0)
-        //{
-        //    stat.HP = 0;
-        //}
-        
     }
 }

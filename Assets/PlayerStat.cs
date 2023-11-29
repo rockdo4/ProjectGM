@@ -34,8 +34,22 @@ public class PlayerStat : Stat
     [Header("피격 시 무적 시간(sec)")]
     public float hitInvincibleTime;
 
-    public override Attack CreateAttack(LivingObject attacker, LivingObject defender)
+    public override Attack CreateAttack(LivingObject attacker, LivingObject defender, bool groggy)
     {
-        return base.CreateAttack(attacker, defender);
+        Player player = attacker as Player;
+        float damage = attacker.stat.AttackDamage;
+        damage += player.CurrentWeapon.attack;
+
+        var critical = Random.value < attacker.stat.Critical;
+        if (critical)
+        {
+            damage *= attacker.stat.CriticalDamage;
+        }
+
+        if (defender != null)
+        {
+            damage -= defender.stat.Defence;
+        }
+        return new Attack((int)damage, critical, groggy);
     }
 }

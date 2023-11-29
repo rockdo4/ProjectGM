@@ -4,7 +4,6 @@ public class AttackDebug : MonoBehaviour, IAttackable
 {
     public void OnAttack(GameObject attacker, Attack attack)
     {
-        Debug.Log(GetComponent<LivingObject>().HP);
-        Debug.Log($"{attacker.name} attacked {gameObject.name} for {attack.Damage} damage. targetHP: {GetComponent<LivingObject>().HP}/{GetComponent<LivingObject>().stat.HP} Critical: {attack.IsCritical}");
+        Debug.Log($"{attacker.name} attacked {gameObject.name} for {attack.Damage} damage.\n{gameObject.name}_HP: {GetComponent<LivingObject>().HP}/{GetComponent<LivingObject>().stat.HP}\tIsCritical: {attack.IsCritical}");
     }
 }
