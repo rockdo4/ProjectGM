@@ -204,6 +204,17 @@ public class EnemyAI : MonoBehaviour
         {
             isTwoPhase = true;
             Debug.Log("페이즈 2로 전환");
+
+            // 여기에 Magic 자식 오브젝트를 활성화하는 코드를 추가
+            Transform magicObject = transform.Find("Magic");
+            if (magicObject != null)
+            {
+                magicObject.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("Magic 오브젝트를 찾을 수 없음");
+            }
         }
         return !isTwoPhase;
     }
@@ -358,7 +369,7 @@ public class EnemyAI : MonoBehaviour
         int x = index % 3;
         int z = index / 3;
 
-        return transform.position + transform.forward + new Vector3(x - 1 + 0.5f, 0, z - 1);
+        return transform.position + transform.forward + new Vector3(x + 1.4f, 0, z - 1);
     }
 
     INode.EnemyState DoMeleeAttack1()
@@ -453,13 +464,17 @@ public class EnemyAI : MonoBehaviour
     {
         if (detectedPlayer != null)
         {
+            float actualMovementSpeed = isTwoPhase ? movementSpeed * 1.5f : movementSpeed;
+
             animator.SetFloat("MoveSpeed", 0.5f);
 
+            // animator.SetFloat("MoveSpeed", isTwoPhase ? 1.0f : 0.5f);
+
             Vector3 direction = (detectedPlayer.position - transform.position).normalized;
-            transform.position += direction * movementSpeed * Time.deltaTime;
+            transform.position += direction * actualMovementSpeed * Time.deltaTime;
 
             Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * movementSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * actualMovementSpeed);
             return INode.EnemyState.Running;
         }
         return INode.EnemyState.Failure;
@@ -487,7 +502,8 @@ public class EnemyAI : MonoBehaviour
                     int index = i * 3 + j;
                     Gizmos.color = attackGrid[index] ? Color.red : Color.green;
 
-                    Vector3 cellPosition = transform.position + transform.forward + new Vector3(j + 0.5f, 0, i - 1);
+                    Vector3 cellPosition = 
+                        transform.position + transform.forward + new Vector3(j + 1.4f, 0, i - 1);
                     Gizmos.DrawCube(cellPosition, new Vector3(1, 0.1f, 1));
                 }
             }
@@ -496,25 +512,20 @@ public class EnemyAI : MonoBehaviour
 
     private void OnAttack()
     {
+        float actualAttackPower = isTwoPhase ? meleeAttackPower * 2 : meleeAttackPower;
+
+
         foreach (GameObject cell in colliderObjects)
         {
             if (cell != null)
             {
-                Debug.Log(colliderObjects);
                 AttackCell attackCell = cell.GetComponent<AttackCell>();
 
-                // 어택셀이 없다면 펄스 // 근데 펄스가 출력되어서 쇼어택레인지에서
-                // 어택셀 컴포넌트를 추가함
-                // 그래서 당연히 콜라이더가 겹치더라도 플레이어 인사이드는 펄스가 나옴
-
-                Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
-
+                // Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
 
                 if (attackCell != null && attackCell.playerInside)
                 {
-                    Debug.Log(attackCell);
-
-                    player.TakeDamage(meleeAttackPower);
+                    player.TakeDamage(actualAttackPower);
                     break;
                 }
             }
