@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class TempEnemy : LivingObject
 {
-
     public EnemyStat Stat
     {
         get

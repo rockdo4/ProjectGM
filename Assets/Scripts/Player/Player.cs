@@ -11,7 +11,7 @@ public class Player : LivingObject
     public bool canCombo { get; set; }
     public bool isAttack { get; set; }
 
-    public TempEnemy Enemy { get; private set; }
+    public LivingObject Enemy { get; private set; }
     public Rigidbody Rigid { get; private set; }
     public BoxCollider Colldier { get; private set; }
     public CinemachineVirtualCamera virtualCamera;
@@ -64,22 +64,14 @@ public class Player : LivingObject
     protected override void Awake()
     {
         base.Awake();
-
         Rigid = GetComponent<Rigidbody>();
         Colldier = GetComponent<BoxCollider>();
-        Animator = GetComponent<Animator>(); // animator test code
+        Animator = GetComponent<Animator>();
     }
 
     private void Start()
     {
-        Enemy = GameObject.FindGameObjectWithTag(Tags.enemy).GetComponent<TempEnemy>();
+        Enemy = GameObject.FindGameObjectWithTag(Tags.enemy).GetComponent<LivingObject>();
         virtualCamera.Follow = transform;
-    }
-
-    public void TakeDamage(float damage)
-    {
-        HP -= damage;
-
-        Debug.Log("�÷��̾� HP : " + HP);
     }
 }

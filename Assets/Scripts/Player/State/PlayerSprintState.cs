@@ -36,7 +36,15 @@ public class PlayerSprintState : PlayerStateBase
 
             if (controller.player.DistanceToEnemy < controller.player.CurrentWeapon.attackRange)
             {
-                controller.SetState((controller.player.Enemy.IsGroggy) ? PlayerController.State.SuperAttack : PlayerController.State.Attack);
+                if (controller.player.Enemy.IsGroggy)
+                {
+                    controller.SetState(PlayerController.State.SuperAttack);
+                }
+                else
+                {
+                    controller.SetState(PlayerController.State.Attack);
+                }
+                //controller.SetState((controller.player.Enemy.IsGroggy) ? PlayerController.State.SuperAttack : PlayerController.State.Attack);
             }
         }
         else

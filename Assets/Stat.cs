@@ -34,6 +34,10 @@ public class Stat : ScriptableObject
         if (defender != null)
         {
             damage -= defender.stat.Defence;
+            if (damage < 0)
+            {
+                damage = 0;
+            }
         }
 
         return new Attack((int)damage, critical, groogy);

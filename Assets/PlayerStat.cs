@@ -13,8 +13,8 @@ public class PlayerStat : Stat
     [Range(-100, 100)]
     public float evadePoint;
 
-    [Header("회피 시 대미지 감소 비율")]
-    [Range(0f, 1f)]
+    [Header("회피 시 대미지 배율")]
+    [Range(0f, 3f)]
     public float evadeDamageRate;
 
     [Header("저스트 회피 판정 시간(sec)")]
@@ -49,6 +49,10 @@ public class PlayerStat : Stat
         if (defender != null)
         {
             damage -= defender.stat.Defence;
+            if (damage < 0)
+            {
+                damage = 0;
+            }
         }
         return new Attack((int)damage, critical, groggy);
     }
