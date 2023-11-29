@@ -10,10 +10,14 @@ public enum AttackType
 
 }
 
-public class Weapon : MonoBehaviour, IEquip
+public class WeaponPrefab : MonoBehaviour, IEquip
 {
     public Item item = null;
+
+    [Header("공격 속성")]
     public AttackType type = AttackType.None;
+
+    [Header("애니메이션 SO")]
     public PlayerAnimationSO animationSO;
 
     public void OnEquip()

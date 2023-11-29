@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
@@ -26,8 +27,12 @@ public class InventoryManager : MonoBehaviour
     private List<Item> sellList = new List<Item>();
     private bool sellMode = false;
 
+    //private ObjectPool<Button> buttonPool;
+
     private void Start()
     {
+        //buttonPool = new ObjectPool<Button>(());
+
         if (PlayDataManager.data == null)
         {
             PlayDataManager.Init();

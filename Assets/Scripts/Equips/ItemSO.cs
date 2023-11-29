@@ -50,10 +50,10 @@ public class ItemSO : ScriptableObject
         return go;
     }
 
-    public Weapon MakeItem(Item item, Transform tr, Animator anim)
+    public WeaponPrefab MakeItem(Item item, Transform tr, Animator anim)
     {
         var go = MakeItem(item, tr);
-        var weapon = go.GetComponent<Weapon>();
+        var weapon = go.GetComponent<WeaponPrefab>();
         weapon.OnEquip(item, anim);
         return weapon;
     }
