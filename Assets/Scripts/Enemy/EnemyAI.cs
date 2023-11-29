@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.GraphView;
@@ -23,9 +24,6 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     private float roarDuration = 3f;
     private bool hasRoared = false;
-
-    [SerializeField]
-    float attackPower = 1f;
 
     [SerializeField]
     float health = 100f;
@@ -56,8 +54,6 @@ public class EnemyAI : MonoBehaviour
     private EnemyType enemyType;
 
     private bool isAttacking = false;
-    private float attackDuration = 2f;
-    private float attackTimer = 0f;
 
     [SerializeField]
     private float meleeAttackPower = 5f;
@@ -67,7 +63,6 @@ public class EnemyAI : MonoBehaviour
     private Material attackRangeMaterial;
 
     private Player player;
-    private Rigidbody rigidbody;
 
     private bool isPreparingAttack = false;
 
@@ -83,7 +78,10 @@ public class EnemyAI : MonoBehaviour
     public List<AttackPattern> savedPatterns = new List<AttackPattern>();
 
     int attackIndex = -1;
-  
+
+    GameObject cellInstance;
+    private GameObject cellParent;
+    private List<GameObject> cellInstances = new List<GameObject>(); // 셀 인스턴스들을 저장할 리스트
 
     public enum EnemyType
     {
@@ -94,6 +92,7 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         StartCoroutine(RoarInit());
+
     }
 
     IEnumerator RoarInit()
@@ -120,11 +119,8 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        if (!hasRoared) // 다시 추가
+        if (!hasRoared)
             return;
-
-        //if (testAniPlaying)
-        //    return;
 
         if (isAttacking)
         {
@@ -135,11 +131,6 @@ public class EnemyAI : MonoBehaviour
         {
             return;
         }
-
-        //if (Input.GetKeyDown(KeyCode.P)) // P키를 누르면 패턴 출력
-        //{
-        //    PrintAttackPatterns();
-        //}
 
         if (Input.GetKeyDown(KeyCode.H))
         {
@@ -218,7 +209,6 @@ public class EnemyAI : MonoBehaviour
         return !isTwoPhase;
     }
 
-
     private INode.EnemyState ExecuteAttackPattern(int[] pattern)
     {
         INode.EnemyState result = INode.EnemyState.Failure;
@@ -270,9 +260,6 @@ public class EnemyAI : MonoBehaviour
         {
             string animationTrigger = "MeleeAttack_" + attackType;
             StartCoroutine(IsAnimationRunning(animationTrigger));
-
-            //Debug.Log(animationTrigger);
-
             //// 기존 방식
             // StartCoroutine(IsAnimationRunning("MeleeAttack_A"));
         }
@@ -283,7 +270,6 @@ public class EnemyAI : MonoBehaviour
         if (animator != null)
         {
             animator.SetTrigger(stateName);
-            //Debug.Log("123123");
 
             yield return new WaitForEndOfFrame();
             yield return new WaitForEndOfFrame();
@@ -304,56 +290,87 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void ShowAttackRange(bool show/*, int attackIndex*/) // 인덱스 굳이?
+    private void ShowAttackRange(bool show /*, int attackIndex*/) // 인덱스 굳이? 공격패턴에서 지정해주기
     {
+
         if (show)
         {
             if (attackRangeInstance == null)
             {
                 attackRangeInstance = Instantiate(attackRangePrefab, transform.position, Quaternion.identity);
             }
-            // 공격 패턴에 따라 공격 범위 시각화를 조정
+
             AttackPattern currentPattern = savedPatterns[attackIndex];
-            UpdateAttackRangeDisplay(currentPattern);
+            cellInstances.Clear(); // 리스트 초기화
 
-            attackRangeInstance.SetActive(true);
+            for (int i = 0; i < currentPattern.pattern.Length; i++)
+            {
+                if (currentPattern.pattern[i])
+                {
+                    Vector3 cellPosition = CalculateCellPosition(i);
+                    GameObject cell = Instantiate(attackRangeInstance, cellPosition, Quaternion.identity);
+                    cell.SetActive(true);
+                    cellInstances.Add(cell); // 생성된 셀 인스턴스를 리스트에 추가
+                }
+            }
 
+            attackRangeInstance.SetActive(false);
         }
         else
         {
-            if (attackRangeInstance != null)
-                attackRangeInstance.SetActive(false);
+            foreach (GameObject cell in cellInstances) // 리스트의 모든 셀 인스턴스를 순회
+            {
+                if (cell != null)
+                    cell.SetActive(false);
+            }
+
+
         }
 
 
-
+        //// 부모 오브젝트 끄는방법
         //if (show)
         //{
-        //    //ClearAttackRangeInstances(); // 이전에 생성된 인스턴스를 정리
-
-        //    for (int i = 0; i < 3; i++)
+        //    if (attackRangeInstance == null)
         //    {
-        //        for (int j = 0; j < 3; j++)
+        //        attackRangeInstance = Instantiate(attackRangePrefab, transform.position, Quaternion.identity);
+        //    }
+
+        //    AttackPattern currentPattern = savedPatterns[attackIndex];
+
+        //    for (int i = 0; i < currentPattern.pattern.Length; i++)
+        //    {
+        //        if (currentPattern.pattern[i]) // 9개의 타일 순회하면서 트루 타일일때
         //        {
-        //            int index = i * 3 + j;
-        //            if (attackGrid[index])
-        //            {
-        //                Vector3 cellPosition = transform.position + transform.forward + new Vector3(j - 1 + 0.5f, 0, i - 1);
-        //                GameObject cellInstance = Instantiate(attackRangePrefab, cellPosition, Quaternion.identity);
-
-        //                // 기즈모 참고
-        //                // Gizmos.DrawCube(cellPosition, new Vector3(1, 0.1f, 1));
-
-        //                // 여기에서 cellInstance의 크기, 색상 등을 설정할 수 있습니다.
-        //                // 예: cellInstance.GetComponent<Renderer>().material.color = Color.red;
-        //            }
+        //            Vector3 cellPosition = CalculateCellPosition(i);
+        //            cellInstance = Instantiate(attackRangeInstance, cellPosition, Quaternion.identity);
+        //            cellInstance.SetActive(true);
         //        }
         //    }
+
+        //    // Debug.Log($"! INDEX : {attackIndex} / COUNT : {i} \n True/false : {savedPatterns[attackIndex].pattern[i]}");
+
+        //    attackRangeInstance.SetActive(false); // 기존꺼는 끄고
         //}
         //else
         //{
-        //    ClearAttackRangeInstances();
+        //    foreach (var cell in cellInstance)
+        //    {
+        //        cell.SetActive(false);
+        //    }
+
+        //    // cellInstance라는 변수는 하나하나 일일히 추적하지 않아서 마지막껏만 꺼짐
+
+        //    // 태그방식은 씬을 다 순회해서 별로임
+
+        //    // 부모를 액티브 펄스 해주는게 더 좋다
+        //    for (int i = 0; i < attackGrid.Length; i++)
+        //    {
+        //        if (cellInstance != null)
+        //            cellInstance.SetActive(false);
+        //    }
         //}
+
     }
 
     private void ClearAttackRangeInstances()
@@ -365,32 +382,6 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-
-    private void UpdateAttackRangeDisplay(AttackPattern pattern)
-    {
-        // 패턴에 따라 공격 범위의 크기 및 위치를 조정
-        for (int i = 0; i < pattern.pattern.Length; i++)
-        {
-            Vector3 cellPosition = CalculateCellPosition(i);
-            // 해당 셀의 위치에 공격 범위 인스턴스를 배치 (예시: 셀마다 별도의 인스턴스를 생성하거나 위치를 조정)
-            // ... 공격 범위 인스턴스 배치 로직 ...
-        }
-    }
-
-
-
-    private Vector3 GetMonsterSize() // 임시
-    {
-        Collider collider = GetComponent<Collider>();
-        if (collider != null)
-        {
-            Vector3 size = collider.bounds.size;
-            return size;
-        }
-        return Vector3.one;
-    }
-
-
     bool IsPlayerInCell(int index)
     {
         Vector3 cellPosition = CalculateCellPosition(index);
@@ -399,9 +390,25 @@ public class EnemyAI : MonoBehaviour
 
     Vector3 CalculateCellPosition(int index)
     {
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    for (int j = 0; j < 3; j++)
+        //    {
+        //        int index = i * 3 + j;
+        //        Gizmos.color = attackGrid[index] ? Color.red : Color.green;
+
+        //        Vector3 cellPosition = transform.position + transform.forward + new Vector3(j + 0.5f, 0, i - 1);
+        //        Gizmos.DrawCube(cellPosition, new Vector3(1, 0.1f, 1));
+        //    }
+        //}
+
+
+
         int x = index % 3; // 가, 세
         int z = index / 3;
+
         return transform.position + transform.forward + new Vector3(x - 1 + 0.5f, 0, z - 1);
+
         // 기즈모에 표시된 범위와 일치해야하니까 수정하긴했는데
     }
 
@@ -422,7 +429,6 @@ public class EnemyAI : MonoBehaviour
             isAttacking = true;
 
             attackIndex = 0; //  A패턴
-            // 지금 구조는 저장된 패턴의 인덱스를 일일히 지정해주어야하는데 다른 방식도 생각해보기
 
             StartCoroutine(PrepareMeleeAttack("A"));
             return INode.EnemyState.Success;
@@ -452,7 +458,6 @@ public class EnemyAI : MonoBehaviour
             StartCoroutine(PrepareMeleeAttack("B"));
             return INode.EnemyState.Success;
         }
-
         return INode.EnemyState.Failure;
     }
 
@@ -476,7 +481,6 @@ public class EnemyAI : MonoBehaviour
             StartCoroutine(PrepareMeleeAttack("C"));
             return INode.EnemyState.Success;
         }
-
         return INode.EnemyState.Failure;
     }
     #endregion
@@ -519,73 +523,41 @@ public class EnemyAI : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, detectRange);
-
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
-
-        for (int i = 0; i < 3; i++)
+        if (!EditorApplication.isPlaying)
         {
-            for (int j = 0; j < 3; j++)
-            {
-                int index = i * 3 + j;
-                Gizmos.color = attackGrid[index] ? Color.red : Color.green;
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, detectRange);
 
-                // 트랜스폼 포지션 빼니까 몬스터의 현재 위치에 대한 정보가 빠져버림
-                Vector3 cellPosition = transform.position + transform.forward + new Vector3(j + 0.5f, 0, i - 1);
-                Gizmos.DrawCube(cellPosition, new Vector3(1, 0.1f, 1));
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    int index = i * 3 + j;
+                    Gizmos.color = attackGrid[index] ? Color.red : Color.green;
+
+                    Vector3 cellPosition = transform.position + transform.forward + new Vector3(j + 0.5f, 0, i - 1);
+                    Gizmos.DrawCube(cellPosition, new Vector3(1, 0.1f, 1));
+                }
             }
         }
     }
 
-    private void OnAttack() // 임시 데미지 애니메이션 이벤트
+    private void OnAttack()
     {
-
-        // 이 데미지를 판정해주는 테스트 메서드에서
-
-        // 매개변수로 패턴을 넘겨봤자 의미가 있나?
-        // 왜냐하면 코드에서는 실행 안함
-        // 애니메이션 이벤트니까
-
-        // 결국 작동이 됐을때 "지금 공격패턴이 어떤 패턴인지?" 를 알아야됨
-
         if (detectedPlayer != null)
         {
             // 그리드 형태의 공격
-            for (int i = 0; i < attackGrid.Length; i++)
+            for (int i = 0; i < savedPatterns[attackIndex].pattern.Length; i++)
             {
                 if (savedPatterns[attackIndex].pattern[i] && IsPlayerInCell(i))
                 {
-                    Debug.Log(attackIndex);
-
                     player.TakeDamage(meleeAttackPower);
                     break;
-
-
-                    //player.TakeDamage(meleeAttackPower);
-                     // 플레이어가 어느 하나의 공격 셀 내에 있으면 데미지 적용 후 반복문 종료
-                    // 그런데 지금은 어느 하나라도 켜져있으면 무조건 트루 발생
                 }
             }
-
         }
     }
-
-    //private void PrintAttackPatterns()
-    //{
-    //    Debug.Log("Attack Pattern 1:");
-    //    for (int i = 0; i < attackPattern1.Length; i++)
-    //    {
-    //        string attackType = attackPattern1[i] == 1 ? "근접 A공격" : "다른 공격 유형";
-    //        Debug.Log("Index " + i + ": " + attackType);
-    //    }
-
-    //    Debug.Log("Attack Pattern 2:");
-    //    for (int i = 0; i < attackPattern2.Length; i++)
-    //    {
-    //        string attackType = attackPattern2[i] == 1 ? "근접 B공격" : "다른 공격 유형";
-    //        Debug.Log("Index " + i + ": " + attackType);
-    //    }
-    //}
 }
