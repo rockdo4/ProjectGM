@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     public State currentState { get; private set; }
 
     // equip weapon test
-    private Item equipWeapon = null;
+    private Weapon equipWeapon = null;
     public Transform leftHand;
     public Transform rightHand;
     public ItemSO weaponSO;
@@ -34,8 +34,8 @@ public class PlayerController : MonoBehaviour
         {
             PlayDataManager.Init();
         }
-        equipWeapon = PlayDataManager.data.Inventory.Find
-            (i => i.instanceID == PlayDataManager.data.Equipment[Item.ItemType.Weapon]);
+        equipWeapon = PlayDataManager.curWeapon;
+        
 
         StateInit();
     }
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, rotation.eulerAngles.y, 0f);
 
         #region Test
-        //ÇÇ°Ý Å×½ºÆ®
+        //ï¿½Ç°ï¿½ ï¿½×½ï¿½Æ®
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (player.evadeTimer < player.Stat.justEvadeTime)

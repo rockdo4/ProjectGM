@@ -15,6 +15,13 @@ public class ItemSO : ScriptableObject
 
     public GameObject MakeItem(Item item)
     {
+        // Item Null Exception
+        if (item == null)
+        {
+            Debug.LogWarning("Not Exist Item!");
+            return null;
+        }
+
         // Item.ItemType Exception
         if (item.type == Item.ItemType.None)
         {
@@ -50,10 +57,10 @@ public class ItemSO : ScriptableObject
         return go;
     }
 
-    public Weapon MakeItem(Item item, Transform tr, Animator anim)
+    public WeaponPrefab MakeItem(Item item, Transform tr, Animator anim)
     {
         var go = MakeItem(item, tr);
-        var weapon = go.GetComponent<Weapon>();
+        var weapon = go.GetComponent<WeaponPrefab>();
         weapon.OnEquip(item, anim);
         return weapon;
     }
