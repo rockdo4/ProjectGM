@@ -16,7 +16,7 @@ public class Player : LivingObject
     public BoxCollider Colldier { get; private set; }
     public CinemachineVirtualCamera virtualCamera;
     public Animator Animator { get; private set; }// animator test code
-    public Weapon CurrentWeapon { get; set; }
+    public WeaponPrefab CurrentWeapon { get; set; }
 
     public float MoveDistance
     {
