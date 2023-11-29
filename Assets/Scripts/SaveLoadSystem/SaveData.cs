@@ -53,23 +53,15 @@ public class SaveDataV3 : SaveData
     public SaveDataV3()
     {
         Version = 3;
-
-        Inventory.Add(Item.ItemType.Weapon, new List<Item>());
-        Inventory.Add(Item.ItemType.Armor, new List<Item>());
-
-        Equipment.Add(Item.ItemType.Weapon, new DateTime());
-        Equipment.Add(Item.ItemType.Armor, new DateTime());
     }
 
     public int Gold { get; set; } = 0;
 
     public int Quest { get; set; } = 1;
 
-    public readonly Dictionary<Item.ItemType, List<Item>> Inventory
-        = new Dictionary<Item.ItemType, List<Item>>();
+    public readonly List<Weapon> WeaponInventory = new List<Weapon>();
 
-    public readonly Dictionary<Item.ItemType, DateTime> Equipment
-        = new Dictionary<Item.ItemType, DateTime>();
+    public readonly List<Armor> ArmorInventory = new List<Armor>();
 
     public override SaveData VersionUp()
     {

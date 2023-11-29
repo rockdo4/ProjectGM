@@ -1,15 +1,5 @@
 using UnityEngine;
 
-public enum AttackType
-{
-    None = -1,
-
-    Hit, // 타격형
-    Slash, // 참격형
-    Pierce, // 관통형
-
-}
-
 public class WeaponPrefab : MonoBehaviour, IEquip
 {
     public Item item = null;
@@ -26,19 +16,19 @@ public class WeaponPrefab : MonoBehaviour, IEquip
         type = item.id switch
         {
             // Hit
-            (int)Item.WeaponID.Simple_Hammer => AttackType.Hit,
-            (int)Item.WeaponID.Gold_Hammer => AttackType.Hit,
+            (int)Weapon.WeaponID.Simple_Hammer => AttackType.Hit,
+            (int)Weapon.WeaponID.Gold_Hammer => AttackType.Hit,
 
             // Slash
-            (int)Item.WeaponID.Go_Work_Sword => AttackType.Slash,
-            (int)Item.WeaponID.Vigil_Sword => AttackType.Slash,
+            (int)Weapon.WeaponID.Go_Work_Sword => AttackType.Slash,
+            (int)Weapon.WeaponID.Vigil_Sword => AttackType.Slash,
 
-            (int)Item.WeaponID.Glory_Sword => AttackType.Slash,
-            (int)Item.WeaponID.Darkness_Sword => AttackType.Slash,
+            (int)Weapon.WeaponID.Glory_Sword => AttackType.Slash,
+            (int)Weapon.WeaponID.Darkness_Sword => AttackType.Slash,
 
             // Pierce
-            (int)Item.WeaponID.Simple_Spear => AttackType.Pierce,
-            (int)Item.WeaponID.Gold_Spear => AttackType.Pierce,
+            (int)Weapon.WeaponID.Simple_Spear => AttackType.Pierce,
+            (int)Weapon.WeaponID.Gold_Spear => AttackType.Pierce,
 
             _ => AttackType.None,
         };
@@ -54,6 +44,6 @@ public class WeaponPrefab : MonoBehaviour, IEquip
     {
         OnEquip(item);
 
-        anim.runtimeAnimatorController = animationSO.GetAnimator((Item.WeaponID)item.id);
+        anim.runtimeAnimatorController = animationSO.GetAnimator((Weapon.WeaponID)item.id);
     }
 }

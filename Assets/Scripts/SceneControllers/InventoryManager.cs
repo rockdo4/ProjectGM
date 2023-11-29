@@ -51,16 +51,15 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < 8; i++)
         {
-            var weapon = new Item(Item.ItemType.Weapon, (int)Item.WeaponID.Simple_Hammer + i);
-            PlayDataManager.data.Inventory[Item.ItemType.Weapon].Add(weapon);
-
+            var weapon = new Weapon(Weapon.WeaponID.Simple_Hammer + i);
+            PlayDataManager.data.WeaponInventory.Add(weapon);
             yield return new WaitForEndOfFrame();
         }
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
-            var armor = new Item(Item.ItemType.Armor, (int)Item.ArmorID.HMD + i);
-            PlayDataManager.data.Inventory[Item.ItemType.Armor].Add(armor);
+            var armor = new Armor(Armor.ArmorID.HMD + i);
+            PlayDataManager.data.ArmorInventory.Add(armor);
 
             yield return new WaitForEndOfFrame();
         }
@@ -71,9 +70,9 @@ public class InventoryManager : MonoBehaviour
     public void ShowWeapons()
     {
         ClearItemButton();
-         
+
         // Object Pool로 최적화할 것
-        var weapons = PlayDataManager.data.Inventory[Item.ItemType.Weapon];
+        var weapons = PlayDataManager.data.WeaponInventory;
         foreach (var weapon in weapons)
         {
             var go = Instantiate(buttonPrefab, inventoryPanel.transform);
@@ -93,9 +92,6 @@ public class InventoryManager : MonoBehaviour
                 }
                 
             });
-
-            var text = go.GetComponentInChildren<TextMeshProUGUI>();
-            text.text = ((Item.WeaponID)weapon.id).ToString();
         }
     }
 
@@ -104,7 +100,7 @@ public class InventoryManager : MonoBehaviour
         ClearItemButton();
 
         // Object Pool로 최적화할 것
-        var armors = PlayDataManager.data.Inventory[Item.ItemType.Armor];
+        var armors = PlayDataManager.data.ArmorInventory;
         foreach (var armor in armors)
         {
             var go = Instantiate(buttonPrefab, inventoryPanel.transform);
@@ -123,9 +119,6 @@ public class InventoryManager : MonoBehaviour
                 }
                 
             });
-
-            var text = go.GetComponentInChildren<TextMeshProUGUI>();
-            text.text = ((Item.ArmorID)armor.id).ToString();
         }
     }
 

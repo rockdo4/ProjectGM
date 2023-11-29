@@ -2437,6 +2437,7 @@ GameObject:
   - component: {fileID: 726828903}
   - component: {fileID: 726828905}
   - component: {fileID: 726828904}
+  - component: {fileID: 726828906}
   m_Layer: 5
   m_Name: Item Info Panel
   m_TagString: Untagged
@@ -2503,6 +2504,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 726828902}
   m_CullTransparentMesh: 1
+--- !u!114 &726828906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726828902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27982739c7532b048a3cf06c2d16697d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iconImage: {fileID: 1934702206}
+  statText: {fileID: 335095159}
+  infoText: {fileID: 1574311950}
 --- !u!1 &742465031
 GameObject:
   m_ObjectHideFlags: 0
@@ -7724,7 +7740,7 @@ MonoBehaviour:
   inventoryPanel: {fileID: 1985895244}
   buttonPrefab: {fileID: 4435680487270199275, guid: 8c67af49ae2043f4581efc53797a1e6d,
     type: 3}
-  itemPanel: {fileID: 726828902}
+  itemPanel: {fileID: 726828906}
   itemPanelInfoText: {fileID: 1574311950}
   decoPanel: {fileID: 1595469974}
   matPanel: {fileID: 442092637}
@@ -7812,9 +7828,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1855066185}
-        m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
-        m_MethodName: EquipItem
+      - m_Target: {fileID: 726828906}
+        m_TargetAssemblyTypeName: ItemPanel, Assembly-CSharp
+        m_MethodName: WearItem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

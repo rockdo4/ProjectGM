@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static Item;
 
 public class ItemPanel : MonoBehaviour, IRenewal
 { 
@@ -21,7 +18,7 @@ public class ItemPanel : MonoBehaviour, IRenewal
     {
         gameObject.SetActive(true);
 
-        infoText.text = ((WeaponID)item.id).ToString();
+        infoText.text = item.id.ToString();
         statText.text = $"instanceID : {item.instanceID} \ntype : {item.type}";
         if (item.isEquip)
         {

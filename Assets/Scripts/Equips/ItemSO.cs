@@ -15,6 +15,13 @@ public class ItemSO : ScriptableObject
 
     public GameObject MakeItem(Item item)
     {
+        // Item Null Exception
+        if (item == null)
+        {
+            Debug.LogWarning("Not Exist Item!");
+            return null;
+        }
+
         // Item.ItemType Exception
         if (item.type == Item.ItemType.None)
         {

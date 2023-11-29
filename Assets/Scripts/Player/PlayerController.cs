@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
     public Player player { get; private set; }
 
     // equip weapon test
-    private Item equipWeapon = null;
+    private Weapon equipWeapon = null;
     public Transform leftHand;
     public Transform rightHand;
     public ItemSO weaponSO;
@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
         {
             PlayDataManager.Init();
         }
-        equipWeapon = PlayDataManager.GetCurrentItem(Item.ItemType.Weapon);
+        equipWeapon = PlayDataManager.curWeapon;
         
 
     }
