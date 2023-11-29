@@ -12,7 +12,7 @@ public class TouchManager : Singleton<TouchManager>
     public bool Swiped { get; private set; }
 
     [Header("홀드 판단 시간")]
-    public float holdTime = 0.04f;
+    public float holdTime = 0.02f;
     private float holdTimer = 0f;
 
     [Header("스와이프 판단 시간")]
@@ -92,25 +92,12 @@ public class TouchManager : Singleton<TouchManager>
             {
                 HoldEndListeners();
             }
-            return;
-            endPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
-            SwipeDetected();
 
-            if (!Holded && !Swiped)
+            if (TapListeners != null)
             {
-                Taped = true;
-            }
-
-            if (Swiped && SwipeListeners != null)
-            {
-                Swiped = false;
-                SwipeListeners();
-            }
-            else if (Taped && TapListeners != null)
-            {
-                Taped = false;
                 TapListeners();
             }
+            return;
         }
 #elif UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount < 1)

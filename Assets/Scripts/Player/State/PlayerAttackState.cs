@@ -2,43 +2,32 @@ using UnityEngine;
 
 public class PlayerAttackState : PlayerStateBase
 {
-    private bool isAnimationPlaying = false;
+    private const string triggerName = "Attack";
+    private bool isFirst = false;
 
     public PlayerAttackState(PlayerController controller) : base(controller)
     {
-
     }
 
     public override void Enter()
     {
-        if (Player.Instance.DistanceToEnemy - Player.Instance.attackRange > Player.Instance.EvadeDistance)
-        {
-            TouchManager.Instance.swipeDirection = TouchManager.SwipeDirection.Up;
-            Player.Instance.SetState(Player.States.Evade);
-            return;
-        }
-
-        Player.Instance.anim.SetTrigger("Attack");
-        isAnimationPlaying = true;
+        isFirst = true;
     }
 
     public override void Update()
     {
-        if (isAnimationPlaying)
+        if (!TouchManager.Instance.Holded)
         {
-            var animatorStateInfo = Player.Instance.anim.GetCurrentAnimatorStateInfo(0);
-            
-            if (animatorStateInfo.normalizedTime >= Player.Instance.comboSuccessRate)
+            controller.SetState(PlayerController.State.Idle);
+        }
+
+        if (isFirst || (controller.player.canCombo && !controller.player.isAttack))
+        {
+            if (isFirst)
             {
-                if (TouchManager.Instance.Taped || TouchManager.Instance.Holded)
-                {
-                    Player.Instance.anim.SetTrigger("Attack");
-                }
-                else if (animatorStateInfo.normalizedTime >= 1.0f)
-                {
-                    Player.Instance.SetState(Player.States.Idle);
-                }
+                isFirst = false;
             }
+            controller.player.Animator.SetTrigger(triggerName);
         }
     }
 
@@ -49,7 +38,6 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void Exit()
     {
-
+        controller.player.Animator.ResetTrigger(triggerName);
     }
-
 }

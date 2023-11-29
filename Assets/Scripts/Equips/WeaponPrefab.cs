@@ -4,11 +4,19 @@ public class WeaponPrefab : MonoBehaviour, IEquip
 {
     public Item item = null;
 
-    [Header("공격 속성")]
+    public PlayerAnimationSO animationSO;
+
+    [Header("무기 속성"), Tooltip("None: -, Hit: 타격, Slash: 참격, Pierce: 관통")]
     public AttackType type = AttackType.None;
 
-    [Header("애니메이션 SO")]
-    public PlayerAnimationSO animationSO;
+    [Header("공격력")]
+    public float attack;
+
+    [Header("사거리")]
+    public float attackRange = 2f;
+
+    [Header("속성 배율")]
+    public float weakDamage;
 
     public void OnEquip()
     {

@@ -5,10 +5,13 @@ public class PlayerStat : Stat
 {
     [Header("회피 판정 시간(sec)")]
     public float evadeTime;
+
+    [Header("그로기 공격에 필요한 회피 포인트")]
+    public float maxEvadePoint;
     
     [Header("회피 시 회피 포인트")]
     [Range(-100, 100)]
-    public int evadePoint;
+    public float evadePoint;
 
     [Header("회피 시 대미지 감소 비율")]
     [Range(0f, 1f)]
@@ -18,13 +21,35 @@ public class PlayerStat : Stat
     public float justEvadeTime;
 
     [Header("저스트 회피 시 회피 포인트")]
-    [Range(-100, 100)]
-    public int justEvadePoint;
+    [Range(-100, 100)] 
+    public float justEvadePoint;
 
     [Header("피격 시 회피 포인트")]
     [Range(-100, 100)]
-    public int hitEvadePoint;
+    public float hitEvadePoint;
+
+    [Header("그로기 유발 시간(sec)")]
+    public float groggyTime;
 
     [Header("피격 시 무적 시간(sec)")]
     public float hitInvincibleTime;
+
+    public override Attack CreateAttack(LivingObject attacker, LivingObject defender, bool groggy)
+    {
+        Player player = attacker as Player;
+        float damage = attacker.stat.AttackDamage;
+        damage += player.CurrentWeapon.attack;
+
+        var critical = Random.value < attacker.stat.Critical;
+        if (critical)
+        {
+            damage *= attacker.stat.CriticalDamage;
+        }
+
+        if (defender != null)
+        {
+            damage -= defender.stat.Defence;
+        }
+        return new Attack((int)damage, critical, groggy);
+    }
 }
