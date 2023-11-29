@@ -76,4 +76,10 @@ public class Player : LivingObject
         virtualCamera.Follow = transform;
     }
 
+    public void TakeDamage(float damage)
+    {
+        HP -= damage;
+
+        Debug.Log("�÷��̾� HP : " + HP);
+    }
 }

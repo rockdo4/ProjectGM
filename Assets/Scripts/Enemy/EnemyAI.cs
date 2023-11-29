@@ -1,14 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
-/// <summary>
-/// ���� ������ bool������ �ϳ������Ѵ�
-/// �� �ൿ ���ϸ��� ���ݽð��� �����Ѵ�
-/// ���ݽð��� ������ ���� ���� �ൿ�� �Ѵ�. ��, ������ �ٽ� �ϰų� Ʈ���̽� ���¿� �����Ѵ�
-/// ������ ü���� 0���ϰ� �Ǹ� ��� �ൿ�� ���߰� �׾���Ѵ�.
-/// </summary>
-
+[RequireComponent(typeof(Animator))]
 public class EnemyAI : MonoBehaviour
 {
     [Header("Range")]
@@ -19,7 +18,7 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField]
-    float movementSpeed = 10f;
+    float movementSpeed = 1f;
 
     [Header("Animation")]
     [SerializeField]
@@ -27,10 +26,9 @@ public class EnemyAI : MonoBehaviour
     private bool hasRoared = false;
 
     [SerializeField]
-    float attackPower = 1f;
-
-    [SerializeField]
     float health = 100f;
+
+    private float mindistance = 2.5f;
 
     [SerializeField]
     private Animator animator;
@@ -38,11 +36,8 @@ public class EnemyAI : MonoBehaviour
     private bool isTwoPhase;
     float phaseTwoHealthThreshold;
 
-    private int[] attackPattern1 = new int[] { 1, 2 };
-    private int bearAttackPatternIndex = 0;
-
+    private int[] attackPattern1 = new int[] { 1, 2 }; // 곰의 A, B 패턴 공격
     private int[] attackPattern2 = new int[] { 1, 2, 3, 2, 3 };
-    private int bearAttackPatternIndex2 = 0;
 
     private int phaseOneAttackSequence = 0;
     private int phaseTwoAttackSequence = 0;
@@ -59,20 +54,34 @@ public class EnemyAI : MonoBehaviour
     private EnemyType enemyType;
 
     private bool isAttacking = false;
-    private float attackDuration = 2f;
-    private float attackTimer = 0f;
 
     [SerializeField]
     private float meleeAttackPower = 5f;
     [SerializeField]
-    private float attackPreparationTime = 2f;
+    private float attackPreparationTime = 3f;
     [SerializeField]
-    private Material attackRangeMaterial; // ���� ������ ǥ���� ����
-
-    private bool isPreparingAttack = false;
-    private GameObject attackRangeIndicator;
+    private Material attackRangeMaterial;
 
     private Player player;
+
+    private bool isPreparingAttack = false;
+
+    [Header("범위 공격의 시각화")]
+    [SerializeField]
+
+    public GameObject attackRangePrefab;
+    private GameObject attackRangeInstance;
+
+    [SerializeField]
+    public bool[] attackGrid = new bool[9];
+    [SerializeField]
+    public List<AttackPattern> savedPatterns = new List<AttackPattern>();
+
+    int attackIndex = -1;
+
+    GameObject cellInstance;
+    private GameObject cellParent;
+    private List<GameObject> cellInstances = new List<GameObject>(); // 셀 인스턴스들을 저장할 리스트
 
     public enum EnemyType
     {
@@ -83,6 +92,7 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         StartCoroutine(RoarInit());
+
     }
 
     IEnumerator RoarInit()
@@ -90,39 +100,6 @@ public class EnemyAI : MonoBehaviour
         animator.SetTrigger("Roar");
         yield return new WaitForSeconds(roarDuration);
         hasRoared = true;
-    }
-    IEnumerator PrepareMeleeAttack()
-    {
-        isPreparingAttack = true;
-        ShowAttackRange(true);
-
-        yield return new WaitForSeconds(attackPreparationTime);
-
-        ShowAttackRange(false);
-        isPreparingAttack = false;
-    }
-
-    private void ShowAttackRange(bool show)
-    {
-        if (show)
-        {
-            if (attackRangeIndicator == null)
-            {
-                attackRangeIndicator = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
-                Destroy(attackRangeIndicator.GetComponent<Collider>()); // �浹ü ����
-
-                attackRangeIndicator.transform.localScale = new Vector3(meleeAttackRange * 2, 0.1f, meleeAttackRange * 2);
-                attackRangeIndicator.GetComponent<Renderer>().material = attackRangeMaterial;
-            }
-            attackRangeIndicator.transform.position = transform.position;
-            attackRangeIndicator.SetActive(true);
-        }
-        else
-        {
-            if (attackRangeIndicator != null)
-                attackRangeIndicator.SetActive(false);
-        }
     }
 
     private void Awake()
@@ -135,13 +112,6 @@ public class EnemyAI : MonoBehaviour
             case EnemyType.Enemy1:
                 BTRunner = new BehaviorTreeRunner(BearBT());
                 break;
-
-                //case EnemyType.Enemy2:
-                //    BTRunner = new BehaviorTreeRunner(Enemy2BT());
-                //    break;
-                //case EnemyType.Enemy3:
-                //    BTRunner = new BehaviorTreeRunner(Enemy3BT());
-                //    break;
         }
         originPos = transform.position;
         animator = GetComponent<Animator>();
@@ -152,10 +122,20 @@ public class EnemyAI : MonoBehaviour
         if (!hasRoared)
             return;
 
+        if (isAttacking)
+        {
+            return;
+        }
+
+        if (isPreparingAttack)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.H))
         {
             health -= 20;
-            Debug.Log("���Ƿ� ����, ���� ü�� : " + health);
+            Debug.Log("현재 체력 : " + health);
         }
 
         if (health <= 0)
@@ -164,30 +144,14 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        if (isAttacking) // �������϶� ���߸��
-        {
-            attackTimer += Time.deltaTime;
-            if (attackTimer >= attackDuration)
-            {
-
-                isAttacking = false;
-                attackTimer = 0f;
-            }
-        }
-
         if (!isAttacking)
         {
-            // �������� 2���� �߻��ϴ� ����
-            // 1. ���۷���Ʈ ȣ�� �ֱ� ����
-            // 2. bool���� ���� �߰� ������?
-            // 3. 
-
             BTRunner.Operate();
         }
 
     }
 
-    #region ���� ������ �׼�
+    #region 곰 행동트리
 
     INode BearBT()
     {
@@ -195,14 +159,13 @@ public class EnemyAI : MonoBehaviour
         (
         new List<INode>()
                 {
+
                     new SequenceNode
                     (
                         new List<INode>()
                         {
-                            // �����߿� �÷��̾ ��Ÿ����� ����� �����Ӵ����� �����ϴ� ������ �߻�
-
-                            new ConditionNode(IsBearPhaseOne), // ������ 1 üũ
-                            new ActionNode(() => ExecuteAttackPattern(attackPattern1)) // ������ 1 ���� ����
+                            new ConditionNode(IsBearPhaseOne),
+                            new ActionNode(() => ExecuteAttackPattern(attackPattern1))
                         }
                     ),
 
@@ -211,7 +174,7 @@ public class EnemyAI : MonoBehaviour
                         new List<INode>()
                         {
                             new InverterNode(new ConditionNode(IsBearPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(attackPattern2)) // ������ 2 ���� ����
+                            new ActionNode(() => ExecuteAttackPattern(attackPattern2)),
                         }
                     ),
 
@@ -223,45 +186,46 @@ public class EnemyAI : MonoBehaviour
                             new ActionNode(TracePlayer),
                         }
                     ),
-                    new ActionNode(MoveToOriginPosition)
+
                 }
-        ); ; ;
+        ); ;
     }
 
     #endregion
 
-    #region ���ݳ��
+    #region 어택 패턴 업데이트
+
+    #endregion 공격 노드 함수
+
+    #region
 
     private bool IsBearPhaseOne()
     {
         if (!isTwoPhase && health <= phaseTwoHealthThreshold)
         {
             isTwoPhase = true;
-            Debug.Log("������ 2�� ��ȯ");
-            // phaseTwoAttackSequence = 0; // ������ 2�� ���� ������ �ʱ�ȭ
+            Debug.Log("페이즈 2로 전환");
         }
-        return !isTwoPhase; // ������ 1�� �ٽ� ��ȯ
+        return !isTwoPhase;
     }
 
     private INode.EnemyState ExecuteAttackPattern(int[] pattern)
     {
         INode.EnemyState result = INode.EnemyState.Failure;
 
-        // ����� ���� ����� ������ �ε��� ����
         int attackSequence = isTwoPhase ? phaseTwoAttackSequence : phaseOneAttackSequence;
 
         switch (pattern[attackSequence])
         {
             case 1:
-                Debug.Log(isTwoPhase ? "������2 ����A" : "������1 ����A");
                 result = DoMeleeAttack1();
                 break;
+
             case 2:
-                Debug.Log(isTwoPhase ? "������2 ����B" : "������1 ����B");
                 result = DoMeleeAttack2();
                 break;
+
             case 3:
-                Debug.Log("������2 ����C");
                 result = DoMeleeAttack3();
                 break;
         }
@@ -280,201 +244,248 @@ public class EnemyAI : MonoBehaviour
         return result;
     }
 
-    INode.EnemyState DoMeleeAttack1()
+    IEnumerator PrepareMeleeAttack(string attackType)
     {
-        if (isPreparingAttack || isAttacking)
-            return INode.EnemyState.Failure;
+        isPreparingAttack = true;
+        ShowAttackRange(true);
 
-        StartCoroutine(PrepareMeleeAttack());
+        yield return new WaitForSeconds(attackPreparationTime);
 
-        if (detectedPlayer == null)
+        ShowAttackRange(false);
+        isPreparingAttack = false;
+
+        player = detectedPlayer.GetComponent<Player>();
+
+        if (player != null)
         {
+            string animationTrigger = "MeleeAttack_" + attackType;
+            StartCoroutine(IsAnimationRunning(animationTrigger));
+            //// 기존 방식
+            // StartCoroutine(IsAnimationRunning("MeleeAttack_A"));
+        }
+    }
+
+    private IEnumerator IsAnimationRunning(string stateName)
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger(stateName);
+
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
+
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+            if (stateInfo.IsName(stateName))
+            {
+                //player.TakeDamage(meleeAttackPower); // 애니메이션 이벤트인 OnAttack로 변경
+                //Debug.Log(stateInfo.length);
+                //Debug.Log(stateInfo.IsName(stateName));
+                yield return new WaitForSeconds(stateInfo.length);
+            }
+
             isAttacking = false;
-            return INode.EnemyState.Failure;
+        }
+    }
+
+    private void ShowAttackRange(bool show /*, int attackIndex*/) // 인덱스 굳이? 공격패턴에서 지정해주기
+    {
+
+        if (show)
+        {
+            if (attackRangeInstance == null)
+            {
+                attackRangeInstance = Instantiate(attackRangePrefab, transform.position, Quaternion.identity);
+            }
+
+            AttackPattern currentPattern = savedPatterns[attackIndex];
+            cellInstances.Clear(); // 리스트 초기화
+
+            for (int i = 0; i < currentPattern.pattern.Length; i++)
+            {
+                if (currentPattern.pattern[i])
+                {
+                    Vector3 cellPosition = CalculateCellPosition(i);
+                    GameObject cell = Instantiate(attackRangeInstance, cellPosition, Quaternion.identity);
+                    cell.SetActive(true);
+                    cellInstances.Add(cell); // 생성된 셀 인스턴스를 리스트에 추가
+                }
+            }
+
+            attackRangeInstance.SetActive(false);
+        }
+        else
+        {
+            foreach (GameObject cell in cellInstances) // 리스트의 모든 셀 인스턴스를 순회
+            {
+                if (cell != null)
+                    cell.SetActive(false);
+            }
+
+
         }
 
+
+        //// 부모 오브젝트 끄는방법
+        //if (show)
+        //{
+        //    if (attackRangeInstance == null)
+        //    {
+        //        attackRangeInstance = Instantiate(attackRangePrefab, transform.position, Quaternion.identity);
+        //    }
+
+        //    AttackPattern currentPattern = savedPatterns[attackIndex];
+
+        //    for (int i = 0; i < currentPattern.pattern.Length; i++)
+        //    {
+        //        if (currentPattern.pattern[i]) // 9개의 타일 순회하면서 트루 타일일때
+        //        {
+        //            Vector3 cellPosition = CalculateCellPosition(i);
+        //            cellInstance = Instantiate(attackRangeInstance, cellPosition, Quaternion.identity);
+        //            cellInstance.SetActive(true);
+        //        }
+        //    }
+
+        //    // Debug.Log($"! INDEX : {attackIndex} / COUNT : {i} \n True/false : {savedPatterns[attackIndex].pattern[i]}");
+
+        //    attackRangeInstance.SetActive(false); // 기존꺼는 끄고
+        //}
+        //else
+        //{
+        //    foreach (var cell in cellInstance)
+        //    {
+        //        cell.SetActive(false);
+        //    }
+
+        //    // cellInstance라는 변수는 하나하나 일일히 추적하지 않아서 마지막껏만 꺼짐
+
+        //    // 태그방식은 씬을 다 순회해서 별로임
+
+        //    // 부모를 액티브 펄스 해주는게 더 좋다
+        //    for (int i = 0; i < attackGrid.Length; i++)
+        //    {
+        //        if (cellInstance != null)
+        //            cellInstance.SetActive(false);
+        //    }
+        //}
+
+    }
+
+    private void ClearAttackRangeInstances()
+    {
+        // 기존에 생성된 공격 범위 인스턴스들을 제거
+        foreach (var instance in GameObject.FindGameObjectsWithTag("AttackRange"))
+        {
+            Destroy(instance);
+        }
+    }
+
+    bool IsPlayerInCell(int index)
+    {
+        Vector3 cellPosition = CalculateCellPosition(index);
+        return Vector3.Distance(detectedPlayer.position, cellPosition) < 1.5f; // 어느 정도 거리 내에 있는지
+    }
+
+    Vector3 CalculateCellPosition(int index)
+    {
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    for (int j = 0; j < 3; j++)
+        //    {
+        //        int index = i * 3 + j;
+        //        Gizmos.color = attackGrid[index] ? Color.red : Color.green;
+
+        //        Vector3 cellPosition = transform.position + transform.forward + new Vector3(j + 0.5f, 0, i - 1);
+        //        Gizmos.DrawCube(cellPosition, new Vector3(1, 0.1f, 1));
+        //    }
+        //}
+
+
+
+        int x = index % 3; // 가, 세
+        int z = index / 3;
+
+        return transform.position + transform.forward + new Vector3(x - 1 + 0.5f, 0, z - 1);
+
+        // 기즈모에 표시된 범위와 일치해야하니까 수정하긴했는데
+    }
+
+    INode.EnemyState DoMeleeAttack1()
+    {
         if (isAttacking)
             return INode.EnemyState.Failure;
 
-        if (Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
+        if (detectedPlayer == null || Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
         {
             isAttacking = false;
             return INode.EnemyState.Failure;
         }
-
-        if (detectedPlayer != null && // �� if
-            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        if (Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
+            Debug.Log(isTwoPhase ? "페이즈2 공격A 준비" : "페이즈1 공격A 준비");
+
             isAttacking = true;
-            animator.SetTrigger("MeleeAttack_A");
 
-            player = detectedPlayer.GetComponent<Player>();
-            if (player != null)
-            {
-                //player.TakeDamage(meleeAttackPower);
-            }
+            attackIndex = 0; //  A패턴
 
-            // ���� ���� ���� �÷��̾� Ž��
-            //Vector3 attackCenter = transform.position + transform.forward * (meleeAttackRange / 2);
-            //Collider[] hitEnemies = Physics.OverlapBox(attackCenter, new Vector3(1, 1, meleeAttackRange / 2), transform.rotation, playerLayerMask);
-            //foreach (var enemyCollider in hitEnemies)
-            //{
-            //    Player player = enemyCollider.GetComponent<Player>();
-            //    if (player != null)
-            //    {
-            //        player.TakeDamage(meleeAttackPower);
-            //    }
-            //}
+            StartCoroutine(PrepareMeleeAttack("A"));
             return INode.EnemyState.Success;
         }
 
         return INode.EnemyState.Failure;
-
 
     }
 
     INode.EnemyState DoMeleeAttack2()
     {
-        if (isPreparingAttack || isAttacking)
-            return INode.EnemyState.Failure;
-
-        StartCoroutine(PrepareMeleeAttack());
-
-        if (detectedPlayer == null)
-        {
-            isAttacking = false;
-            return INode.EnemyState.Failure;
-        }
-
         if (isAttacking)
             return INode.EnemyState.Failure;
 
-        if (Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
+        if (detectedPlayer == null || Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
         {
             isAttacking = false;
             return INode.EnemyState.Failure;
         }
-
-        if (detectedPlayer != null &&
-            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        if (Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
+            Debug.Log(isTwoPhase ? "페이즈2 공격B 준비" : "페이즈1 공격B 준비");
+
             isAttacking = true;
-            animator.SetTrigger("MeleeAttack_A");
 
-            player = detectedPlayer.GetComponent<Player>();
-            if (player != null)
-            {
-                //player.TakeDamage(meleeAttackPower);
-            }
-
-            //isAttacking = true;
-            //movementSpeed = 0;
-            //animator.SetTrigger("MeleeAttack_B");
-
-            //Collider[] hitEnemies = Physics.OverlapSphere(transform.position, meleeAttackRange, playerLayerMask);
-            //foreach (var enemyCollider in hitEnemies)
-            //{
-            //    Vector3 directionToEnemy = (enemyCollider.transform.position - transform.position).normalized;
-            //    if (Vector3.Angle(transform.forward, directionToEnemy) < 90)
-            //    {
-            //        Player player = enemyCollider.GetComponent<Player>();
-            //        if (player != null)
-            //        {
-            //            player.TakeDamage(meleeAttackPower);
-            //        }
-            //    }
-            //}
+            attackIndex = 1; //  B패턴
+            StartCoroutine(PrepareMeleeAttack("B"));
             return INode.EnemyState.Success;
         }
-
         return INode.EnemyState.Failure;
-
-
-        //if (isAttacking)
-        //    return INode.EnemyState.Failure;
-
-        //if (detectedPlayer != null && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
-        //{
-        //    isAttacking = true;
-        //    return INode.EnemyState.Success;
-        //}
-
-        //return INode.EnemyState.Failure;
     }
 
     INode.EnemyState DoMeleeAttack3()
     {
-
-        if (isPreparingAttack || isAttacking)
-            return INode.EnemyState.Failure;
-
-        StartCoroutine(PrepareMeleeAttack());
-
-        if (detectedPlayer == null)
-        {
-            isAttacking = false;
-            return INode.EnemyState.Failure;
-        }
-
         if (isAttacking)
             return INode.EnemyState.Failure;
 
-        if (Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
+        if (detectedPlayer == null || Vector3.Distance(detectedPlayer.position, transform.position) >= meleeAttackRange)
         {
             isAttacking = false;
-            return INode.EnemyState.Failure; // ��Ÿ� �� �߰ݻ��� üũ
+            return INode.EnemyState.Failure;
         }
-
-
-        //Vector3 attackCenter = transform.position + transform.forward * (meleeAttackRange / 2);
-        //Vector3 attackSize = new Vector3(3, 1, 1); // ���� 3ĭ
-
-        //Collider[] hitTargets = Physics.OverlapBox(attackCenter, attackSize / 2, transform.rotation, playerLayerMask);
-
-        //if (hitTargets.Length > 0 && detectedPlayer != null &&
-        //    Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
-        //{
-
-        //    isAttacking = true;
-        //    animator.SetTrigger("MeleeAttack_C");
-
-        //    foreach (var target in hitTargets)
-        //    {
-        //        Player player = target.GetComponent<Player>();
-        //        if (player != null)
-        //        {
-        //            player.TakeDamage(meleeAttackPower);
-        //        }
-        //    }
-
-        //    return INode.EnemyState.Success;
-
-        //}
-
-        if (detectedPlayer != null &&
-            Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
+        if (Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
+            Debug.Log(isTwoPhase ? "페이즈2 공격C 준비" : "출력되면 안되는 거임");
+
             isAttacking = true;
-            animator.SetTrigger("MeleeAttack_C");
+
+            attackIndex = 2; //  C패턴
+            StartCoroutine(PrepareMeleeAttack("C"));
             return INode.EnemyState.Success;
         }
-
         return INode.EnemyState.Failure;
-
-
-        //if (isAttacking)
-        //    return INode.EnemyState.Failure;
-
-        //if (detectedPlayer != null && Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
-        //{
-        //    isAttacking = true;
-        //    return INode.EnemyState.Success;
-        //}
-        //return INode.EnemyState.Failure;
     }
     #endregion
 
-    #region ���� �� �̵� ���
+    #region
     INode.EnemyState DetectPlayer()
     {
         var overlapColliders = Physics.OverlapSphere(transform.position, detectRange, LayerMask.GetMask("Player"));
@@ -492,42 +503,61 @@ public class EnemyAI : MonoBehaviour
     INode.EnemyState TracePlayer()
     {
         if (detectedPlayer != null)
-        {// ���߿� ��ߵ� �ӽ���
-            // ����?
+        {
+            animator.SetFloat("MoveSpeed", 0.5f);
 
-            animator.SetFloat("MoveSpeed", 0.5f); // 
+            Vector3 direction = (detectedPlayer.position - transform.position).normalized;
+            transform.position += direction * movementSpeed * Time.deltaTime;
 
-            transform.position = Vector3.MoveTowards(transform.position, detectedPlayer.position, Time.deltaTime * movementSpeed);
-            transform.LookAt(detectedPlayer); // Look At Player code
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * movementSpeed);
             return INode.EnemyState.Running;
         }
-
         return INode.EnemyState.Failure;
     }
     #endregion
 
-    #region  ���ڸ� ���ư��� ���߿� �ٸ������� ����
-    INode.EnemyState MoveToOriginPosition()
-    {
-        if (Vector3.Distance(originPos, transform.position) < 0.01f)
-        {
-            return INode.EnemyState.Success;
-        }
-        else
-        {
-            animator.SetTrigger("BearWalk");
-            transform.position = Vector3.MoveTowards(transform.position, originPos, Time.deltaTime * movementSpeed);
-            return INode.EnemyState.Running;
-        }
-    }
+    #region
+
     #endregion
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, detectRange);
+        if (!EditorApplication.isPlaying)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, detectRange);
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    int index = i * 3 + j;
+                    Gizmos.color = attackGrid[index] ? Color.red : Color.green;
+
+                    Vector3 cellPosition = transform.position + transform.forward + new Vector3(j + 0.5f, 0, i - 1);
+                    Gizmos.DrawCube(cellPosition, new Vector3(1, 0.1f, 1));
+                }
+            }
+        }
+    }
+
+    private void OnAttack()
+    {
+        if (detectedPlayer != null)
+        {
+            // 그리드 형태의 공격
+            for (int i = 0; i < savedPatterns[attackIndex].pattern.Length; i++)
+            {
+                if (savedPatterns[attackIndex].pattern[i] && IsPlayerInCell(i))
+                {
+                    player.TakeDamage(meleeAttackPower);
+                    break;
+                }
+            }
+        }
     }
 }
