@@ -23,21 +23,7 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
             return;
         }
 
-        evade = player.evadeTimer switch
-        {
-            float x when (x < player.Stat.justEvadeTime) => EvadeSuccesss.Just,
-            float x when (x >= player.Stat.justEvadeTime && x < player.Stat.evadeTime) => EvadeSuccesss.Normal,
-            _ => EvadeSuccesss.None
-        };
-
-        player.evadePoint += evade switch
-        {
-            EvadeSuccesss.Just => player.Stat.justEvadePoint,
-            EvadeSuccesss.Normal => player.Stat.evadePoint,
-            _ => player.Stat.hitEvadePoint
-        };
-
-        player.evadePoint = Mathf.Clamp(player.evadePoint, 0, player.Stat.maxEvadePoint);
+        EvadeCheck();
 
         switch (evade)
         {
@@ -61,5 +47,30 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
                 destructable.OnDestruction(attacker);
             }
         }
+    }
+    
+    private void EvadeCheck()
+    {
+        if (player.GetComponent<PlayerController>().currentState != PlayerController.State.Evade)
+        {
+            evade = EvadeSuccesss.None;
+            return;
+        }
+
+        evade = player.evadeTimer switch
+        {
+            float x when (x < player.Stat.justEvadeTime) => EvadeSuccesss.Just,
+            float x when (x >= player.Stat.justEvadeTime && x < player.Stat.evadeTime) => EvadeSuccesss.Normal,
+            _ => EvadeSuccesss.None
+        };
+
+        player.evadePoint += evade switch
+        {
+            EvadeSuccesss.Just => player.Stat.justEvadePoint,
+            EvadeSuccesss.Normal => player.Stat.evadePoint,
+            _ => player.Stat.hitEvadePoint
+        };
+
+        player.evadePoint = Mathf.Clamp(player.evadePoint, 0, player.Stat.maxEvadePoint);
     }
 }

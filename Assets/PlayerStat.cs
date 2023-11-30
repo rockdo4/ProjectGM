@@ -13,7 +13,7 @@ public class PlayerStat : Stat
     [Range(-100, 100)]
     public float evadePoint;
 
-    [Header("회피 시 대미지 배율")]
+    [Header("회피 시 피격 대미지 배율")]
     [Range(0f, 3f)]
     public float evadeDamageRate;
 

@@ -59,8 +59,7 @@ public class Player : LivingObject
     }
 
     #region TestData
-    [Header("슬라이더 연결")]
-    public Slider slider;
+    public Slider slider { get; private set; }
     public int comboCount { get; set; } = 0;
     #endregion
 
@@ -70,6 +69,8 @@ public class Player : LivingObject
         Rigid = GetComponent<Rigidbody>();
         Colldier = GetComponent<BoxCollider>();
         Animator = GetComponent<Animator>();
+        slider = GetComponentInChildren<Slider>();
+        virtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
     }
 
     private void Start()

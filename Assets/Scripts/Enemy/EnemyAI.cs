@@ -254,7 +254,6 @@ public class EnemyAI : LivingObject
         ShowAttackRange(true);
 
         yield return new WaitForSeconds(attackPreparationTime);
-        Debug.Log(detectedPlayer.name);
 
         ShowAttackRange(false);
         isPreparingAttack = false;
