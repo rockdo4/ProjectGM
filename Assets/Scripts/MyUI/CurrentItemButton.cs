@@ -28,14 +28,18 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
             case Item.ItemType.Weapon:
                 if (PlayDataManager.curWeapon == null)
                 {
+                    tester.text = "X";
+
                     break;
                 }
                 tester.text = PlayDataManager.curWeapon.id.ToString();
                 break;
 
             case Item.ItemType.Armor:
-                if (!PlayDataManager.curArmor.ContainsKey(armorType))
+                if (PlayDataManager.curArmor[armorType] == null)
                 {
+                    tester.text = "X";
+
                     break;
                 }
                 tester.text = PlayDataManager.curArmor[armorType].id.ToString();
@@ -45,5 +49,11 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
                 Debug.LogWarning("Not Exist Item.ItemType! - CurrentItemButton");
                 break;
         }
+    }
+
+    public void UnWear()
+    {
+        PlayDataManager.UnWearItem(Type, armorType);
+        Renewal();
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 using SaveDataVC = SaveDataV3; // Version Change?
 
 public static class PlayDataManager
@@ -139,6 +138,26 @@ public static class PlayDataManager
                 curArmor[armor.armorType] = armor;
                 curArmor[armor.armorType].isEquip = true;
 
+                break;
+
+            default:
+                return;
+        }
+        Save();
+    }
+
+    public static void UnWearItem(Item.ItemType type, Armor.ArmorType armorType = Armor.ArmorType.None)
+    {
+        switch (type)
+        {
+            case Item.ItemType.Weapon:
+                curWeapon.isEquip = false;
+                curWeapon = null;
+                break;
+
+            case Item.ItemType.Armor:
+                curArmor[armorType].isEquip = false;
+                curArmor[armorType] = null;
                 break;
 
             default:
