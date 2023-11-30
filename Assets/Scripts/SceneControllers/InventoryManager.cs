@@ -51,7 +51,7 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < 8; i++)
         {
-            var weapon = new Weapon(Weapon.WeaponID.Simple_Hammer + i);
+            var weapon = new Weapon(Weapon.WeaponID.Simple_Tonpa_Lv1 + i * 100);
             PlayDataManager.data.WeaponInventory.Add(weapon);
             yield return new WaitForEndOfFrame();
         }

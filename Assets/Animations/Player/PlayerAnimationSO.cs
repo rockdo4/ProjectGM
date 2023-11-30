@@ -17,24 +17,21 @@ public class PlayerAnimationSO : ScriptableObject
 
     public AnimatorOverrideController GetAnimator(Weapon.WeaponID id)
     {
-        switch (id)
+        var table = CsvTableMgr.GetTable<WeaponTable>().dataTable;
+        switch (table[id].type)
         {
-            case Weapon.WeaponID.Simple_Hammer:
-            case Weapon.WeaponID.Gold_Hammer:
+            case 1: // 통파
                 return anim_Tonpa;
 
-            case Weapon.WeaponID.Go_Work_Sword:
-            case Weapon.WeaponID.Vigil_Sword:
+            case 2: // 두손검
                 return anim_Two_Hand_Sword;
 
-            case Weapon.WeaponID.Glory_Sword:
-            case Weapon.WeaponID.Darkness_Sword:
+            case 3: // 한손검
                 return anim_One_Hand_Sword;
 
-            case Weapon.WeaponID.Simple_Spear:
-            case Weapon.WeaponID.Gold_Spear:
+            case 4: // 창
                 return anim_Spear;
- 
+
             default:
                 return null;
         }
