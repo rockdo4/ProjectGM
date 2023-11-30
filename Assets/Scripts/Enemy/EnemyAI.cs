@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : MonoBehaviour
@@ -35,8 +31,8 @@ public class EnemyAI : MonoBehaviour
     private bool isTwoPhase;
     float phaseTwoHealthThreshold;
 
-    private int[] attackPattern1 = new int[] { 1, 2 }; // 곰의 A, B 패턴 공격
-    private int[] attackPattern2 = new int[] { 1, 2, 3, 2, 3 };
+    private int[] bearAttackPatternPhaseOne = new int[] { 1, 2 }; // 곰의 A, B 패턴 공격
+    private int[] bearAttackPatternPhaseTwo = new int[] { 1, 2, 3, 2, 3 };
 
     private int phaseOneAttackSequence = 0;
     private int phaseTwoAttackSequence = 0;
@@ -164,7 +160,7 @@ public class EnemyAI : MonoBehaviour
                         new List<INode>()
                         {
                             new ConditionNode(IsBearPhaseOne),
-                            new ActionNode(() => ExecuteAttackPattern(attackPattern1))
+                            new ActionNode(() => ExecuteAttackPattern(bearAttackPatternPhaseOne))
                         }
                     ),
 
@@ -173,7 +169,7 @@ public class EnemyAI : MonoBehaviour
                         new List<INode>()
                         {
                             new InverterNode(new ConditionNode(IsBearPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(attackPattern2)),
+                            new ActionNode(() => ExecuteAttackPattern(bearAttackPatternPhaseTwo)),
                         }
                     ),
 
