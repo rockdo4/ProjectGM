@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : LivingObject
 {
     [Header("Range")]
     [SerializeField]
@@ -13,17 +13,12 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     float meleeAttackRange = 2f;
 
-    [Header("Movement")]
-    [SerializeField]
-    float movementSpeed = 1f;
-
     [Header("Animation")]
     [SerializeField]
     private float roarDuration = 3f;
     private bool hasRoared = false;
 
-    [SerializeField]
-    float health = 100f;
+    private float mindistance = 2.5f;
 
     [SerializeField]
     private Animator animator;
@@ -50,8 +45,6 @@ public class EnemyAI : MonoBehaviour
 
     private bool isAttacking = false;
 
-    [SerializeField]
-    private float meleeAttackPower = 5f;
     [SerializeField]
     private float attackPreparationTime = 3f;
     [SerializeField]
@@ -84,6 +77,18 @@ public class EnemyAI : MonoBehaviour
         Enemy2,
     }
 
+    #region Interaction Player And Enemy
+    public EnemyStat Stat
+    {
+        get
+        {
+            return stat as EnemyStat;
+        }
+    }
+    
+    #endregion
+
+
     private void Start()
     {
         StartCoroutine(RoarInit());
@@ -97,9 +102,10 @@ public class EnemyAI : MonoBehaviour
         hasRoared = true;
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-        phaseTwoHealthThreshold = health * 0.5f;
+        base.Awake();
+        phaseTwoHealthThreshold = HP * 0.5f;
         isTwoPhase = false;
 
         switch (enemyType)
@@ -129,11 +135,11 @@ public class EnemyAI : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.H))
         {
-            health -= 20;
-            Debug.Log("현재 체력 : " + health);
+            HP -= 20;
+            Debug.Log("현재 체력 : " + HP);
         }
 
-        if (health <= 0)
+        if (HP <= 0)
         {
             animator.SetTrigger("Die");
             return;
@@ -196,7 +202,7 @@ public class EnemyAI : MonoBehaviour
 
     private bool IsBearPhaseOne()
     {
-        if (!isTwoPhase && health <= phaseTwoHealthThreshold)
+        if (!isTwoPhase && HP <= phaseTwoHealthThreshold)
         {
             isTwoPhase = true;
             Debug.Log("페이즈 2로 전환");
@@ -256,6 +262,7 @@ public class EnemyAI : MonoBehaviour
         ShowAttackRange(true);
 
         yield return new WaitForSeconds(attackPreparationTime);
+        Debug.Log(detectedPlayer.name);
 
         ShowAttackRange(false);
         isPreparingAttack = false;
@@ -284,6 +291,7 @@ public class EnemyAI : MonoBehaviour
 
             if (stateInfo.IsName(stateName))
             {
+                //player.TakeDamage(Stat.AttackDamage); // 애니메이션 이벤트인 OnAttack로 변경
                 //Debug.Log(stateInfo.length);
                 //Debug.Log(stateInfo.IsName(stateName));
                 yield return new WaitForSeconds(stateInfo.length);
@@ -467,10 +475,10 @@ public class EnemyAI : MonoBehaviour
             // animator.SetFloat("MoveSpeed", isTwoPhase ? 1.0f : 0.5f);
 
             Vector3 direction = (detectedPlayer.position - transform.position).normalized;
-            transform.position += direction * actualMovementSpeed * Time.deltaTime;
+            transform.position += direction * Stat.MoveSpeed * Time.deltaTime;
 
             Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * actualMovementSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * Stat.MoveSpeed);
             return INode.EnemyState.Running;
         }
         return INode.EnemyState.Failure;
@@ -506,26 +514,32 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void OnAttack()
+    private void Attack()
     {
-        float actualAttackPower = isTwoPhase ? meleeAttackPower * 2 : meleeAttackPower;
-
-
-        foreach (GameObject cell in colliderObjects)
+        if (detectedPlayer == null)
         {
-            if (cell != null)
+            return;
+        }
+        // 그리드 형태의 공격
+        for (int i = 0; i < savedPatterns[attackIndex].pattern.Length; i++)
+        {
+            if (savedPatterns[attackIndex].pattern[i] && IsPlayerInCell(i))
             {
-                AttackCell attackCell = cell.GetComponent<AttackCell>();
-
-                // Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
-
-                if (attackCell != null && attackCell.playerInside)
-                {
-                    player.TakeDamage(actualAttackPower);
-                    break;
-                }
+                ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player);
+                break;
             }
         }
 
+    }
+
+    private void ExecuteAttack(LivingObject attacker, LivingObject defender)
+    {
+        Attack attack = Stat.CreateAttack(attacker, defender, true);
+
+        var attackables = defender.GetComponents<IAttackable>();
+        foreach (var attackable in attackables)
+        {
+            attackable.OnAttack(gameObject, attack);
+        }
     }
 }

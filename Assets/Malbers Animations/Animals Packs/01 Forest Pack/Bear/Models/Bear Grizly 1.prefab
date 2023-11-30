@@ -1442,22 +1442,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stat: {fileID: 0}
   detectRange: 35
   meleeAttackRange: 3
-  movementSpeed: 1
   roarDuration: 3
-  health: 100
   animator: {fileID: 0}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
   enemyType: 0
-  meleeAttackPower: 5
   attackPreparationTime: 2
   attackRangeMaterial: {fileID: -7974662883447924875, guid: a5ac6998bd0c4b1a87b67e82fb321d4a,
     type: 3}
-  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
-    type: 3}
+  attackRangePrefab: {fileID: 0}
   attackGrid: 000000000000000000
   savedPatterns:
   - patternName: "\uADFC\uC811 A\uD328\uD134"

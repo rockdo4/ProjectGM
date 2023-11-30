@@ -9,14 +9,12 @@ public class PlayerIdleState : PlayerStateBase
 
     public override void Enter()
     {
+        //controller.player.Animator.Play("Idle");
     }
 
     public override void Update()
     {
-        if (TouchManager.Instance.Swiped)
-        {
-            //Player2.Instance.SetState(Player2.States.Evade);
-        }
+        
     }
 
     public override void FixedUpdate()

@@ -4854,6 +4854,7 @@ GameObject:
   - component: {fileID: 4584229113192832}
   - component: {fileID: 33165742181543910}
   - component: {fileID: 23958726366799928}
+  - component: {fileID: -7518777999832334402}
   m_Layer: 0
   m_Name: Darkness Sword
   m_TagString: Untagged
@@ -4928,6 +4929,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-7518777999832334402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430438690474188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c702989a4c5ac34da80b06b9deddd84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  animationSO: {fileID: 11400000, guid: eff25ae3ea82e0e41857197aa5a8eea1, type: 2}
 --- !u!1 &1693438405931276
 GameObject:
   m_ObjectHideFlags: 0

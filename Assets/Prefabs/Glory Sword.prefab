@@ -14549,6 +14549,7 @@ GameObject:
   - component: {fileID: 4393946019257510}
   - component: {fileID: 33583919405245118}
   - component: {fileID: 23276586274284072}
+  - component: {fileID: -7403576779025243605}
   m_Layer: 0
   m_Name: Glory Sword
   m_TagString: Untagged
@@ -14624,3 +14625,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-7403576779025243605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189674227078662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c702989a4c5ac34da80b06b9deddd84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationSO: {fileID: 11400000, guid: eff25ae3ea82e0e41857197aa5a8eea1, type: 2}
+  type: 1
+  attack: 7
+  attackRange: 2
+  weakDamage: 1.2

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "ItemSO")]
@@ -14,6 +15,13 @@ public class ItemSO : ScriptableObject
 
     public GameObject MakeItem(Item item)
     {
+        // Item Null Exception
+        if (item == null)
+        {
+            Debug.LogWarning("Not Exist Item!");
+            return null;
+        }
+
         // Item.ItemType Exception
         if (item.type == Item.ItemType.None)
         {
@@ -44,32 +52,16 @@ public class ItemSO : ScriptableObject
 
     public GameObject MakeItem(Item item, Transform tr)
     {
-        // Item.ItemType Exception
-        if (item.type == Item.ItemType.None)
-        {
-            Debug.LogWarning("Wrong Item Type!");
-            return null;
-        }
-
-        int index = -1;
-        for (int i = 0; i < ID.Length; i++)
-        {
-            if (ID[i] == item.id)
-            {
-                index = i;
-                break;
-            }
-        }
-
-        // Item index Exception
-        if (index < 0)
-        {
-            Debug.LogWarning("Not Exist Item!");
-            return null;
-        }
-
-        var go = Instantiate(Prefab[index]);
-        go.transform.SetParent(tr);
+        var go = MakeItem(item);
+        go.transform.SetParent(tr, false);
         return go;
+    }
+
+    public WeaponPrefab MakeItem(Item item, Transform tr, Animator anim)
+    {
+        var go = MakeItem(item, tr);
+        var weapon = go.GetComponent<WeaponPrefab>();
+        weapon.OnEquip(item, anim);
+        return weapon;
     }
 }
