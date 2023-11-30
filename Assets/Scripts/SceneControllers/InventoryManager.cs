@@ -38,7 +38,7 @@ public class InventoryManager : MonoBehaviour
             PlayDataManager.Init();
         }
 
-        //TestAddItem();
+        TestAddItem();
         ShowWeapons();
     }
 

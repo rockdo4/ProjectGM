@@ -16,9 +16,7 @@ public class EnemyAI : LivingObject
     [Header("Animation")]
     [SerializeField]
     private float roarDuration = 3f;
-    private bool hasRoared = false;
-
-    private float mindistance = 2.5f;
+    private bool hasRoared;
 
     [SerializeField]
     private Animator animator;
@@ -65,7 +63,7 @@ public class EnemyAI : LivingObject
     [SerializeField]
     public List<AttackPattern> savedPatterns = new List<AttackPattern>();
 
-    int attackIndex = -1;
+    private int attackIndex = -1;
 
     private List<GameObject> cellInstances = new List<GameObject>(); // 셀 인스턴스들을 저장할 리스트
 
@@ -91,13 +89,16 @@ public class EnemyAI : LivingObject
 
     private void Start()
     {
-        StartCoroutine(RoarInit());
+        // LookAtPlayer();
 
+        StartCoroutine(RoarInit());
     }
 
     IEnumerator RoarInit()
     {
+        hasRoared = false;
         animator.SetTrigger("Roar");
+
         yield return new WaitForSeconds(roarDuration);
         hasRoared = true;
     }
@@ -118,8 +119,29 @@ public class EnemyAI : LivingObject
         animator = GetComponent<Animator>();
     }
 
+
+    private void LookAtPlayer()
+    {
+        Vector3 direction = detectedPlayer.position - transform.position;
+        direction.y = 0; // Y축 방향은 고정
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+    }
+
     private void Update()
     {
+        
+
+        if (IsGroggy)
+        {
+            // 그로기 상태일때
+            // 진짜 그로기 상태 만들어주기
+        }
+
+        if (detectedPlayer != null)
+            LookAtPlayer();
+
+
         if (!hasRoared)
             return;
 
@@ -141,12 +163,15 @@ public class EnemyAI : LivingObject
 
         if (HP <= 0)
         {
+            Debug.Log("죽음");
             animator.SetTrigger("Die");
             return;
         }
 
         if (!isAttacking)
         {
+            // 공격중이 아닐때만 실행해버리니까 ㅏ
+
             BTRunner.Operate();
         }
 
@@ -240,6 +265,7 @@ public class EnemyAI : LivingObject
             case 3:
                 result = DoMeleeAttack3();
                 break;
+
         }
 
         if (result == INode.EnemyState.Success)
@@ -261,8 +287,17 @@ public class EnemyAI : LivingObject
         isPreparingAttack = true;
         ShowAttackRange(true);
 
+        for (float speed = 0.5f; speed >= 0.0f; speed -= Time.deltaTime / attackPreparationTime)
+        {
+            animator.SetFloat("MoveSpeed", speed);
+            yield return null;
+        }
+
+        // animator.SetFloat("MoveSpeed", 0f); // 대기시간때는 Idle로
+
         yield return new WaitForSeconds(attackPreparationTime);
-        Debug.Log(detectedPlayer.name);
+
+        //Debug.Log(detectedPlayer.name);
 
         ShowAttackRange(false);
         isPreparingAttack = false;
@@ -291,9 +326,7 @@ public class EnemyAI : LivingObject
 
             if (stateInfo.IsName(stateName))
             {
-                //player.TakeDamage(Stat.AttackDamage); // 애니메이션 이벤트인 OnAttack로 변경
-                //Debug.Log(stateInfo.length);
-                //Debug.Log(stateInfo.IsName(stateName));
+
                 yield return new WaitForSeconds(stateInfo.length);
             }
 
@@ -307,14 +340,16 @@ public class EnemyAI : LivingObject
         {
             if (attackRangeInstance == null)
             {
-                attackRangeInstance = Instantiate(attackRangePrefab, transform.position, Quaternion.identity);
+                attackRangeInstance = Instantiate(attackRangePrefab, transform);
             }
 
             foreach (GameObject cell in cellInstances) // 리스트의 모든 셀 인스턴스를 순회
             {
                 if (cell != null)
                 {
-                    Destroy(cell);
+                    Destroy(cell); // 지금 이게 안좋다
+                    // 파편화가 날 수 있음 2순위로 두고
+
                 }
             }
 
@@ -335,7 +370,7 @@ public class EnemyAI : LivingObject
                 if (currentPattern.pattern[i])
                 {
                     Vector3 cellPosition = CalculateCellPosition(i);
-                    GameObject cell = Instantiate(attackRangeInstance, cellPosition, Quaternion.identity);
+                    GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
                     cell.SetActive(true);
                     cellInstances.Add(cell);
 
@@ -372,8 +407,10 @@ public class EnemyAI : LivingObject
     {
         int x = index % 3;
         int z = index / 3;
-
-        return transform.position + transform.forward + new Vector3(x + 1.4f, 0, z - 1);
+        
+        Vector3 actualPosition = new Vector3(x -1, 0, z + 1.4f);
+        actualPosition = transform.rotation * actualPosition;
+        return transform.position + actualPosition;
     }
 
     INode.EnemyState DoMeleeAttack1()
@@ -386,6 +423,7 @@ public class EnemyAI : LivingObject
             isAttacking = false;
             return INode.EnemyState.Failure;
         }
+
         if (Vector3.Distance(detectedPlayer.position, transform.position) < meleeAttackRange)
         {
             Debug.Log(isTwoPhase ? "페이즈2 공격A 준비" : "페이즈1 공격A 준비");
@@ -452,11 +490,20 @@ public class EnemyAI : LivingObject
     #region
     INode.EnemyState DetectPlayer()
     {
+        // Vector3 distance = detectedPlayer.position - transform.position;
+
+
         var overlapColliders = Physics.OverlapSphere(transform.position, detectRange, LayerMask.GetMask("Player"));
 
         if (overlapColliders.Length > 0)
         {
             detectedPlayer = overlapColliders[0].transform;
+
+            Vector3 direction = detectedPlayer.position - transform.position;
+            direction.y = 0; // Y축 방향은 고정
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // 로테이션 스피드 5f 임시
+
             return INode.EnemyState.Success;
         }
 
@@ -468,17 +515,15 @@ public class EnemyAI : LivingObject
     {
         if (detectedPlayer != null)
         {
-            float actualMovementSpeed = isTwoPhase ? movementSpeed * 1.5f : movementSpeed;
+            float actualMoveSpeed = isTwoPhase ? Stat.MoveSpeed * 1.5f : Stat.MoveSpeed;
 
-            animator.SetFloat("MoveSpeed", 0.5f);
-
-            // animator.SetFloat("MoveSpeed", isTwoPhase ? 1.0f : 0.5f);
+            animator.SetFloat("MoveSpeed", 0.5f); // 속도는 바꿔주고 애니메이션은 일단 Run 유지하고
 
             Vector3 direction = (detectedPlayer.position - transform.position).normalized;
-            transform.position += direction * Stat.MoveSpeed * Time.deltaTime;
+            transform.position += direction * actualMoveSpeed * Time.deltaTime;
 
             Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * Stat.MoveSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * actualMoveSpeed);
             return INode.EnemyState.Running;
         }
         return INode.EnemyState.Failure;
@@ -506,9 +551,16 @@ public class EnemyAI : LivingObject
                     int index = i * 3 + j;
                     Gizmos.color = attackGrid[index] ? Color.red : Color.green;
 
-                    Vector3 cellPosition = 
-                        transform.position + transform.forward + new Vector3(j + 1.4f, 0, i - 1);
-                    Gizmos.DrawCube(cellPosition, new Vector3(1, 0.1f, 1));
+                    Vector3 cellLocalPosition = new Vector3(j - 1, 0, i + 1.4f);
+                    Vector3 cellWorldPosition = transform.TransformPoint(cellLocalPosition);
+
+                    Gizmos.DrawCube(cellWorldPosition, new Vector3(1, 0.1f, 1));
+
+                    // 기존
+
+                    //Vector3 cellPosition = 
+                    //    transform.position + transform.forward + new Vector3(j + 1.4f, 0, i - 1);
+                    //Gizmos.DrawCube(cellPosition, new Vector3(1, 0.1f, 1));
                 }
             }
         }
@@ -516,20 +568,24 @@ public class EnemyAI : LivingObject
 
     private void Attack()
     {
-        if (detectedPlayer == null)
+        float actualMoveSpeed = isTwoPhase ? Stat.MoveSpeed * 2 : Stat.MoveSpeed;
+
+
+        foreach (GameObject cell in colliderObjects)
         {
-            return;
-        }
-        // 그리드 형태의 공격
-        for (int i = 0; i < savedPatterns[attackIndex].pattern.Length; i++)
-        {
-            if (savedPatterns[attackIndex].pattern[i] && IsPlayerInCell(i))
+            if (cell != null)
             {
-                ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player);
-                break;
+                AttackCell attackCell = cell.GetComponent<AttackCell>();
+
+                // Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
+
+                if (attackCell != null && attackCell.playerInside)
+                {
+                    ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player);
+                    break;
+                }
             }
         }
-
     }
 
     private void ExecuteAttack(LivingObject attacker, LivingObject defender)

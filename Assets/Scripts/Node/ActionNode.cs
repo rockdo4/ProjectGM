@@ -1,6 +1,6 @@
 using System;
 
-public sealed class ActionNode : INode
+public class ActionNode : INode
 {
     Func<INode.EnemyState> onUpdate = null;
 
