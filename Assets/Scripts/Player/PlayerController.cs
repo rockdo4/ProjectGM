@@ -67,25 +67,6 @@ public class PlayerController : MonoBehaviour
         Quaternion rotation = Quaternion.LookRotation(relativePos);
         transform.rotation = Quaternion.Euler(0f, rotation.eulerAngles.y, 0f);
 
-        #region Test
-        //�ǰ� �׽�Ʈ
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if (player.evadeTimer < player.Stat.justEvadeTime)
-            {
-                player.evadePoint += player.Stat.justEvadePoint;
-            }
-            else if (player.evadeTimer >= player.Stat.justEvadeTime && player.evadeTimer < player.Stat.evadeTime)
-            {
-                player.evadePoint += player.Stat.evadePoint;
-            }
-            else
-            {
-                player.evadePoint += player.Stat.hitEvadePoint;
-            }
-            player.evadePoint = Mathf.Clamp(player.evadePoint, player.slider.minValue, player.slider.maxValue);
-        }
-
         //Groggy
         if (player.evadePoint >= player.Stat.maxEvadePoint)
         {
@@ -100,8 +81,8 @@ public class PlayerController : MonoBehaviour
                 player.GroggyAttack = false;
             }
         }
+
         player.slider.value = player.evadePoint;
-        #endregion  
     }
 
     private void FixedUpdate()

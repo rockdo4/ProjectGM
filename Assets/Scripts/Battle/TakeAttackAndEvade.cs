@@ -23,6 +23,40 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
             return;
         }
 
+        EvadeCheck();
+
+        switch (evade)
+        {
+            case EvadeSuccesss.None:
+                player.HP -= attack.Damage;
+                player.IsGroggy = attack.IsGroggy;
+                break;
+            case EvadeSuccesss.Normal:
+                player.HP -= (int)(attack.Damage * player.Stat.evadeDamageRate);
+                break;
+            case EvadeSuccesss.Just:
+                break;
+        }
+
+        if (player.HP <= 0)
+        {
+            player.HP = 0;
+            var destructables = player.GetComponents<IDestructable>();
+            foreach (var destructable in destructables)
+            {
+                destructable.OnDestruction(attacker);
+            }
+        }
+    }
+    
+    private void EvadeCheck()
+    {
+        if (player.GetComponent<PlayerController>().currentState != PlayerController.State.Evade)
+        {
+            evade = EvadeSuccesss.None;
+            return;
+        }
+
         evade = player.evadeTimer switch
         {
             float x when (x < player.Stat.justEvadeTime) => EvadeSuccesss.Just,
@@ -38,31 +72,5 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
         };
 
         player.evadePoint = Mathf.Clamp(player.evadePoint, 0, player.Stat.maxEvadePoint);
-
-        switch (evade)
-        {
-            case EvadeSuccesss.None:
-                Debug.Log("피격");
-                player.HP -= attack.Damage;
-                player.IsGroggy = attack.IsGroggy;
-                break;
-            case EvadeSuccesss.Normal:
-                Debug.Log("일반 회피");
-                player.HP -= (int)(attack.Damage * player.Stat.evadeDamageRate);
-                break;
-            case EvadeSuccesss.Just:
-                Debug.Log("저스트 회피");
-                break;
-        }
-
-        if (player.HP <= 0)
-        {
-            player.HP = 0;
-            var destructables = player.GetComponents<IDestructable>();
-            foreach (var destructable in destructables)
-            {
-                destructable.OnDestruction(attacker);
-            }
-        }
     }
 }
