@@ -1428,8 +1428,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 2, z: 3}
-  m_Center: {x: 0, y: 0.78, z: 0.5886268}
+  m_Size: {x: 0.84408414, y: 2, z: 1.3969074}
+  m_Center: {x: 0.060391024, y: 0.78, z: 0.36171538}
 --- !u!114 &7419941498188861280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1454,15 +1454,16 @@ MonoBehaviour:
   attackPreparationTime: 2
   attackRangeMaterial: {fileID: -7974662883447924875, guid: a5ac6998bd0c4b1a87b67e82fb321d4a,
     type: 3}
-  attackRangePrefab: {fileID: 0}
-  attackGrid: 010000010000010000
+  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
+    type: 3}
+  attackGrid: 010101000000010101
   savedPatterns:
   - patternName: "\uADFC\uC811 A\uD328\uD134"
-    pattern: 010000010000010000
+    pattern: 010101000000000000
   - patternName: "\uADFC\uC811 B\uD328\uD134"
-    pattern: 000000010101000000
+    pattern: 000100000100000100
   - patternName: "\uADFC\uC811 C\uD328\uD134"
-    pattern: 000101000101000101
+    pattern: 000000010101010101
 --- !u!1 &8570982625879845167
 GameObject:
   m_ObjectHideFlags: 0
