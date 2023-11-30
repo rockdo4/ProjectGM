@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 using SaveDataVC = SaveDataV3; // Version Change?
 
 public static class PlayDataManager
@@ -19,10 +18,10 @@ public static class PlayDataManager
             data = new SaveDataVC();
 
             // 기본 무기 4종 지급
-            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Simple_Hammer));
-            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Go_Work_Sword));
-            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Glory_Sword));
-            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Simple_Spear));
+            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Simple_Tonpa_Lv1));
+            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Go_Work_Sword_Lv1));
+            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Glory_Sword_Lv1));
+            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Simple_Spear_Lv1));
         }
         SaveLoadSystem.Save(data, "savefile.json");
 
@@ -139,6 +138,26 @@ public static class PlayDataManager
                 curArmor[armor.armorType] = armor;
                 curArmor[armor.armorType].isEquip = true;
 
+                break;
+
+            default:
+                return;
+        }
+        Save();
+    }
+
+    public static void UnWearItem(Item.ItemType type, Armor.ArmorType armorType = Armor.ArmorType.None)
+    {
+        switch (type)
+        {
+            case Item.ItemType.Weapon:
+                curWeapon.isEquip = false;
+                curWeapon = null;
+                break;
+
+            case Item.ItemType.Armor:
+                curArmor[armorType].isEquip = false;
+                curArmor[armorType] = null;
                 break;
 
             default:

@@ -32,7 +32,8 @@ public class ItemSO : ScriptableObject
         int index = -1;
         for (int i = 0; i < ID.Length; i++)
         {
-            if (ID[i] == item.id)
+            int original = item.id / 100 * 100; // 레벨 초기화
+            if (ID[i] == original)
             {
                 index = i;
                 break;
