@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
         SuperAttack,
         Evade,
         Sprint,
+        Hit,
+        Dead
     }
     private StateManager stateManager = new StateManager();
     private List<StateBase> states = new List<StateBase>();
@@ -58,14 +60,24 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        stateManager?.Update();
+        player.Rigid.velocity = Vector3.zero;
         if (player.Enemy == null)
         {
             return;
         }
+        if (currentState == State.Dead)
+        {
+            return;
+        }
+        stateManager?.Update();
         Vector3 relativePos = player.Enemy.transform.position - transform.position;
         Quaternion rotation = Quaternion.LookRotation(relativePos);
         transform.rotation = Quaternion.Euler(0f, rotation.eulerAngles.y, 0f);
+
+        if (player.IsGroggy)
+        {
+            SetState(State.Hit);
+        }
 
         //Groggy
         if (player.evadePoint >= player.Stat.maxEvadePoint)
@@ -93,6 +105,11 @@ public class PlayerController : MonoBehaviour
     #region Touch Event
     private void OnSwipe()
     {
+        if (currentState == State.Hit || currentState == State.Dead)
+        {
+            return;
+        }
+
         if (player.isAttack)
         {
             return;
@@ -101,6 +118,11 @@ public class PlayerController : MonoBehaviour
     }
     private void OnHold()
     {
+        if (currentState == State.Hit || currentState == State.Dead)
+        {
+            return;
+        }
+
         if (currentState == State.Evade)
         {
             return;
@@ -117,6 +139,10 @@ public class PlayerController : MonoBehaviour
     }
     private void HoldEnd()
     {
+        if (currentState == State.Hit || currentState == State.Dead)
+        {
+            return;
+        }
         player.canCombo = false;
     }
     #endregion
@@ -165,7 +191,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 #if UNITY_EDITOR
-        Debug.Log($"--------- ChangeState: {newState} ---------");
+        //Debug.Log($"--------- ChangeState: {newState} ---------");
 #endif
         currentState = newState;
         stateManager?.ChangeState(states[(int)newState]);
@@ -178,6 +204,8 @@ public class PlayerController : MonoBehaviour
         states.Add(new PlayerSuperAttackState(this));
         states.Add(new PlayerEvadeState(this));
         states.Add(new PlayerSprintState(this));
+        states.Add(new PlayerHitState(this));
+        states.Add(new PlayerDeadState(this));
 
         SetState(State.Idle);
     }

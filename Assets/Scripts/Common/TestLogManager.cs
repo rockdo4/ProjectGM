@@ -9,7 +9,7 @@ public class TestLogManager : MonoBehaviour
     public List<GameObject> UIPrefab;
     private Dictionary<GameObject, Action> uiList = new Dictionary<GameObject, Action> ();
 
-    private bool isHide = true;
+    private bool isHide = false;
 
     private void Awake()
     {

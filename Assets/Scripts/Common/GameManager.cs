@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        Time.timeScale = gameOverTimeScale;
+        //Time.timeScale = gameOverTimeScale;
         gameOverUI.SetActive(true);
     }
 }

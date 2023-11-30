@@ -3,17 +3,13 @@ using UnityEngine;
 
 public class TakeAttackDebugPlayer : MonoBehaviour, IAttackable
 {
-    private enum EvadeSuccesss
-    {
-        None, Normal, Just
-    }
-    private EvadeSuccesss evade;
     private Player player;
 
     private GameObject hpUI;
     private GameObject evadeUI;
     private GameObject evadePointUI;
     private GameObject groggyAttackUI;
+    private GameObject hitUI;
 
     private void Awake()
     {
@@ -22,7 +18,7 @@ public class TakeAttackDebugPlayer : MonoBehaviour, IAttackable
 
     private void Start()
     {
-        hpUI = TestLogManager.Instance.MakeUI(HPAction);
+        hpUI = TestLogManager.Instance.MakeUI();
         hpUI.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "플레이어HP";
 
         evadeUI = TestLogManager.Instance.MakeUI(EvadeAction);
@@ -32,27 +28,14 @@ public class TakeAttackDebugPlayer : MonoBehaviour, IAttackable
 
         groggyAttackUI = TestLogManager.Instance.MakeUI(GroggyAction);
         groggyAttackUI.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "특수공격";
+
+        hitUI = TestLogManager.Instance.MakeUI(HitAction);
+        hitUI.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "피격 여부";
     }
 
     public void OnAttack(GameObject attacker, Attack attack)
     {
-        EvadeCheck();
-    }
-
-    private void EvadeCheck()
-    {
-        if (player.GetComponent<PlayerController>().currentState != PlayerController.State.Evade)
-        {
-            evade = EvadeSuccesss.None;
-            return;
-        }
-                                                                                           
-        evade = player.evadeTimer switch
-        {
-            float x when (x < player.Stat.justEvadeTime) => EvadeSuccesss.Just,
-            float x when (x >= player.Stat.justEvadeTime && x < player.Stat.evadeTime) => EvadeSuccesss.Normal,
-            _ => EvadeSuccesss.None
-        };
+        HPAction();
     }
 
     #region TestLog Events
@@ -86,6 +69,14 @@ public class TakeAttackDebugPlayer : MonoBehaviour, IAttackable
         {
             true => $"<color=green>ON</color>",
             false => $"<color=white>OFF</color>"
+        };
+    }
+    private void HitAction()
+    {
+        hitUI.GetComponentsInChildren<TextMeshProUGUI>()[1].text = player.GetComponent<PlayerController>().currentState switch
+        {
+            PlayerController.State.Hit => $"<color=red>ON</color>",
+            _ => $"<color=white>OFF</color>"
         };
     }
     #endregion

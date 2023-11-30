@@ -5,6 +5,14 @@ public class DestructGameObject : MonoBehaviour, IDestructable
     public void OnDestruction(GameObject attacker)
     {
         GameManager.instance.EndGame();
-        Destroy(gameObject);
+        var player = GetComponent<PlayerController>();
+        if (player != null)
+        {
+            player.SetState(PlayerController.State.Dead);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
