@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WeaponPrefab : MonoBehaviour, IEquip
 {
-    public Item item = null;
+    public Weapon item = null;
 
     public PlayerAnimationSO animationSO;
 
@@ -21,30 +21,12 @@ public class WeaponPrefab : MonoBehaviour, IEquip
     public void OnEquip()
     {
         // Define AttackType
-        type = item.id switch
-        {
-            // Hit
-            (int)Weapon.WeaponID.Simple_Hammer => AttackType.Hit,
-            (int)Weapon.WeaponID.Gold_Hammer => AttackType.Hit,
-
-            // Slash
-            (int)Weapon.WeaponID.Go_Work_Sword => AttackType.Slash,
-            (int)Weapon.WeaponID.Vigil_Sword => AttackType.Slash,
-
-            (int)Weapon.WeaponID.Glory_Sword => AttackType.Slash,
-            (int)Weapon.WeaponID.Darkness_Sword => AttackType.Slash,
-
-            // Pierce
-            (int)Weapon.WeaponID.Simple_Spear => AttackType.Pierce,
-            (int)Weapon.WeaponID.Gold_Spear => AttackType.Pierce,
-
-            _ => AttackType.None,
-        };
+        type = item.attackType;
     }
 
     public void OnEquip(Item item)
     {
-        this.item = item;
+        this.item = item as Weapon;
         OnEquip();
     }
 
