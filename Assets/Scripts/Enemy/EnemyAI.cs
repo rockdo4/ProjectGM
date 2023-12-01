@@ -616,6 +616,7 @@ public class EnemyAI : LivingObject
 
     private void OnDrawGizmos()
     {
+#if UNITY_EDITOR
         if (!EditorApplication.isPlaying)
         {
             Gizmos.color = Color.green;
@@ -644,6 +645,7 @@ public class EnemyAI : LivingObject
             }
 
         }
+#endif
     }
 
     private void Attack()

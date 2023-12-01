@@ -186,16 +186,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1658408706389290784, guid: ab82f6376adb4834cb7ff7cafa84688e,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1658408706389290784, guid: ab82f6376adb4834cb7ff7cafa84688e,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3721337743071715051, guid: ab82f6376adb4834cb7ff7cafa84688e,
         type: 3}
       propertyPath: m_Name
@@ -251,23 +241,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5881668350392401820, guid: ab82f6376adb4834cb7ff7cafa84688e,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 116
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3721337743071715051, guid: ab82f6376adb4834cb7ff7cafa84688e,
-        type: 3}
-      insertIndex: 4
-      addedObject: {fileID: 779536165}
-    - targetCorrespondingSourceObject: {fileID: 3721337743071715051, guid: ab82f6376adb4834cb7ff7cafa84688e,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 779536166}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab82f6376adb4834cb7ff7cafa84688e, type: 3}
 --- !u!1001 &214427998
 PrefabInstance:
@@ -1030,51 +1007,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bear Grizly 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: attackGrid.Array.data[1]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: attackGrid.Array.data[4]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: attackGrid.Array.data[5]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: attackGrid.Array.data[6]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: attackGrid.Array.data[8]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[0].pattern.Array.data[1]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[0].pattern.Array.data[3]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[0].pattern.Array.data[5]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[0].pattern.Array.data[7]
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4691967391105962301, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1125,44 +1057,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6403444672829335199, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6403444672829335199, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6403444672829335199, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: m_Size.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6403444672829335199, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0.66
-      objectReference: {fileID: 0}
-    - target: {fileID: 6403444672829335199, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: m_Center.z
-      value: 0.35
-      objectReference: {fileID: 0}
-    - target: {fileID: 6403444672829335199, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 105006126220715780, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 783073935}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0f5e895cdf5cab4b98b2a6810d54fb7, type: 3}
 --- !u!114 &1837166470 stripped
 MonoBehaviour:
