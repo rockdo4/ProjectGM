@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -52,3 +53,4 @@ public class EnemyAIEditor : Editor
         EditorUtility.SetDirty(script);
     }
 }
+#endif

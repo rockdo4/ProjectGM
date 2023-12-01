@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -574,6 +576,7 @@ public class EnemyAI : LivingObject
 
     private void OnDrawGizmos()
     {
+#if UNITY_EDITOR
         if (!EditorApplication.isPlaying)
         {
             Gizmos.color = Color.green;
@@ -600,7 +603,6 @@ public class EnemyAI : LivingObject
             }
 
 
-
             //for (int i = 0; i < 3; i++)
             //{
             //    for (int j = 0; j < 3; j++)
@@ -615,6 +617,7 @@ public class EnemyAI : LivingObject
             //    }
             //}
         }
+#endif
     }
 
     private void Attack()

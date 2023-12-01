@@ -19,6 +19,7 @@ public class TakeAttackDebugPlayer : MonoBehaviour, IAttackable
     private void Start()
     {
         hpUI = TestLogManager.Instance.MakeUI();
+        hpUI.GetComponentsInChildren<TextMeshProUGUI>()[1].text = $"{player.HP}";
         hpUI.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "플레이어HP";
 
         evadeUI = TestLogManager.Instance.MakeUI(EvadeAction);
