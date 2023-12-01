@@ -9,16 +9,8 @@ public static class CsvTableMgr
     {
         tables.Clear();
 
-        /*
-        var upgradeTable = new UpgradeTable();
-        tables.Add(typeof(UpgradeTable), upgradeTable);
-
-        var monsterTable = new MonsterTable();
-        tables.Add(typeof(MonsterTable), monsterTable);
-
-        var arsenalTable = new ArsenalTable();
-        tables.Add(typeof(ArsenalTable), arsenalTable);
-        */
+        var weaponTable = new WeaponTable();
+        tables.Add(typeof(WeaponTable), weaponTable);
     }
 
     public static T GetTable<T>() where T : CsvTable

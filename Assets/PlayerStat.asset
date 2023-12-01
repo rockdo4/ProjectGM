@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: PlayerStat
   m_EditorClassIdentifier: 
   HP: 100
-  AttackDamage: 10
-  Defence: 10
+  AttackDamage: 0
+  Defence: 0
   MoveSpeed: 10
   Critical: 0
   CriticalDamage: 1
-  evadeTime: 0.5
+  evadeTime: 0.3166667
   maxEvadePoint: 100
   evadePoint: 10
   evadeDamageRate: 0.5
-  justEvadeTime: 0.25
+  justEvadeTime: 0.15
   justEvadePoint: 25
   hitEvadePoint: -5
   groggyTime: 10

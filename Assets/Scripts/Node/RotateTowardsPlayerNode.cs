@@ -20,7 +20,7 @@ public class RotateTowardsPlayerNode : INode
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
             monsterTransform.rotation = Quaternion.Slerp(monsterTransform.rotation, lookRotation, Time.deltaTime * 5f);
             return INode.EnemyState.Success;
-            return INode.EnemyState.Running; // 러닝으로 수정 할 수도
+            //return INode.EnemyState.Running; // 러닝으로 수정 할 수도
         }
         return INode.EnemyState.Failure;
     }

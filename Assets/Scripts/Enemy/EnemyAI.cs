@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -139,8 +137,6 @@ public class EnemyAI : LivingObject
 
         if (IsGroggy)
         {
-            Debug.Log("123");
-
             animator.ResetTrigger("MeleeAttack_A");
             animator.ResetTrigger("MeleeAttack_B");
             animator.ResetTrigger("MeleeAttack_C");
@@ -319,8 +315,6 @@ public class EnemyAI : LivingObject
         }
 
         yield return new WaitForSeconds(attackPreparationTime);
-
-        //Debug.Log(detectedPlayer.name);
 
         ShowAttackRange(false);
         isPreparingAttack = false;

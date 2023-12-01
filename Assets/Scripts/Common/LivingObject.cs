@@ -12,4 +12,5 @@ public abstract class LivingObject : MonoBehaviour
         HP = stat.HP;
         IsGroggy = false;
     }
+
 }
