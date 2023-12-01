@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 6787471056299916835}
   - component: {fileID: 5956209694159090163}
   - component: {fileID: 6083304989142593996}
-  - component: {fileID: 6403444672829335199}
   - component: {fileID: 3570399017614776302}
   m_Layer: 0
   m_Name: Bear Grizly 1
@@ -130,27 +129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae8fd83196764641b9a0db9ae1c691c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &6403444672829335199
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 105006126220715780}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3570399017614776302
 MonoBehaviour:
   m_ObjectHideFlags: 0

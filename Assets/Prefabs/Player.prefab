@@ -1115,10 +1115,6 @@ PrefabInstance:
       addedObject: {fileID: 5322342214061034969}
     - targetCorrespondingSourceObject: {fileID: 100154, guid: bdd7a03fd93bf2d4cb6babd63ceabee8,
         type: 3}
-      insertIndex: 5
-      addedObject: {fileID: 6075360498091553834}
-    - targetCorrespondingSourceObject: {fileID: 100154, guid: bdd7a03fd93bf2d4cb6babd63ceabee8,
-        type: 3}
       insertIndex: -1
       addedObject: {fileID: 5881668350392401820}
     - targetCorrespondingSourceObject: {fileID: 100154, guid: bdd7a03fd93bf2d4cb6babd63ceabee8,
@@ -1183,21 +1179,6 @@ MonoBehaviour:
   leftHand: {fileID: 3707892061425531854}
   rightHand: {fileID: 4045825788344842719}
   weaponSO: {fileID: 11400000, guid: 3501d7d55b17cb24395e1b839e228de9, type: 2}
---- !u!114 &6075360498091553834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3721337743071715051}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b78f411f05c6cef4a865d4d150f23c52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stat: {fileID: 11400000, guid: 1476a0f1e8a5a484ebd7763a74a8c651, type: 2}
-  evadeTimer: 0
-  virtualCamera: {fileID: 0}
 --- !u!54 &5881668350392401820
 Rigidbody:
   m_ObjectHideFlags: 0

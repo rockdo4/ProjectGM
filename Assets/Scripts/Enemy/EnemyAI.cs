@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -73,6 +71,9 @@ public class EnemyAI : LivingObject
 
     private List<GameObject> colliderObjects = new List<GameObject>();
 
+    private float realSpeed;
+    private bool IsrealSpeed = false;
+
     public enum EnemyType
     {
         Enemy1,
@@ -87,7 +88,7 @@ public class EnemyAI : LivingObject
             return stat as EnemyStat;
         }
     }
-    
+
     #endregion
 
 
@@ -134,7 +135,8 @@ public class EnemyAI : LivingObject
 
     private void Update()
     {
-
+        //if (detectedPlayer != null)
+        //    LookAtPlayer();
 
 
         if (IsGroggy)
@@ -153,9 +155,9 @@ public class EnemyAI : LivingObject
                 grogyTimer = 5f;
                 IsGroggy = false;
                 animator.SetBool("Grogy", false);
-            } 
+            }
         }
-        else if(!IsGroggy) // 임시
+        else if (!IsGroggy) // 임시
         {
             animator.speed = 1f;
             grogyTimer = 5f;
@@ -318,6 +320,8 @@ public class EnemyAI : LivingObject
 
         yield return new WaitForSeconds(attackPreparationTime);
 
+        //Debug.Log(detectedPlayer.name);
+
         ShowAttackRange(false);
         isPreparingAttack = false;
 
@@ -393,7 +397,7 @@ public class EnemyAI : LivingObject
                     cell.SetActive(true);
                     cellInstances.Add(cell);
 
-                    // 별개의 콜라이더 똑같은 위치에 하나 더 만들기
+                    // 별개의 투명 콜라이더 공격범위의 시각화 Cell과 일치하게
                     GameObject colliderObject = new GameObject("AttackCollider");
                     colliderObject.AddComponent<AttackCell>();
                     BoxCollider collider = colliderObject.AddComponent<BoxCollider>();
@@ -412,7 +416,7 @@ public class EnemyAI : LivingObject
         }
         else
         {
-            foreach (GameObject cell in cellInstances) // 리스트의 모든 셀 인스턴스를 순회
+            foreach (GameObject cell in cellInstances)
             {
                 if (cell != null)
                 {
@@ -424,10 +428,20 @@ public class EnemyAI : LivingObject
 
     Vector3 CalculateCellPosition(int index) // 칼큘
     {
+        Renderer renderer = attackRangePrefab.GetComponent<Renderer>();// 어택 레인지 프리펩
+        if (renderer == null)
+        {
+            Debug.LogError("attackRangePrefab에 Renderer 컴포넌트가 없습니다.");
+            return Vector3.zero;
+        }
+
+        Vector3 cellSize = renderer.bounds.size; // 프리펩의 로컬 사이즈 받아오기
+        float offset = cellSize.x + 0.01f;
+
         int x = index % 3;
         int z = index / 3;
-        
-        Vector3 actualPosition = new Vector3(x - 1, 0, z + 2.25f);
+
+        Vector3 actualPosition = new Vector3(x * offset - offset, 0.1f, z * offset + 2.5f);
         actualPosition = transform.rotation * actualPosition;
         return transform.position + actualPosition;
     }
@@ -451,8 +465,10 @@ public class EnemyAI : LivingObject
         Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
         float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
 
-        if (angleToPlayer > 2.0f) // 2도 이내에서만 공격
+        if (angleToPlayer > 10.0f) // 2도 이내에서만 공격
             return INode.EnemyState.Failure;
+
+        
 
         Debug.Log(isTwoPhase ? "페이즈2 공격A 준비" : "페이즈1 공격A 준비");
         isAttacking = true;
@@ -483,7 +499,7 @@ public class EnemyAI : LivingObject
         Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
         float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
 
-        if (angleToPlayer > 2.0f) // 2도 이내에서만 공격
+        if (angleToPlayer > 10.0f) // 2도 이내에서만 공격
             return INode.EnemyState.Failure;
 
         Debug.Log(isTwoPhase ? "페이즈2 공격B 준비" : "페이즈1 공격B 준비");
@@ -514,7 +530,7 @@ public class EnemyAI : LivingObject
         Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
         float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
 
-        if (angleToPlayer > 2.0f) // 2도 이내에서만 공격
+        if (angleToPlayer > 10.0f) // 2도 이내에서만 공격
             return INode.EnemyState.Failure;
 
         Debug.Log(isTwoPhase ? "페이즈2 공격C 준비" : "출력되면 안되는 거임");
@@ -540,7 +556,8 @@ public class EnemyAI : LivingObject
             detectedPlayer = overlapColliders[0].transform;
 
             Vector3 direction = detectedPlayer.position - transform.position;
-            direction.y = 0; // Y축 방향은 고정
+            direction.y = 0;
+
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // 로테이션 스피드 5f 임시
 
@@ -553,6 +570,14 @@ public class EnemyAI : LivingObject
 
     INode.EnemyState TracePlayer()
     {
+        //float distanceToPlayer = Vector3.Distance(transform.position, detectedPlayer.position);
+
+        //if (distanceToPlayer < meleeAttackRange)
+        //{
+        //    animator.SetFloat("MoveSpeed", 0f);
+        //    return INode.EnemyState.Failure;
+        //}
+
         if (detectedPlayer != null)
         {
             float actualMoveSpeed = isTwoPhase ? Stat.MoveSpeed * 1.5f : Stat.MoveSpeed;
@@ -560,13 +585,28 @@ public class EnemyAI : LivingObject
             animator.SetFloat("MoveSpeed", 0.5f); // 속도는 바꿔주고 애니메이션은 일단 Run 유지하고
 
             Vector3 direction = (detectedPlayer.position - transform.position).normalized;
+
+            // 잠깐
+
+            if (IsrealSpeed)
+            {
+
+                //Debug.Log(actualMoveSpeed);
+                //transform.position += direction * -actualMoveSpeed * Time.deltaTime;
+                //Debug.Log(transform.position);
+            }
+           
             transform.position += direction * actualMoveSpeed * Time.deltaTime;
+            
 
             Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * actualMoveSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f);
             return INode.EnemyState.Running;
+
+
         }
         return INode.EnemyState.Failure;
+            
     }
     #endregion
 
@@ -576,7 +616,6 @@ public class EnemyAI : LivingObject
 
     private void OnDrawGizmos()
     {
-#if UNITY_EDITOR
         if (!EditorApplication.isPlaying)
         {
             Gizmos.color = Color.green;
@@ -585,39 +624,26 @@ public class EnemyAI : LivingObject
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
 
-            for (int index = 0; index < 9; index++)
-            {
-                int x = index % 3; // x 위치 계산
-                int z = index / 3; // z 위치 계산
+            // 겹쳐서 찍히는 버그 오프셋 주어야함
 
-                // 실제 위치 계산
-                Vector3 actualPosition = new Vector3(x - 1, 0.1f, z + 2.25f);
+            float gizmoSize = 2.1f;
+            float offset = gizmoSize + 0.02f;
+
+            for (int index = 0; index < attackGrid.Length; index++)
+            {
+                int x = index % 3;
+                int z = index / 3;
+
+                Vector3 actualPosition = new Vector3((x - 1) * offset - 1, 0.1f, (z - 1) * offset + 4f);
                 actualPosition = transform.rotation * actualPosition;
                 Vector3 worldPosition = transform.position + actualPosition;
 
-                // 타일의 색상 설정
                 Gizmos.color = attackGrid[index] ? Color.red : Color.green;
 
-                // 타일 그리기
-                Gizmos.DrawCube(worldPosition, new Vector3(2.1f, 0.1f, 2.1f));
+                Gizmos.DrawCube(worldPosition, new Vector3(gizmoSize, 0.1f, gizmoSize));
             }
 
-
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    for (int j = 0; j < 3; j++)
-            //    {
-            //        int index = i * 3 + j;
-            //        Gizmos.color = attackGrid[index] ? Color.red : Color.green;
-
-            //        Vector3 cellLocalPosition = new Vector3(j - 1, 0, i + 2.25f);
-            //        Vector3 cellWorldPosition = transform.TransformPoint(cellLocalPosition);
-
-            //        Gizmos.DrawCube(cellWorldPosition, new Vector3(1.7f, 0.1f, 1.7f));
-            //    }
-            //}
         }
-#endif
     }
 
     private void Attack()
@@ -652,4 +678,37 @@ public class EnemyAI : LivingObject
             attackable.OnAttack(gameObject, attack);
         }
     }
+
+    //그러면 제자리에서 이동속도 0줘서 대가리 돌아가게만
+
+    //대가리 돌아가는 코드는 이미 있음 ^^
+
+    private void OnTriggerEnter(Collider other)
+    {
+        IsrealSpeed = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        IsrealSpeed = false;
+    }
+
+    //private void OnTriggerEnter(collider other)
+    //{
+    //    debug.log("엔터");
+    //    realspeed = stat.movespeed;
+
+    //    animator.setfloat("movespeed", 0f); // 블랜드트리에서 idle상태
+
+    //    stat.movespeed = 0;
+    //    debug.log(stat.movespeed);
+    //}
+
+    //private void Ontriggerexit(collider other)
+    //{
+    //    debug.log("익시스트");
+    //    animator.setfloat("movespeed", 0.5f); // 이게 추적상태 run애니메이션
+    //    stat.movespeed = realspeed;
+    //}
+
 }
