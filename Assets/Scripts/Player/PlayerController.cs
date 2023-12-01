@@ -191,7 +191,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 #if UNITY_EDITOR
-        //Debug.Log($"--------- ChangeState: {newState} ---------");
+        Debug.Log($"--------- ChangeState: {newState} ---------");
 #endif
         currentState = newState;
         stateManager?.ChangeState(states[(int)newState]);
