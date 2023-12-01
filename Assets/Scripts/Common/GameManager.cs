@@ -29,10 +29,18 @@ public class GameManager : MonoBehaviour
         gameOverUI.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            EndGame();
+        }
+    }
+
 
     public void EndGame()
     {
-        //Time.timeScale = gameOverTimeScale;
+        Time.timeScale = gameOverTimeScale;
         gameOverUI.SetActive(true);
     }
 }
