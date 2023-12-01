@@ -18,8 +18,8 @@ public static class PlayDataManager
             data = new SaveDataVC();
 
             // 기본 무기 4종 지급
-            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Simple_Tonpa_Lv1));
-            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Go_Work_Sword_Lv1));
+            //data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Simple_Tonpa_Lv1));
+            //data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Go_Work_Sword_Lv1));
             data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Glory_Sword_Lv1));
             data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Simple_Spear_Lv1));
         }
