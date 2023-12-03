@@ -190,9 +190,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-#if UNITY_EDITOR
-        Debug.Log($"--------- ChangeState: {newState} ---------");
-#endif
+        Debug.Log($"ChangeState = {newState}");
         currentState = newState;
         stateManager?.ChangeState(states[(int)newState]);
     }
@@ -205,7 +203,7 @@ public class PlayerController : MonoBehaviour
         states.Add(new PlayerEvadeState(this));
         states.Add(new PlayerSprintState(this));
         states.Add(new PlayerHitState(this));
-        states.Add(new PlayerDeadState(this));
+        states.Add(new PlayerDeathState(this));
 
         SetState(State.Idle);
     }
