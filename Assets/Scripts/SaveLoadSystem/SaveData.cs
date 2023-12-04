@@ -59,9 +59,38 @@ public class SaveDataV3 : SaveData
 
     public int Quest { get; set; } = 1;
 
-    public readonly List<Weapon> WeaponInventory = new List<Weapon>();
+    public List<Weapon> WeaponInventory = new List<Weapon>();
 
-    public readonly List<Armor> ArmorInventory = new List<Armor>();
+    public List<Armor> ArmorInventory = new List<Armor>();
+
+    public override SaveData VersionUp()
+    {
+        var data = new SaveDataV4();
+        data.Gold = Gold;
+        data.Quest = Quest;
+        data.WeaponInventory = WeaponInventory;
+        data.ArmorInventory = ArmorInventory;
+
+        return data;
+    }
+}
+
+public class SaveDataV4 : SaveData
+{
+    public SaveDataV4() 
+    {
+        Version = 4;
+    }
+
+    public int Gold { get; set; } = 0;
+
+    public int Quest { get; set; } = 1;
+
+    public List<Weapon> WeaponInventory = new List<Weapon>();
+
+    public List<Armor> ArmorInventory = new List<Armor>();
+
+    public HashSet<Materials> MatInventory = new HashSet<Materials>();
 
     public override SaveData VersionUp()
     {

@@ -1,8 +1,8 @@
 using System;
 
-public class Item
+public class Equip
 {
-    public enum ItemType
+    public enum EquipType
     {
         None = -1,
 
@@ -11,11 +11,11 @@ public class Item
     }
 
     public DateTime instanceID;
-    public ItemType type = ItemType.None;
+    public EquipType type = EquipType.None;
     public int id = -1;
     public bool isEquip = false;
 
-    public Item(ItemType type = ItemType.None, int id = -1, bool isEquip = false)
+    public Equip(EquipType type = EquipType.None, int id = -1, bool isEquip = false)
     {
         instanceID = DateTime.Now;
 
@@ -36,7 +36,7 @@ public enum AttackType
 
 }
 
-public class Weapon : Item 
+public class Weapon : Equip 
 {
     public enum WeaponID
     {
@@ -134,7 +134,7 @@ public class Weapon : Item
     public AttackType attackType = AttackType.None;
 
     public Weapon(WeaponID id, bool isEquip = false)
-        : base(ItemType.Weapon, (int)id, isEquip)
+        : base(EquipType.Weapon, (int)id, isEquip)
     {
         var table = CsvTableMgr.GetTable<WeaponTable>().dataTable;
 
@@ -172,7 +172,7 @@ public struct Skill
     }
 }
 
-public class Armor : Item
+public class Armor : Equip
 {
     public enum ArmorID
     {
@@ -206,7 +206,7 @@ public class Armor : Item
     public int socket = 1;
 
     public Armor(ArmorID id, bool isEquip = false)
-        : base(ItemType.Armor, (int)id, isEquip)
+        : base(EquipType.Armor, (int)id, isEquip)
     {
         armorType = id switch
         {

@@ -24,7 +24,7 @@ public class InventoryManager : MonoBehaviour
 
     [Header("일괄판매")]
     public GameObject sellPanel;
-    private Item[] sellList = new Item[10]; // 최대 판매 개수
+    private Equip[] sellList = new Equip[10]; // 최대 판매 개수
     private bool sellMode = false;
 
     //private ObjectPool<Button> buttonPool;
@@ -51,7 +51,7 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < 8; i++)
         {
-            var weapon = new Weapon(Weapon.WeaponID.Simple_Tonpa_Lv1 + i * 100);
+            var weapon = new Weapon(Weapon.WeaponID.Simple_Tonpa_Lv1 + i * 200);
             PlayDataManager.data.WeaponInventory.Add(weapon);
             yield return new WaitForEndOfFrame();
         }
@@ -134,6 +134,13 @@ public class InventoryManager : MonoBehaviour
     {
         ClearItemButton();
 
+        var mats = PlayDataManager.data.MatInventory;
+        foreach (var mat in mats)
+        {
+            Instantiate(buttonPrefab, inventoryPanel.transform);
+
+
+        }
     }
 
     public void ClearItemButton()
@@ -156,5 +163,11 @@ public class InventoryManager : MonoBehaviour
 
             sellPanel.SetActive(true);
         }
+    }
+
+    public void Tester()
+    {
+        //PlayDataManager.data.MatInventory.Add(new Materials(71001));
+        //PlayDataManager.data.MatInventory.Add(new Materials(72001));
     }
 }

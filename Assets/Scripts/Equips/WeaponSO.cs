@@ -20,7 +20,7 @@ public class WeaponSO : ScriptableObject
         }
 
         // Item.ItemType Exception
-        if (weapon.type == Item.ItemType.None)
+        if (weapon.type == Equip.EquipType.None)
         {
             Debug.LogWarning("Wrong Item Type!");
             return null;
