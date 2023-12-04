@@ -95,6 +95,21 @@ public class PlayerController : MonoBehaviour
         }
 
         player.slider.value = player.evadePoint;
+
+        #region Test
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            player.evadePoint += 50;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            player.Stat.AttackDamage = (player.Stat.AttackDamage == 0) ? 70 : 0;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            player.Stat.Defence = (player.Stat.Defence == 0) ? -100 : 0;
+        }
+        #endregion
     }
 
     private void FixedUpdate()
