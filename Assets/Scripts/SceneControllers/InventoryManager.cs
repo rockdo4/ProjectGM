@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -10,7 +11,7 @@ public class InventoryManager : MonoBehaviour
 {
     public GameObject inventoryPanel;
 
-    public GameObject buttonPrefab;
+    public ItemButton buttonPrefab;
 
     [Header("무기/방어구")]
     public ItemPanel itemPanel;
@@ -29,11 +30,29 @@ public class InventoryManager : MonoBehaviour
     private Equip[] sellList = new Equip[10]; // 최대 판매 개수
     private bool sellMode = false;
 
-    //private ObjectPool<Button> buttonPool;
+    private ObjectPool<ItemButton> buttonPool;
+    private List<ItemButton> releaseList = new List<ItemButton>();
 
     private void Start()
     {
-        //buttonPool = new ObjectPool<Button>(());
+        buttonPool = new ObjectPool<ItemButton>(() => 
+        {
+            var button = Instantiate(buttonPrefab);
+            button.OnCountAct();
+            button.gameObject.SetActive(false);
+            return button;
+        },
+        delegate (ItemButton button)
+        {
+            button.gameObject.SetActive(true);
+        },
+        delegate (ItemButton button)
+        {
+            button.OnCountAct();
+            button.iconImage.sprite = null;
+            button.button.onClick.RemoveAllListeners();
+            button.gameObject.SetActive(false);
+        });
 
         if (PlayDataManager.data == null)
         {
@@ -75,15 +94,13 @@ public class InventoryManager : MonoBehaviour
     {
         ClearItemButton();
 
-        // Object Pool로 최적화할 것
         var weapons = PlayDataManager.data.WeaponInventory;
         foreach (var weapon in weapons)
         {
-            var go = Instantiate(buttonPrefab, inventoryPanel.transform);
-            var button = go.GetComponent<ItemButton>();
-            button.OnCountAct();
+            var go = buttonPool.Get();
+            go.transform.SetParent(inventoryPanel.transform);
 
-            button.GetComponent<ItemButton>().button.onClick.AddListener(() => 
+            go.button.onClick.AddListener(() => 
             {
                 if (sellMode)
                 {
@@ -93,11 +110,13 @@ public class InventoryManager : MonoBehaviour
                 else
                 {
                     itemPanel.SetItem(weapon);
-                    itemPanel.iconImage = button.iconImage;
+                    itemPanel.iconImage.sprite = go.iconImage.sprite;
                     itemPanel.Renewal();
                 }
                 
             });
+
+            releaseList.Add(go);
         }
     }
 
@@ -109,11 +128,10 @@ public class InventoryManager : MonoBehaviour
         var armors = PlayDataManager.data.ArmorInventory;
         foreach (var armor in armors)
         {
-            var go = Instantiate(buttonPrefab, inventoryPanel.transform);
-            var button = go.GetComponent<ItemButton>();
-            button.OnCountAct();
+            var go = buttonPool.Get();
+            go.transform.SetParent(inventoryPanel.transform);
 
-            button.GetComponent<ItemButton>().button.onClick.AddListener(() =>
+            go.button.onClick.AddListener(() =>
             {
                 if (sellMode)
                 {
@@ -122,11 +140,13 @@ public class InventoryManager : MonoBehaviour
                 else
                 {
                     itemPanel.SetItem(armor);
-                    itemPanel.iconImage = button.iconImage;
+                    itemPanel.iconImage.sprite = go.iconImage.sprite;
                     itemPanel.Renewal();
                 }
                 
             });
+
+            releaseList.Add(go);
         }
     }
 
@@ -143,32 +163,33 @@ public class InventoryManager : MonoBehaviour
         var mats = PlayDataManager.data.MatInventory;
         foreach (var mat in mats)
         {
-            var go = Instantiate(buttonPrefab, inventoryPanel.transform);
-            var button = go.GetComponent<ItemButton>();
-            button.OnCountAct(true);
-            button.SetCount(mat.count);
-            button.iconImage.sprite = matIconSo.GetSprite(mat.id);
+            var go = buttonPool.Get();
+            go.transform.SetParent(inventoryPanel.transform);
 
-            button.GetComponent<ItemButton>().button.onClick.AddListener(() =>
+            go.OnCountAct(true);
+            go.SetCount(mat.count);
+            go.iconImage.sprite = matIconSo.GetSprite(mat.id);
+
+            go.GetComponent<ItemButton>().button.onClick.AddListener(() =>
             {
                 // if (sellMode)
                 matPanel.SetMaterials(mat);
-                matPanel.iconImage.sprite = button.iconImage.sprite;
+                matPanel.iconImage.sprite = go.iconImage.sprite;
                 matPanel.Renewal();
             });
+
+            releaseList.Add(go);
         }
     }
 
     public void ClearItemButton()
     {
-        var arr = inventoryPanel.GetComponentsInChildren<Button>();
-        if (arr != null)
+        foreach (var item in releaseList)
         {
-            foreach (var item in arr)
-            {
-                Destroy(item.gameObject);
-            }
+            buttonPool.Release(item);
         }
+
+        releaseList.Clear();
     }
 
     public void SellMode()
