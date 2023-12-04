@@ -14,13 +14,15 @@ public class InventoryManager : MonoBehaviour
 
     [Header("무기/방어구")]
     public ItemPanel itemPanel;
-    public TextMeshProUGUI itemPanelInfoText;
 
     [Header("장식주")]
     public GameObject decoPanel;
 
     [Header("재료")]
-    public GameObject matPanel;
+    public MatPanel matPanel;
+
+    [Header("재료 IconSO")]
+    public IconSO matIconSo;
 
     [Header("일괄판매")]
     public GameObject sellPanel;
@@ -78,9 +80,10 @@ public class InventoryManager : MonoBehaviour
         foreach (var weapon in weapons)
         {
             var go = Instantiate(buttonPrefab, inventoryPanel.transform);
+            var button = go.GetComponent<ItemButton>();
+            button.OnCountAct();
 
-            var button = go.GetComponent<Button>();
-            button.onClick.AddListener(() => 
+            button.GetComponent<ItemButton>().button.onClick.AddListener(() => 
             {
                 if (sellMode)
                 {
@@ -90,6 +93,7 @@ public class InventoryManager : MonoBehaviour
                 else
                 {
                     itemPanel.SetItem(weapon);
+                    itemPanel.iconImage = button.iconImage;
                     itemPanel.Renewal();
                 }
                 
@@ -106,9 +110,10 @@ public class InventoryManager : MonoBehaviour
         foreach (var armor in armors)
         {
             var go = Instantiate(buttonPrefab, inventoryPanel.transform);
+            var button = go.GetComponent<ItemButton>();
+            button.OnCountAct();
 
-            var button = go.GetComponent<Button>();
-            button.onClick.AddListener(() =>
+            button.GetComponent<ItemButton>().button.onClick.AddListener(() =>
             {
                 if (sellMode)
                 {
@@ -117,6 +122,7 @@ public class InventoryManager : MonoBehaviour
                 else
                 {
                     itemPanel.SetItem(armor);
+                    itemPanel.iconImage = button.iconImage;
                     itemPanel.Renewal();
                 }
                 
@@ -137,9 +143,19 @@ public class InventoryManager : MonoBehaviour
         var mats = PlayDataManager.data.MatInventory;
         foreach (var mat in mats)
         {
-            Instantiate(buttonPrefab, inventoryPanel.transform);
+            var go = Instantiate(buttonPrefab, inventoryPanel.transform);
+            var button = go.GetComponent<ItemButton>();
+            button.OnCountAct(true);
+            button.SetCount(mat.count);
+            button.iconImage.sprite = matIconSo.GetSprite(mat.id);
 
-
+            button.GetComponent<ItemButton>().button.onClick.AddListener(() =>
+            {
+                // if (sellMode)
+                matPanel.SetMaterials(mat);
+                matPanel.iconImage.sprite = button.iconImage.sprite;
+                matPanel.Renewal();
+            });
         }
     }
 
@@ -167,7 +183,7 @@ public class InventoryManager : MonoBehaviour
 
     public void Tester()
     {
-        //PlayDataManager.data.MatInventory.Add(new Materials(71001));
-        //PlayDataManager.data.MatInventory.Add(new Materials(72001));
+        PlayDataManager.data.MatInventory.Add(new Materials(71001));
+        PlayDataManager.data.MatInventory.Add(new Materials(72001));
     }
 }
