@@ -12,7 +12,7 @@ public class DestructGameObjectWithAnimation : MonoBehaviour, IDestructable
         {
             return;
         }
-        isDie = animator.GetBool("Die");
+        isDie = true;
     }
     private void Update()
     {
@@ -21,6 +21,7 @@ public class DestructGameObjectWithAnimation : MonoBehaviour, IDestructable
             var animationStateInfo = animator.GetCurrentAnimatorStateInfo(0);
             if (animationStateInfo.IsTag("Die") && animationStateInfo.normalizedTime >= 1f)
             {
+                isDie = false;
                 GameManager.instance.EndGame();
             }
         }
