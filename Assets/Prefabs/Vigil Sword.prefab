@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4420664804571618}
   - component: {fileID: 33638725473550416}
   - component: {fileID: 23351253654449770}
+  - component: {fileID: 761270585638588403}
   m_Layer: 0
   m_Name: Vigil Sword
   m_TagString: Untagged
@@ -83,3 +84,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &761270585638588403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014989259798498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c702989a4c5ac34da80b06b9deddd84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationSO: {fileID: 11400000, guid: eff25ae3ea82e0e41857197aa5a8eea1, type: 2}
+  type: 2
+  attack: 0
+  attackRange: 2
+  weakDamage: 0

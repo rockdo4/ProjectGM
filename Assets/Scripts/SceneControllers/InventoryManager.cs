@@ -24,7 +24,7 @@ public class InventoryManager : MonoBehaviour
 
     [Header("일괄판매")]
     public GameObject sellPanel;
-    private List<Item> sellList = new List<Item>();
+    private Item[] sellList = new Item[10]; // 최대 판매 개수
     private bool sellMode = false;
 
     //private ObjectPool<Button> buttonPool;
@@ -65,6 +65,8 @@ public class InventoryManager : MonoBehaviour
         }
 
         PlayDataManager.Save();
+
+        ShowWeapons();
     }
 
     public void ShowWeapons()

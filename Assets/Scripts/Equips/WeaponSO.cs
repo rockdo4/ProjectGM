@@ -1,29 +1,26 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ItemSO")]
-public class ItemSO : ScriptableObject
+[CreateAssetMenu(menuName = "weaponSO")]
+public class WeaponSO : ScriptableObject
 {
-    [Header("아이템 종류")]
-    public Item.ItemType Type;
-
     [Header("아이템 ID")]
-    public int[] ID;
+    public Weapon.WeaponID[] ID;
 
     [Header("아이템 프리팹")]
     public GameObject[] Prefab;
 
-    public GameObject MakeItem(Item item)
+    public GameObject MakeWeapon(Weapon weapon)
     {
         // Item Null Exception
-        if (item == null)
+        if (weapon == null)
         {
             Debug.LogWarning("Not Exist Item!");
             return null;
         }
 
         // Item.ItemType Exception
-        if (item.type == Item.ItemType.None)
+        if (weapon.type == Item.ItemType.None)
         {
             Debug.LogWarning("Wrong Item Type!");
             return null;
@@ -32,8 +29,8 @@ public class ItemSO : ScriptableObject
         int index = -1;
         for (int i = 0; i < ID.Length; i++)
         {
-            int original = item.id / 100 * 100; // 레벨 초기화
-            if (ID[i] == original)
+            int original = weapon.id / 100 * 100; // 레벨 초기화
+            if (ID[i] == (Weapon.WeaponID)original)
             {
                 index = i;
                 break;
@@ -51,18 +48,19 @@ public class ItemSO : ScriptableObject
         return go;
     }
 
-    public GameObject MakeItem(Item item, Transform tr)
+    public GameObject MakeWeapon(Weapon weapon, Transform tr)
     {
-        var go = MakeItem(item);
+        var go = MakeWeapon(weapon);
         go.transform.SetParent(tr, false);
         return go;
     }
 
-    public WeaponPrefab MakeItem(Item item, Transform tr, Animator anim)
+    public WeaponPrefab MakeWeapon(Weapon weapon, Transform tr, Animator anim)
     {
-        var go = MakeItem(item, tr);
-        var weapon = go.GetComponent<WeaponPrefab>();
-        weapon.OnEquip(item, anim);
-        return weapon;
+        var go = MakeWeapon(weapon, tr);
+        var weaponPrefab = go.GetComponent<WeaponPrefab>();
+        weaponPrefab.OnEquip(weapon, anim);
+
+        return weaponPrefab;
     }
 }

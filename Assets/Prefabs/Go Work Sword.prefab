@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4417530817065136}
   - component: {fileID: 33241488102382690}
   - component: {fileID: 23490559892862816}
+  - component: {fileID: -3780502115043383642}
   m_Layer: 0
   m_Name: Go Work Sword
   m_TagString: Untagged
@@ -83,3 +84,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-3780502115043383642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777591198242490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c702989a4c5ac34da80b06b9deddd84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationSO: {fileID: 11400000, guid: eff25ae3ea82e0e41857197aa5a8eea1, type: 2}
+  type: 2
+  attack: 0
+  attackRange: 2
+  weakDamage: 0
