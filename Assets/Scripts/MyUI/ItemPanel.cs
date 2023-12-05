@@ -37,8 +37,9 @@ public class ItemPanel : MonoBehaviour, IRenewal
             case Equip.EquipType.Weapon:
                 {
                     var table = CsvTableMgr.GetTable<WeaponTable>().dataTable[(Weapon.WeaponID)item.id];
+                    var st = CsvTableMgr.GetTable<StringTable>().dataTable;
                     //iconImage.sprite = ;
-                    nameText.text = ((Weapon.WeaponID)table.weapon_name).ToString(); // string table
+                    nameText.text = st[table.weapon_name];
                     statText.text = $"[공격력] {table.atk}\n[무기속성] {table.property}";
                     infoText.text = table.weapon_name.ToString(); // string table
                 }

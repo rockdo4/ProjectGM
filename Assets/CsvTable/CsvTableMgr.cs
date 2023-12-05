@@ -9,6 +9,9 @@ public static class CsvTableMgr
     {
         tables.Clear();
 
+        var stringTable = new StringTable();
+        tables.Add(typeof(StringTable), stringTable);
+
         var weaponTable = new WeaponTable();
         tables.Add(typeof(WeaponTable), weaponTable);
     }
