@@ -4,8 +4,6 @@ using UnityEngine;
 public class AttackCell : MonoBehaviour
 {
     public bool playerInside = false;
-
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
