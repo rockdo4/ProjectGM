@@ -31,13 +31,13 @@ public class ItemPanel : MonoBehaviour, IRenewal
     public void SetItem(Equip item)
     {
         this.item = item;
+        var st = CsvTableMgr.GetTable<StringTable>().dataTable;
 
         switch (item.type)
         {
             case Equip.EquipType.Weapon:
                 {
                     var table = CsvTableMgr.GetTable<WeaponTable>().dataTable[(Weapon.WeaponID)item.id];
-                    var st = CsvTableMgr.GetTable<StringTable>().dataTable;
                     //iconImage.sprite = ;
                     nameText.text = st[table.weapon_name];
                     statText.text = $"[공격력] {table.atk}\n[무기속성] {table.property}";
@@ -48,8 +48,12 @@ public class ItemPanel : MonoBehaviour, IRenewal
 
             case Equip.EquipType.Armor:
                 {
+                    var table = CsvTableMgr.GetTable<ArmorTable>().dataTable[(Armor.ArmorID)item.id];
                     //iconImage.sprite = ;
 
+                    nameText.text = st[table.Armor_name];
+                    statText.text = $"[방어력] {table.def}\n[부위] {table.Armor_type}";
+                    infoText.text = $"[세트효과] {table.set_skill}";
                 }
 
                 break;
