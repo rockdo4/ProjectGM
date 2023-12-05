@@ -6,89 +6,78 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : LivingObject
 {
-    private int[] bearAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
-    private int[] bearAttackPatternPhaseTwo = new int[] { 1, 2, 3, 2, 3 }; // abcbc
-
-    private int[] tigerAttackPatternPhaseOne = new int[] { 3, 3, 1 }; // cca
-    private int[] tigerAttackPatternPhaseTwo = new int[] { 3, 3, 1, 2, 1 }; // ccaba 공격순서
-
-    private int[] spiderAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
-    private int[] spiderAttackPatternPhaseTwo = new int[] { 1, 2, 3}; // abc
-
-    private int[] wolfAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
-    private int[] wolfAttackPatternPhaseTwo = new int[] { 1, 2, 1, 2, 2 }; // ababb
-
-    private int meleeAttackIndexOne = 0;
-    private int meleeAttackIndexTwo = 1;
-    private int meleeAttackIndexThree = 2;
-
-    [Header("범위 공격의 시각화 프리펩")]
-    public GameObject attackRangePrefab;
-
-    [Header("몬스터의 탐지범위")]
+    [Header("Range")]
     [SerializeField]
-    private float detectRange = 50f;
-
-    [Header("몬스터의 공격 사거리")] 
+    float detectRange = 10f;
     [SerializeField]
-    private float meleeAttackRange = 3f;
+    float meleeAttackRange = 2f;
 
-    [Header("포효 시간 - 몬스터가 처음 등장할때만 작동")]
+    [Header("Animation")]
     [SerializeField]
     private float roarDuration = 3f;
+    private bool hasRoared;
 
-    [Header("플레이어 할당해야 몬스터가 쫒아다님")]
     [SerializeField]
-    private LayerMask playerLayerMask;
-
-    [Header("몬스터의 타입")]
-    [SerializeField]
-    private EnemyType enemyType;
-
-    [Header("공격 조건중 몬스터가 플레이어를 바라볼때의 최소각도")]
-    public float minAngle = 10f;
-    [Header("몬스터가 고개를 돌리는 속도")]
-    public float rotationSpeed = 5f;
-
-    [Header("공격 대기시간")]
-    [SerializeField]
-    private float attackPreparationTime = 0.5f;
-
-    BehaviorTreeRunner BTRunner;
-    Transform detectedPlayer;
-    private Player player;
-
     private Animator animator;
-    private GameObject attackRangeInstance;
-    private Material attackRangeMaterial;
+
+    private bool isTwoPhase;
+    float phaseTwoHealthThreshold;
+
+    private int[] bearAttackPatternPhaseOne = new int[] { 1, 2 }; // 곰의 A, B 패턴 공격
+    private int[] bearAttackPatternPhaseTwo = new int[] { 1, 2, 3, 2, 3 };
 
     private int phaseOneAttackSequence = 0;
     private int phaseTwoAttackSequence = 0;
 
-    private float phaseTwoHealthThreshold;
+    [SerializeField]
+    private LayerMask playerLayerMask;
 
-    private bool hasRoared;
-    private bool isTwoPhase;
+    Vector3 originPos;
+
+    BehaviorTreeRunner BTRunner;
+    Transform detectedPlayer;
+
+    [SerializeField]
+    private EnemyType enemyType;
+
     private bool isAttacking = false;
+
+    [SerializeField]
+    private float attackPreparationTime = 3f;
+    [SerializeField]
+    private Material attackRangeMaterial;
+
+    private Player player;
+
     private bool isPreparingAttack = false;
 
+    [Header("범위 공격의 시각화")]
+    [SerializeField]
+
+    public GameObject attackRangePrefab;
+    private GameObject attackRangeInstance;
+
+    [SerializeField]
+    public bool[] attackGrid = new bool[9];
+    [SerializeField]
+    public List<AttackPattern> savedPatterns = new List<AttackPattern>();
+
     private int attackIndex = -1;
-    
+
     private float grogySpeed = 0.5f;
     private float grogyTimer = 5f;
 
-    public bool[] attackGrid = new bool[9];
-    public List<AttackPattern> savedPatterns = new List<AttackPattern>();
-    private List<GameObject> cellInstances = new List<GameObject>();
+    private List<GameObject> cellInstances = new List<GameObject>(); // 셀 인스턴스들을 저장할 리스트
+
     private List<GameObject> colliderObjects = new List<GameObject>();
+
+    private float realSpeed;
+    private bool IsrealSpeed = false;
 
     public enum EnemyType
     {
-        Bear,
-        Tiger,
-        Spider,
-        Wolf,
-
+        Enemy1,
+        Enemy2,
     }
 
     #region Interaction Player And Enemy
@@ -102,10 +91,12 @@ public class EnemyAI : LivingObject
 
     #endregion
 
+
     private void Start()
     {
+        // LookAtPlayer();
+
         StartCoroutine(RoarInit());
-        //CreateBeforePrefabs();
     }
 
     IEnumerator RoarInit()
@@ -125,22 +116,14 @@ public class EnemyAI : LivingObject
 
         switch (enemyType)
         {
-            case EnemyType.Bear:
+            case EnemyType.Enemy1:
                 BTRunner = new BehaviorTreeRunner(BearBT());
                 break;
-            case EnemyType.Tiger:
-                BTRunner = new BehaviorTreeRunner(TigerBT());
-                break;
-            case EnemyType.Spider:
-                BTRunner = new BehaviorTreeRunner(SpiderBT());
-                break;
-            case EnemyType.Wolf:
-                BTRunner = new BehaviorTreeRunner(WolfBT());
-                break;
-
         }
+        originPos = transform.position;
         animator = GetComponent<Animator>();
     }
+
 
     private void LookAtPlayer()
     {
@@ -152,6 +135,10 @@ public class EnemyAI : LivingObject
 
     private void Update()
     {
+        //if (detectedPlayer != null)
+        //    LookAtPlayer();
+
+
         if (IsGroggy)
         {
             animator.ResetTrigger("MeleeAttack_A");
@@ -195,7 +182,7 @@ public class EnemyAI : LivingObject
 
         if (Input.GetKeyDown(KeyCode.H))
         {
-            HP -= 100;
+            HP -= 20;
             Debug.Log("현재 체력 : " + HP);
         }
 
@@ -208,6 +195,8 @@ public class EnemyAI : LivingObject
 
         if (!isAttacking)
         {
+            // 공격중이 아닐때만 실행해버리니까 ㅏ
+
             BTRunner.Operate();
         }
 
@@ -226,8 +215,8 @@ public class EnemyAI : LivingObject
                     (
                         new List<INode>()
                         {
-                            new ConditionNode(IsPhaseOne),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseOne))
+                            new ConditionNode(IsBearPhaseOne),
+                            new ActionNode(() => ExecuteAttackPattern(bearAttackPatternPhaseOne))
                         }
                     ),
 
@@ -235,8 +224,8 @@ public class EnemyAI : LivingObject
                     (
                         new List<INode>()
                         {
-                            new InverterNode(new ConditionNode(IsPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseTwo)),
+                            new InverterNode(new ConditionNode(IsBearPhaseOne)),
+                            new ActionNode(() => ExecuteAttackPattern(bearAttackPatternPhaseTwo)),
                         }
                     ),
 
@@ -250,151 +239,58 @@ public class EnemyAI : LivingObject
                     ),
 
                 }
-        );
+        ); ;
     }
 
     #endregion
 
-    #region 호랑이 행동트리
-    INode TigerBT()
+    #region 어택 패턴 업데이트
+
+    #endregion 공격 노드 함수
+
+    #region
+
+    private bool IsBearPhaseOne()
     {
-        return new SelectorNode
-        (
-        new List<INode>()
-                {
+        if (!isTwoPhase && HP <= phaseTwoHealthThreshold)
+        {
+            isTwoPhase = true;
+            Debug.Log("페이즈 2로 전환");
 
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ConditionNode(IsPhaseOne),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, tigerAttackPatternPhaseOne))
-                        }
-                    ),
-
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new InverterNode(new ConditionNode(IsPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, tigerAttackPatternPhaseTwo)),
-                        }
-                    ),
-
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ActionNode(DetectPlayer),
-                            new ActionNode(TracePlayer),
-                        }
-                    ),
-
-                }
-        );
+            // 여기에 Magic 자식 오브젝트를 활성화하는 코드를 추가
+            Transform magicObject = transform.Find("Magic");
+            if (magicObject != null)
+            {
+                magicObject.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("Magic 오브젝트를 찾을 수 없음");
+            }
+        }
+        return !isTwoPhase;
     }
-    #endregion
 
-    #region 거미 행동트리
-    INode SpiderBT()
-    {
-        return new SelectorNode
-        (
-        new List<INode>()
-                {
-
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ConditionNode(IsPhaseOne),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, spiderAttackPatternPhaseOne))
-                        }
-                    ),
-
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new InverterNode(new ConditionNode(IsPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, spiderAttackPatternPhaseTwo)),
-                        }
-                    ),
-
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ActionNode(DetectPlayer),
-                            new ActionNode(TracePlayer),
-                        }
-                    ),
-
-                }
-        );
-    }
-    #endregion
-
-    #region 늑대 행동트리
-    INode WolfBT()
-    {
-        return new SelectorNode
-        (
-        new List<INode>()
-                {
-
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ConditionNode(IsPhaseOne),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, wolfAttackPatternPhaseOne))
-                        }
-                    ),
-
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new InverterNode(new ConditionNode(IsPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, wolfAttackPatternPhaseTwo)),
-                        }
-                    ),
-
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ActionNode(DetectPlayer),
-                            new ActionNode(TracePlayer),
-                        }
-                    ),
-
-                }
-        );
-    }
-    #endregion
-
-    #region 행동트리 -> 어택 패턴 -> 애니메이션 업데이트
-
-    private INode.EnemyState ExecuteAttackPattern(EnemyType enemytype, int[] pattern)
+    private INode.EnemyState ExecuteAttackPattern(int[] pattern)
     {
         INode.EnemyState result = INode.EnemyState.Failure;
+
         int attackSequence = isTwoPhase ? phaseTwoAttackSequence : phaseOneAttackSequence;
 
         switch (pattern[attackSequence])
         {
             case 1:
-                result = MelleAttackOne(enemytype, meleeAttackIndexOne);
+                result = DoMeleeAttack1();
                 break;
 
             case 2:
-                result = MelleAttackTwo(enemytype, meleeAttackIndexTwo);
+                result = DoMeleeAttack2();
                 break;
 
             case 3:
-                result = MelleAttackThree(enemytype, meleeAttackIndexThree);
+                result = DoMeleeAttack3();
                 break;
+
         }
 
         if (result == INode.EnemyState.Success)
@@ -411,7 +307,7 @@ public class EnemyAI : LivingObject
         return result;
     }
 
-    IEnumerator PrepareMeleeAttack(EnemyType enemytype, string attackType)
+    IEnumerator PrepareMeleeAttack(string attackType)
     {
         isPreparingAttack = true;
         ShowAttackRange(true);
@@ -424,6 +320,8 @@ public class EnemyAI : LivingObject
 
         yield return new WaitForSeconds(attackPreparationTime);
 
+        //Debug.Log(detectedPlayer.name);
+
         ShowAttackRange(false);
         isPreparingAttack = false;
 
@@ -431,7 +329,7 @@ public class EnemyAI : LivingObject
 
         if (player != null)
         {
-            string animationTrigger = $"{enemytype}{attackType}";
+            string animationTrigger = "MeleeAttack_" + attackType;
             StartCoroutine(IsAnimationRunning(animationTrigger));
         }
     }
@@ -451,11 +349,11 @@ public class EnemyAI : LivingObject
 
             if (stateInfo.IsName(stateName))
             {
-                Debug.Log(stateInfo.length);
+
                 yield return new WaitForSeconds(stateInfo.length);
-                isAttacking = false; // 공격상태 해제를 여기서 해주지 않으면 코루틴을 하는 의미가 없어짐
-                // 하지만 다음 공격버그가 생긴다면 여기일듯
             }
+
+            isAttacking = false;
         }
     }
 
@@ -472,7 +370,9 @@ public class EnemyAI : LivingObject
             {
                 if (cell != null)
                 {
-                    Destroy(cell); // 파편화가 날 수 있음 2순위로 두고
+                    Destroy(cell); // 지금 이게 안좋다
+                    // 파편화가 날 수 있음 2순위로 두고
+
                 }
             }
 
@@ -502,6 +402,7 @@ public class EnemyAI : LivingObject
                     colliderObject.AddComponent<AttackCell>();
                     BoxCollider collider = colliderObject.AddComponent<BoxCollider>();
 
+
                     collider.size = new Vector3(1, 0.1f, 1);
                     collider.isTrigger = true;
                     colliderObject.transform.position = cellPosition;
@@ -509,7 +410,9 @@ public class EnemyAI : LivingObject
                     colliderObjects.Add(colliderObject);
                 }
             }
+
             attackRangeInstance.SetActive(false);
+
         }
         else
         {
@@ -522,172 +425,6 @@ public class EnemyAI : LivingObject
             }
         }
     }
-
-    #endregion 
-
-    #region 행동트리 -> 플레이어 감지 및 추격
-    INode.EnemyState DetectPlayer()
-    {
-        var overlapColliders = Physics.OverlapSphere(transform.position, detectRange, LayerMask.GetMask("Player"));
-
-        if (overlapColliders.Length > 0)
-        {
-            detectedPlayer = overlapColliders[0].transform;
-
-            Vector3 direction = detectedPlayer.position - transform.position;
-            direction.y = 0;
-
-            Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed); // 로테이션 스피드 5f 임시
-
-            return INode.EnemyState.Success;
-        }
-        detectedPlayer = null;
-        return INode.EnemyState.Failure;
-    }
-
-    INode.EnemyState TracePlayer()
-    {
-        if (detectedPlayer != null)
-        {
-            float actualMoveSpeed = isTwoPhase ? Stat.MoveSpeed * 1.5f : Stat.MoveSpeed;
-
-            animator.SetFloat("MoveSpeed", 0.5f); // 속도는 바꿔주고 애니메이션은 일단 Run 유지하고
-
-            Vector3 direction = (detectedPlayer.position - transform.position).normalized;
-            transform.position += direction * actualMoveSpeed * Time.deltaTime;
-
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f);
-            return INode.EnemyState.Running;
-        }
-        return INode.EnemyState.Failure;
-    }
-    #endregion
-
-    #region 근접 공격타입 1, 2, 3
-
-    INode.EnemyState MelleAttackOne(EnemyType enemyType, int attackPatternIndex)
-    {
-        if (isAttacking)
-            return INode.EnemyState.Failure;
-
-        if (detectedPlayer == null)
-            return INode.EnemyState.Failure;
-
-        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
-
-        if (distanceToPlayer >= meleeAttackRange)
-        {
-            isAttacking = false;
-            return INode.EnemyState.Failure;
-        }
-
-        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
-        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
-
-        if (angleToPlayer > minAngle)
-            return INode.EnemyState.Failure;
-
-        Debug.Log(isTwoPhase ? "페이즈2 공격A 준비" : "페이즈1 공격A 준비");
-        isAttacking = true;
-
-        attackIndex = attackPatternIndex;
-
-        StartCoroutine(PrepareMeleeAttack(enemyType, "A"));
-        return INode.EnemyState.Success;
-    }
-
-    INode.EnemyState MelleAttackTwo(EnemyType enemyType, int attackPatternIndex)
-    {
-        if (isAttacking)
-            return INode.EnemyState.Failure;
-
-        if (detectedPlayer == null)
-            return INode.EnemyState.Failure;
-
-        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
-
-        if (distanceToPlayer >= meleeAttackRange)
-        {
-            isAttacking = false;
-            return INode.EnemyState.Failure;
-        }
-
-        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
-        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
-
-        if (angleToPlayer > minAngle)
-            return INode.EnemyState.Failure;
-
-        Debug.Log(isTwoPhase ? "페이즈2 공격B 준비" : "페이즈1 공격B 준비");
-        isAttacking = true;
-
-        attackIndex = attackPatternIndex;
-
-        StartCoroutine(PrepareMeleeAttack(enemyType, "B"));
-        return INode.EnemyState.Success;
-    }
-
-    INode.EnemyState MelleAttackThree(EnemyType enemyType, int attackPatternIndex)
-    {
-        if (isAttacking)
-            return INode.EnemyState.Failure;
-
-        if (detectedPlayer == null)
-            return INode.EnemyState.Failure;
-
-        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
-
-        if (distanceToPlayer >= meleeAttackRange)
-        {
-            isAttacking = false;
-            return INode.EnemyState.Failure;
-        }
-
-        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
-        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
-
-        if (angleToPlayer > minAngle)
-            return INode.EnemyState.Failure;
-
-        Debug.Log(isTwoPhase ? "페이즈2 공격C 준비" : "페이즈1 공격C 준비");
-        isAttacking = true;
-
-        attackIndex = attackPatternIndex;
-
-        StartCoroutine(PrepareMeleeAttack(enemyType, "C"));
-        return INode.EnemyState.Success;
-    }
-
-    #endregion
-
-    #region 페이즈 체크
-
-    private bool IsPhaseOne()
-    {
-        if (!isTwoPhase && HP <= phaseTwoHealthThreshold)
-        {
-            isTwoPhase = true;
-            Debug.Log("페이즈 2로 전환");
-
-            // 여기에 Magic 자식 오브젝트를 활성화하는 코드를 추가
-            Transform magicObject = transform.Find("Magic");
-            if (magicObject != null)
-            {
-                magicObject.gameObject.SetActive(true);
-            }
-            else
-            {
-                Debug.LogError("Magic 오브젝트를 찾을 수 없음");
-            }
-        }
-        return !isTwoPhase;
-    }
-
-    #endregion
-
-    #region 공격 타일 계산
 
     Vector3 CalculateCellPosition(int index) // 칼큘
     {
@@ -704,18 +441,178 @@ public class EnemyAI : LivingObject
         int x = index % 3;
         int z = index / 3;
 
-        Vector3 actualPosition = new Vector3(x * offset - (offset * 1), 0f, z * offset + meleeAttackRange); // 지금은 임시로 y축 위치를 0f로 함
-        // 왜냐하면 테스트씬의 그라운드의 y포지션이 -0.01f임
-        // 하드코딩 1 오프셋 관련 - (offset * 4) 나중에 수식 활용
-        // int x = index % 10; 이것도 마찬가지
-        // 뒤에 나눠주는 값 셀이 100개라면 나누는 수는 10이어야하니까 루트 씌워야됨
+        Vector3 actualPosition = new Vector3(x * offset - offset, 0.1f, z * offset + 2.5f);
         actualPosition = transform.rotation * actualPosition;
         return transform.position + actualPosition;
     }
 
+    INode.EnemyState DoMeleeAttack1()
+    {
+        if (isAttacking)
+            return INode.EnemyState.Failure;
+
+        if (detectedPlayer == null)
+            return INode.EnemyState.Failure;
+
+        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
+
+        if (distanceToPlayer >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
+        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        if (angleToPlayer > 10.0f) // 2도 이내에서만 공격
+            return INode.EnemyState.Failure;
+
+        
+
+        Debug.Log(isTwoPhase ? "페이즈2 공격A 준비" : "페이즈1 공격A 준비");
+        isAttacking = true;
+
+        attackIndex = 0; // A패턴
+
+        StartCoroutine(PrepareMeleeAttack("A"));
+        return INode.EnemyState.Success;
+
+    }
+
+    INode.EnemyState DoMeleeAttack2()
+    {
+        if (isAttacking)
+            return INode.EnemyState.Failure;
+
+        if (detectedPlayer == null)
+            return INode.EnemyState.Failure;
+
+        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
+
+        if (distanceToPlayer >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
+        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        if (angleToPlayer > 10.0f) // 2도 이내에서만 공격
+            return INode.EnemyState.Failure;
+
+        Debug.Log(isTwoPhase ? "페이즈2 공격B 준비" : "페이즈1 공격B 준비");
+        isAttacking = true;
+
+        attackIndex = 1; // B패턴
+
+        StartCoroutine(PrepareMeleeAttack("B"));
+        return INode.EnemyState.Success;
+    }
+
+    INode.EnemyState DoMeleeAttack3()
+    {
+        if (isAttacking)
+            return INode.EnemyState.Failure;
+
+        if (detectedPlayer == null)
+            return INode.EnemyState.Failure;
+
+        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
+
+        if (distanceToPlayer >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
+        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        if (angleToPlayer > 10.0f) // 2도 이내에서만 공격
+            return INode.EnemyState.Failure;
+
+        Debug.Log(isTwoPhase ? "페이즈2 공격C 준비" : "출력되면 안되는 거임");
+        isAttacking = true;
+
+        attackIndex = 2; // C패턴
+
+        StartCoroutine(PrepareMeleeAttack("C"));
+        return INode.EnemyState.Success;
+    }
     #endregion
 
-    #region 기즈모
+    #region
+    INode.EnemyState DetectPlayer()
+    {
+        // Vector3 distance = detectedPlayer.position - transform.position;
+
+
+        var overlapColliders = Physics.OverlapSphere(transform.position, detectRange, LayerMask.GetMask("Player"));
+
+        if (overlapColliders.Length > 0)
+        {
+            detectedPlayer = overlapColliders[0].transform;
+
+            Vector3 direction = detectedPlayer.position - transform.position;
+            direction.y = 0;
+
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // 로테이션 스피드 5f 임시
+
+            return INode.EnemyState.Success;
+        }
+
+        detectedPlayer = null;
+        return INode.EnemyState.Failure;
+    }
+
+    INode.EnemyState TracePlayer()
+    {
+        //float distanceToPlayer = Vector3.Distance(transform.position, detectedPlayer.position);
+
+        //if (distanceToPlayer < meleeAttackRange)
+        //{
+        //    animator.SetFloat("MoveSpeed", 0f);
+        //    return INode.EnemyState.Failure;
+        //}
+
+        if (detectedPlayer != null)
+        {
+            float actualMoveSpeed = isTwoPhase ? Stat.MoveSpeed * 1.5f : Stat.MoveSpeed;
+
+            animator.SetFloat("MoveSpeed", 0.5f); // 속도는 바꿔주고 애니메이션은 일단 Run 유지하고
+
+            Vector3 direction = (detectedPlayer.position - transform.position).normalized;
+
+            // 잠깐
+
+            if (IsrealSpeed)
+            {
+
+                //Debug.Log(actualMoveSpeed);
+                //transform.position += direction * -actualMoveSpeed * Time.deltaTime;
+                //Debug.Log(transform.position);
+            }
+           
+            transform.position += direction * actualMoveSpeed * Time.deltaTime;
+            
+
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f);
+            return INode.EnemyState.Running;
+
+
+        }
+        return INode.EnemyState.Failure;
+            
+    }
+    #endregion
+
+    #region
+
+    #endregion
 
     private void OnDrawGizmos()
     {
@@ -728,6 +625,8 @@ public class EnemyAI : LivingObject
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, meleeAttackRange);
 
+            // 겹쳐서 찍히는 버그 오프셋 주어야함
+
             float gizmoSize = 2.1f;
             float offset = gizmoSize + 0.02f;
 
@@ -736,7 +635,7 @@ public class EnemyAI : LivingObject
                 int x = index % 3;
                 int z = index / 3;
 
-                Vector3 actualPosition = new Vector3((x - 1) * offset, 0f, (z + 1) * offset);
+                Vector3 actualPosition = new Vector3((x - 1) * offset - 1, 0.1f, (z - 1) * offset + 4f);
                 actualPosition = transform.rotation * actualPosition;
                 Vector3 worldPosition = transform.position + actualPosition;
 
@@ -749,37 +648,31 @@ public class EnemyAI : LivingObject
 #endif
     }
 
-    #endregion
-
-    #region 공격 판정 애니메이션 이벤트
-
     private void Attack()
     {
-        float actualAttackDamage = isTwoPhase ? Stat.AttackDamage * 2 : Stat.AttackDamage;
+        float actualMoveSpeed = isTwoPhase ? Stat.MoveSpeed * 2 : Stat.MoveSpeed;
+
 
         foreach (GameObject cell in colliderObjects)
         {
             if (cell != null)
             {
                 AttackCell attackCell = cell.GetComponent<AttackCell>();
+
                 // Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
 
                 if (attackCell != null && attackCell.playerInside)
                 {
-                    ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
+                    ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player);
                     break;
                 }
             }
         }
     }
 
-    #endregion
-
-    #region 애니메이션 이벤트후에 실제 데미지 주는 부분 - 영재가 추가
-    private void ExecuteAttack(LivingObject attacker, LivingObject defender, float actualAttackDamage)
+    private void ExecuteAttack(LivingObject attacker, LivingObject defender)
     {
         Attack attack = Stat.CreateAttack(attacker, defender, true);
-        attack.CheatAttack((int)actualAttackDamage);
 
         var attackables = defender.GetComponents<IAttackable>();
         foreach (var attackable in attackables)
@@ -788,5 +681,36 @@ public class EnemyAI : LivingObject
         }
     }
 
-    #endregion
+    //그러면 제자리에서 이동속도 0줘서 대가리 돌아가게만
+
+    //대가리 돌아가는 코드는 이미 있음 ^^
+
+    private void OnTriggerEnter(Collider other)
+    {
+        IsrealSpeed = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        IsrealSpeed = false;
+    }
+
+    //private void OnTriggerEnter(collider other)
+    //{
+    //    debug.log("엔터");
+    //    realspeed = stat.movespeed;
+
+    //    animator.setfloat("movespeed", 0f); // 블랜드트리에서 idle상태
+
+    //    stat.movespeed = 0;
+    //    debug.log(stat.movespeed);
+    //}
+
+    //private void Ontriggerexit(collider other)
+    //{
+    //    debug.log("익시스트");
+    //    animator.setfloat("movespeed", 0.5f); // 이게 추적상태 run애니메이션
+    //    stat.movespeed = realspeed;
+    //}
+
 }

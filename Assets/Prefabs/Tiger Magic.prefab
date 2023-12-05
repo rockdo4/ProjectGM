@@ -706,10 +706,9 @@ GameObject:
   - component: {fileID: 4730682435250684104}
   - component: {fileID: 6447030957912835941}
   - component: {fileID: 4859398064107606173}
-  - component: {fileID: 7108988849047264272}
   m_Layer: 0
   m_Name: Tiger Magic
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -741,8 +740,8 @@ Animator:
   m_GameObject: {fileID: 4212617445579661437}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 76b6f7d6dddcdf2408f0ad36fc6c9c5d, type: 3}
-  m_Controller: {fileID: 22100000, guid: 0b839a202147acb489b051f4c5d2586d, type: 2}
-  m_CullingMode: 0
+  m_Controller: {fileID: 9100000, guid: c86aa0252c5b9dc44b202fc847d5311a, type: 2}
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
@@ -764,19 +763,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stat: {fileID: 11400000, guid: 438d28f649db81d4dafa7cfa55cc4449, type: 2}
-  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
-    type: 3}
-  detectRange: 50
-  meleeAttackRange: 3
+  detectRange: 10
+  meleeAttackRange: 2
+  movementSpeed: 1
   roarDuration: 3
+  health: 100
+  animator: {fileID: 0}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  enemyType: 1
-  minAngle: 10
-  rotationSpeed: 5
-  attackPreparationTime: 0.5
+  enemyType: 0
+  meleeAttackPower: 5
+  attackPreparationTime: 3
+  attackRangeMaterial: {fileID: 0}
+  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
+    type: 3}
   attackGrid: 000001010101000001
   savedPatterns:
   - patternName: "\uD638\uB791\uC774 \uACF5\uACA9 A"
@@ -785,29 +786,6 @@ MonoBehaviour:
     pattern: 000100010101000100
   - patternName: "\uD638\uB791\uC774 \uACF5\uACA9 C"
     pattern: 000101000101000101
---- !u!136 &7108988849047264272
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4212617445579661437}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 2.2
-  m_Height: 2.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5381920892478571529
 GameObject:
   m_ObjectHideFlags: 0

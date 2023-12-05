@@ -10,9 +10,4 @@ public struct Attack
         IsCritical = critical;
         IsGroggy = groggy;
     }
-
-    public void CheatAttack(int damage)
-    {
-        Damage = damage;
-    }
 }
