@@ -14,6 +14,9 @@ public static class CsvTableMgr
 
         var weaponTable = new WeaponTable();
         tables.Add(typeof(WeaponTable), weaponTable);
+
+        var matTable = new MatTable();
+        tables.Add(typeof(MatTable), matTable);
     }
 
     public static T GetTable<T>() where T : CsvTable

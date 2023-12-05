@@ -25,8 +25,12 @@ public class MatPanel : MonoBehaviour, IRenewal
     {
         this.mat = mat;
 
-        // table
-        nameText.text = mat.id.ToString();
+        var table = CsvTableMgr.GetTable<MatTable>().dataTable;
+        var st = CsvTableMgr.GetTable<StringTable>().dataTable;
+
+        nameText.text = st[table[mat.id].item_name];
+        infoText.text = st[table[mat.id].item_script];
+        sellText.text = $"판매 가격 : {table[mat.id].gold.ToString()}";
     }
 
     public void Renewal()
