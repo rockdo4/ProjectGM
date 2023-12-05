@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.GridBrushBase;
 
 public class PlayerEvadeState : PlayerStateBase
 {

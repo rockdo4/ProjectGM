@@ -95,21 +95,6 @@ public class PlayerController : MonoBehaviour
         }
 
         player.slider.value = player.evadePoint;
-
-        #region Test
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            player.evadePoint += 50;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            player.Stat.AttackDamage = (player.Stat.AttackDamage == 0) ? 70 : 0;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            player.Stat.Defence = (player.Stat.Defence == 0) ? -100 : 0;
-        }
-        #endregion
     }
 
     private void FixedUpdate()
@@ -205,7 +190,9 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        Debug.Log($"ChangeState = {newState}");
+#if UNITY_EDITOR
+        //Debug.Log($"--------- ChangeState: {newState} ---------");
+#endif
         currentState = newState;
         stateManager?.ChangeState(states[(int)newState]);
     }
@@ -218,7 +205,7 @@ public class PlayerController : MonoBehaviour
         states.Add(new PlayerEvadeState(this));
         states.Add(new PlayerSprintState(this));
         states.Add(new PlayerHitState(this));
-        states.Add(new PlayerDeathState(this));
+        states.Add(new PlayerDeadState(this));
 
         SetState(State.Idle);
     }

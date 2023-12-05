@@ -17,11 +17,11 @@ public class TouchManager : Singleton<TouchManager>
 
     [Header("스와이프 판단 시간")]
     [SerializeField]
-    public float swipeTime = 0.2f;
+    public float swipeTime = 0.3f;
 
     [Header("스와이프 판정 거리")]
     [Range(0f, 1f)]
-    public float swipeDistance = 0.1f;
+    public float swipeDistance = 0.15f;
 
     private Vector2 startPosition;
     private Vector2 endPosition;
