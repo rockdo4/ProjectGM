@@ -740,7 +740,7 @@ Animator:
   m_GameObject: {fileID: 4212617445579661437}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 76b6f7d6dddcdf2408f0ad36fc6c9c5d, type: 3}
-  m_Controller: {fileID: 9100000, guid: c86aa0252c5b9dc44b202fc847d5311a, type: 2}
+  m_Controller: {fileID: 22100000, guid: b0b9dd6916fe4344a8201f3019acbd1d, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -763,21 +763,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRange: 10
-  meleeAttackRange: 2
-  movementSpeed: 1
+  stat: {fileID: 0}
+  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
+    type: 3}
+  attackPreparationTime: 0.1
+  detectRange: 50
+  meleeAttackRange: 3
   roarDuration: 3
-  health: 100
-  animator: {fileID: 0}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
   enemyType: 0
-  meleeAttackPower: 5
-  attackPreparationTime: 3
-  attackRangeMaterial: {fileID: 0}
-  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
-    type: 3}
+  minAngle: 10
+  rotationSpeed: 5
   attackGrid: 000001010101000001
   savedPatterns:
   - patternName: "\uD638\uB791\uC774 \uACF5\uACA9 A"

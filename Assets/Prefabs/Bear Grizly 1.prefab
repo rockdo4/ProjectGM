@@ -143,25 +143,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stat: {fileID: 11400000, guid: 2871ea0a10c98ae488d110ce1a93a938, type: 2}
-  detectRange: 35
+  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
+    type: 3}
+  attackPreparationTime: 0.1
+  detectRange: 50
   meleeAttackRange: 3
   roarDuration: 3
-  animator: {fileID: 0}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
   enemyType: 0
-  attackPreparationTime: 2
-  attackRangeMaterial: {fileID: -7974662883447924875, guid: a5ac6998bd0c4b1a87b67e82fb321d4a,
-    type: 3}
-  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
-    type: 3}
-  attackGrid: 010101000101010000
+  minAngle: 10
+  rotationSpeed: 5
+  attackGrid: 010000010001000100
   savedPatterns:
   - patternName: MelleAttack_A
-    pattern: 010101010101010101
+    pattern: 000000010101010101
   - patternName: MelleAttack_B
-    pattern: 010001000100010001
+    pattern: 010001010101010001
   - patternName: MelleAttack_C
     pattern: 010001000100010001
 --- !u!136 &5542212552224907592
