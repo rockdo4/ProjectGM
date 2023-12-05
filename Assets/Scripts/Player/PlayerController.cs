@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.LowLevel;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,6 +25,7 @@ public class PlayerController : MonoBehaviour
     {
         Hand, Wing
     }
+    public WeaponPosition currentWeaponPosition;
     private Weapon equipWeapon = null;
     public Transform leftHand;
     public Transform rightHand;
@@ -45,7 +45,6 @@ public class PlayerController : MonoBehaviour
             PlayDataManager.Init();
         }
         equipWeapon = PlayDataManager.curWeapon;
-        
 
         StateInit();
     }
@@ -53,10 +52,11 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         player.CurrentWeapon = weaponSO.MakeWeapon(equipWeapon, rightHand, player.Animator);
-        if (equipWeapon.IsDualWield)
+        if (equipWeapon.weaponType == WeaponType.Tonpa)
         {
             player.FakeWeapon = Instantiate(player.CurrentWeapon);
         }
+
         MoveWeaponPosition(WeaponPosition.Hand);
         
         touchManager.SwipeListeners += OnSwipe;
@@ -261,6 +261,7 @@ public class PlayerController : MonoBehaviour
 
     public void MoveWeaponPosition(WeaponPosition position)
     {
+        currentWeaponPosition = position;
         switch (position)
         {
             case WeaponPosition.Hand:
@@ -273,4 +274,18 @@ public class PlayerController : MonoBehaviour
                 break;
         }
     }
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        if (equipWeapon.weaponType != WeaponType.Two_Hand_Sword || currentWeaponPosition != WeaponPosition.Hand)
+        {
+            return;
+        }
+        var left = player.CurrentWeapon.transform.GetChild(0);
+        player.Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+        player.Animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
+        player.Animator.SetIKPosition(AvatarIKGoal.LeftHand, left.transform.position);
+        player.Animator.SetIKRotation(AvatarIKGoal.LeftHand, left.transform.rotation);
+    }
+
 }
