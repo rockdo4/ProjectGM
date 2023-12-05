@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         player.CurrentWeapon = weaponSO.MakeWeapon(equipWeapon, rightHand, player.Animator);
-        if (player.CurrentWeapon.IsDualWield)
+        if (equipWeapon.IsDualWield)
         {
             player.FakeWeapon = Instantiate(player.CurrentWeapon);
         }

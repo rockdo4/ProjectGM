@@ -18,18 +18,6 @@ public class WeaponPrefab : MonoBehaviour, IWear
     [Header("속성 배율")]
     public float weakDamage;
     
-    public bool IsDualWield
-    {
-        get
-        {
-            if (item.weaponType == WeaponType.Tonpa)
-            {
-                return true;
-            }
-            return false;
-        }
-    }
-
     public void OnEquip(Weapon item)
     {
         type = item.attackType;

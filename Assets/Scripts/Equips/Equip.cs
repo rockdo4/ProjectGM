@@ -1,4 +1,5 @@
 using System;
+using static UnityEditor.Progress;
 
 public class Equip
 {
@@ -150,6 +151,18 @@ public class Weapon : Equip
         // Define AttackType
         attackType = table[id].property;
         weaponType = table[id].type;
+    }
+
+    public bool IsDualWield
+    {
+        get
+        {
+            if (weaponType == WeaponType.Tonpa)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
 #endregion
