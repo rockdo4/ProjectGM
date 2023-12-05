@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class CurrentItemButton : MonoBehaviour, IRenewal
 {
     [Header("아이템 분류")]
-    public Item.ItemType Type;
+    public Equip.EquipType Type;
 
     [Header("방어구 분류")]
     public Armor.ArmorType armorType;
@@ -25,7 +25,7 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
     {
         switch (Type)
         {
-            case Item.ItemType.Weapon:
+            case Equip.EquipType.Weapon:
                 if (PlayDataManager.curWeapon == null)
                 {
                     tester.text = "X";
@@ -35,7 +35,7 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
                 tester.text = PlayDataManager.curWeapon.id.ToString();
                 break;
 
-            case Item.ItemType.Armor:
+            case Equip.EquipType.Armor:
                 if (PlayDataManager.curArmor[armorType] == null)
                 {
                     tester.text = "X";

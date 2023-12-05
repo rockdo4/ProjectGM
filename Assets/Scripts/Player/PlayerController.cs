@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     public Transform rightHand;
     public Transform leftWing;
     public Transform rightWing;
-    public ItemSO weaponSO;
+    public WeaponSO weaponSO;
     #endregion
 
     private void Awake()
@@ -52,13 +52,13 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        player.CurrentWeapon = weaponSO.MakeItem(equipWeapon, rightHand, player.Animator);
+        player.CurrentWeapon = weaponSO.MakeWeapon(equipWeapon, rightHand, player.Animator);
         if (player.CurrentWeapon.IsDualWield)
         {
             player.FakeWeapon = Instantiate(player.CurrentWeapon);
         }
         MoveWeaponPosition(WeaponPosition.Hand);
-
+        
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
         touchManager.HoldEndListeners += HoldEnd;
