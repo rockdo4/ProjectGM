@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UI;
@@ -15,15 +16,21 @@ public class InventoryManager : MonoBehaviour
 
     [Header("무기/방어구")]
     public ItemPanel itemPanel;
+    public IconSO weaponIconSO;
+
+    [Space(10.0f)]
 
     [Header("장식주")]
     public GameObject decoPanel;
 
+    [Space(10.0f)]
+
+
     [Header("재료")]
     public MatPanel matPanel;
-
-    [Header("재료 IconSO")]
     public IconSO matIconSo;
+
+    [Space(10.0f)]
 
     [Header("일괄판매")]
     public GameObject sellPanel;
@@ -35,18 +42,20 @@ public class InventoryManager : MonoBehaviour
 
     private void Start()
     {
-        buttonPool = new ObjectPool<ItemButton>(() => 
+        buttonPool = new ObjectPool<ItemButton>(
+            () => // createFunc
         {
             var button = Instantiate(buttonPrefab);
             button.OnCountAct();
             button.gameObject.SetActive(false);
+
             return button;
         },
-        delegate (ItemButton button)
+        delegate (ItemButton button) // actionOnGet
         {
             button.gameObject.SetActive(true);
         },
-        delegate (ItemButton button)
+        delegate (ItemButton button) // actionOnRelease
         {
             button.OnCountAct();
             button.iconImage.sprite = null;
@@ -72,7 +81,7 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < 8; i++)
         {
-            var weapon = new Weapon(Weapon.WeaponID.Simple_Tonpa_Lv1 + i * 200);
+            var weapon = new Weapon(Weapon.WeaponID.Simple_Tonpa_Lv1 + i * 100);
             PlayDataManager.data.WeaponInventory.Add(weapon);
             yield return new WaitForEndOfFrame();
         }
@@ -85,7 +94,7 @@ public class InventoryManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        PlayDataManager.Save();
+        //PlayDataManager.Save();
 
         ShowWeapons();
     }
@@ -99,6 +108,8 @@ public class InventoryManager : MonoBehaviour
         {
             var go = buttonPool.Get();
             go.transform.SetParent(inventoryPanel.transform);
+
+            go.iconImage.sprite = weaponIconSO.GetSprite(weapon.id / 100 * 100);
 
             go.button.onClick.AddListener(() => 
             {
@@ -206,5 +217,7 @@ public class InventoryManager : MonoBehaviour
     {
         PlayDataManager.data.MatInventory.Add(new Materials(71001));
         PlayDataManager.data.MatInventory.Add(new Materials(72001));
+
+        TestAddItem();
     }
 }

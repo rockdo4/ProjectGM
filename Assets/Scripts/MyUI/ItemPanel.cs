@@ -8,7 +8,7 @@ public class ItemPanel : MonoBehaviour, IRenewal
     public Image iconImage;
 
     [Header("텍스트 모음")]
-    //public TextMeshProUGUI nameText;
+    public TextMeshProUGUI nameText;
     public TextMeshProUGUI statText;
     public TextMeshProUGUI infoText;
 
@@ -38,8 +38,9 @@ public class ItemPanel : MonoBehaviour, IRenewal
                 {
                     var table = CsvTableMgr.GetTable<WeaponTable>().dataTable[(Weapon.WeaponID)item.id];
                     //iconImage.sprite = ;
+                    nameText.text = ((Weapon.WeaponID)table.weapon_name).ToString(); // string table
                     statText.text = $"[공격력] {table.atk}\n[무기속성] {table.property}";
-                    infoText.text = table.weapon_name.ToString();
+                    infoText.text = table.weapon_name.ToString(); // string table
                 }
                 
                 break;
