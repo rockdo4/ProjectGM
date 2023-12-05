@@ -17,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     [Header("무기/방어구")]
     public ItemPanel itemPanel;
     public IconSO weaponIconSO;
+    public IconSO armorIconSO;
 
     [Space(10.0f)]
 
@@ -135,12 +136,13 @@ public class InventoryManager : MonoBehaviour
     {
         ClearItemButton();
 
-        // Object Pool로 최적화할 것
         var armors = PlayDataManager.data.ArmorInventory;
         foreach (var armor in armors)
         {
             var go = buttonPool.Get();
             go.transform.SetParent(inventoryPanel.transform);
+
+            go.iconImage.sprite = armorIconSO.GetSprite(armor.id);
 
             go.button.onClick.AddListener(() =>
             {
