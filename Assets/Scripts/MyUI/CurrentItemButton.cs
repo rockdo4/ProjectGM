@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,16 +7,20 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
     [Header("아이템 분류")]
     public Equip.EquipType Type;
 
-    [Header("방어구 분류")]
+    [Header("방어구 분류"), Tooltip("아이템이 무기라면 None타입으로 설정할 것")]
     public Armor.ArmorType armorType;
 
+    [Header("무기 IconSO")]
+    public IconSO weaponIconSO;
+
+    [Header("방어구 IconSO")]
+    public IconSO armorIconSO;
+
     private Image iconImage;
-    private TextMeshProUGUI tester; // test code
 
     private void Awake()
     {
         iconImage = GetComponent<Image>();
-        tester = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     public void Renewal()
@@ -28,21 +30,22 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
             case Equip.EquipType.Weapon:
                 if (PlayDataManager.curWeapon == null)
                 {
-                    tester.text = "X";
+                    iconImage.sprite = null;
 
                     break;
                 }
-                tester.text = PlayDataManager.curWeapon.id.ToString();
+                iconImage.sprite = weaponIconSO.GetSprite(PlayDataManager.curWeapon.id);
+
                 break;
 
             case Equip.EquipType.Armor:
                 if (PlayDataManager.curArmor[armorType] == null)
                 {
-                    tester.text = "X";
+                    iconImage.sprite = null;
 
                     break;
                 }
-                tester.text = PlayDataManager.curArmor[armorType].id.ToString();
+                iconImage.sprite = armorIconSO.GetSprite(PlayDataManager.curArmor[armorType].id);
                 break;
 
             default:
