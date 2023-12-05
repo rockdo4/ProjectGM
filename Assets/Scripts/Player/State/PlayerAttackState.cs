@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class PlayerAttackState : PlayerStateBase
 {
     private const string triggerName = "Attack";
@@ -11,6 +9,7 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void Enter()
     {
+        controller.MoveWeapon(PlayerController.WeaponPosition.Hand);
         isFirst = true;
     }
 

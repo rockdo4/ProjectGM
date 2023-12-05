@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.LowLevel;
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,11 +21,18 @@ public class PlayerController : MonoBehaviour
     private List<StateBase> states = new List<StateBase>();
     public State currentState { get; private set; }
 
-    // equip weapon test
+    #region Weapon
+    public enum WeaponPosition
+    {
+        Hand, Wing
+    }
     private Weapon equipWeapon = null;
     public Transform leftHand;
     public Transform rightHand;
+    public Transform leftWing;
+    public Transform rightWing;
     public ItemSO weaponSO;
+    #endregion
 
     private void Awake()
     {
@@ -45,6 +53,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         player.CurrentWeapon = weaponSO.MakeItem(equipWeapon, rightHand, player.Animator);
+        MoveWeapon(WeaponPosition.Hand);
 
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
@@ -137,7 +146,6 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
         if (currentState == State.Evade)
         {
             return;
@@ -231,6 +239,21 @@ public class PlayerController : MonoBehaviour
         foreach (var attackable in attackables)
         {
             attackable.OnAttack(player.gameObject, attack);
+        }
+    }
+
+    public void MoveWeapon(WeaponPosition position)
+    {
+        switch (position)
+        {
+            case WeaponPosition.Hand:
+                player.CurrentWeapon.transform.SetParent(rightHand, false);
+                //player.CurrentWeapon2.transform.SetParent(leftHand, false);
+                break;
+            case WeaponPosition.Wing:
+                player.CurrentWeapon.transform.SetParent(rightWing, false);
+                //player.CurrentWeapon2.transform.SetParent(leftWing, false);
+                break;
         }
     }
 }
