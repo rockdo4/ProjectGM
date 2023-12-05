@@ -20,16 +20,16 @@ public class PlayerAnimationSO : ScriptableObject
         var table = CsvTableMgr.GetTable<WeaponTable>().dataTable;
         switch (table[id].type)
         {
-            case 1: // 통파
+            case WeaponType.Tonpa: // 통파
                 return anim_Tonpa;
 
-            case 2: // 두손검
+            case WeaponType.Two_Hand_Sword: // 두손검
                 return anim_Two_Hand_Sword;
 
-            case 3: // 한손검
+            case WeaponType.One_Hand_Sword: // 한손검
                 return anim_One_Hand_Sword;
 
-            case 4: // 창
+            case WeaponType.Spear: // 창
                 return anim_Spear;
 
             default:

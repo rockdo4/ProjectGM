@@ -564,6 +564,12 @@ Transform:
   - {fileID: 1462236623}
   m_Father: {fileID: 223354316}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &365440765 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3446526013813627044, guid: 171fe1e25acf4a149ba01b146b19fc35,
+    type: 3}
+  m_PrefabInstance: {fileID: 1906492173613655807}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &773880673
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,6 +688,12 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!4 &814594986 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2647309340549258145, guid: 171fe1e25acf4a149ba01b146b19fc35,
+    type: 3}
+  m_PrefabInstance: {fileID: 1906492173613655807}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &855363210 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1270781583145196798, guid: e6be9ec9474f31e4fba2527883be4fa0,
@@ -1777,11 +1789,32 @@ PrefabInstance:
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4871745935007499456, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: animators.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871745935007499456, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: animators.Array.data[3]
+      value: 
+      objectReference: {fileID: 22100000, guid: 5d23a4b199a00d745beb96d9aed879a0,
+        type: 2}
     - target: {fileID: 7576396174195467301, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8763300904159196873, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: leftHand
+      value: 
+      objectReference: {fileID: 365440765}
+    - target: {fileID: 8763300904159196873, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: rightHand
+      value: 
+      objectReference: {fileID: 814594986}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

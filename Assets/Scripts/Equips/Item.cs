@@ -35,6 +35,14 @@ public enum AttackType
     Pierce, // °üÅëÇü
 
 }
+public enum WeaponType
+{
+    None = -1,
+    Tonpa = 1,
+    Two_Hand_Sword,
+    One_Hand_Sword,
+    Spear
+}
 
 public class Weapon : Item 
 {
@@ -132,6 +140,7 @@ public class Weapon : Item
     }
 
     public AttackType attackType = AttackType.None;
+    public WeaponType weaponType = WeaponType.None;
 
     public Weapon(WeaponID id, bool isEquip = false)
         : base(ItemType.Weapon, (int)id, isEquip)
@@ -140,6 +149,7 @@ public class Weapon : Item
 
         // Define AttackType
         attackType = table[id].property;
+        weaponType = table[id].type;
     }
 }
 #endregion

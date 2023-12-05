@@ -19,6 +19,7 @@ public class Player : LivingObject
     public CinemachineVirtualCamera virtualCamera;
     public Animator Animator { get; private set; }// animator test code
     public WeaponPrefab CurrentWeapon { get; set; }
+    public WeaponPrefab FakeWeapon { get; set; }
 
     public float MoveDistance
     {

@@ -13,7 +13,7 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Enter()
     {
-        controller.MoveWeapon(PlayerController.WeaponPosition.Wing);
+        controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
 
         controller.player.Animator.Play("Idle");
         controller.player.evadeTimer = 0f;

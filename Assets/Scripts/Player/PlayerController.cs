@@ -53,7 +53,11 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         player.CurrentWeapon = weaponSO.MakeItem(equipWeapon, rightHand, player.Animator);
-        MoveWeapon(WeaponPosition.Hand);
+        if (player.CurrentWeapon.IsDualWield)
+        {
+            player.FakeWeapon = Instantiate(player.CurrentWeapon);
+        }
+        MoveWeaponPosition(WeaponPosition.Hand);
 
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
@@ -105,7 +109,7 @@ public class PlayerController : MonoBehaviour
 
         player.slider.value = player.evadePoint;
 
-        #region Test
+        #region Test Input
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             player.evadePoint += 50;
@@ -117,6 +121,19 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             player.Stat.Defence = (player.Stat.Defence == 0) ? -100 : 0;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            if (player.FakeWeapon == null)
+            {
+                player.FakeWeapon = Instantiate(player.CurrentWeapon);
+                MoveWeaponPosition(WeaponPosition.Wing);
+            }
+            else
+            {
+                Destroy(player.FakeWeapon.gameObject);
+                player.FakeWeapon = null;
+            }
         }
         #endregion
     }
@@ -242,17 +259,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void MoveWeapon(WeaponPosition position)
+    public void MoveWeaponPosition(WeaponPosition position)
     {
         switch (position)
         {
             case WeaponPosition.Hand:
                 player.CurrentWeapon.transform.SetParent(rightHand, false);
-                //player.CurrentWeapon2.transform.SetParent(leftHand, false);
+                player.FakeWeapon?.transform.SetParent(leftHand, false);
                 break;
             case WeaponPosition.Wing:
                 player.CurrentWeapon.transform.SetParent(rightWing, false);
-                //player.CurrentWeapon2.transform.SetParent(leftWing, false);
+                player.FakeWeapon?.transform.SetParent(leftWing, false);
                 break;
         }
     }

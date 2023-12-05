@@ -9,7 +9,7 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void Enter()
     {
-        controller.MoveWeapon(PlayerController.WeaponPosition.Hand);
+        controller.MoveWeaponPosition(PlayerController.WeaponPosition.Hand);
         isFirst = true;
     }
 
