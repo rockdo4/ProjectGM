@@ -22,8 +22,17 @@ public class EnemyAI : LivingObject
     private int meleeAttackIndexTwo = 1;
     private int meleeAttackIndexThree = 2;
 
-    [Header("범위 공격의 시각화 프리펩")]
-    public GameObject attackRangePrefab;
+    [Header("원 공격 타입 프리펩")]
+    public GameObject attackTypeAPrefab;
+
+    [Header("삼각형 공격 타입 프리펩")]
+    public GameObject attackTypeBPrefab;
+
+    [Header("부채꼴 공격 타입 프리펩")]
+    public GameObject attackTypeCPrefab;
+
+    [Header("와이파이 공격 타입 프리펩")]
+    public GameObject attackTypeDPrefab;
 
     [Header("공격 대기시간")]
     [SerializeField]
@@ -91,6 +100,14 @@ public class EnemyAI : LivingObject
         Tiger,
         Spider,
         Wolf,
+    }
+
+    public enum AttackType
+    {
+       A,
+       B,
+       C,
+       D,
 
     }
 
@@ -417,10 +434,10 @@ public class EnemyAI : LivingObject
         return result;
     }
 
-    IEnumerator PrepareMeleeAttack(EnemyType enemytype, string attackType)
+    IEnumerator PrepareMeleeAttack(EnemyType enemytype, AttackType attackType)
     {
         isPreparingAttack = true;
-        ShowAttackRange(true);
+        ShowAttackRange(true, attackType);
 
         for (float speed = 0.5f; speed >= 0.0f; speed -= Time.deltaTime / attackPreparationTime)
         {
@@ -430,7 +447,7 @@ public class EnemyAI : LivingObject
 
         yield return new WaitForSeconds(attackPreparationTime);
 
-        ShowAttackRange(false);
+        ShowAttackRange(false, attackType);
         isPreparingAttack = false;
 
         player = detectedPlayer.GetComponent<Player>();
@@ -465,13 +482,32 @@ public class EnemyAI : LivingObject
         }
     }
 
-    private void ShowAttackRange(bool show)
+    private void ShowAttackRange(bool show, AttackType attackType)
     {
+        GameObject attackPrefab = null;
+
+        switch (attackType)
+        {
+            case AttackType.A:
+                attackPrefab = attackTypeAPrefab;
+                break;
+            case AttackType.B:
+                attackPrefab = attackTypeBPrefab;
+                break;
+            case AttackType.C:
+                attackPrefab = attackTypeCPrefab;
+                break;
+            case AttackType.D:
+                attackPrefab = attackTypeDPrefab;
+                break;
+        }
+
+
         if (show)
         {
             if (attackRangeInstance == null)
             {
-                attackRangeInstance = Instantiate(attackRangePrefab, transform);
+                attackRangeInstance = Instantiate(attackPrefab, transform);
             }
 
             foreach (GameObject cell in cellInstances) // 리스트의 모든 셀 인스턴스를 순회
@@ -499,7 +535,7 @@ public class EnemyAI : LivingObject
             {
                 if (currentPattern.pattern[i])
                 {
-                    Vector3 cellPosition = CalculateCellPosition(i);
+                    Vector3 cellPosition = CalculateCellPosition(attackPrefab, i);
                     GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
                     cell.SetActive(true);
                     cellInstances.Add(cell);
@@ -601,7 +637,7 @@ public class EnemyAI : LivingObject
 
         attackIndex = attackPatternIndex;
 
-        StartCoroutine(PrepareMeleeAttack(enemyType, "A"));
+        StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.A));
         return INode.EnemyState.Success;
     }
 
@@ -632,7 +668,7 @@ public class EnemyAI : LivingObject
 
         attackIndex = attackPatternIndex;
 
-        StartCoroutine(PrepareMeleeAttack(enemyType, "B"));
+        StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.B));
         return INode.EnemyState.Success;
     }
 
@@ -663,7 +699,7 @@ public class EnemyAI : LivingObject
 
         attackIndex = attackPatternIndex;
 
-        StartCoroutine(PrepareMeleeAttack(enemyType, "C"));
+        StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.C));
         return INode.EnemyState.Success;
     }
 
@@ -696,12 +732,12 @@ public class EnemyAI : LivingObject
 
     #region 공격 타일 계산
 
-    Vector3 CalculateCellPosition(int index) // 칼큘
+    Vector3 CalculateCellPosition(GameObject attackPrefab, int index) // 칼큘
     {
-        Renderer renderer = attackRangePrefab.GetComponent<Renderer>();// 어택 레인지 프리펩
+        Renderer renderer = attackPrefab.GetComponent<Renderer>();// 어택 레인지 프리펩
         if (renderer == null)
         {
-            Debug.LogError("attackRangePrefab에 Renderer 컴포넌트가 없습니다.");
+            Debug.LogError("칼큘에서 호출함 // attackPrefab에 Renderer 컴포넌트가 없음");
             return Vector3.zero;
         }
 
@@ -711,11 +747,14 @@ public class EnemyAI : LivingObject
         int x = index % 3;
         int z = index / 3;
 
-        Vector3 actualPosition = new Vector3(x * offset - (offset * 1), 0f, z * offset + meleeAttackRange); // 지금은 임시로 y축 위치를 0f로 함
+        Vector3 actualPosition = new Vector3((x - 1) * offset, 0.1f, (z - 1) * offset);
+        
+        // 지금은 임시로 y축 위치를 0f로 함
         // 왜냐하면 테스트씬의 그라운드의 y포지션이 -0.01f임
         // 하드코딩 1 오프셋 관련 - (offset * 4) 나중에 수식 활용
         // int x = index % 10; 이것도 마찬가지
         // 뒤에 나눠주는 값 셀이 100개라면 나누는 수는 10이어야하니까 루트 씌워야됨
+
         actualPosition = transform.rotation * actualPosition;
         return transform.position + actualPosition;
     }
@@ -743,7 +782,7 @@ public class EnemyAI : LivingObject
                 int x = index % 3;
                 int z = index / 3;
 
-                Vector3 actualPosition = new Vector3((x - 1) * offset, 0f, (z + 1) * offset);
+                Vector3 actualPosition = new Vector3((x - 1) * offset, 0f, (z - 1) * offset);
                 actualPosition = transform.rotation * actualPosition;
                 Vector3 worldPosition = transform.position + actualPosition;
 

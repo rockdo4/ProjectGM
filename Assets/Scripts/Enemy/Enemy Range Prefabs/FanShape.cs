@@ -4,10 +4,11 @@ using UnityEngine;
 public class FanShape : MonoBehaviour
 {
     public float radius = 5f;
-    public float angle = 360f;
-
+    public float angle = 90f;
     public int segments = 50;
-    public int wifiSegments = 2; // 와이파이 세그먼트 수
+    public int wifiSegments = 2;
+
+    private Mesh sharedMesh;
 
     void Start()
     {
@@ -36,16 +37,16 @@ public class FanShape : MonoBehaviour
         // 정점 생성
         for (int i = 0; i <= segments; i++)
         {
-            float currentAngle = angleStep * i;
+            float currentAngle = angleStep * i + 90f; // 90도 추가
             vertices[vertexIndex++] = new Vector3(
-                Mathf.Sin(currentAngle * Mathf.Deg2Rad) * innerRadius,
+                Mathf.Cos(currentAngle * Mathf.Deg2Rad) * innerRadius,
                 0,
-                Mathf.Cos(currentAngle * Mathf.Deg2Rad) * innerRadius
+                Mathf.Sin(currentAngle * Mathf.Deg2Rad) * innerRadius
             );
             vertices[vertexIndex++] = new Vector3(
-                Mathf.Sin(currentAngle * Mathf.Deg2Rad) * outerRadius,
+                Mathf.Cos(currentAngle * Mathf.Deg2Rad) * outerRadius,
                 0,
-                Mathf.Cos(currentAngle * Mathf.Deg2Rad) * outerRadius
+                Mathf.Sin(currentAngle * Mathf.Deg2Rad) * outerRadius
             );
         }
 
@@ -67,5 +68,24 @@ public class FanShape : MonoBehaviour
         mesh.RecalculateNormals();
 
         return mesh;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (sharedMesh == null)
+        {
+            sharedMesh = CreateFanMesh();
+        }
+
+        //MeshFilter meshFilter = GetComponent<MeshFilter>();
+
+        //// 새로운 메시가 아직 생성되지 않았을 경우에만 생성dddd
+        //if (meshFilter.sharedMesh == null)
+        //{
+        //    meshFilter.sharedMesh = CreateFanMesh();
+        //}
+
+        //// Gizmos로 메시 그리기
+        Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, transform.localScale);
     }
 }
