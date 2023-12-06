@@ -1970,7 +1970,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1855066185}
         m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
         m_MethodName: ShowDecorations
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2160,8 +2160,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 532.1053, y: -330}
-  m_SizeDelta: {x: 354.73685, y: 660}
+  m_AnchoredPosition: {x: 550.5405, y: -330}
+  m_SizeDelta: {x: 367.02704, y: 660}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &582500201
 MonoBehaviour:
@@ -2708,8 +2708,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 177.36842, y: -330}
-  m_SizeDelta: {x: 354.73685, y: 660}
+  m_AnchoredPosition: {x: 183.51352, y: -330}
+  m_SizeDelta: {x: 367.02704, y: 660}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &645971071
 MonoBehaviour:
@@ -3240,7 +3240,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1855066185}
         m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
         m_MethodName: ShowWeapons
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4583,7 +4583,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1855066185}
         m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
         m_MethodName: ShowArmors
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4667,8 +4667,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 354.73685, y: -330}
-  m_SizeDelta: {x: 709.4737, y: 660}
+  m_AnchoredPosition: {x: 367.02704, y: -330}
+  m_SizeDelta: {x: 734.0541, y: 660}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1159789775
 MonoBehaviour:
@@ -5381,8 +5381,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 354.73685, y: -990}
-  m_SizeDelta: {x: 709.4737, y: 660}
+  m_AnchoredPosition: {x: 367.02704, y: -990}
+  m_SizeDelta: {x: 734.0541, y: 660}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1271721607
 MonoBehaviour:
@@ -5436,6 +5436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iconImage: {fileID: 1934702206}
+  equipButton: {fileID: 1911471269}
   nameText: {fileID: 1574311950}
   statText: {fileID: 335095159}
   infoText: {fileID: 265024226}
@@ -8361,7 +8362,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1321125546}
         m_TargetAssemblyTypeName: ItemPanel, Assembly-CSharp
         m_MethodName: WearItem
         m_Mode: 1
@@ -8701,7 +8702,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1855066185}
         m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
         m_MethodName: ShowMaterials
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

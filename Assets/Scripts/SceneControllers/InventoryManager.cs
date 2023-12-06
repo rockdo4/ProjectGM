@@ -70,7 +70,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         //TestAddItem();
-        ShowWeapons();
+        ShowWeapons(true);
     }
 
     private void TestAddItem()
@@ -97,11 +97,15 @@ public class InventoryManager : MonoBehaviour
 
         //PlayDataManager.Save();
 
-        ShowWeapons();
+        ShowWeapons(true);
     }
 
-    public void ShowWeapons()
+    public void ShowWeapons(bool isOn)
     {
+        if (!isOn)
+        {
+            return;
+        }
         ClearItemButton();
 
         var weapons = PlayDataManager.data.WeaponInventory;
@@ -132,8 +136,12 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void ShowArmors()
+    public void ShowArmors(bool isOn)
     {
+        if (!isOn)
+        {
+            return;
+        }
         ClearItemButton();
 
         var armors = PlayDataManager.data.ArmorInventory;
@@ -163,14 +171,22 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void ShowDecorations()
+    public void ShowDecorations(bool isOn)
     {
+        if (!isOn)
+        {
+            return;
+        }
         ClearItemButton();
 
     }
 
-    public void ShowMaterials()
+    public void ShowMaterials(bool isOn)
     {
+        if (!isOn)
+        {
+            return;
+        }
         ClearItemButton();
 
         var mats = PlayDataManager.data.MatInventory;

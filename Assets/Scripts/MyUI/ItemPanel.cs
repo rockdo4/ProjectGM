@@ -7,6 +7,9 @@ public class ItemPanel : MonoBehaviour, IRenewal
     [Header("아이콘 이미지")]
     public Image iconImage;
 
+    [Header("장착 버튼")]
+    public Button equipButton;
+
     [Header("텍스트 모음")]
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI statText;
@@ -58,6 +61,8 @@ public class ItemPanel : MonoBehaviour, IRenewal
 
                 break;
         }
+
+        equipButton.interactable = !item.isEquip;
     }
 
     public void WearItem()

@@ -7,6 +7,12 @@ public class UpgradeManager : MonoBehaviour
     [Header("현재 장비 버튼들")]
     public List<CurrentItemButton> equipButtons;
 
+    [Header("플레이어 정보")]
+    public UpgradeInfoPanel upgradeInfoPanel;
+
+    [Header("")]
+    public GameObject prefab;
+
     private void Awake()
     {
         if (PlayDataManager.data == null)
@@ -23,6 +29,7 @@ public class UpgradeManager : MonoBehaviour
         {
             renewal.Renewal();
         }
+        upgradeInfoPanel.Renewal();
 
         ShowWeapons(true);
     }
@@ -31,9 +38,9 @@ public class UpgradeManager : MonoBehaviour
     {
         if (!isOn)
         {
-            Clear();
             return;
         }
+        Clear();
         Debug.Log("W");
     }
 
@@ -41,9 +48,9 @@ public class UpgradeManager : MonoBehaviour
     {
         if (!isOn)
         {
-            Clear();
             return;
         }
+        Clear();
         Debug.Log("A");
 
     }

@@ -34,7 +34,7 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
 
                     break;
                 }
-                iconImage.sprite = weaponIconSO.GetSprite(PlayDataManager.curWeapon.id);
+                iconImage.sprite = weaponIconSO.GetSprite(PlayDataManager.curWeapon.id / 100 * 100);
 
                 break;
 
