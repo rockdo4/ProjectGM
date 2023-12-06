@@ -17,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     [Header("무기/방어구")]
     public ItemPanel itemPanel;
     public IconSO weaponIconSO;
+    public IconSO armorIconSO;
 
     [Space(10.0f)]
 
@@ -69,7 +70,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         //TestAddItem();
-        ShowWeapons();
+        ShowWeapons(true);
     }
 
     private void TestAddItem()
@@ -96,11 +97,15 @@ public class InventoryManager : MonoBehaviour
 
         //PlayDataManager.Save();
 
-        ShowWeapons();
+        ShowWeapons(true);
     }
 
-    public void ShowWeapons()
+    public void ShowWeapons(bool isOn)
     {
+        if (!isOn)
+        {
+            return;
+        }
         ClearItemButton();
 
         var weapons = PlayDataManager.data.WeaponInventory;
@@ -131,16 +136,21 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void ShowArmors()
+    public void ShowArmors(bool isOn)
     {
+        if (!isOn)
+        {
+            return;
+        }
         ClearItemButton();
 
-        // Object Pool로 최적화할 것
         var armors = PlayDataManager.data.ArmorInventory;
         foreach (var armor in armors)
         {
             var go = buttonPool.Get();
             go.transform.SetParent(inventoryPanel.transform);
+
+            go.iconImage.sprite = armorIconSO.GetSprite(armor.id);
 
             go.button.onClick.AddListener(() =>
             {
@@ -161,14 +171,22 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void ShowDecorations()
+    public void ShowDecorations(bool isOn)
     {
+        if (!isOn)
+        {
+            return;
+        }
         ClearItemButton();
 
     }
 
-    public void ShowMaterials()
+    public void ShowMaterials(bool isOn)
     {
+        if (!isOn)
+        {
+            return;
+        }
         ClearItemButton();
 
         var mats = PlayDataManager.data.MatInventory;
