@@ -37,7 +37,7 @@ public class WeaponTable : CsvTable
             this.weakpoint = weakpoint;
         }
     }
-    public Dictionary<Weapon.WeaponID, Data_Weapon> dataTable = new Dictionary<Weapon.WeaponID, Data_Weapon>();
+    public Dictionary<int, Data_Weapon> dataTable = new Dictionary<int, Data_Weapon>();
 
     public WeaponTable()
     {
@@ -61,7 +61,7 @@ public class WeaponTable : CsvTable
 
         while (csv.Read())
         {
-            dataTable.Add((Weapon.WeaponID)int.Parse(csv.GetField(0)),
+            dataTable.Add(int.Parse(csv.GetField(0)),
                 new Data_Weapon
                 (
                     int.Parse(csv.GetField(1)), // weapon_name

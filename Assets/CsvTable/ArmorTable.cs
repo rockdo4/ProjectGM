@@ -40,7 +40,7 @@ public class ArmorTable : CsvTable
             this.socket = socket;
         }
     }
-    public Dictionary<Armor.ArmorID, Data> dataTable = new Dictionary<Armor.ArmorID, Data>();
+    public Dictionary<int, Data> dataTable = new Dictionary<int, Data>();
 
     public ArmorTable()
     {
@@ -64,7 +64,7 @@ public class ArmorTable : CsvTable
 
         while (csv.Read())
         {
-            dataTable.Add((Armor.ArmorID)int.Parse(csv.GetField(0)),
+            dataTable.Add(int.Parse(csv.GetField(0)),
                 new Data
                 (
                     int.Parse(csv.GetField(1)), // Armor_name

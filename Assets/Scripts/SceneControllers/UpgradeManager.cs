@@ -10,8 +10,8 @@ public class UpgradeManager : MonoBehaviour
     [Header("플레이어 정보")]
     public UpgradeInfoPanel upgradeInfoPanel;
 
-    [Header("")]
-    public GameObject prefab;
+    [Header("버튼 프리팹")]
+    public UpgradeEquipButton prefab;
 
     private void Awake()
     {
