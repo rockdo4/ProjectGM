@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     private Weapon equipWeapon = null;
     public Transform leftHand;
     public Transform rightHand;
-    public ItemSO weaponSO;
+    public WeaponSO weaponSO;
 
     private void Awake()
     {
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        player.CurrentWeapon = weaponSO.MakeItem(equipWeapon, rightHand, player.Animator);
+        player.CurrentWeapon = weaponSO.MakeWeapon(equipWeapon, rightHand, player.Animator);
 
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
