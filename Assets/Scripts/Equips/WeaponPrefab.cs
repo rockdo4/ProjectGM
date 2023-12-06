@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WeaponPrefab : MonoBehaviour, IEquip
+public class WeaponPrefab : MonoBehaviour, IWear
 {
     public Weapon item = null;
 
@@ -17,20 +17,17 @@ public class WeaponPrefab : MonoBehaviour, IEquip
 
     [Header("속성 배율")]
     public float weakDamage;
-
-    public void OnEquip()
+    
+    public void OnEquip(Weapon item)
     {
-        // Define AttackType
         type = item.attackType;
+
+        var table = CsvTableMgr.GetTable<WeaponTable>().dataTable[(Weapon.WeaponID)item.id];
+        attack = table.atk;
+        weakDamage = table.weakpoint;
     }
 
-    public void OnEquip(Item item)
-    {
-        this.item = item as Weapon;
-        OnEquip();
-    }
-
-    public void OnEquip(Item item, Animator anim)
+    public void OnEquip(Weapon item, Animator anim)
     {
         OnEquip(item);
 

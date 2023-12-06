@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using SaveDataVC = SaveDataV3; // Version Change?
+using SaveDataVC = SaveDataV4; // Version Change?
 
 public static class PlayDataManager
 {
@@ -18,8 +18,8 @@ public static class PlayDataManager
             data = new SaveDataVC();
 
             // 기본 무기 4종 지급
-            //data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Simple_Tonpa_Lv1));
-            //data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Go_Work_Sword_Lv1));
+            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Simple_Tonpa_Lv1));
+            data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Go_Work_Sword_Lv1));
             data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Glory_Sword_Lv1));
             data.WeaponInventory.Add(new Weapon(Weapon.WeaponID.Simple_Spear_Lv1));
         }
@@ -86,7 +86,7 @@ public static class PlayDataManager
         Save();
     }
 
-    public static void WearItem(Item item)
+    public static void WearItem(Equip item)
     {
         if (item == null)
         {
@@ -96,7 +96,7 @@ public static class PlayDataManager
 
         switch (item.type)
         {
-            case Item.ItemType.Weapon:
+            case Equip.EquipType.Weapon:
                 var weapon = item as Weapon;
 
                 if (curWeapon == null)
@@ -118,7 +118,7 @@ public static class PlayDataManager
 
                 break;
 
-            case Item.ItemType.Armor:
+            case Equip.EquipType.Armor:
                 var armor = item as Armor;
 
                 if (curArmor[armor.armorType] == null)
@@ -146,16 +146,16 @@ public static class PlayDataManager
         Save();
     }
 
-    public static void UnWearItem(Item.ItemType type, Armor.ArmorType armorType = Armor.ArmorType.None)
+    public static void UnWearItem(Equip.EquipType type, Armor.ArmorType armorType = Armor.ArmorType.None)
     {
         switch (type)
         {
-            case Item.ItemType.Weapon:
+            case Equip.EquipType.Weapon:
                 curWeapon.isEquip = false;
                 curWeapon = null;
                 break;
 
-            case Item.ItemType.Armor:
+            case Equip.EquipType.Armor:
                 curArmor[armorType].isEquip = false;
                 curArmor[armorType] = null;
                 break;

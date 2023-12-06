@@ -402,7 +402,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2069079120147748783
 Transform:
   m_ObjectHideFlags: 0
@@ -430,7 +430,7 @@ Animator:
   m_GameObject: {fileID: 2545784051288900843}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: a59a2976ab21ceb4db58ed90a6a64f3f, type: 3}
-  m_Controller: {fileID: 9100000, guid: 708422cd3ddd1ca4084acbbfe8cdfdff, type: 2}
+  m_Controller: {fileID: 22100000, guid: 6df2811d7ad06634181b506973cbd4bd, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -453,21 +453,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRange: 10
-  meleeAttackRange: 2
-  movementSpeed: 1
+  stat: {fileID: 0}
+  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
+    type: 3}
+  attackPreparationTime: 0.1
+  detectRange: 50
+  meleeAttackRange: 3
   roarDuration: 3
-  health: 100
-  animator: {fileID: 0}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
   enemyType: 0
-  meleeAttackPower: 5
-  attackPreparationTime: 3
-  attackRangeMaterial: {fileID: 0}
-  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
-    type: 3}
+  minAngle: 10
+  rotationSpeed: 5
   attackGrid: 000000010101000000
   savedPatterns:
   - patternName: "\uAC70\uBBF8 \uACF5\uACA9 A"

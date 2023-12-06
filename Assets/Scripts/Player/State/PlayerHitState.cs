@@ -1,6 +1,3 @@
-using Unity.VisualScripting;
-using UnityEngine;
-
 public class PlayerHitState : PlayerStateBase
 {
     private const string triggerName = "Hit";

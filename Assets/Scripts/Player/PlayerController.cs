@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -20,11 +22,23 @@ public class PlayerController : MonoBehaviour
     private List<StateBase> states = new List<StateBase>();
     public State currentState { get; private set; }
 
-    // equip weapon test
+    #region Weapon
+    public enum WeaponPosition
+    {
+        Hand, Wing
+    }
+    public WeaponPosition currentWeaponPosition;
     private Weapon equipWeapon = null;
     public Transform leftHand;
     public Transform rightHand;
-    public ItemSO weaponSO;
+    public Transform leftWing;
+    public Transform rightWing;
+    public WeaponSO weaponSO;
+    #endregion
+
+    #region IK
+    private Transform subHandle;
+    #endregion
 
     private void Awake()
     {
@@ -37,15 +51,21 @@ public class PlayerController : MonoBehaviour
             PlayDataManager.Init();
         }
         equipWeapon = PlayDataManager.curWeapon;
-        
 
         StateInit();
     }
 
     private void Start()
     {
-        player.CurrentWeapon = weaponSO.MakeItem(equipWeapon, rightHand, player.Animator);
+        player.CurrentWeapon = weaponSO.MakeWeapon(equipWeapon, rightHand, player.Animator);
+        if (equipWeapon.weaponType == WeaponType.Tonpa)
+        {
+            player.FakeWeapon = Instantiate(player.CurrentWeapon);
+        }
+        subHandle = player.CurrentWeapon.transform.Find("LeftHandle");
 
+        MoveWeaponPosition(WeaponPosition.Hand);
+        
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
         touchManager.HoldEndListeners += HoldEnd;
@@ -60,7 +80,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        player.Rigid.velocity = Vector3.zero;
         if (player.Enemy == null)
         {
             return;
@@ -79,7 +98,7 @@ public class PlayerController : MonoBehaviour
             SetState(State.Hit);
         }
 
-        //Groggy
+        #region EvadePoint
         if (player.evadePoint >= player.Stat.maxEvadePoint)
         {
             player.GroggyAttack = true;
@@ -93,8 +112,36 @@ public class PlayerController : MonoBehaviour
                 player.GroggyAttack = false;
             }
         }
-
         player.slider.value = player.evadePoint;
+        #endregion
+
+        #region Test Input
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            player.evadePoint += 50;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            player.Stat.AttackDamage = (player.Stat.AttackDamage == 0) ? 70 : 0;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            player.Stat.Defence = (player.Stat.Defence == 0) ? -100 : 0;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            if (player.FakeWeapon == null)
+            {
+                player.FakeWeapon = Instantiate(player.CurrentWeapon);
+                MoveWeaponPosition(WeaponPosition.Wing);
+            }
+            else
+            {
+                Destroy(player.FakeWeapon.gameObject);
+                player.FakeWeapon = null;
+            }
+        }
+        #endregion
     }
 
     private void FixedUpdate()
@@ -122,7 +169,6 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
         if (currentState == State.Evade)
         {
             return;
@@ -218,6 +264,43 @@ public class PlayerController : MonoBehaviour
         foreach (var attackable in attackables)
         {
             attackable.OnAttack(player.gameObject, attack);
+        }
+    }
+
+    public void MoveWeaponPosition(WeaponPosition position)
+    {
+        currentWeaponPosition = position;
+        switch (position)
+        {
+            case WeaponPosition.Hand:
+                player.CurrentWeapon.transform.SetParent(rightHand, false);
+                player.FakeWeapon?.transform.SetParent(leftHand, false);
+                break;
+            case WeaponPosition.Wing:
+                player.CurrentWeapon.transform.SetParent(rightWing, false);
+                player.FakeWeapon?.transform.SetParent(leftWing, false);
+                break;
+        }
+    }
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        if (currentWeaponPosition != WeaponPosition.Hand)
+        {
+            return;
+        }
+
+        switch (equipWeapon.weaponType)
+        {
+            case WeaponType.Two_Hand_Sword:
+                //�޼ո� ����ֱ�
+                player.Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+                player.Animator.SetIKPosition(AvatarIKGoal.LeftHand, subHandle.transform.position);
+                break;
+            case WeaponType.Tonpa:
+                break;
+            default:
+                return;
         }
     }
 }

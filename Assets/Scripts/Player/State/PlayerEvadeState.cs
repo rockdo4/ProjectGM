@@ -12,6 +12,8 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Enter()
     {
+        controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
+
         controller.player.Animator.Play("Idle");
         controller.player.evadeTimer = 0f;
         direction = TouchManager.Instance.swipeDirection switch
@@ -38,6 +40,15 @@ public class PlayerEvadeState : PlayerStateBase
         {
             controller.SetState(PlayerController.State.Idle);
         }
+
+        //var position = controller.player.transform.position;
+        //if (Vector3.Distance(startPosition, position) < controller.player.MoveDistance)
+        //{
+        //    var rotation = controller.player.transform.rotation;
+        //    rotation.x = 0f;
+        //    var moveSpeed = controller.player.stat.MoveSpeed;
+        //    controller.player.transform.position = (position + rotation * direction * moveSpeed * Time.deltaTime);
+        //}
     }
 
     public override void FixedUpdate()

@@ -8,6 +8,7 @@ public class PlayerSuperAttackState : PlayerStateBase
 
     public override void Enter()
     {
+        controller.MoveWeaponPosition(PlayerController.WeaponPosition.Hand);
         controller.player.Animator.SetTrigger(triggerName);
     }
 
