@@ -41,6 +41,15 @@ public class PlayerEvadeState : PlayerStateBase
         {
             controller.SetState(PlayerController.State.Idle);
         }
+
+        //var position = controller.player.transform.position;
+        //if (Vector3.Distance(startPosition, position) < controller.player.MoveDistance)
+        //{
+        //    var rotation = controller.player.transform.rotation;
+        //    rotation.x = 0f;
+        //    var moveSpeed = controller.player.stat.MoveSpeed;
+        //    controller.player.transform.position = (position + rotation * direction * moveSpeed * Time.deltaTime);
+        //}
     }
 
     public override void FixedUpdate()

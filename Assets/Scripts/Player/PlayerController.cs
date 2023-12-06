@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -34,6 +36,10 @@ public class PlayerController : MonoBehaviour
     public WeaponSO weaponSO;
     #endregion
 
+    #region IK
+    private Transform subHandle;
+    #endregion
+
     private void Awake()
     {
         player = GetComponent<Player>();
@@ -56,6 +62,7 @@ public class PlayerController : MonoBehaviour
         {
             player.FakeWeapon = Instantiate(player.CurrentWeapon);
         }
+        subHandle = player.CurrentWeapon.transform.Find("LeftHandle");
 
         MoveWeaponPosition(WeaponPosition.Hand);
         
@@ -73,7 +80,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        player.Rigid.velocity = Vector3.zero;
         if (player.Enemy == null)
         {
             return;
@@ -92,7 +98,7 @@ public class PlayerController : MonoBehaviour
             SetState(State.Hit);
         }
 
-        //Groggy
+        #region EvadePoint
         if (player.evadePoint >= player.Stat.maxEvadePoint)
         {
             player.GroggyAttack = true;
@@ -106,8 +112,8 @@ public class PlayerController : MonoBehaviour
                 player.GroggyAttack = false;
             }
         }
-
         player.slider.value = player.evadePoint;
+        #endregion
 
         #region Test Input
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -277,15 +283,22 @@ public class PlayerController : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        if (equipWeapon.weaponType != WeaponType.Two_Hand_Sword || currentWeaponPosition != WeaponPosition.Hand)
+        if (currentWeaponPosition != WeaponPosition.Hand)
         {
             return;
         }
-        var left = player.CurrentWeapon.transform.GetChild(0);
-        player.Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
-        player.Animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
-        player.Animator.SetIKPosition(AvatarIKGoal.LeftHand, left.transform.position);
-        player.Animator.SetIKRotation(AvatarIKGoal.LeftHand, left.transform.rotation);
-    }
 
+        switch (equipWeapon.weaponType)
+        {
+            case WeaponType.Two_Hand_Sword:
+                //¿Þ¼Õ¸¸ ¾ñ¾îÁÖ±â
+                player.Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+                player.Animator.SetIKPosition(AvatarIKGoal.LeftHand, subHandle.transform.position);
+                break;
+            case WeaponType.Tonpa:
+                break;
+            default:
+                return;
+        }
+    }
 }
