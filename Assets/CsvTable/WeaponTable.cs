@@ -23,7 +23,7 @@ public class WeaponTable : CsvTable
         public int weapon_name { get; set; }
         public int gold { get; set; }
         public AttackType property { get; set; }
-        public int type { get; set; }
+        public WeaponType type { get; set; }
         public float atk { get; set; }
         public float weakpoint { get; set; }
 
@@ -32,7 +32,7 @@ public class WeaponTable : CsvTable
             this.weapon_name = weapon_name;
             this.gold = gold;
             this.property = (AttackType)property;
-            this.type = type;
+            this.type = (WeaponType)type;
             this.atk = atk;
             this.weakpoint = weakpoint;
         }
