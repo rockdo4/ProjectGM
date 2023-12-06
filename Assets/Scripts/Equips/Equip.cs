@@ -152,18 +152,6 @@ public class Weapon : Equip
         attackType = table[id].property;
         weaponType = table[id].type;
     }
-
-    public bool IsDualWield
-    {
-        get
-        {
-            if (weaponType == WeaponType.Tonpa)
-            {
-                return true;
-            }
-            return false;
-        }
-    }
 }
 #endregion
 

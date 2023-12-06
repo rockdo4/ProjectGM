@@ -285,22 +285,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        if (currentWeaponPosition != WeaponPosition.Hand)
+        if (subHandle == null || currentWeaponPosition != WeaponPosition.Hand)
         {
             return;
         }
-
-        switch (equipWeapon.weaponType)
-        {
-            case WeaponType.Two_Hand_Sword:
-                //�޼ո� ����ֱ�
-                player.Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
-                player.Animator.SetIKPosition(AvatarIKGoal.LeftHand, subHandle.transform.position);
-                break;
-            case WeaponType.Tonpa:
-                break;
-            default:
-                return;
-        }
+        player.Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+        player.Animator.SetIKPosition(AvatarIKGoal.LeftHand, subHandle.transform.position);
     }
 }
