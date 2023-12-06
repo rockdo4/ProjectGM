@@ -750,7 +750,15 @@ public class EnemyAI : LivingObject
 
                 Gizmos.color = attackGrid[index] ? Color.red : Color.green;
 
-                Gizmos.DrawCube(worldPosition, new Vector3(gizmoSize, 0.1f, gizmoSize));
+                // 삼각형을 그리기 위한 꼭지점 계산
+                Vector3 p1 = worldPosition + new Vector3(-gizmoSize / 2, 0, -gizmoSize / 2);
+                Vector3 p2 = worldPosition + new Vector3(0, 0, gizmoSize / 2);
+                Vector3 p3 = worldPosition + new Vector3(gizmoSize / 2, 0, -gizmoSize / 2);
+
+                // 삼각형 그리기
+                Gizmos.DrawLine(p1, p2);
+                Gizmos.DrawLine(p2, p3);
+                Gizmos.DrawLine(p3, p1);
             }
 
         }

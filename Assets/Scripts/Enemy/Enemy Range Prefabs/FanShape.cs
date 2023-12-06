@@ -4,10 +4,10 @@ using UnityEngine;
 public class FanShape : MonoBehaviour
 {
     public float radius = 5f;
-    public float angle = 60f;
-    public int segments = 10; // 세그먼트 수를 0이 아닌 값으로 초기화
-    public int skipEveryNthSegment = 2; // 이 값으로 몇 번째 세그먼트를 건너뛸지 설정
-    public int wifiSegments = 3; // 와이파이 세그먼트 수
+    public float angle = 360f;
+
+    public int segments = 50;
+    public int wifiSegments = 2; // 와이파이 세그먼트 수
 
     void Start()
     {
@@ -19,48 +19,47 @@ public class FanShape : MonoBehaviour
     {
         Mesh mesh = new Mesh();
 
-        // vertices 배열의 크기를 재계산합니다.
-        Vector3[] vertices = new Vector3[(segments + 1) * wifiSegments];
+        // 각 세그먼트의 정점을 저장할 배열
+        Vector3[] vertices = new Vector3[(segments + 1) * 2]; // 한 세그먼트당 정점은 세그먼트 수의 2배
         int[] triangles;
 
-        // triangles 배열의 크기를 재계산합니다.
-        int triangleCount = (segments * 3 * 2) * (wifiSegments - 1);
+        // 삼각형 배열의 크기 재계산
+        int triangleCount = segments * 3 * 2;
         triangles = new int[triangleCount];
 
         float angleStep = angle / segments;
-        float radiusStep = radius / wifiSegments;
+        float innerRadius = radius * ((float)(wifiSegments - 1) / wifiSegments); // 내부 반경 계산
+        float outerRadius = radius; // 외부 반경은 전체 반경
 
         int vertexIndex = 0, triangleIndex = 0;
 
-        for (int j = 0; j < wifiSegments; j++)
+        // 정점 생성
+        for (int i = 0; i <= segments; i++)
         {
-            float currentRadius = radiusStep * (j + 1);
+            float currentAngle = angleStep * i;
+            vertices[vertexIndex++] = new Vector3(
+                Mathf.Sin(currentAngle * Mathf.Deg2Rad) * innerRadius,
+                0,
+                Mathf.Cos(currentAngle * Mathf.Deg2Rad) * innerRadius
+            );
+            vertices[vertexIndex++] = new Vector3(
+                Mathf.Sin(currentAngle * Mathf.Deg2Rad) * outerRadius,
+                0,
+                Mathf.Cos(currentAngle * Mathf.Deg2Rad) * outerRadius
+            );
+        }
 
-            for (int i = 0; i <= segments; i++)
-            {
-                float currentAngle = angleStep * i;
-                vertices[vertexIndex++] = new Vector3(
-                    Mathf.Sin(currentAngle * Mathf.Deg2Rad) * currentRadius,
-                    0,
-                    Mathf.Cos(currentAngle * Mathf.Deg2Rad) * currentRadius
-                );
+        // 삼각형 생성
+        for (int i = 0; i < segments; i++)
+        {
+            int baseIndex = i * 2;
+            triangles[triangleIndex++] = baseIndex;
+            triangles[triangleIndex++] = baseIndex + 2;
+            triangles[triangleIndex++] = baseIndex + 1;
 
-                // 마지막 와이파이 세그먼트에서는 삼각형을 생성하지 않습니다.
-                if (j < wifiSegments - 1 && i < segments)
-                {
-                    int baseIndex = j * (segments + 1) + i;
-
-                    // 위 삼각형
-                    triangles[triangleIndex++] = baseIndex;
-                    triangles[triangleIndex++] = baseIndex + segments + 1;
-                    triangles[triangleIndex++] = baseIndex + segments + 2;
-
-                    // 아래 삼각형
-                    triangles[triangleIndex++] = baseIndex;
-                    triangles[triangleIndex++] = baseIndex + segments + 2;
-                    triangles[triangleIndex++] = baseIndex + 1;
-                }
-            }
+            triangles[triangleIndex++] = baseIndex + 1;
+            triangles[triangleIndex++] = baseIndex + 2;
+            triangles[triangleIndex++] = baseIndex + 3;
         }
 
         mesh.vertices = vertices;
