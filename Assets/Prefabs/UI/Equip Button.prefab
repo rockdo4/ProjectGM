@@ -135,8 +135,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd8786d4966db2849a045469382489e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upgradableImage: {fileID: 0}
-  iconImage: {fileID: 0}
+  upgradableImage: {fileID: 3174349520922708999}
+  iconImage: {fileID: 3435960694695434681}
+  weaponIconSO: {fileID: 11400000, guid: 098f567ac50ea104aadffc576bbc6ac4, type: 2}
+  armorIconSO: {fileID: 11400000, guid: 5d895a1e54d0a234e9eeca5361832061, type: 2}
   button: {fileID: 7305671855999392702}
 --- !u!1 &6268826940444854484
 GameObject:
@@ -225,7 +227,7 @@ GameObject:
   - component: {fileID: 5912416176495133798}
   - component: {fileID: 3174349520922708999}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Up Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -247,8 +249,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10, y: 10}
-  m_SizeDelta: {x: 50, y: 50}
+  m_AnchoredPosition: {x: -6, y: -6}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &5912416176495133798
 CanvasRenderer:
@@ -271,14 +273,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_Color: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -287,4 +289,4 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 4.49
