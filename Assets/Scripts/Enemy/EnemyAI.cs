@@ -458,7 +458,7 @@ public class EnemyAI : LivingObject
 
             if (stateInfo.IsName(stateName))
             {
-                Debug.Log(stateInfo.length);
+                Debug.Log("공격 애니메이션 재생 시간 : " + stateInfo.length);
                 yield return new WaitForSeconds(stateInfo.length);
                 isAttacking = false; // 공격상태 해제를 여기서 해주지 않으면 코루틴을 하는 의미가 없어짐
                 // 하지만 다음 공격버그가 생긴다면 여기일듯

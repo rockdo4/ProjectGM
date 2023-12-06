@@ -10,8 +10,6 @@ public class AttackCell : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // Debug.Log("온트리거엔터");
-
             playerInside = true;
         }
     }
@@ -20,8 +18,6 @@ public class AttackCell : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // Debug.Log("온트리거Exit");
-
             playerInside = false;
         }
     }
