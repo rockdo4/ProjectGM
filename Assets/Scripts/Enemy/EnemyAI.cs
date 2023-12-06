@@ -208,7 +208,6 @@ public class EnemyAI : LivingObject
 
         if (HP <= 0)
         {
-            Debug.Log("죽음");
             animator.SetTrigger("Die");
             return;
         }
