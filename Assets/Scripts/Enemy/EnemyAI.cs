@@ -97,7 +97,8 @@ public class EnemyAI : LivingObject
 
     FanShape fanShape = null;
 
-    float cellSize;
+    
+    
 
     public enum EnemyType
     {
@@ -489,21 +490,29 @@ public class EnemyAI : LivingObject
     private void ShowAttackRange(bool show, AttackType attackType)
     {
         GameObject attackPrefab = null;
+        Vector3 attackOffset = Vector3.zero;
+
+        // 케이스마다 오프셋과 프리펩을 변경한다로 가자
+
+        Debug.Log(player.MoveDistance);
+
 
         switch (attackType)
         {
             case AttackType.A:
-                attackPrefab = attackTypeCPrefab;
+                attackPrefab = attackTypeAPrefab;
                 Debug.Log(attackPrefab + "케이스A");
                 break;
 
             case AttackType.B:
                 attackPrefab = attackTypeBPrefab;
+                attackOffset = new Vector3(0f, 0f, -2f);
                 Debug.Log(attackPrefab + "케이스B");
                 break;
 
             case AttackType.C:
                 attackPrefab = attackTypeCPrefab;
+                Debug.Log(attackPrefab + "케이스C");
                 break;
 
             case AttackType.D:
@@ -541,24 +550,19 @@ public class EnemyAI : LivingObject
             AttackPattern currentPattern = savedPatterns[attackIndex];
             cellInstances.Clear(); // 리스트 초기화
 
-          
-
             fanShape = attackPrefab.GetComponent<FanShape>();
 
-            //if (fanShape != null)
-            //{
-            //    cellSize = fanShape.GetColliderSize();
-            //}
+            Vector3 cellSize = fanShape.Return(); // 부채꼴의 크기를 Vector3로 받음
+            Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.01f, cellSize.z + 0.01f);
 
-        
+            //Vector3 centerPoint = fanShape.GetCenterPoint(); // 중심점
 
-            float cellSize = fanShape.radius;
+            Vector3 centerPointLocal = fanShape.GetCenterPoint();
+            Vector3 centerPointWorld = attackRangeInstance.transform.TransformPoint(centerPointLocal);
 
-
+            //Vector3 worldCenterPoint = attackRangeInstance.transform.TransformPoint(centerPoint);
 
             Debug.Log(cellSize + " 겟 콜라이더한 셀 사이즈");
-
-            float offset = cellSize + 0.01f;
 
             // Debug.Log(cellSize + " : 펜 쉐이프 리턴사이즈"); // 사이즈 계산은 다시?
 
@@ -566,20 +570,38 @@ public class EnemyAI : LivingObject
             {
                 if (currentPattern.pattern[i])
                 {
-                    Vector3 cellPosition = CalculateCellPosition(i, offset);
+                    Vector3 cellPosition = CalculateCellPosition(i, offset) + attackOffset;
                     GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
                     cell.SetActive(true);
                     cellInstances.Add(cell);
 
+
+                    // 1. 4번 인덱스면 그래도 몬스터의 룩 로테이션은 따라가는게 맞다
+                    // 에일리언의 2 패턴같은경우는 180도를 회전하면 안된다 다른 몬스터의 패턴에 따라서도마찬가지로 바꿔주어야한다
+
+                    if (i != 4)
+                    {
+                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
+                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
+
+                        Quaternion additionalRotation = Quaternion.Euler(0, 120, 0); // 180도 회전 추가
+
+                        cell.transform.rotation = initialRotation * additionalRotation;
+                        // 회전 결합, 별로 같은데 다른 방법은?
+
+                    }
+                    else
+                    {
+                        cell.transform.rotation = transform.rotation;
+                    }
+
                     GameObject colliderObject = new GameObject("AttackCollider");
                     colliderObject.AddComponent<AttackCell>();
                     BoxCollider collider = colliderObject.AddComponent<BoxCollider>();
-
-                    // 사이즈 임시값인데 cellSize 계산한거 넣으면 될듯?
-                    collider.size = new Vector3(cellSize, 0.1f, cellSize); 
+                    collider.size = new Vector3(cellSize.x, 0.1f, cellSize.z);
                     collider.isTrigger = true;
-                    colliderObject.transform.position = cellPosition;
-
+                    colliderObject.transform.position = cellPosition + (centerPointWorld - attackRangeInstance.transform.position);
+                    //colliderObject.transform.position = cellPosition + centerPointWorld;
                     colliderObjects.Add(colliderObject);
                 }
             }
@@ -763,37 +785,20 @@ public class EnemyAI : LivingObject
 
     #region 공격 타일 계산
 
-    Vector3 CalculateCellPosition(int index, float cellSpacing) // 칼큘
+    Vector3 CalculateCellPosition(int index, Vector3 offset) // 칼큘
     {
         int x = index % 3; // -1, 0, 1
         int z = index / 3; // -1, 0, 1
 
-        Vector3 cellPosition = new Vector3((x - 1) * cellSpacing, 0.1f, (z - 1) * cellSpacing);
-        return transform.position + transform.rotation * cellPosition;
+        Vector3 actualPosition = new Vector3((x - 1) * offset.x, 0.1f, (z - 1) * offset.z);
+        actualPosition = transform.rotation * actualPosition;
+        return transform.position + actualPosition;
 
-        //Renderer renderer = attackPrefab.GetComponent<Renderer>();// 어택 레인지 프리펩
-        //if (renderer == null)
-        //{
-        //    Debug.LogError("칼큘에서 호출함 // attackPrefab에 Renderer 컴포넌트가 없음");
-        //    return Vector3.zero;
-        //}
-
-        //Vector3 cellSize = renderer.bounds.size; // 프리펩의 로컬 사이즈 받아오기
-        //float offset = cellSize.x + 0.01f;
-
-        //int x = index % 3;
-        //int z = index / 3;
-
-        //Vector3 actualPosition = new Vector3((x - 1) * offset, 0.1f, (z - 1) * offset);
-
-        //// 지금은 임시로 y축 위치를 0f로 함
-        //// 왜냐하면 테스트씬의 그라운드의 y포지션이 -0.01f임
-        //// 하드코딩 1 오프셋 관련 - (offset * 4) 나중에 수식 활용
-        //// int x = index % 10; 이것도 마찬가지
-        //// 뒤에 나눠주는 값 셀이 100개라면 나누는 수는 10이어야하니까 루트 씌우고 -1까지 해줘야함
-
-        //actualPosition = transform.rotation * actualPosition;
-        //return transform.position + actualPosition;
+        // 지금은 임시로 y축 위치를 0f로 함
+        // 왜냐하면 테스트씬의 그라운드의 y포지션이 -0.01f임
+        // 하드코딩 1 오프셋 관련 - (offset * 4) 나중에 수식 활용
+        // int x = index % 10; 이것도 마찬가지
+        // 뒤에 나눠주는 값 셀이 100개라면 나누는 수는 10이어야하니까 루트 씌우고 -1까지 해줘야함
     }
 
     #endregion

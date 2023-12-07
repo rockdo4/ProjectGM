@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6944929299038301808}
   - component: {fileID: 8319083183581047181}
   - component: {fileID: 6057029559847748180}
+  - component: {fileID: 7954583210771272307}
   m_Layer: 0
   m_Name: "Triangle 60\xBA Range Prefab"
   m_TagString: Untagged
@@ -27,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1564119753327051011}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.2588191, z: 0, w: 0.9659258}
   m_LocalPosition: {x: 13.08, y: 1.81, z: 6.910972}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 30, z: 0}
 --- !u!33 &6944929299038301808
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -100,3 +101,27 @@ MonoBehaviour:
   angle: 60
   segments: 1
   wifiSegments: 1
+  centerPoint: {x: 0, y: 0, z: 0}
+  sharedMesh: {fileID: 0}
+--- !u!64 &7954583210771272307
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564119753327051011}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
