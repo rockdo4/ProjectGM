@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     {
         Hand, Wing
     }
-    public WeaponPosition currentWeaponPosition;
+    public WeaponPosition currentWeaponPosition { get; private set; }
     private Weapon equipWeapon = null;
     public Transform leftHand;
     public Transform rightHand;

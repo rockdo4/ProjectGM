@@ -10,6 +10,7 @@ public class PlayerDeathState : PlayerStateBase
 
     public override void Enter()
     {
+        Debug.Log("플레이어 죽음");
         controller.player.Animator.SetTrigger(triggerName);
     }
 
