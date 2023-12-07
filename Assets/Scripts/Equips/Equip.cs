@@ -6,7 +6,7 @@ public class Equip
     {
         None = -1,
 
-        Weapon,
+        Weapon = 1,
         Armor,
     }
 

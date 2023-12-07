@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using UnityEngineInternal;
 using SaveDataVC = SaveDataV4; // Version Change?
 
 public static class PlayDataManager
@@ -178,6 +180,34 @@ public static class PlayDataManager
 
             default:
                 return;
+        }
+        Save();
+    }
+
+    public static void AddGold(int value)
+    {
+        if (data.Gold + value >= int.MaxValue)
+        {
+            data.Gold = int.MaxValue;
+            return;
+        }
+        data.Gold += value;
+        Save();
+    }
+
+    public static void DecreaseMat(int id, int count)
+    {
+        var mat = data.MatInventory.Find(x => x.id == id);
+
+        if (mat == null || mat.count < count)
+        {
+            return;
+        }
+        mat.count -= count;
+
+        if (mat.count <= 0)
+        {
+            data.MatInventory.Remove(mat);
         }
         Save();
     }

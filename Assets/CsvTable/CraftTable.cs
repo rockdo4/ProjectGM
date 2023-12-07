@@ -1,6 +1,5 @@
 ﻿using CsvHelper.Configuration;
 using CsvHelper;
-using System.Data;
 using System.Globalization;
 using System.IO;
 using UnityEngine;
@@ -10,7 +9,7 @@ public class CraftTable : CsvTable
 {
     public class Data
     {
-        public int gold { get; set; }
+        public Equip.EquipType _class;
         public int mf_module { get; set; }
         public int number_1 { get; set; }
         public int mon_core { get; set; }
@@ -19,14 +18,16 @@ public class CraftTable : CsvTable
         public int number_3 { get; set; }
         public int ingredients { get; set; }
         public int number_4 { get; set; }
-        public int result_id { get; set; }
+        public int gold { get; set; }
 
-        public Data(int gold, int mf_module, int number_1,
+        public Data(int _class,
+            int mf_module, int number_1,
             int mon_core, int number_2,
             int lvup_module, int number_3,
-            int ingredients, int number_4, int result_id)
+            int ingredients, int number_4,
+            int gold)
         {
-            this.gold = gold;
+            this._class = (Equip.EquipType)_class;
             this.mf_module = mf_module;
             this.number_1 = number_1;
             this.mon_core = mon_core;
@@ -35,7 +36,7 @@ public class CraftTable : CsvTable
             this.number_3 = number_3;
             this.ingredients = ingredients;
             this.number_4 = number_4;
-            this.result_id = result_id;
+            this.gold = gold;
         }
     }
     public Dictionary<int, Data> dataTable = new Dictionary<int, Data>();
@@ -65,7 +66,7 @@ public class CraftTable : CsvTable
             dataTable.Add(csv.GetField<int>(0),
                 new Data
                 (
-                    csv.GetField<int>(1), // gold
+                    csv.GetField<int>(1), // _class
                     csv.GetField<int>(2), // mf_module
                     csv.GetField<int>(3), // number_1
                     csv.GetField<int>(4), // mon_core
@@ -74,7 +75,7 @@ public class CraftTable : CsvTable
                     csv.GetField<int>(7), // number_3
                     csv.GetField<int>(8), // ingredients
                     csv.GetField<int>(9), // number_4
-                    csv.GetField<int>(10) // result_id
+                    csv.GetField<int>(10) // gold
                 )
             );
         }
