@@ -9,17 +9,6 @@ public class WeaponTable : CsvTable
 {
     public class Data
     {
-        public string weapon_id { get; set; }
-        public string weapon_name { get; set; }
-        public string gold { get; set; }
-        public string type { get; set; }
-        public string hand { get; set; }
-        public string atk { get; set; }
-        public string weakpoint { get; set; }
-    }
-
-    public class Data_Weapon
-    {
         public int weapon_name { get; set; }
         public int gold { get; set; }
         public AttackType property { get; set; }
@@ -27,7 +16,7 @@ public class WeaponTable : CsvTable
         public float atk { get; set; }
         public float weakpoint { get; set; }
 
-        public Data_Weapon(int weapon_name, int gold, int property, int type, float atk, float weakpoint)
+        public Data(int weapon_name, int gold, int property, int type, float atk, float weakpoint)
         {
             this.weapon_name = weapon_name;
             this.gold = gold;
@@ -37,7 +26,7 @@ public class WeaponTable : CsvTable
             this.weakpoint = weakpoint;
         }
     }
-    public Dictionary<Weapon.WeaponID, Data_Weapon> dataTable = new Dictionary<Weapon.WeaponID, Data_Weapon>();
+    public Dictionary<int, Data> dataTable = new Dictionary<int, Data>();
 
     public WeaponTable()
     {
@@ -61,15 +50,15 @@ public class WeaponTable : CsvTable
 
         while (csv.Read())
         {
-            dataTable.Add((Weapon.WeaponID)int.Parse(csv.GetField(0)),
-                new Data_Weapon
+            dataTable.Add(int.Parse(csv.GetField(0)),
+                new Data
                 (
-                    int.Parse(csv.GetField(1)), // weapon_name
-                    int.Parse(csv.GetField(2)), // gold
-                    int.Parse(csv.GetField(3)), // property
-                    int.Parse(csv.GetField(4)), // type
-                    float.Parse(csv.GetField(5)), // atk
-                    float.Parse(csv.GetField(6)) // weakpoint
+                    csv.GetField<int>(1), // weapon_name
+                    csv.GetField<int>(2), // gold
+                    csv.GetField<int>(3), // property
+                    csv.GetField<int>(4), // type
+                    csv.GetField<float>(5), // atk
+                    csv.GetField<float>(6) // weakpoint
                 )
             );
         }

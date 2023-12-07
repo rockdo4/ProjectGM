@@ -15,7 +15,7 @@ public class PlayerAnimationSO : ScriptableObject
     [Header("창 애니메이션")]
     public AnimatorOverrideController anim_Spear;
 
-    public AnimatorOverrideController GetAnimator(Weapon.WeaponID id)
+    public AnimatorOverrideController GetAnimator(int id)
     {
         var table = CsvTableMgr.GetTable<WeaponTable>().dataTable;
         switch (table[id].type)
