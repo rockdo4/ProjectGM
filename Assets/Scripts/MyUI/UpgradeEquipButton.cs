@@ -43,6 +43,9 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
 
     private bool IsUpgradable()
     {
+        var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
+
+
         return false;
     }
 
@@ -70,13 +73,14 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
                 button.onClick.AddListener(() =>
                 {
                     um.createArmorPanel.SetEquip(item);
+                    //um.createArmorPanel.iconImage.sprite = iconImage.sprite;
                     um.createArmorPanel.Renewal();
                 });
                 break;
         }
         
 
-        iconImage.color = Color.gray;
+        iconImage.color = Color.black;
     }
 
     public void UpgradeMode(UpgradeManager um)

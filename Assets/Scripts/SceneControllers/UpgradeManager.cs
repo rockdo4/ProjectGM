@@ -82,6 +82,24 @@ public class UpgradeManager : MonoBehaviour
 
             releaseList.Add(go);
         }
+
+        var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
+        foreach (var data in ct)
+        {
+            if (data.Value.mf_module != -1)
+            {
+                var item = new Weapon(data.Key);
+                var go = buttonPool.Get();
+                go.transform.SetParent(content.transform);
+
+                go.SetEquip(item);
+                go.CreateMode(this);
+                go.Renewal();
+
+                releaseList.Add(go);
+            }
+            
+        }
     }
 
     public void ShowArmors(bool isOn)
