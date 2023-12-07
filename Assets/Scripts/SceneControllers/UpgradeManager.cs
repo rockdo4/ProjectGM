@@ -111,6 +111,38 @@ public class UpgradeManager : MonoBehaviour
         Clear();
 
 
+        var inv = PlayDataManager.data.ArmorInventory;
+        foreach (var item in inv)
+        {
+            var go = buttonPool.Get();
+            go.transform.SetParent(content.transform);
+
+            go.SetEquip(item);
+            go.UpgradeMode(this);
+            go.Renewal();
+
+            releaseList.Add(go);
+        }
+
+        /*
+        var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
+        foreach (var data in ct)
+        {
+            if (data.Value.mf_module != -1)
+            {
+                var item = new Armor(data.Key);
+                var go = buttonPool.Get();
+                go.transform.SetParent(content.transform);
+
+                go.SetEquip(item);
+                go.CreateMode(this);
+                go.Renewal();
+
+                releaseList.Add(go);
+            }
+
+        }
+        */
     }
 
     public void Clear()

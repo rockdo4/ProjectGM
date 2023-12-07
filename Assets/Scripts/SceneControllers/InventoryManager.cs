@@ -73,33 +73,6 @@ public class InventoryManager : MonoBehaviour
         ShowWeapons(true);
     }
 
-    private void TestAddItem()
-    {
-        StartCoroutine(AllAddTester());
-    }
-
-    private IEnumerator AllAddTester()
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            var weapon = new Weapon(8100 + i * 100);
-            PlayDataManager.data.WeaponInventory.Add(weapon);
-            yield return new WaitForEndOfFrame();
-        }
-
-        for (int i = 0; i < 5; i++)
-        {
-            var armor = new Armor(100001 + i);
-            PlayDataManager.data.ArmorInventory.Add(armor);
-
-            yield return new WaitForEndOfFrame();
-        }
-
-        //PlayDataManager.Save();
-
-        ShowWeapons(true);
-    }
-
     public void ShowWeapons(bool isOn)
     {
         if (!isOn)
@@ -233,9 +206,44 @@ public class InventoryManager : MonoBehaviour
 
     public void Tester()
     {
-        PlayDataManager.data.MatInventory.Add(new Materials(71001));
-        PlayDataManager.data.MatInventory.Add(new Materials(72001));
+        PlayDataManager.data.MatInventory.Add(new Materials(71001, 100));
+        PlayDataManager.data.MatInventory.Add(new Materials(72001, 100));
 
-        TestAddItem();
+        PlayDataManager.AddGold(100000);
+
+        StartCoroutine(TestCoroutine());
+    }
+
+    private IEnumerator TestCoroutine()
+    {
+        {
+            var armor = new Armor(100001);
+            PlayDataManager.data.ArmorInventory.Add(armor);
+            yield return new WaitForEndOfFrame();
+        }
+
+        {
+            var armor = new Armor(100002);
+            PlayDataManager.data.ArmorInventory.Add(armor);
+            yield return new WaitForEndOfFrame();
+        }
+
+        {
+            var armor = new Armor(100003);
+            PlayDataManager.data.ArmorInventory.Add(armor);
+            yield return new WaitForEndOfFrame();
+        }
+
+        {
+            var armor = new Armor(100004);
+            PlayDataManager.data.ArmorInventory.Add(armor);
+            yield return new WaitForEndOfFrame();
+        }
+
+        {
+            var armor = new Armor(100005);
+            PlayDataManager.data.ArmorInventory.Add(armor);
+            yield return new WaitForEndOfFrame();
+        }
     }
 }
