@@ -1,18 +1,34 @@
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class FanShape : MonoBehaviour
 {
     public float radius = 5f;
-    public float angle = 360f;
-
+    public float angle = 90f;
     public int segments = 50;
-    public int wifiSegments = 2; // 와이파이 세그먼트 수
+    public int wifiSegments = 2;
 
-    void Start()
+    private Mesh sharedMesh;
+    private MeshCollider meshCollider;
+
+    void Awake()
     {
         MeshFilter meshFilter = GetComponent<MeshFilter>();
-        meshFilter.mesh = CreateFanMesh();
+        meshCollider = GetComponent<MeshCollider>(); // MeshCollider 컴포넌트 가져오기
+
+        if (meshCollider == null)
+        {
+            Debug.Log("MeshCollider 컴포넌트가 없어서 추가합니다.");
+            meshCollider = gameObject.AddComponent<MeshCollider>();
+        }
+        else
+        {
+            Debug.Log("MeshCollider 컴포넌트가 이미 존재합니다.");
+        }
+
+        sharedMesh = CreateFanMesh();
+        meshFilter.mesh = sharedMesh;
+        meshCollider.sharedMesh = sharedMesh; // MeshCollider에 메시 설정
     }
 
     Mesh CreateFanMesh()
@@ -36,16 +52,16 @@ public class FanShape : MonoBehaviour
         // 정점 생성
         for (int i = 0; i <= segments; i++)
         {
-            float currentAngle = angleStep * i;
+            float currentAngle = angleStep * i + 90f; // 90도 추가
             vertices[vertexIndex++] = new Vector3(
-                Mathf.Sin(currentAngle * Mathf.Deg2Rad) * innerRadius,
+                Mathf.Cos(currentAngle * Mathf.Deg2Rad) * innerRadius,
                 0,
-                Mathf.Cos(currentAngle * Mathf.Deg2Rad) * innerRadius
+                Mathf.Sin(currentAngle * Mathf.Deg2Rad) * innerRadius
             );
             vertices[vertexIndex++] = new Vector3(
-                Mathf.Sin(currentAngle * Mathf.Deg2Rad) * outerRadius,
+                Mathf.Cos(currentAngle * Mathf.Deg2Rad) * outerRadius,
                 0,
-                Mathf.Cos(currentAngle * Mathf.Deg2Rad) * outerRadius
+                Mathf.Sin(currentAngle * Mathf.Deg2Rad) * outerRadius
             );
         }
 
@@ -68,4 +84,76 @@ public class FanShape : MonoBehaviour
 
         return mesh;
     }
+
+    void OnDrawGizmos()
+    {
+        if (sharedMesh == null)
+        {
+            sharedMesh = CreateFanMesh();
+        }
+
+        //MeshFilter meshFilter = GetComponent<MeshFilter>();
+
+        //// 새로운 메시가 아직 생성되지 않았을 경우에만 생성dddd
+        //if (meshFilter.sharedMesh == null)
+        //{
+        //    meshFilter.sharedMesh = CreateFanMesh();
+        //}
+
+        //// Gizmos로 메시 그리기
+        Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, transform.localScale);
+    }
+
+    //public float GetColliderSize()
+    //{
+    //    return meshCollider.bounds.size;
+    //}
+
+    public float GetColliderSize()
+    {
+        Vector3 size = meshCollider.bounds.size;
+
+        Debug.LogError(size);
+
+        if (meshCollider == null)
+        {
+            Debug.LogError("meshCollider가 할당되지 않았습니다.");
+            return 0f; // 기본값 반환
+        }
+
+        // 가장 긴 축의 길이를 반환
+        return Mathf.Max(size.x, size.y, size.z);
+    }
+
+    //public float GetColliderSize()
+    //{
+    //    if (meshCollider == null)
+    //    {
+    //        Debug.LogError("meshCollider가 할당되지 않았습니다.");
+    //        return 0f; // 기본값 반환
+    //    }
+
+    //    return meshCollider.bounds.size;
+    //}
+
+
+    public void ToggleMeshRendering(bool isEnabled)
+    {
+        GetComponent<MeshRenderer>().enabled = isEnabled;
+    }
+
+    //public float Return()
+    //{
+    //    float width = radius;
+    //    if (angle < 180f)
+    //    {
+    //        float halfAngleRad = (angle * 0.5f) * Mathf.Deg2Rad;
+    //        width = Mathf.Sin(halfAngleRad) * radius * 2f;
+    //    }
+    //    float height = radius;
+    //    float depth = 0; // 부채꼴이 평면에 있으므로 깊이는 0
+
+    //    Vector3 size = new Vector3(width, height, depth);
+    //    return size.magnitude; // 벡터의 크기(대각선 길이) 반환
+    //}
 }
