@@ -35,7 +35,7 @@ public class StringTable : CsvTable
 
             while (csv.Read())
             {
-                dataTable.Add(int.Parse(csv.GetField(0)), csv.GetField(1));
+                dataTable.Add(csv.GetField<int>(0), csv.GetField<string>(1));
             }
         }
         

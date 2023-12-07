@@ -22,7 +22,7 @@ public class WeaponPrefab : MonoBehaviour, IWear
     {
         type = item.attackType;
 
-        var table = CsvTableMgr.GetTable<WeaponTable>().dataTable[(Weapon.WeaponID)item.id];
+        var table = CsvTableMgr.GetTable<WeaponTable>().dataTable[item.id];
         attack = table.atk;
         weakDamage = table.weakpoint;
     }
@@ -31,6 +31,6 @@ public class WeaponPrefab : MonoBehaviour, IWear
     {
         OnEquip(item);
 
-        anim.runtimeAnimatorController = animationSO.GetAnimator((Weapon.WeaponID)item.id);
+        anim.runtimeAnimatorController = animationSO.GetAnimator(item.id);
     }
 }

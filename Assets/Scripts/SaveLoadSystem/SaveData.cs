@@ -90,7 +90,7 @@ public class SaveDataV4 : SaveData
 
     public List<Armor> ArmorInventory = new List<Armor>();
 
-    public HashSet<Materials> MatInventory = new HashSet<Materials>();
+    public List<Materials> MatInventory = new List<Materials>();
 
     public override SaveData VersionUp()
     {
