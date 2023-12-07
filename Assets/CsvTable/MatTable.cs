@@ -47,9 +47,9 @@ public class MatTable : CsvTable
             dataTable.Add(int.Parse(csv.GetField(0)),
                 new Data
                 (
-                    int.Parse(csv.GetField(1)), // item_name
-                    int.Parse(csv.GetField(2)), // item_script
-                    int.Parse(csv.GetField(3)) // gold
+                    csv.GetField<int>(1), // item_name
+                    csv.GetField<int>(2), // item_script
+                    csv.GetField<int>(3) // gold
                 )
             );
         }

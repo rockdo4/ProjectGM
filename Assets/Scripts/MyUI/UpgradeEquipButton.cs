@@ -60,6 +60,8 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
             case Equip.EquipType.Weapon:
                 button.onClick.AddListener(() =>
                 {
+                    um.createWeaponPanel.SetEquip(item);
+                    um.createWeaponPanel.iconImage.sprite = iconImage.sprite;
                     um.createWeaponPanel.Renewal();
                 });
                 break;
@@ -67,11 +69,14 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
             case Equip.EquipType.Armor:
                 button.onClick.AddListener(() =>
                 {
+                    um.createArmorPanel.SetEquip(item);
                     um.createArmorPanel.Renewal();
                 });
                 break;
         }
         
+
+        iconImage.color = Color.gray;
     }
 
     public void UpgradeMode(UpgradeManager um)
@@ -94,5 +99,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
                 });
                 break;
         }
+
+        iconImage.color = Color.white;
     }
 }

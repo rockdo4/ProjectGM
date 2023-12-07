@@ -67,17 +67,17 @@ public class ArmorTable : CsvTable
             dataTable.Add(int.Parse(csv.GetField(0)),
                 new Data
                 (
-                    int.Parse(csv.GetField(1)), // Armor_name
-                    (Armor.ArmorType)int.Parse(csv.GetField(2)), // Armor_type
-                    int.Parse(csv.GetField(3)), // def
-                    (SkillID)int.Parse(csv.GetField(4)), // skill1_id
-                    int.Parse(csv.GetField(5)), // skill1_lv
-                    (SkillID)int.Parse(csv.GetField(6)), // skill2_id
-                    int.Parse(csv.GetField(7)), // skill2_lv
-                    (SkillID)int.Parse(csv.GetField(8)), // skill3_id
-                    int.Parse(csv.GetField(9)), // skill3_lv
-                    (SetSkill)int.Parse(csv.GetField(10)), // set_skill
-                    int.Parse(csv.GetField(11)) // socket
+                    csv.GetField<int>(1), // Armor_name
+                    (Armor.ArmorType)csv.GetField<int>(2), // Armor_type
+                    csv.GetField<int>(3), // def
+                    (SkillID)csv.GetField<int>(4), // skill1_id
+                    csv.GetField<int>(5), // skill1_lv
+                    (SkillID)csv.GetField<int>(6), // skill2_id
+                    csv.GetField<int>(7), // skill2_lv
+                    (SkillID)csv.GetField<int>(8), // skill3_id
+                    csv.GetField<int>(9), // skill3_lv
+                    (SetSkill)csv.GetField<int>(10), // set_skill
+                    csv.GetField<int>(11) // socket
                 )
             );
         }
