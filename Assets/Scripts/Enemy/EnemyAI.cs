@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 
@@ -94,6 +95,10 @@ public class EnemyAI : LivingObject
     private List<GameObject> cellInstances = new List<GameObject>(); // 셀 인스턴스들을 저장할 리스트
     private List<GameObject> colliderObjects = new List<GameObject>();
 
+    FanShape fanShape = null;
+
+    float cellSize;
+
     public enum EnemyType
     {
         Bear,
@@ -108,7 +113,6 @@ public class EnemyAI : LivingObject
        B,
        C,
        D,
-
     }
 
     #region Interaction Player And Enemy
@@ -489,14 +493,19 @@ public class EnemyAI : LivingObject
         switch (attackType)
         {
             case AttackType.A:
-                attackPrefab = attackTypeAPrefab;
+                attackPrefab = attackTypeCPrefab;
+                Debug.Log(attackPrefab + "케이스A");
                 break;
+
             case AttackType.B:
                 attackPrefab = attackTypeBPrefab;
+                Debug.Log(attackPrefab + "케이스B");
                 break;
+
             case AttackType.C:
                 attackPrefab = attackTypeCPrefab;
                 break;
+
             case AttackType.D:
                 attackPrefab = attackTypeDPrefab;
                 break;
@@ -505,10 +514,11 @@ public class EnemyAI : LivingObject
 
         if (show)
         {
-            if (attackRangeInstance == null)
+            if (attackRangeInstance != null) // 추후 수정
             {
-                attackRangeInstance = Instantiate(attackPrefab, transform);
+                Destroy(attackRangeInstance);
             }
+            attackRangeInstance = Instantiate(attackPrefab, transform);
 
             foreach (GameObject cell in cellInstances) // 리스트의 모든 셀 인스턴스를 순회
             {
@@ -531,21 +541,42 @@ public class EnemyAI : LivingObject
             AttackPattern currentPattern = savedPatterns[attackIndex];
             cellInstances.Clear(); // 리스트 초기화
 
+          
+
+            fanShape = attackPrefab.GetComponent<FanShape>();
+
+            //if (fanShape != null)
+            //{
+            //    cellSize = fanShape.GetColliderSize();
+            //}
+
+        
+
+            float cellSize = fanShape.radius;
+
+
+
+            Debug.Log(cellSize + " 겟 콜라이더한 셀 사이즈");
+
+            float offset = cellSize + 0.01f;
+
+            // Debug.Log(cellSize + " : 펜 쉐이프 리턴사이즈"); // 사이즈 계산은 다시?
+
             for (int i = 0; i < currentPattern.pattern.Length; i++)
             {
                 if (currentPattern.pattern[i])
                 {
-                    Vector3 cellPosition = CalculateCellPosition(attackPrefab, i);
+                    Vector3 cellPosition = CalculateCellPosition(i, offset);
                     GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
                     cell.SetActive(true);
                     cellInstances.Add(cell);
 
-                    // 별개의 투명 콜라이더 공격범위의 시각화 Cell과 일치하게
                     GameObject colliderObject = new GameObject("AttackCollider");
                     colliderObject.AddComponent<AttackCell>();
                     BoxCollider collider = colliderObject.AddComponent<BoxCollider>();
 
-                    collider.size = new Vector3(2.1f, 0.1f, 2.1f);
+                    // 사이즈 임시값인데 cellSize 계산한거 넣으면 될듯?
+                    collider.size = new Vector3(cellSize, 0.1f, cellSize); 
                     collider.isTrigger = true;
                     colliderObject.transform.position = cellPosition;
 
@@ -635,7 +666,7 @@ public class EnemyAI : LivingObject
         Debug.Log(isTwoPhase ? "페이즈2 공격A 준비" : "페이즈1 공격A 준비");
         isAttacking = true;
 
-        attackIndex = attackPatternIndex;
+        attackIndex = attackPatternIndex; // 인덱스 바꾸고
 
         StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.A));
         return INode.EnemyState.Success;
@@ -732,31 +763,37 @@ public class EnemyAI : LivingObject
 
     #region 공격 타일 계산
 
-    Vector3 CalculateCellPosition(GameObject attackPrefab, int index) // 칼큘
+    Vector3 CalculateCellPosition(int index, float cellSpacing) // 칼큘
     {
-        Renderer renderer = attackPrefab.GetComponent<Renderer>();// 어택 레인지 프리펩
-        if (renderer == null)
-        {
-            Debug.LogError("칼큘에서 호출함 // attackPrefab에 Renderer 컴포넌트가 없음");
-            return Vector3.zero;
-        }
+        int x = index % 3; // -1, 0, 1
+        int z = index / 3; // -1, 0, 1
 
-        Vector3 cellSize = renderer.bounds.size; // 프리펩의 로컬 사이즈 받아오기
-        float offset = cellSize.x + 0.01f;
+        Vector3 cellPosition = new Vector3((x - 1) * cellSpacing, 0.1f, (z - 1) * cellSpacing);
+        return transform.position + transform.rotation * cellPosition;
 
-        int x = index % 3;
-        int z = index / 3;
+        //Renderer renderer = attackPrefab.GetComponent<Renderer>();// 어택 레인지 프리펩
+        //if (renderer == null)
+        //{
+        //    Debug.LogError("칼큘에서 호출함 // attackPrefab에 Renderer 컴포넌트가 없음");
+        //    return Vector3.zero;
+        //}
 
-        Vector3 actualPosition = new Vector3((x - 1) * offset, 0.1f, (z - 1) * offset);
-        
-        // 지금은 임시로 y축 위치를 0f로 함
-        // 왜냐하면 테스트씬의 그라운드의 y포지션이 -0.01f임
-        // 하드코딩 1 오프셋 관련 - (offset * 4) 나중에 수식 활용
-        // int x = index % 10; 이것도 마찬가지
-        // 뒤에 나눠주는 값 셀이 100개라면 나누는 수는 10이어야하니까 루트 씌워야됨
+        //Vector3 cellSize = renderer.bounds.size; // 프리펩의 로컬 사이즈 받아오기
+        //float offset = cellSize.x + 0.01f;
 
-        actualPosition = transform.rotation * actualPosition;
-        return transform.position + actualPosition;
+        //int x = index % 3;
+        //int z = index / 3;
+
+        //Vector3 actualPosition = new Vector3((x - 1) * offset, 0.1f, (z - 1) * offset);
+
+        //// 지금은 임시로 y축 위치를 0f로 함
+        //// 왜냐하면 테스트씬의 그라운드의 y포지션이 -0.01f임
+        //// 하드코딩 1 오프셋 관련 - (offset * 4) 나중에 수식 활용
+        //// int x = index % 10; 이것도 마찬가지
+        //// 뒤에 나눠주는 값 셀이 100개라면 나누는 수는 10이어야하니까 루트 씌우고 -1까지 해줘야함
+
+        //actualPosition = transform.rotation * actualPosition;
+        //return transform.position + actualPosition;
     }
 
     #endregion

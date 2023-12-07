@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7702501526828029645}
   - component: {fileID: 3890004641799092643}
   - component: {fileID: 6765785144591338417}
+  - component: {fileID: 829135223555832440}
   m_Layer: 0
   m_Name: "Division 360\xBA Range Prefab (4)"
   m_TagString: Untagged
@@ -100,3 +101,25 @@ MonoBehaviour:
   angle: 360
   segments: 50
   wifiSegments: 1
+--- !u!64 &829135223555832440
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5073490652078658777}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
