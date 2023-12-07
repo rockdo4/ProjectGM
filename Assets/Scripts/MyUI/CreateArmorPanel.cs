@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -73,15 +71,15 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
 
     public void CraftEquip()
     {
-        var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
-
         if (!IsCraftable())
         {
             // 제작 불가능
             return;
         }
 
+        var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         var armor = new Armor(item.id);
+
         PlayDataManager.Purchase(ct[item.id].gold);
         PlayDataManager.DecreaseMat(ct[item.id].mf_module, ct[item.id].number_1);
         PlayDataManager.data.ArmorInventory.Add(armor);

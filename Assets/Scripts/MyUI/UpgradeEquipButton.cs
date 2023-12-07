@@ -92,7 +92,11 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
             case Equip.EquipType.Weapon:
                 button.onClick.AddListener(() => 
                 {
-
+                    um.upgradeWeaponPanel.SetEquip(item);
+                    um.upgradeWeaponPanel.SetButton(this);
+                    um.upgradeWeaponPanel.beforeIconImage.sprite = iconImage.sprite;
+                    um.upgradeWeaponPanel.afterIconImage.sprite = iconImage.sprite;
+                    um.upgradeWeaponPanel.Renewal();
                 });
                 break;
 

@@ -208,6 +208,11 @@ public class InventoryManager : MonoBehaviour
     {
         PlayDataManager.data.MatInventory.Add(new Materials(71001, 100));
         PlayDataManager.data.MatInventory.Add(new Materials(72001, 100));
+        PlayDataManager.data.MatInventory.Add(new Materials(73001, 100));
+        PlayDataManager.data.MatInventory.Add(new Materials(73002, 100));
+        PlayDataManager.data.MatInventory.Add(new Materials(73003, 100));
+        PlayDataManager.data.MatInventory.Add(new Materials(73004, 100));
+        PlayDataManager.data.MatInventory.Add(new Materials(73005, 100));
 
         PlayDataManager.AddGold(100000);
 
