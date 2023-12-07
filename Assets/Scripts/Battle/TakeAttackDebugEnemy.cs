@@ -15,6 +15,10 @@ public class TakeAttackDebugEnemy : MonoBehaviour, IAttackable
 
     private void Start()
     {
+        if (TestLogManager.Instance == null)
+        {
+            return;
+        }
         hpUI = TestLogManager.Instance.MakeUI(HPAction);
         hpUI.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "<color=red>Àû HP</color>";
 
