@@ -67,6 +67,12 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
         }
 
         defText.text = armor.def.ToString();
+        {
+            if (armor.skill1_id != -1)
+            {
+
+            }
+        }
         skillsText.text = $"{armor.skill1_id} Lv.{armor.skill1_lv}";
         priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
     }
