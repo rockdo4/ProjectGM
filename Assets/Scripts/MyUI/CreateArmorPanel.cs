@@ -66,6 +66,14 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
             go.Renewal();
         }
 
+        defText.text = armor.def.ToString();
+        {
+            if (armor.skill1_id != -1)
+            {
+
+            }
+        }
+        skillsText.text = $"{armor.skill1_id} Lv.{armor.skill1_lv}";
         priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
     }
 
@@ -84,6 +92,9 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
         PlayDataManager.DecreaseMat(ct[item.id].mf_module, ct[item.id].number_1);
         PlayDataManager.data.ArmorInventory.Add(armor);
         PlayDataManager.Save();
+
+        UpgradeManager.Instance.ShowArmors(true);
+        gameObject.SetActive(false);
     }
 
     private bool IsCraftable()

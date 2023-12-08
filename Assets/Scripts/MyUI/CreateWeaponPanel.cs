@@ -63,6 +63,8 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
             go.Renewal();
         }
 
+        atkText.text = weapon.atk.ToString();
+        attackTypeText.text = weapon.property.ToString();
         priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
     }
 
@@ -81,6 +83,9 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         PlayDataManager.DecreaseMat(ct[item.id].mf_module, ct[item.id].number_1);
         PlayDataManager.data.WeaponInventory.Add(weapon);
         PlayDataManager.Save();
+
+        UpgradeManager.Instance.ShowWeapons(true);
+        gameObject.SetActive(false);
     }
 
     private bool IsCraftable()

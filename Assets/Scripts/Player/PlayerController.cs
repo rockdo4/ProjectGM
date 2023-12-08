@@ -52,6 +52,15 @@ public class PlayerController : MonoBehaviour
         }
         equipWeapon = PlayDataManager.curWeapon;
 
+        foreach (var armor in PlayDataManager.curArmor)
+        {
+            if (armor.Value != null)
+            {
+                var table = CsvTableMgr.GetTable<ArmorTable>().dataTable;
+                player.Stat.Defence += table[armor.Value.id].def;
+            }
+        }
+
         StateInit();
     }
 

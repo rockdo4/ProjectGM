@@ -6,10 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class TitleManager : MonoBehaviour
 {
-    public string sceneName = string.Empty;
     public TextMeshProUGUI noticeText;
 
-    public void GoGame()
+    public void GoGame(string sceneName)
     {
         if (PlayDataManager.data == null)
         {
@@ -28,5 +27,11 @@ public class TitleManager : MonoBehaviour
     {
         noticeText.text = str;
         noticeText.gameObject.SetActive(true);
+    }
+
+    public void ClearData()
+    {
+        PlayDataManager.Reset();
+        Notice("데이터를 초기화 하였습니다.");
     }
 }
