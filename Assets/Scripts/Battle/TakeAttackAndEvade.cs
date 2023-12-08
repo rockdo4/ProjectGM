@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Serialization;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
@@ -23,20 +24,29 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
             return;
         }
 
+        var damage = attack.Damage;
+
+        damage -= player.Stat.Defence;
+        if (damage <= 0)
+        {
+            damage = 0;
+        }
+
         EvadeCheck();
 
         switch (evade)
         {
             case EvadeSuccesss.None:
-                player.HP -= attack.Damage;
                 player.IsGroggy = attack.IsGroggy;
                 break;
             case EvadeSuccesss.Normal:
-                player.HP -= (int)(attack.Damage * player.Stat.evadeDamageRate);
+                damage = (int)(damage * player.Stat.evadeDamageRate);
                 break;
             case EvadeSuccesss.Just:
                 break;
         }
+
+        player.HP -= damage;
 
         if (player.HP <= 0)
         {

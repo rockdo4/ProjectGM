@@ -1013,10 +1013,9 @@ public class EnemyAI : LivingObject
                 AttackCell attackCell = cell.GetComponent<AttackCell>();
 
                 //Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
-
+                
                 if (attackCell != null && attackCell.playerInside)
                 {
-                    //Debug.Log("온어택 호출");
                     ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
                     break;
                 }
