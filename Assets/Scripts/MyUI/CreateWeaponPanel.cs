@@ -63,6 +63,8 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
             go.Renewal();
         }
 
+        atkText.text = weapon.atk.ToString();
+        attackTypeText.text = weapon.property.ToString();
         priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
     }
 

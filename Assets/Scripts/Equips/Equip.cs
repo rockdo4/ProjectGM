@@ -62,27 +62,12 @@ public class Weapon : Equip
 #endregion
 
 #region Armor
-public enum SetSkill
-{
-    None = -1,
-
-
-}
-
-public enum SkillID
-{
-    None = -1,
-
-    a = 101,
-
-}
-
 public struct Skill
 {
-    public SkillID id;
+    public int id;
     public int level;
 
-    public Skill(SkillID id, int level)
+    public Skill(int id, int level)
     {
         this.id = id;
         this.level = level;
@@ -103,7 +88,7 @@ public class Armor : Equip
     }
 
     public ArmorType armorType = ArmorType.None;
-    public SetSkill setSkill = SetSkill.None;
+    public int setSkill = -1;
     public Skill[] skills = null;
     public int socket = 1;
 
