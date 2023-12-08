@@ -53,7 +53,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4691967391105962301
 Transform:
   m_ObjectHideFlags: 0
@@ -143,9 +143,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stat: {fileID: 11400000, guid: 2871ea0a10c98ae488d110ce1a93a938, type: 2}
-  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
+  attackTypeAPrefab: {fileID: 4974148430569709096, guid: da44565a3c47a8f4cad84aa5d2251def,
     type: 3}
-  attackPreparationTime: 0.1
+  attackTypeBPrefab: {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f,
+    type: 3}
+  attackTypeCPrefab: {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f,
+    type: 3}
+  attackTypeDPrefab: {fileID: 9153738736741634195, guid: aaa21cefd58c5c442910061e8e46a4b6,
+    type: 3}
+  attackPreparationTime: 1
   detectRange: 50
   meleeAttackRange: 3
   roarDuration: 3
@@ -155,14 +161,14 @@ MonoBehaviour:
   enemyType: 0
   minAngle: 10
   rotationSpeed: 5
-  attackGrid: 010000010001000100
+  attackGrid: 000000000100000000
   savedPatterns:
   - patternName: MelleAttack_A
-    pattern: 000000010101010101
+    pattern: 000000000100000000
   - patternName: MelleAttack_B
-    pattern: 010001010101010001
+    pattern: 000000000100000000
   - patternName: MelleAttack_C
-    pattern: 010001000100010001
+    pattern: 000000000100000000
 --- !u!136 &5542212552224907592
 CapsuleCollider:
   m_ObjectHideFlags: 0
