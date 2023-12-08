@@ -76,6 +76,10 @@ public class Player : LivingObject
 
     private void Start()
     {
+        if (GameObject.FindGameObjectWithTag(Tags.enemy) == null)
+        {
+            return;
+        }
         Enemy = GameObject.FindGameObjectWithTag(Tags.enemy).GetComponent<LivingObject>();
         virtualCamera.Follow = transform;
     }

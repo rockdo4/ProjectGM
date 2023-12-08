@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DestructGameObjectWithAnimation : MonoBehaviour, IDestructable
 {
@@ -22,7 +24,11 @@ public class DestructGameObjectWithAnimation : MonoBehaviour, IDestructable
             if (animationStateInfo.IsTag("Die") && animationStateInfo.normalizedTime >= 1f)
             {
                 isDie = false;
-                GameManager.instance.EndGame();
+                var dieObject = GetComponent<LivingObject>();
+                if (dieObject.OnDeathEvent != null)
+                {
+                    dieObject.OnDeathEvent.Invoke();
+                }
             }
         }
     }

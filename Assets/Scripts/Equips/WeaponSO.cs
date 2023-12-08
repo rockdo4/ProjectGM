@@ -5,7 +5,7 @@ using UnityEngine;
 public class WeaponSO : ScriptableObject
 {
     [Header("아이템 ID")]
-    public Weapon.WeaponID[] ID;
+    public int[] ID;
 
     [Header("아이템 프리팹")]
     public GameObject[] Prefab;
@@ -30,7 +30,7 @@ public class WeaponSO : ScriptableObject
         for (int i = 0; i < ID.Length; i++)
         {
             int original = weapon.id / 100 * 100; // 레벨 초기화
-            if (ID[i] == (Weapon.WeaponID)original)
+            if (ID[i] == original)
             {
                 index = i;
                 break;

@@ -9,17 +9,15 @@ public static class CsvTableMgr
     {
         tables.Clear();
 
-        var stringTable = new StringTable();
-        tables.Add(typeof(StringTable), stringTable);
+        tables.Add(typeof(StringTable), new StringTable());
 
-        var weaponTable = new WeaponTable();
-        tables.Add(typeof(WeaponTable), weaponTable);
+        tables.Add(typeof(WeaponTable), new WeaponTable());
 
-        var armorTable = new ArmorTable();
-        tables.Add(typeof(ArmorTable), armorTable);
+        tables.Add(typeof(ArmorTable), new ArmorTable());
 
-        var matTable = new MatTable();
-        tables.Add(typeof(MatTable), matTable);
+        tables.Add(typeof(MatTable), new MatTable());
+
+        tables.Add(typeof(CraftTable), new CraftTable());
     }
 
     public static T GetTable<T>() where T : CsvTable

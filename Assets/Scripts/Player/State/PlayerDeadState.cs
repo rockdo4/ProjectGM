@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerDeadState : PlayerStateBase
 {
-    private const string triggerName = "Death";
+    private const string triggerName = "Die";
     public PlayerDeadState(PlayerController controller) : base(controller)
     {
 

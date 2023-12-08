@@ -28,7 +28,7 @@ public class UpgradeInfoPanel : MonoBehaviour, IRenewal
         }
 
         var wt = CsvTableMgr.GetTable<WeaponTable>().dataTable;
-        var weapon = wt[(Weapon.WeaponID)PlayDataManager.curWeapon.id];
+        var weapon = wt[PlayDataManager.curWeapon.id];
 
         // 공격력 합산식
         var atk = 0.0f;

@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
+using static EnemyAI;
 
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : LivingObject
@@ -9,11 +12,11 @@ public class EnemyAI : LivingObject
     private int[] bearAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
     private int[] bearAttackPatternPhaseTwo = new int[] { 1, 2, 3, 2, 3 }; // abcbc
 
-    private int[] tigerAttackPatternPhaseOne = new int[] { 3, 3, 1 }; // cca
-    private int[] tigerAttackPatternPhaseTwo = new int[] { 3, 3, 1, 2, 1 }; // ccaba 공격순서
+    private int[] alienAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
+    private int[] alienAttackPatternPhaseTwo = new int[] { 1, 2, 3 }; // abc
 
     private int[] spiderAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
-    private int[] spiderAttackPatternPhaseTwo = new int[] { 1, 2, 3}; // abc
+    private int[] spiderAttackPatternPhaseTwo = new int[] { 1, 2, 3 }; // abc
 
     private int[] wolfAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
     private int[] wolfAttackPatternPhaseTwo = new int[] { 1, 2, 1, 2, 2 }; // ababb
@@ -22,8 +25,17 @@ public class EnemyAI : LivingObject
     private int meleeAttackIndexTwo = 1;
     private int meleeAttackIndexThree = 2;
 
-    [Header("범위 공격의 시각화 프리펩")]
-    public GameObject attackRangePrefab;
+    [Header("원 공격 타입 프리펩")]
+    public GameObject attackTypeAPrefab;
+
+    [Header("삼각형 공격 타입 프리펩")]
+    public GameObject attackTypeBPrefab;
+
+    [Header("부채꼴 공격 타입 프리펩")]
+    public GameObject attackTypeCPrefab;
+
+    [Header("와이파이 공격 타입 프리펩")]
+    public GameObject attackTypeDPrefab;
 
     [Header("공격 대기시간")]
     [SerializeField]
@@ -33,7 +45,7 @@ public class EnemyAI : LivingObject
     [SerializeField]
     private float detectRange = 10f;
 
-    [Header("몬스터의 공격 사거리")] 
+    [Header("몬스터의 공격 사거리")]
     [SerializeField]
     private float meleeAttackRange = 3f;
 
@@ -54,8 +66,6 @@ public class EnemyAI : LivingObject
     [Header("몬스터가 고개를 돌리는 속도")]
     public float rotationSpeed = 5f;
 
-    
-
     BehaviorTreeRunner BTRunner;
     Transform detectedPlayer;
     private Player player;
@@ -75,23 +85,31 @@ public class EnemyAI : LivingObject
     private bool isPreparingAttack = false;
 
     private int attackIndex = -1;
-    
+
     private float grogySpeed = 0.5f;
     private float grogyTimer = 5f;
 
     public bool[] attackGrid = new bool[9];
     public List<AttackPattern> savedPatterns = new List<AttackPattern>();
-
     private List<GameObject> cellInstances = new List<GameObject>(); // 셀 인스턴스들을 저장할 리스트
     private List<GameObject> colliderObjects = new List<GameObject>();
+
+    FanShape fanShape = null;
 
     public enum EnemyType
     {
         Bear,
-        Tiger,
+        Alien,
         Spider,
         Wolf,
+    }
 
+    public enum AttackType
+    {
+        A,
+        B,
+        C,
+        D,
     }
 
     #region Interaction Player And Enemy
@@ -131,8 +149,8 @@ public class EnemyAI : LivingObject
             case EnemyType.Bear:
                 BTRunner = new BehaviorTreeRunner(BearBT());
                 break;
-            case EnemyType.Tiger:
-                BTRunner = new BehaviorTreeRunner(TigerBT());
+            case EnemyType.Alien:
+                BTRunner = new BehaviorTreeRunner(AlienBT());
                 break;
             case EnemyType.Spider:
                 BTRunner = new BehaviorTreeRunner(SpiderBT());
@@ -161,9 +179,9 @@ public class EnemyAI : LivingObject
 
         if (IsGroggy)
         {
-            animator.ResetTrigger("MeleeAttack_A");
-            animator.ResetTrigger("MeleeAttack_B");
-            animator.ResetTrigger("MeleeAttack_C");
+            animator.ResetTrigger("Attack_A");
+            animator.ResetTrigger("Attack_B");
+            animator.ResetTrigger("Attack_C");
 
             animator.SetBool("Grogy", true);
             animator.speed = grogySpeed;
@@ -203,7 +221,7 @@ public class EnemyAI : LivingObject
         if (Input.GetKeyDown(KeyCode.H))
         {
             HP -= 100;
-            Debug.Log("현재 체력 : " + HP);
+            //Debug.Log("현재 체력 : " + HP);
         }
 
         if (HP <= 0)
@@ -262,7 +280,7 @@ public class EnemyAI : LivingObject
     #endregion
 
     #region 호랑이 행동트리
-    INode TigerBT()
+    INode AlienBT()
     {
         return new SelectorNode
         (
@@ -274,7 +292,7 @@ public class EnemyAI : LivingObject
                         new List<INode>()
                         {
                             new ConditionNode(IsPhaseOne),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Tiger, tigerAttackPatternPhaseOne))
+                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Alien, alienAttackPatternPhaseOne))
                         }
                     ),
 
@@ -283,7 +301,7 @@ public class EnemyAI : LivingObject
                         new List<INode>()
                         {
                             new InverterNode(new ConditionNode(IsPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Tiger, tigerAttackPatternPhaseTwo)),
+                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Alien, alienAttackPatternPhaseTwo)),
                         }
                     ),
 
@@ -417,10 +435,10 @@ public class EnemyAI : LivingObject
         return result;
     }
 
-    IEnumerator PrepareMeleeAttack(EnemyType enemytype, string attackType)
+    IEnumerator PrepareMeleeAttack(EnemyType enemytype, AttackType attackType)
     {
         isPreparingAttack = true;
-        ShowAttackRange(true);
+        ShowAttackRange(true, enemytype, attackType);
 
         for (float speed = 0.5f; speed >= 0.0f; speed -= Time.deltaTime / attackPreparationTime)
         {
@@ -430,14 +448,14 @@ public class EnemyAI : LivingObject
 
         yield return new WaitForSeconds(attackPreparationTime);
 
-        ShowAttackRange(false);
+        ShowAttackRange(false, enemytype, attackType);
         isPreparingAttack = false;
 
         player = detectedPlayer.GetComponent<Player>();
 
         if (player != null)
         {
-            string animationTrigger = $"{enemytype}{attackType}";
+            string animationTrigger = $"{"Attack_"}{attackType}";
             StartCoroutine(IsAnimationRunning(animationTrigger));
         }
     }
@@ -457,7 +475,7 @@ public class EnemyAI : LivingObject
 
             if (stateInfo.IsName(stateName))
             {
-                Debug.Log("공격 애니메이션 재생 시간 : " + stateInfo.length);
+                //Debug.Log("공격 애니메이션 재생 시간 : " + stateInfo.length);
                 yield return new WaitForSeconds(stateInfo.length);
                 isAttacking = false; // 공격상태 해제를 여기서 해주지 않으면 코루틴을 하는 의미가 없어짐
                 // 하지만 다음 공격버그가 생긴다면 여기일듯
@@ -465,14 +483,133 @@ public class EnemyAI : LivingObject
         }
     }
 
-    private void ShowAttackRange(bool show)
+    private Vector3 GetAttackOffset(EnemyType enemyType, AttackType attackType)
     {
+        if (enemyType == EnemyType.Alien)
+        {
+            switch (attackType)
+            {
+                case AttackType.B:
+                    return new Vector3(0f, 0f, -2f); // 세모위치 조정 에일리언 B패턴임
+                case AttackType.C:
+                    return new Vector3(0f, 0f, 0f);
+            }
+        }
+
+        if (enemyType == EnemyType.Bear)
+        {
+            switch (attackType)
+            {
+                case AttackType.B:
+                    return new Vector3(0f, 0f, -2f); // 세모위치 조정 곰 B 패턴
+                case AttackType.C:
+                    return new Vector3(0f, 0f, -2f); // 곰 C 패턴
+            }
+        }
+
+        return Vector3.zero;
+    }
+
+    IEnumerator ChangeAttackRangeColor(Material material, float duration)
+    {
+        float timer = 0;
+        Color startColor = Color.yellow;
+        Color midColor = new Color(1, 0.65f, 0, 1); // 주황색
+        Color endColor = Color.red;
+
+        while (timer < duration)
+        {
+            float halfDuration = duration / 2;
+            if (timer < halfDuration) // 전반부: 노랑에서 주황으로
+            {
+                material.color = Color.Lerp(startColor, midColor, timer / halfDuration);
+            }
+            else
+            {
+                material.color = Color.Lerp(midColor, endColor, (timer - halfDuration) / halfDuration);
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        material.color = endColor;
+    }
+
+
+    #region 공격 타일 계산
+
+    Vector3 CalculateCellPosition(int index, Vector3 offset, EnemyType enemyType, AttackType attackType) // 칼큘
+    {
+        int x = index % 3;
+        int z = index / 3;
+
+        Vector3 actualPosition = new Vector3((x - 1) * offset.x, 0.015f, (z - 1) * offset.z);
+
+        if (index == 4)
+        {
+            actualPosition -= offset; // realOffset 추가 적용
+        }
+
+        if (enemyType == EnemyType.Alien && attackType == AttackType.C) // 임시
+        {
+
+
+            switch (index)
+            {
+                case 1: actualPosition += new Vector3(0, 0, -0.5f); break; // 뒤
+                case 3: actualPosition += new Vector3(-0.5f, 0, 0); break; // 오른쪽
+                case 5: actualPosition += new Vector3(0.5f, 0, 0); break; // 왼쪽
+                case 7: actualPosition += new Vector3(0, 0, 0.5f); break; // 앞
+
+                    // 여기서 딱히 로테이션은 건드리지 않았지만
+                    // 여기밖에 바뀔 이유가
+            }
+        }
+
+
+
+        actualPosition = transform.rotation * actualPosition; // 이게 문젠가?
+        return transform.position + actualPosition;
+    }
+
+    #endregion
+
+    private void ShowAttackRange(bool show, EnemyType enemyType, AttackType attackType) // 쇼
+    {
+        GameObject attackPrefab = null;
+        Vector3 attackOffset = GetAttackOffset(enemyType, attackType);
+
+        switch (attackType)
+        {
+            case AttackType.A:
+                attackPrefab = attackTypeAPrefab;
+                //Debug.Log(attackPrefab + "케이스A");
+                break;
+
+            case AttackType.B:
+                attackPrefab = attackTypeBPrefab;
+                //Debug.Log(attackPrefab + "케이스B");
+                break;
+
+            case AttackType.C:
+                attackPrefab = attackTypeCPrefab;
+                //Debug.Log(attackPrefab + "케이스C");
+                break;
+
+            case AttackType.D:
+                attackPrefab = attackTypeDPrefab;
+                break;
+        }
+
         if (show)
         {
-            if (attackRangeInstance == null)
+            if (attackRangeInstance != null) // 추후 수정
             {
-                attackRangeInstance = Instantiate(attackRangePrefab, transform);
+                Destroy(attackRangeInstance);
             }
+
+            attackRangeInstance = Instantiate(attackPrefab, transform);
 
             foreach (GameObject cell in cellInstances) // 리스트의 모든 셀 인스턴스를 순회
             {
@@ -495,28 +632,146 @@ public class EnemyAI : LivingObject
             AttackPattern currentPattern = savedPatterns[attackIndex];
             cellInstances.Clear(); // 리스트 초기화
 
+            fanShape = attackPrefab.GetComponent<FanShape>();
+
+            Vector3 cellSize = fanShape.Return(); // 부채꼴의 크기를 Vector3로 받음
+            Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.01f, cellSize.z + 0.01f);
+
+            Vector3 realOffset = attackOffset;
+
+            Vector3 centerPointLocal = fanShape.GetCenterPoint();
+            Vector3 centerPointWorld = attackRangeInstance.transform.TransformPoint(centerPointLocal);
+
+            //Debug.Log(cellSize + " 겟 콜라이더한 셀 사이즈");
+
             for (int i = 0; i < currentPattern.pattern.Length; i++)
             {
                 if (currentPattern.pattern[i])
                 {
-                    Vector3 cellPosition = CalculateCellPosition(i);
+                    // 베어 어택 공격1 어택 오프셋 0,0,0 찍힘
+                    //Debug.Log(attackOffset);
+
+                    Vector3 cellPosition = CalculateCellPosition(i, realOffset, enemyType, attackType);
                     GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
                     cell.SetActive(true);
                     cellInstances.Add(cell);
 
-                    // 별개의 투명 콜라이더 공격범위의 시각화 Cell과 일치하게
+
+                    //if (enemyType == EnemyType.Bear && attackType == AttackType.A) // 곰 A패턴 로테이션 임시 추가
+                    //{
+                    //    Vector3 directionToMonster = (transform.position - cellPosition).normalized;
+                    //    Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
+
+                    //    Quaternion additionalRotation = Quaternion.Euler(0f, 330, 0f); // 120도 회전 추가
+
+                    //    cell.transform.rotation = initialRotation * additionalRotation;
+
+                    //}
+
+                    if (i != 4)
+                    {
+                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
+                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
+
+                        Quaternion additionalRotation = Quaternion.Euler(0f, 120, 0f); // 120도 회전 추가
+
+                        cell.transform.rotation = initialRotation * additionalRotation;
+                    }
+                    else
+                    {
+                        cell.transform.rotation = transform.rotation;
+                    }
+
                     GameObject colliderObject = new GameObject("AttackCollider");
                     colliderObject.AddComponent<AttackCell>();
-                    BoxCollider collider = colliderObject.AddComponent<BoxCollider>();
+                    // 공격셀 프리펩을 부모로 설정
+                    // 콜라이더의 로컬 위치 공격셀 중심으로잡고
+                    // 콜라이더의 로컬 회전을 기본값으로
 
-                    collider.size = new Vector3(2.1f, 0.1f, 2.1f);
+                    colliderObject.transform.SetParent(cell.transform);
+                    colliderObject.transform.localRotation = Quaternion.identity;
+
+                    BoxCollider collider = colliderObject.AddComponent<BoxCollider>();
+                    collider.size = new Vector3(cellSize.x, 0.015f, cellSize.z);
                     collider.isTrigger = true;
-                    colliderObject.transform.position = cellPosition;
+
+                    Vector3 additionalOffset = Vector3.zero;
+
+                    if (enemyType == EnemyType.Bear && attackType == AttackType.A)
+                    {
+                        additionalOffset = new Vector3(1.6f, 0f, 2.6f);
+                    }
+
+                    if (enemyType == EnemyType.Bear && attackType == AttackType.B || attackType == AttackType.C)
+                    {
+                        additionalOffset = new Vector3(0f, 0f, 2.5f);
+                    }
+
+                    if (enemyType == EnemyType.Alien && attackType == AttackType.B)
+                    {
+                        Vector3 currentSize = collider.size;
+                        collider.size = new Vector3(currentSize.x / 1.8f, currentSize.y, currentSize.z);
+                        additionalOffset = new Vector3(0f, 0f, 2.5f);
+                    }
+
+                    if (enemyType == EnemyType.Alien && attackType == AttackType.C)
+                    {
+                        switch (i) // 1, 3, 5, 7 인덱스
+                        {
+                            case 1:
+                                //Debug.Log("0");
+                                additionalOffset += new Vector3(0f, 0f, -2f); break;
+                            case 3:
+                                //Debug.Log("2");
+                                additionalOffset += new Vector3(-2f, 0f, 0f); break;
+                            case 5: additionalOffset += new Vector3(0f, 0f, 0f); break;
+                            case 7: additionalOffset += new Vector3(0f, 0f, 0f); break;
+                        }
+
+                        Vector3 currentSize = collider.size;
+                        collider.size = new Vector3(currentSize.x / 1.5f, currentSize.y, currentSize.z / 1.5f);
+
+                    }
+
+
+                    colliderObject.transform.localPosition = Vector3.zero + additionalOffset; // 위치 변경 뒤에 해야함
 
                     colliderObjects.Add(colliderObject);
+
                 }
             }
+            // 어택 콜라이더가 자식이 되어서 수정이 필요함 // 아니면 공격판정이 당연히 안됨 같이 꺼져서
+            // 액티브 펄스를 하는 방식에서 매쉬만 끄게 하는걸로
             attackRangeInstance.SetActive(false);
+
+            foreach (GameObject cell in cellInstances)
+            {
+                MeshRenderer cellMeshRenderer = cell.GetComponent<MeshRenderer>();
+                if (cellMeshRenderer != null)
+                {
+
+
+                    //Debug.Log("색깔 바뀌냐?");
+
+                    Material newMaterial = new Material(cellMeshRenderer.sharedMaterial);
+                    newMaterial.color = Color.yellow;
+                    cellMeshRenderer.material = newMaterial;
+
+                    //Debug.Log(cellMeshRenderer.material);
+
+                    cellMeshRenderer.enabled = true;
+                    // 초기 노랑색으로 추가
+                    //cellMeshRenderer.material.color = Color.yellow;
+                }
+            }
+
+
+            //MeshRenderer meshRenderer = attackRangeInstance.GetComponent<MeshRenderer>();
+            //if (meshRenderer != null)
+            //{
+            //    meshRenderer.enabled = false;
+            //}
+
         }
         else
         {
@@ -524,7 +779,11 @@ public class EnemyAI : LivingObject
             {
                 if (cell != null)
                 {
-                    cell.SetActive(false); // 삭제는 조금 있다
+                    MeshRenderer cellMeshRenderer = cell.GetComponent<MeshRenderer>();
+                    if (cellMeshRenderer != null)
+                    {
+                        cellMeshRenderer.enabled = false;
+                    }
                 }
             }
         }
@@ -596,12 +855,12 @@ public class EnemyAI : LivingObject
         if (angleToPlayer > minAngle)
             return INode.EnemyState.Failure;
 
-        Debug.Log(isTwoPhase ? "페이즈2 공격A 준비" : "페이즈1 공격A 준비");
+        //Debug.Log(isTwoPhase ? "페이즈2 공격A 준비" : "페이즈1 공격A 준비");
         isAttacking = true;
 
-        attackIndex = attackPatternIndex;
+        attackIndex = attackPatternIndex; // 인덱스 바꾸고
 
-        StartCoroutine(PrepareMeleeAttack(enemyType, "A"));
+        StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.A));
         return INode.EnemyState.Success;
     }
 
@@ -627,12 +886,12 @@ public class EnemyAI : LivingObject
         if (angleToPlayer > minAngle)
             return INode.EnemyState.Failure;
 
-        Debug.Log(isTwoPhase ? "페이즈2 공격B 준비" : "페이즈1 공격B 준비");
+        // Debug.Log(isTwoPhase ? "페이즈2 공격B 준비" : "페이즈1 공격B 준비");
         isAttacking = true;
 
         attackIndex = attackPatternIndex;
 
-        StartCoroutine(PrepareMeleeAttack(enemyType, "B"));
+        StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.B));
         return INode.EnemyState.Success;
     }
 
@@ -658,12 +917,12 @@ public class EnemyAI : LivingObject
         if (angleToPlayer > minAngle)
             return INode.EnemyState.Failure;
 
-        Debug.Log(isTwoPhase ? "페이즈2 공격C 준비" : "페이즈1 공격C 준비");
+        //Debug.Log(isTwoPhase ? "페이즈2 공격C 준비" : "페이즈1 공격C 준비");
         isAttacking = true;
 
         attackIndex = attackPatternIndex;
 
-        StartCoroutine(PrepareMeleeAttack(enemyType, "C"));
+        StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.C));
         return INode.EnemyState.Success;
     }
 
@@ -676,7 +935,7 @@ public class EnemyAI : LivingObject
         if (!isTwoPhase && HP <= phaseTwoHealthThreshold)
         {
             isTwoPhase = true;
-            Debug.Log("페이즈 2로 전환");
+            //Debug.Log("페이즈 2로 전환");
 
             // 여기에 Magic 자식 오브젝트를 활성화하는 코드를 추가
             Transform magicObject = transform.Find("Magic");
@@ -684,43 +943,17 @@ public class EnemyAI : LivingObject
             {
                 magicObject.gameObject.SetActive(true);
             }
-            else
-            {
-                Debug.LogError("Magic 오브젝트를 찾을 수 없음");
-            }
+            //else
+            //{
+            //    Debug.Log("Magic 오브젝트를 찾을 수 없음");
+            //}
         }
         return !isTwoPhase;
     }
 
     #endregion
 
-    #region 공격 타일 계산
 
-    Vector3 CalculateCellPosition(int index) // 칼큘
-    {
-        Renderer renderer = attackRangePrefab.GetComponent<Renderer>();// 어택 레인지 프리펩
-        if (renderer == null)
-        {
-            Debug.LogError("attackRangePrefab에 Renderer 컴포넌트가 없습니다.");
-            return Vector3.zero;
-        }
-
-        Vector3 cellSize = renderer.bounds.size; // 프리펩의 로컬 사이즈 받아오기
-        float offset = cellSize.x + 0.01f;
-
-        int x = index % 3;
-        int z = index / 3;
-
-        Vector3 actualPosition = new Vector3(x * offset - (offset * 1), 0f, z * offset + meleeAttackRange); // 지금은 임시로 y축 위치를 0f로 함
-        // 왜냐하면 테스트씬의 그라운드의 y포지션이 -0.01f임
-        // 하드코딩 1 오프셋 관련 - (offset * 4) 나중에 수식 활용
-        // int x = index % 10; 이것도 마찬가지
-        // 뒤에 나눠주는 값 셀이 100개라면 나누는 수는 10이어야하니까 루트 씌워야됨
-        actualPosition = transform.rotation * actualPosition;
-        return transform.position + actualPosition;
-    }
-
-    #endregion
 
     #region 기즈모
 
@@ -743,7 +976,7 @@ public class EnemyAI : LivingObject
                 int x = index % 3;
                 int z = index / 3;
 
-                Vector3 actualPosition = new Vector3((x - 1) * offset, 0f, (z + 1) * offset);
+                Vector3 actualPosition = new Vector3((x - 1) * offset, 0f, (z - 1) * offset);
                 actualPosition = transform.rotation * actualPosition;
                 Vector3 worldPosition = transform.position + actualPosition;
 
@@ -776,11 +1009,14 @@ public class EnemyAI : LivingObject
         {
             if (cell != null)
             {
+
                 AttackCell attackCell = cell.GetComponent<AttackCell>();
-                // Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
+
+                //Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
 
                 if (attackCell != null && attackCell.playerInside)
                 {
+                    //Debug.Log("온어택 호출");
                     ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
                     break;
                 }
