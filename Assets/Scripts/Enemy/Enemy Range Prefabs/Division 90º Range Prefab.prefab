@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6249738971602245742}
   - component: {fileID: 170580996063855623}
   - component: {fileID: 1234882770835833396}
+  - component: {fileID: 6514780230589558262}
   m_Layer: 0
   m_Name: "Division 90\xBA Range Prefab"
   m_TagString: Untagged
@@ -62,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e06654e42f6991548a76f7ed883c3515, type: 2}
+  - {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -100,3 +101,27 @@ MonoBehaviour:
   angle: 90
   segments: 20
   wifiSegments: 1
+  centerPoint: {x: 0, y: 0, z: 0}
+  sharedMesh: {fileID: 0}
+--- !u!64 &6514780230589558262
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831290539580255820}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
