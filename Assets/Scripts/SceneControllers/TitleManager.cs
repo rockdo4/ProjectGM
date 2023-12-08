@@ -28,4 +28,10 @@ public class TitleManager : MonoBehaviour
         noticeText.text = str;
         noticeText.gameObject.SetActive(true);
     }
+
+    public void ClearData()
+    {
+        PlayDataManager.Reset();
+        Notice("데이터를 초기화 하였습니다.");
+    }
 }

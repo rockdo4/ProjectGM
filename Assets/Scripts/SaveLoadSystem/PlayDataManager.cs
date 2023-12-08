@@ -42,8 +42,9 @@ public static class PlayDataManager
                 weapon.instanceID = weapon.instanceID.AddSeconds(4);
                 data.WeaponInventory.Add(weapon);
             }
+
+            SaveLoadSystem.Save(data, "savefile.json");
         }
-        SaveLoadSystem.Save(data, "savefile.json");
 
         // 무기 인벤토리를 순회해서 curWeapon에 할당
         foreach (var weapon in data.WeaponInventory)
@@ -77,10 +78,8 @@ public static class PlayDataManager
 
     public static void Reset()
     {
-        data = new SaveDataVC();
-        curWeapon = null;
-        curArmor.Clear();
-        Save();
+        SaveLoadSystem.Remove("savefile.json");
+        Init();
     }
 
     public static bool Purchase(int pay)

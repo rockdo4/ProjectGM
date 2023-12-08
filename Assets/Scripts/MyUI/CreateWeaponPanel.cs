@@ -81,6 +81,9 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         PlayDataManager.DecreaseMat(ct[item.id].mf_module, ct[item.id].number_1);
         PlayDataManager.data.WeaponInventory.Add(weapon);
         PlayDataManager.Save();
+
+        UpgradeManager.Instance.ShowWeapons(true);
+        gameObject.SetActive(false);
     }
 
     private bool IsCraftable()

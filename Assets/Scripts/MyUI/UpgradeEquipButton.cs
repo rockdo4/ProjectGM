@@ -44,9 +44,34 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
     private bool IsUpgradable()
     {
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
+        if (!ct.ContainsKey(item.id + 1))
+        {
+            Debug.Log($"{item.id} is Full Level");
+            return false;
+        }
+
+        var mat = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id + 1].lvup_module);
+        if (mat == null)
+        {
+            Debug.Log("Not Exist Materials");
+            return false;
+        }
+
+        if (mat.count < ct[item.id + 1].number_3)
+        {
+            Debug.Log("Lack Of Materials Count");
+            return false;
+        }
+
+        if (PlayDataManager.data.Gold < ct[item.id + 1].gold)
+        {
+            Debug.Log("Lack Of Gold");
+            return false;
+        }
+        // 인벤토리 공간 부족 (추후 추가 필요)
 
 
-        return false;
+        return true;
     }
 
     public void SetEquip(Equip item)

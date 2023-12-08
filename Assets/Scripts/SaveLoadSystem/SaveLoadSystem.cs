@@ -79,4 +79,13 @@ public static class SaveLoadSystem
         }
         return result;
     }
+
+    public static void Remove(string fileName)
+    {
+        var path = Path.Combine(SaveDirectory, fileName);
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+    }
 }
