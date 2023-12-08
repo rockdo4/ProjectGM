@@ -6,10 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class TitleManager : MonoBehaviour
 {
-    public string sceneName = string.Empty;
     public TextMeshProUGUI noticeText;
 
-    public void GoGame()
+    public void GoGame(string sceneName)
     {
         if (PlayDataManager.data == null)
         {
