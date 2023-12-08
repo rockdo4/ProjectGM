@@ -59,6 +59,14 @@ public class Player : LivingObject
         }
     }
 
+    public PlayerController.State CurrentState
+    {
+        get
+        {
+            return GetComponent<PlayerController>().currentState;
+        }
+    }
+
     #region TestData
     public Slider slider { get; private set; }
     public int comboCount { get; set; } = 0;
