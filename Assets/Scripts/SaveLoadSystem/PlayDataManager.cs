@@ -34,6 +34,8 @@ public static class PlayDataManager
                 var weapon = new Weapon(8500);
                 weapon.instanceID.AddSeconds(3);
                 data.WeaponInventory.Add(weapon);
+
+                curWeapon = weapon;
             }
             {
                 var weapon = new Weapon(8700);
