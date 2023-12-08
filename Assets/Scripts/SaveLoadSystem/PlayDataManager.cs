@@ -22,24 +22,24 @@ public static class PlayDataManager
             // 기본 무기 4종 지급
             {
                 var weapon = new Weapon(8100);
-                weapon.instanceID.AddSeconds(1);
+                weapon.instanceID = weapon.instanceID.AddSeconds(1);
                 data.WeaponInventory.Add(weapon);
             }
             {
                 var weapon = new Weapon(8300);
-                weapon.instanceID.AddSeconds(2);
+                weapon.instanceID = weapon.instanceID.AddSeconds(2);
                 data.WeaponInventory.Add(weapon);
             }
             {
                 var weapon = new Weapon(8500);
-                weapon.instanceID.AddSeconds(3);
+                weapon.instanceID = weapon.instanceID.AddSeconds(3);
                 data.WeaponInventory.Add(weapon);
 
                 curWeapon = weapon;
             }
             {
                 var weapon = new Weapon(8700);
-                weapon.instanceID.AddSeconds(4);
+                weapon.instanceID = weapon.instanceID.AddSeconds(4);
                 data.WeaponInventory.Add(weapon);
             }
         }
