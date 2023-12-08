@@ -35,10 +35,10 @@ public class RemoveSelectGameObjectCollider : MonoBehaviour
                         log += "\t<color=red>REMOVING COLLIDER:</color> " + collider.name + "\n";
 
                         // remove the collider
-                        //DestroyImmediate(collider);
+                        DestroyImmediate(collider);
 
                         // disable the collider
-                        collider.enabled = false;
+                        //collider.enabled = false;
 
                         modified = true;
                     }

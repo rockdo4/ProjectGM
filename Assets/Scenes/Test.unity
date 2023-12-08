@@ -15321,7 +15321,7 @@ Transform:
   m_GameObject: {fileID: 1526050043}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 1.5210176}
+  m_LocalPosition: {x: 0, y: -0.19960475, z: 3.9764814}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17697,6 +17697,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: New Player
       objectReference: {fileID: 0}
+    - target: {fileID: 239229579990284695, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2587267489539564580, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
       propertyPath: OnDeathEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -17756,6 +17761,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4987199099642129594, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.19960475
+      objectReference: {fileID: 0}
+    - target: {fileID: 4987199099642129594, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.023518562
       objectReference: {fileID: 0}
     - target: {fileID: 7179339617550557771, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
