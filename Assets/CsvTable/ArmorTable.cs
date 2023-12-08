@@ -16,16 +16,14 @@ public class ArmorTable : CsvTable
         public int skill1_lv { get; set; }
         public int skill2_id { get; set; }
         public int skill2_lv { get; set; }
-        public int skill3_id { get; set; }
-        public int skill3_lv { get; set; }
         public int set_skill { get; set; }
         public int socket { get; set; }
+        public int upgrade { get; set; }
 
         public Data(int Armor_name, Armor.ArmorType Armor_type, int def,
             int skill1_id, int skill1_lv,
             int skill2_id, int skill2_lv,
-            int skill3_id, int skill3_lv,
-            int set_skill, int socket)
+            int set_skill, int socket, int upgrade)
         {
             this.Armor_name = Armor_name;
             this.Armor_type = Armor_type;
@@ -34,10 +32,9 @@ public class ArmorTable : CsvTable
             this.skill1_lv = skill1_lv;
             this.skill2_id = skill2_id;
             this.skill2_lv = skill2_lv;
-            this.skill3_id = skill3_id;
-            this.skill3_lv = skill3_lv;
             this.set_skill = set_skill;
             this.socket = socket;
+            this.upgrade = upgrade;
         }
     }
     public Dictionary<int, Data> dataTable = new Dictionary<int, Data>();
@@ -74,10 +71,9 @@ public class ArmorTable : CsvTable
                     csv.GetField<int>(5), // skill1_lv
                     csv.GetField<int>(6), // skill2_id
                     csv.GetField<int>(7), // skill2_lv
-                    csv.GetField<int>(8), // skill3_id
-                    csv.GetField<int>(9), // skill3_lv
-                    csv.GetField<int>(10), // set_skill
-                    csv.GetField<int>(11) // socket
+                    csv.GetField<int>(8), // set_skill
+                    csv.GetField<int>(9), // socket
+                    csv.GetField<int>(10) // upgrade
                 )
             );
         }
