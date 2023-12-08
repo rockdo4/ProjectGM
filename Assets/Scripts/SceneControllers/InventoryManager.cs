@@ -47,6 +47,7 @@ public class InventoryManager : MonoBehaviour
             () => // createFunc
         {
             var button = Instantiate(buttonPrefab);
+            button.transform.SetParent(inventoryPanel.transform);
             button.OnCountAct();
             button.gameObject.SetActive(false);
 
@@ -84,8 +85,8 @@ public class InventoryManager : MonoBehaviour
         var weapons = PlayDataManager.data.WeaponInventory;
         foreach (var weapon in weapons)
         {
+            Debug.Log(weapon.id);
             var go = buttonPool.Get();
-            go.transform.SetParent(inventoryPanel.transform);
 
             go.iconImage.sprite = weaponIconSO.GetSprite(weapon.id / 100 * 100);
 
@@ -121,7 +122,6 @@ public class InventoryManager : MonoBehaviour
         foreach (var armor in armors)
         {
             var go = buttonPool.Get();
-            go.transform.SetParent(inventoryPanel.transform);
 
             go.iconImage.sprite = armorIconSO.GetSprite(armor.id);
 

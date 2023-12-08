@@ -4,6 +4,8 @@ using UnityEngine.Pool;
 
 public class UpgradeManager : MonoBehaviour
 {
+    public static UpgradeManager Instance;
+
     [Header("현재 장비 버튼들")]
     public List<CurrentItemButton> equipButtons;
 
@@ -28,6 +30,8 @@ public class UpgradeManager : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
+
         if (PlayDataManager.data == null)
         {
             PlayDataManager.Init();

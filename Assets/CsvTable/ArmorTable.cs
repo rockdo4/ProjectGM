@@ -12,20 +12,20 @@ public class ArmorTable : CsvTable
         public int Armor_name { get; set; }
         public Armor.ArmorType Armor_type { get; set; }
         public int def { get; set; }
-        public SkillID skill1_id { get; set; }
+        public int skill1_id { get; set; }
         public int skill1_lv { get; set; }
-        public SkillID skill2_id { get; set; }
+        public int skill2_id { get; set; }
         public int skill2_lv { get; set; }
-        public SkillID skill3_id { get; set; }
+        public int skill3_id { get; set; }
         public int skill3_lv { get; set; }
-        public SetSkill set_skill { get; set; }
+        public int set_skill { get; set; }
         public int socket { get; set; }
 
         public Data(int Armor_name, Armor.ArmorType Armor_type, int def,
-            SkillID skill1_id, int skill1_lv,
-            SkillID skill2_id, int skill2_lv,
-            SkillID skill3_id, int skill3_lv,
-            SetSkill set_skill, int socket)
+            int skill1_id, int skill1_lv,
+            int skill2_id, int skill2_lv,
+            int skill3_id, int skill3_lv,
+            int set_skill, int socket)
         {
             this.Armor_name = Armor_name;
             this.Armor_type = Armor_type;
@@ -70,13 +70,13 @@ public class ArmorTable : CsvTable
                     csv.GetField<int>(1), // Armor_name
                     (Armor.ArmorType)csv.GetField<int>(2), // Armor_type
                     csv.GetField<int>(3), // def
-                    (SkillID)csv.GetField<int>(4), // skill1_id
+                    csv.GetField<int>(4), // skill1_id
                     csv.GetField<int>(5), // skill1_lv
-                    (SkillID)csv.GetField<int>(6), // skill2_id
+                    csv.GetField<int>(6), // skill2_id
                     csv.GetField<int>(7), // skill2_lv
-                    (SkillID)csv.GetField<int>(8), // skill3_id
+                    csv.GetField<int>(8), // skill3_id
                     csv.GetField<int>(9), // skill3_lv
-                    (SetSkill)csv.GetField<int>(10), // set_skill
+                    csv.GetField<int>(10), // set_skill
                     csv.GetField<int>(11) // socket
                 )
             );
