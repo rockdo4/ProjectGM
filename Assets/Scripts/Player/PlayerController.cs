@@ -183,7 +183,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (player.DistanceToEnemy < player.CurrentWeapon.attackRange && player.Enemy != null)
+        if (player.DistanceToEnemy < player.CurrentWeapon.attackRange)
         {
             SetState((player.Enemy.IsGroggy) ? State.SuperAttack : State.Attack);
         }

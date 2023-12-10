@@ -12,6 +12,8 @@ public class Player : LivingObject
     public bool canCombo { get; set; }
     public bool isAttack { get; set; }
 
+    public bool IsHold { get; set; }
+
     public LivingObject Enemy { get; private set; }
     public Rigidbody Rigid { get; private set; }
     public BoxCollider Colldier { get; private set; }

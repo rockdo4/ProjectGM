@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class TakeAttackDebugPlayer : MonoBehaviour, IAttackable
+public class PlayerTestLog : MonoBehaviour
 {
     private Player player;
 
@@ -22,8 +22,7 @@ public class TakeAttackDebugPlayer : MonoBehaviour, IAttackable
         {
             return;
         }
-        hpUI = TestLogManager.Instance.MakeUI();
-        hpUI.GetComponentsInChildren<TextMeshProUGUI>()[1].text = $"{player.HP}";
+        hpUI = TestLogManager.Instance.MakeUI(HPAction);
         hpUI.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "플레이어HP";
 
         evadeUI = TestLogManager.Instance.MakeUI(EvadeAction);
@@ -36,11 +35,6 @@ public class TakeAttackDebugPlayer : MonoBehaviour, IAttackable
 
         hitUI = TestLogManager.Instance.MakeUI(HitAction);
         hitUI.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "피격 여부";
-    }
-
-    public void OnAttack(GameObject attacker, Attack attack)
-    {
-        HPAction();
     }
 
     #region TestLog Events

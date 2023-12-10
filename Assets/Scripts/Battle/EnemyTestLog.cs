@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class TakeAttackDebugEnemy : MonoBehaviour, IAttackable
+public class EnemyTestLog : MonoBehaviour
 {
     private EnemyAI enemy;
 
@@ -24,11 +24,6 @@ public class TakeAttackDebugEnemy : MonoBehaviour, IAttackable
 
         groggyUI = TestLogManager.Instance.MakeUI(GroggyAction);
         groggyUI.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "<color=red>적 그로기\n상태</color>";
-    }
-
-    public void OnAttack(GameObject attacker, Attack attack)
-    {
-
     }
 
     #region TestLog Events

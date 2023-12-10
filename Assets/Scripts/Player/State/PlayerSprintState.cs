@@ -35,7 +35,7 @@ public class PlayerSprintState : PlayerStateBase
             var moveSpeed = controller.player.stat.MoveSpeed;
             controller.player.Rigid.MovePosition(position + rotation * direction * moveSpeed * Time.deltaTime);
 
-            if (controller.player.DistanceToEnemy < controller.player.CurrentWeapon.attackRange)
+            if (controller.player.CanAttack)
             {
                 if (controller.player.Enemy.IsGroggy)
                 {
@@ -45,7 +45,6 @@ public class PlayerSprintState : PlayerStateBase
                 {
                     controller.SetState(PlayerController.State.Attack);
                 }
-                //controller.SetState((controller.player.Enemy.IsGroggy) ? PlayerController.State.SuperAttack : PlayerController.State.Attack);
             }
         }
         else
