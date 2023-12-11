@@ -79,6 +79,8 @@ public static class PlayDataManager
     public static void Reset()
     {
         SaveLoadSystem.Remove("savefile.json");
+        curWeapon = null;
+        curArmor.Clear();
         Init();
     }
 

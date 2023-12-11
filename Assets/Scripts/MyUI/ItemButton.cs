@@ -8,6 +8,10 @@ public class ItemButton : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI countText;
 
+    [Header("장착중 이미지")]
+    [SerializeField]
+    private Image equipImage;
+
     [Header("아이콘 이미지")]
     public Image iconImage;
 
@@ -20,13 +24,23 @@ public class ItemButton : MonoBehaviour
         button = GetComponent<Button>();
     }
 
-    public void OnCountAct(bool isActive = false)
+    public void OnCountAct(bool isActive = false, int value = 0)
     {
         countText.gameObject.SetActive(isActive);
+        countText.text = value.ToString();
+
     }
 
-    public void SetCount(int value)
+    public void OnEquip(bool isEquip = false)
     {
-        countText.text = value.ToString();
+        equipImage.gameObject.SetActive(isEquip);
     }
+
+    private void OnEnable()
+    {
+#if UNITY_STANDALONE || UNITY_EDITOR
+        transform.localScale = Vector3.one;
+#endif
+    }
+    
 }

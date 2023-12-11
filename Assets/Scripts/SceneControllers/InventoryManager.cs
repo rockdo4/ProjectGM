@@ -10,6 +10,8 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
+    public static InventoryManager Instance;
+
     public GameObject inventoryPanel;
 
     public ItemButton buttonPrefab;
@@ -40,6 +42,11 @@ public class InventoryManager : MonoBehaviour
 
     private ObjectPool<ItemButton> buttonPool;
     private List<ItemButton> releaseList = new List<ItemButton>();
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -89,6 +96,7 @@ public class InventoryManager : MonoBehaviour
             var go = buttonPool.Get();
 
             go.iconImage.sprite = weaponIconSO.GetSprite(weapon.id / 100 * 100);
+            go.OnEquip(weapon.isEquip);
 
             go.button.onClick.AddListener(() => 
             {
@@ -124,6 +132,7 @@ public class InventoryManager : MonoBehaviour
             var go = buttonPool.Get();
 
             go.iconImage.sprite = armorIconSO.GetSprite(armor.id);
+            go.OnEquip(armor.isEquip);
 
             go.button.onClick.AddListener(() =>
             {
@@ -168,9 +177,9 @@ public class InventoryManager : MonoBehaviour
             var go = buttonPool.Get();
             go.transform.SetParent(inventoryPanel.transform);
 
-            go.OnCountAct(true);
-            go.SetCount(mat.count);
+            go.OnCountAct(true, mat.count);
             go.iconImage.sprite = matIconSo.GetSprite(mat.id);
+            go.OnEquip();
 
             go.GetComponent<ItemButton>().button.onClick.AddListener(() =>
             {
@@ -206,13 +215,13 @@ public class InventoryManager : MonoBehaviour
 
     public void Tester()
     {
-        PlayDataManager.data.MatInventory.Add(new Materials(71001, 100));
-        PlayDataManager.data.MatInventory.Add(new Materials(72001, 100));
-        PlayDataManager.data.MatInventory.Add(new Materials(73001, 100));
-        PlayDataManager.data.MatInventory.Add(new Materials(73002, 100));
-        PlayDataManager.data.MatInventory.Add(new Materials(73003, 100));
-        PlayDataManager.data.MatInventory.Add(new Materials(73004, 100));
-        PlayDataManager.data.MatInventory.Add(new Materials(73005, 100));
+        PlayDataManager.data.MatInventory.Add(new Materials(71001, 99));
+        PlayDataManager.data.MatInventory.Add(new Materials(72001, 99));
+        PlayDataManager.data.MatInventory.Add(new Materials(73001, 99));
+        PlayDataManager.data.MatInventory.Add(new Materials(73002, 99));
+        PlayDataManager.data.MatInventory.Add(new Materials(73003, 99));
+        PlayDataManager.data.MatInventory.Add(new Materials(73004, 99));
+        PlayDataManager.data.MatInventory.Add(new Materials(73005, 99));
 
         PlayDataManager.AddGold(100000);
 
