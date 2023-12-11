@@ -20,14 +20,14 @@ public class PlayerAttackState : PlayerStateBase
             controller.SetState(PlayerController.State.Idle);
         }
 
-        //if (isFirst || (controller.player.canCombo && !controller.player.isAttack))
-        //{
-        //    if (isFirst)
-        //    {
-        //        isFirst = false;
-        //    }
+        if (isFirst || (controller.player.canCombo && !controller.player.isAttack))
+        {
+            if (isFirst)
+            {
+                isFirst = false;
+            }
             controller.player.Animator.SetTrigger(triggerName);
-        //}
+        }
     }
     
 

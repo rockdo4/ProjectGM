@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
         Evade,
         Sprint,
         Hit,
-        Dead
+        Death
     }
     private StateManager stateManager = new StateManager();
     private List<StateBase> states = new List<StateBase>();
@@ -93,10 +93,11 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        if (currentState == State.Dead)
+        if (currentState == State.Death)
         {
             return;
         }
+
         stateManager?.Update();
         Vector3 relativePos = player.Enemy.transform.position - transform.position;
         Quaternion rotation = Quaternion.LookRotation(relativePos);
@@ -132,10 +133,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             player.Stat.AttackDamage = (player.Stat.AttackDamage == 0) ? 70 : 0;
+            Debug.Log(player.Stat.AttackDamage);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             player.Stat.Defence = (player.Stat.Defence == 0) ? -100 : 0;
+            Debug.Log(player.Stat.Defence);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
@@ -161,7 +164,7 @@ public class PlayerController : MonoBehaviour
     #region Touch Event
     private void OnSwipe()
     {
-        if (currentState == State.Hit || currentState == State.Dead)
+        if (currentState == State.Hit || currentState == State.Death)
         {
             return;
         }
@@ -174,7 +177,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnHold()
     {
-        if (currentState == State.Hit || currentState == State.Dead)
+        if (currentState == State.Hit || currentState == State.Death)
         {
             return;
         }
@@ -194,7 +197,7 @@ public class PlayerController : MonoBehaviour
     }
     private void HoldEnd()
     {
-        if (currentState == State.Hit || currentState == State.Dead)
+        if (currentState == State.Hit || currentState == State.Death)
         {
             return;
         }
@@ -246,7 +249,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 #if UNITY_EDITOR
-        //Debug.Log($"--------- ChangeState: {newState} ---------");
+        Debug.Log($"--------- ChangeState: {newState} ---------");
 #endif
         currentState = newState;
         stateManager?.ChangeState(states[(int)newState]);
@@ -260,7 +263,7 @@ public class PlayerController : MonoBehaviour
         states.Add(new PlayerEvadeState(this));
         states.Add(new PlayerSprintState(this));
         states.Add(new PlayerHitState(this));
-        states.Add(new PlayerDeadState(this));
+        states.Add(new PlayerDeathState(this));
 
         SetState(State.Idle);
     }

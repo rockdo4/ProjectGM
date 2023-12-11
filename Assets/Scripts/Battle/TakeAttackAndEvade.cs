@@ -51,7 +51,7 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
         if (player.HP <= 0)
         {
             player.HP = 0;
-            player.GetComponent<PlayerController>().SetState(PlayerController.State.Dead);
+            player.GetComponent<PlayerController>().SetState(PlayerController.State.Death);
             var destructables = player.GetComponents<IDestructable>();
             foreach (var destructable in destructables)
             {

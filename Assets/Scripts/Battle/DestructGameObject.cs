@@ -8,7 +8,7 @@ public class DestructGameObject : MonoBehaviour, IDestructable
         var player = GetComponent<PlayerController>();
         if (player != null)
         {
-            player.SetState(PlayerController.State.Dead);
+            player.SetState(PlayerController.State.Death);
         }
         else
         {
