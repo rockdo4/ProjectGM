@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -73,6 +74,18 @@ public class ItemPanel : MonoBehaviour, IRenewal
         }
 
         PlayDataManager.WearItem(item);
+        switch (item.type)
+        {
+            case Equip.EquipType.Weapon:
+                InventoryManager.Instance.ShowWeapons(true);
+
+                break;
+
+            case Equip.EquipType.Armor:
+                InventoryManager.Instance.ShowArmors(true);
+
+                break;
+        }
 
         Renewal();
     }
