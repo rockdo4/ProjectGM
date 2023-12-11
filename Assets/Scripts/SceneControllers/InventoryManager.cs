@@ -7,9 +7,18 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UI;
+using static Unity.VisualScripting.Dependencies.Sqlite.SQLite3;
 
 public class InventoryManager : MonoBehaviour
 {
+    public enum ItemType
+    {
+        Weapon,
+        Armor,
+        SkillCode,
+        Mat
+    }
+    private ItemType curType = ItemType.Weapon;
     public static InventoryManager Instance;
 
     public GameObject inventoryPanel;
@@ -28,7 +37,6 @@ public class InventoryManager : MonoBehaviour
 
     [Space(10.0f)]
 
-
     [Header("재료")]
     public MatPanel matPanel;
     public IconSO matIconSo;
@@ -36,9 +44,12 @@ public class InventoryManager : MonoBehaviour
     [Space(10.0f)]
 
     [Header("일괄판매")]
+    public GameObject sellArea;
     public GameObject sellPanel;
-    private Equip[] sellList = new Equip[10]; // 최대 판매 개수
+    public GameObject sellButton;
+
     private bool sellMode = false;
+    private List<Equip> sellEquipList = new List<Equip>();
 
     private ObjectPool<ItemButton> buttonPool;
     private List<ItemButton> releaseList = new List<ItemButton>();
@@ -69,6 +80,7 @@ public class InventoryManager : MonoBehaviour
         {
             button.OnCountAct();
             button.iconImage.sprite = null;
+            button.iconImage.color = Color.white;
             button.button.onClick.RemoveAllListeners();
             button.transform.SetParent(gameObject.transform); // ItemButton Transform Reset
             button.gameObject.SetActive(false);
@@ -90,22 +102,47 @@ public class InventoryManager : MonoBehaviour
             return;
         }
         ClearItemButton();
+        curType = ItemType.Weapon;
 
         var weapons = PlayDataManager.data.WeaponInventory;
         foreach (var weapon in weapons)
         {
-            Debug.Log(weapon.id);
             var go = buttonPool.Get();
 
             go.iconImage.sprite = weaponIconSO.GetSprite(weapon.id / 100 * 100);
+            go.iconImage.color = Color.white;
             go.OnEquip(weapon.isEquip);
 
             go.button.onClick.AddListener(() => 
             {
-                if (sellMode)
+                if (sellMode && sellEquipList.Count <= 10)
                 {
-                    //sellList.Add(weapon);
+                    if (go.iconImage.color == Color.white)
+                    {
+                        sellEquipList.Add(weapon);
+                        go.iconImage.color = Color.red;
 
+                        var newGo = buttonPool.Get();
+                        newGo.iconImage.sprite = weaponIconSO.GetSprite(weapon.id / 100 * 100);
+                        newGo.OnEquip(weapon.isEquip);
+                        newGo.transform.SetParent(sellPanel.transform);
+                        newGo.button.onClick.AddListener(() => 
+                        {
+                            buttonPool.Release(go.sell);
+                            go.sell = null;
+                            sellEquipList.Remove(weapon);
+                            go.iconImage.color = Color.white;
+                        });
+
+                        go.sell = newGo;
+                    }
+                    else
+                    {
+                        buttonPool.Release(go.sell);
+                        go.sell = null;
+                        sellEquipList.Remove(weapon);
+                        go.iconImage.color = Color.white;
+                    }
                 }
                 else
                 {
@@ -127,6 +164,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
         ClearItemButton();
+        curType = ItemType.Armor;
 
         var armors = PlayDataManager.data.ArmorInventory;
         foreach (var armor in armors)
@@ -134,11 +172,12 @@ public class InventoryManager : MonoBehaviour
             var go = buttonPool.Get();
 
             go.iconImage.sprite = armorIconSO.GetSprite(armor.id);
+            go.iconImage.color = Color.white;
             go.OnEquip(armor.isEquip);
 
             go.button.onClick.AddListener(() =>
             {
-                if (sellMode)
+                if (sellMode && sellEquipList.Count <= 10)
                 {
 
                 }
@@ -162,7 +201,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
         ClearItemButton();
-
+        curType = ItemType.SkillCode;
     }
 
     public void ShowMaterials(bool isOn)
@@ -172,6 +211,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
         ClearItemButton();
+        curType = ItemType.Mat;
 
         var mats = PlayDataManager.data.MatInventory;
         foreach (var mat in mats)
@@ -205,14 +245,87 @@ public class InventoryManager : MonoBehaviour
         releaseList.Clear();
     }
 
-    public void SellMode()
+    public void SellMode(bool mode)
     {
-        if (!sellMode)
-        {
-            sellMode = true;
+        sellMode = mode;
+        sellArea.SetActive(mode);
+        sellButton.SetActive(!mode);
 
-            sellPanel.SetActive(true);
+        switch (curType)
+        {
+            case ItemType.Weapon:
+            case ItemType.Armor:
+                sellEquipList.Clear();
+                break;
+
+            case ItemType.SkillCode:
+                // 구현 필요
+                break;
+
+            case ItemType.Mat:
+                // 구현 필요
+                break;
         }
+
+        switch (sellMode)
+        {
+            case true:
+
+                break;
+
+            case false:
+                foreach (var item in releaseList)
+                {
+                    if (item.sell != null)
+                    {
+                        buttonPool.Release(item.sell);
+                        item.sell = null;
+
+                    }
+                    item.iconImage.color = Color.white;
+                }
+                break;
+        }
+    }
+
+    public void SellItem()
+    {
+        switch (curType)
+        {
+            case ItemType.Weapon:
+                {
+                    foreach (var item in sellEquipList)
+                    {
+                        PlayDataManager.SellItem(item as Weapon);
+                    }
+                    ShowWeapons(true);
+                }
+                break;
+
+            case ItemType.Armor:
+                {
+                    foreach (var item in sellEquipList)
+                    {
+                        PlayDataManager.SellItem(item as Armor);
+                    }
+                    ShowArmors(true);
+                }
+                break;
+
+            case ItemType.SkillCode:
+                {
+                    // 구현 필요
+                }
+                break;
+
+            case ItemType.Mat:
+                {
+                    // 구현 필요
+                }
+                break;
+        }
+        SellMode(false);
+
     }
 
     public void Tester()

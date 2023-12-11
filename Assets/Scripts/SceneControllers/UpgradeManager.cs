@@ -46,6 +46,7 @@ public class UpgradeManager : MonoBehaviour
             () => // createFunc
             {
                 var button = Instantiate(buttonPrefab);
+                button.transform.SetParent(content.transform);
                 button.gameObject.SetActive(false);
 
                 return button;
@@ -53,10 +54,12 @@ public class UpgradeManager : MonoBehaviour
         delegate (UpgradeEquipButton button) // actionOnGet
         {
             button.gameObject.SetActive(true);
+            button.transform.SetParent(content.transform);
         },
         delegate (UpgradeEquipButton button) // actionOnRelease
         {
             button.iconImage.sprite = null;
+            button.transform.SetParent(transform);
             button.gameObject.SetActive(false);
         });
 
@@ -81,7 +84,6 @@ public class UpgradeManager : MonoBehaviour
         foreach (var item in inv)
         {
             var go = buttonPool.Get();
-            go.transform.SetParent(content.transform);
 
             go.SetEquip(item);
             go.UpgradeMode(this);
@@ -97,7 +99,6 @@ public class UpgradeManager : MonoBehaviour
             {
                 var item = new Weapon(data.Key);
                 var go = buttonPool.Get();
-                go.transform.SetParent(content.transform);
 
                 go.SetEquip(item);
                 go.CreateMode(this);
@@ -122,7 +123,6 @@ public class UpgradeManager : MonoBehaviour
         foreach (var item in inv)
         {
             var go = buttonPool.Get();
-            go.transform.SetParent(content.transform);
 
             go.SetEquip(item);
             go.UpgradeMode(this);

@@ -56,6 +56,10 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
 
     public void UnWear()
     {
+        if (iconImage.sprite == null)
+        {
+            return;
+        }
         PlayDataManager.UnWearItem(Type, armorType);
         Renewal();
     }

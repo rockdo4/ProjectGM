@@ -49,15 +49,15 @@ public class UpgradeInfoPanel : MonoBehaviour, IRenewal
 
     private void PrintDef()
     {
-        var ats = CsvTableMgr.GetTable<ArmorTable>().dataTable;
+        var at = CsvTableMgr.GetTable<ArmorTable>().dataTable;
 
         // 방어력 합산식
         var def = 0;
-        foreach (var at in ats)
+        foreach (var armor in PlayDataManager.curArmor)
         {
-            if (at.Value != null)
+            if (armor.Value != null)
             {
-                def += at.Value.def;
+                def += at[armor.Value.id].def;
             }
         }
 
