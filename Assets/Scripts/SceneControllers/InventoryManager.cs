@@ -63,12 +63,14 @@ public class InventoryManager : MonoBehaviour
         delegate (ItemButton button) // actionOnGet
         {
             button.gameObject.SetActive(true);
+            button.transform.SetParent(inventoryPanel.transform);
         },
         delegate (ItemButton button) // actionOnRelease
         {
             button.OnCountAct();
             button.iconImage.sprite = null;
             button.button.onClick.RemoveAllListeners();
+            button.transform.SetParent(gameObject.transform); // ItemButton Transform Reset
             button.gameObject.SetActive(false);
         });
 
