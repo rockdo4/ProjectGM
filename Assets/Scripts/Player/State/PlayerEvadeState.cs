@@ -59,7 +59,7 @@ public class PlayerEvadeState : PlayerStateBase
             var rotation = controller.player.Rigid.rotation;
             rotation.x = 0f;
             var moveSpeed = controller.player.stat.MoveSpeed;
-            controller.player.Rigid.MovePosition(position + rotation * direction * moveSpeed * Time.deltaTime);
+            controller.player.Rigid.MovePosition(position + rotation * direction * moveSpeed * Time.fixedDeltaTime);
         }
     }
 

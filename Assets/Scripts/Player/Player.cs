@@ -91,6 +91,6 @@ public class Player : LivingObject
             return;
         }
         Enemy = GameObject.FindGameObjectWithTag(Tags.enemy).GetComponent<LivingObject>();
-        //virtualCamera.Follow = transform;
+        Debug.Log(Stat.ToString());
     }
 }

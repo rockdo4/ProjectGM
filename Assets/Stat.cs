@@ -1,3 +1,4 @@
+using CsvHelper;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Stat", fileName = "DefaultStat")]
@@ -41,5 +42,10 @@ public class Stat : ScriptableObject
         }
 
         return new Attack((int)damage, critical, groogy);
+    }
+
+    public override string ToString()
+    {
+        return $"HP: {HP}\tAttackDamage: {AttackDamage}\tDefence: {Defence}\t\nMoveSpeed: {MoveSpeed}\tCritical: {Critical}\tCriticalDamage: {CriticalDamage}";
     }
 }
