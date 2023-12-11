@@ -50,6 +50,7 @@ public class InventoryManager : MonoBehaviour
 
     private bool sellMode = false;
     private List<Equip> sellEquipList = new List<Equip>();
+    private List<Materials> sellMatList = new List<Materials>();
 
     private ObjectPool<ItemButton> buttonPool;
     private List<ItemButton> releaseList = new List<ItemButton>();
@@ -115,7 +116,7 @@ public class InventoryManager : MonoBehaviour
 
             go.button.onClick.AddListener(() => 
             {
-                if (sellMode && sellEquipList.Count <= 10)
+                if (sellMode && sellEquipList.Count < 10)
                 {
                     if (go.iconImage.color == Color.white)
                     {
@@ -177,9 +178,34 @@ public class InventoryManager : MonoBehaviour
 
             go.button.onClick.AddListener(() =>
             {
-                if (sellMode && sellEquipList.Count <= 10)
+                if (sellMode && sellEquipList.Count < 10)
                 {
+                    if (go.iconImage.color == Color.white)
+                    {
+                        sellEquipList.Add(armor);
+                        go.iconImage.color = Color.red;
 
+                        var newGo = buttonPool.Get();
+                        newGo.iconImage.sprite = weaponIconSO.GetSprite(armor.id);
+                        newGo.OnEquip(armor.isEquip);
+                        newGo.transform.SetParent(sellPanel.transform);
+                        newGo.button.onClick.AddListener(() =>
+                        {
+                            buttonPool.Release(go.sell);
+                            go.sell = null;
+                            sellEquipList.Remove(armor);
+                            go.iconImage.color = Color.white;
+                        });
+
+                        go.sell = newGo;
+                    }
+                    else
+                    {
+                        buttonPool.Release(go.sell);
+                        go.sell = null;
+                        sellEquipList.Remove(armor);
+                        go.iconImage.color = Color.white;
+                    }
                 }
                 else
                 {
@@ -225,10 +251,40 @@ public class InventoryManager : MonoBehaviour
 
             go.GetComponent<ItemButton>().button.onClick.AddListener(() =>
             {
-                // if (sellMode)
-                matPanel.SetMaterials(mat);
-                matPanel.iconImage.sprite = go.iconImage.sprite;
-                matPanel.Renewal();
+                if (sellMode && sellMatList.Count < 10)
+                {
+                    if (go.iconImage.color == Color.white)
+                    {
+                        sellMatList.Add(mat);
+                        go.iconImage.color = Color.red;
+
+                        var newGo = buttonPool.Get();
+                        newGo.iconImage.sprite = matIconSo.GetSprite(mat.id);
+                        newGo.transform.SetParent(sellPanel.transform);
+                        newGo.button.onClick.AddListener(() =>
+                        {
+                            buttonPool.Release(go.sell);
+                            go.sell = null;
+                            sellMatList.Remove(mat);
+                            go.iconImage.color = Color.white;
+                        });
+
+                        go.sell = newGo;
+                    }
+                    else
+                    {
+                        buttonPool.Release(go.sell);
+                        go.sell = null;
+                        sellMatList.Remove(mat);
+                        go.iconImage.color = Color.white;
+                    }
+                }
+                else
+                {
+                    matPanel.SetMaterials(mat);
+                    matPanel.iconImage.sprite = go.iconImage.sprite;
+                    matPanel.Renewal();
+                }
             });
 
             releaseList.Add(go);
@@ -263,7 +319,7 @@ public class InventoryManager : MonoBehaviour
                 break;
 
             case ItemType.Mat:
-                // 구현 필요
+                sellMatList.Clear();
                 break;
         }
 
@@ -320,7 +376,11 @@ public class InventoryManager : MonoBehaviour
 
             case ItemType.Mat:
                 {
-                    // 구현 필요
+                    foreach (var item in sellMatList)
+                    {
+                        PlayDataManager.SellItem(item);
+                    }
+                    ShowMaterials(true);
                 }
                 break;
         }

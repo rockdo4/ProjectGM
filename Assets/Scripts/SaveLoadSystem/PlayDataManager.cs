@@ -255,4 +255,33 @@ public static class PlayDataManager
         data.ArmorInventory.Remove(item);
         //AddGold(table[item.id].);
     }
+
+    public static void SellItem(Materials item)
+    {
+        if (item == null || !data.MatInventory.Contains(item))
+        {
+            return;
+        }
+        var table = CsvTableMgr.GetTable<MatTable>().dataTable;
+
+        data.MatInventory.Remove(item);
+        AddGold(table[item.id].gold * item.count);
+    }
+
+    public static void SellItem(Materials item, int count)
+    {
+        if (item == null || !data.MatInventory.Contains(item) || count < 0 || item.count < count)
+        {
+            return;
+        }
+        if (item.count - count == 0)
+        {
+            SellItem(item);
+            return;
+        }
+        var table = CsvTableMgr.GetTable<MatTable>().dataTable;
+
+        data.MatInventory.Find(x => x == item).count -= count;
+        AddGold(table[item.id].gold * count);
+    }
 }
