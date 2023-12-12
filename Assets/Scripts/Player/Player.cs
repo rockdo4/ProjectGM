@@ -23,6 +23,8 @@ public class Player : LivingObject
     public WeaponPrefab CurrentWeapon { get; set; }
     public WeaponPrefab FakeWeapon { get; set; }
 
+    public PlayerEffectPool effectPool { get; private set; }
+
     public float MoveDistance
     {
         get
@@ -82,6 +84,7 @@ public class Player : LivingObject
         Animator = GetComponent<Animator>();
         slider = GetComponentInChildren<Slider>();
         virtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
+        effectPool = GetComponent<PlayerEffectPool>();
     }
 
     private void Start()
@@ -91,6 +94,5 @@ public class Player : LivingObject
             return;
         }
         Enemy = GameObject.FindGameObjectWithTag(Tags.enemy).GetComponent<LivingObject>();
-        Debug.Log(Stat.ToString());
     }
 }

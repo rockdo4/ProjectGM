@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
         }
         equipWeapon = PlayDataManager.curWeapon;
 
+
         foreach (var armor in PlayDataManager.curArmor)
         {
             if (armor.Value != null)
@@ -249,7 +250,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 #if UNITY_EDITOR
-        Debug.Log($"--------- ChangeState: {newState} ---------");
+        //Debug.Log($"--------- ChangeState: {newState} ---------");
 #endif
         currentState = newState;
         stateManager?.ChangeState(states[(int)newState]);
@@ -271,7 +272,6 @@ public class PlayerController : MonoBehaviour
     private void ExecuteAttack(LivingObject attacker, LivingObject defender)
     {
         Attack attack = player.Stat.CreateAttack(attacker, defender, player.GroggyAttack);
-
         var attackables = defender.GetComponents<IAttackable>();
         foreach (var attackable in attackables)
         {

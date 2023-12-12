@@ -10,8 +10,6 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
     }
     private EvadeSuccesss evade;
     private Player player;
-    public ParticleSystem evadeEffect;
-    public ParticleSystem justEvadeEffect;
 
     private void Awake()
     {
@@ -38,16 +36,14 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
                 damage = (int)(damage * player.Stat.evadeDamageRate);
                 break;
             case EvadeSuccesss.Just:
-                justEvadeEffect.Play();
+                player.effectPool.PlayEffect(EffectType.JustEvade);
                 damage = 0;
                 break;
         }
-
         if (damage <= 0)
         {
             damage = 0;
         }
-
         player.HP -= damage;
 
         if (player.HP <= 0)
