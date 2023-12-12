@@ -86,6 +86,8 @@ public class Player : LivingObject
 
     private void Start()
     {
+       
+
         if (GameObject.FindGameObjectWithTag(Tags.enemy) == null)
         {
             return;

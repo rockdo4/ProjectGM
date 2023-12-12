@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using static EnemyAI;
@@ -43,7 +42,7 @@ public class EnemyAI : LivingObject
 
     [Header("몬스터의 탐지범위")]
     [SerializeField]
-    private float detectRange = 10f;
+    private float detectRange = 100f;
 
     [Header("몬스터의 공격 사거리")]
     [SerializeField]
@@ -96,6 +95,9 @@ public class EnemyAI : LivingObject
 
     FanShape fanShape = null;
 
+    //private bool isgroggy = false;
+
+ 
     public enum EnemyType
     {
         Bear,
@@ -125,7 +127,11 @@ public class EnemyAI : LivingObject
 
     private void Start()
     {
-        // LookAtPlayer();
+        //if (livingObject == null)
+        //{
+        //    Debug.Log("리빙오보젝트 참조가 설정되지 않음");
+        //}
+
         StartCoroutine(RoarInit());
     }
 
@@ -133,7 +139,6 @@ public class EnemyAI : LivingObject
     {
         hasRoared = false;
         animator.SetTrigger("Roar");
-
         yield return new WaitForSeconds(roarDuration);
         hasRoared = true;
     }
@@ -161,67 +166,18 @@ public class EnemyAI : LivingObject
 
         }
         animator = GetComponent<Animator>();
-    }
-
-    private void LookAtPlayer()
-    {
-        //Vector3 direction = detectedPlayer.position - transform.position;
-        //direction.y = 0; // Y축 방향은 고정
-        //Quaternion lookRotation = Quaternion.LookRotation(direction);
-        //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        
     }
 
     private void Update()
     {
-        //if (detectedPlayer != null)
-        //    LookAtPlayer();
-
-
-        if (IsGroggy)
-        {
-            animator.ResetTrigger("Attack_A");
-            animator.ResetTrigger("Attack_B");
-            animator.ResetTrigger("Attack_C");
-
-            animator.SetBool("Grogy", true);
-            animator.speed = grogySpeed;
-
-            grogyTimer -= Time.deltaTime;
-            if (grogyTimer < 0 || !IsGroggy && animator.GetBool("Grogy"))
-            {
-                animator.speed = 1f;
-                grogyTimer = 5f;
-                IsGroggy = false;
-                animator.SetBool("Grogy", false);
-            }
-        }
-        else if (!IsGroggy) // 임시
-        {
-            animator.speed = 1f;
-            grogyTimer = 5f;
-            animator.SetBool("Grogy", false);
-        }
-
-        if (IsGroggy)
-            return;
-
         if (!hasRoared)
             return;
-
-        if (isAttacking)
-        {
-            return;
-        }
-
-        if (isPreparingAttack)
-        {
-            return;
-        }
 
         if (Input.GetKeyDown(KeyCode.H))
         {
             HP -= 100;
-            //Debug.Log("현재 체력 : " + HP);
+            Debug.Log("현재 체력 : " + HP);
         }
 
         if (HP <= 0)
@@ -230,12 +186,125 @@ public class EnemyAI : LivingObject
             return;
         }
 
-        if (!isAttacking)
+        if (isPreparingAttack)
         {
-            BTRunner.Operate();
+            return;
         }
 
+        if (isAttacking)
+        {
+            return;
+        }
+
+        BTRunner.Operate(); // 위치변경
+
+        
     }
+
+    #region 그로기
+
+    private void SetGroggyState(bool isGroggy)
+    {
+        IsGroggy = isGroggy;
+        if (isGroggy)
+        {
+            animator.ResetTrigger("Attack_A");
+            animator.ResetTrigger("Attack_B");
+            animator.ResetTrigger("Attack_C");
+
+            animator.speed = grogySpeed;
+
+            animator.SetBool("Grogy", true);
+            //grogyTimer = 5f; // 그로기 상태 지속 시간 초기화
+        }
+        else
+        {
+
+            //GroggyFalseState();
+
+            //animator.ResetTrigger("Attack_A");
+            //animator.ResetTrigger("Attack_B");
+            //animator.ResetTrigger("Attack_C");
+
+            grogyTimer = 5f;
+            animator.speed = 1f; // 기본 속도로 복귀
+            Debug.Log("셋불 그로기 펄스 호출 - Set그로기 스테이트");
+            animator.SetBool("Grogy", false);
+        }
+    }
+
+    INode.EnemyState GroggyTrueState()
+    {
+        if (IsGroggy)
+        {
+            //Debug.Log("그로기 상태입니다.");
+            grogyTimer -= Time.deltaTime;
+
+            IsGroggy = true;
+            if (IsGroggy)
+            {
+                animator.ResetTrigger("Attack_A");
+                animator.ResetTrigger("Attack_B");
+                animator.ResetTrigger("Attack_C");
+
+                animator.speed = grogySpeed;
+
+                animator.SetBool("Grogy", true);
+            }
+
+            Debug.Log(grogyTimer);
+
+            if (grogyTimer <= 0)
+            {
+                grogyTimer = 5f; // 그로기 상태 지속 시간 초기화
+                IsGroggy = false;
+                //GroggyFalseState();
+            }
+
+            return INode.EnemyState.Success; // 계속 그로기 상태 유지 // 러닝 or 석세스
+        }
+        
+        return INode.EnemyState.Failure;
+    }
+
+    INode.EnemyState GroggyFalseState()
+    {
+        //Debug.Log("그로기 상태가 해제되었습니다.");
+
+        grogyTimer = 5f;
+        animator.speed = 1f; // 기본 속도로 복귀
+        Debug.Log("셋불 그로기 펄스 호출 - Set그로기 스테이트");
+        animator.SetBool("Grogy", false);
+
+        IsGroggy = false;
+        isAttacking = false;
+        isPreparingAttack = false;
+
+        // SetGroggyState(false); // 안전을 위해 상태 해제를 한번 더 호출
+        return INode.EnemyState.Success;
+
+
+        if (!IsGroggy)
+        {
+            // 외부에서 그로기 상태가 해제되었을 때
+            //Debug.Log("그로기 상태가 해제되었습니다.");
+            isAttacking = false;
+            isPreparingAttack = false;
+
+            // SetGroggyState(false); // 안전을 위해 상태 해제를 한번 더 호출
+            return INode.EnemyState.Success; // 다음 행동으로 넘어감
+        }
+        return INode.EnemyState.Failure;
+    }
+
+    #endregion
+
+
+    #region 행동트리 -> 페이즈 전환 체크 및 처리
+
+
+    #endregion
+
 
     #region 곰 행동트리
 
@@ -243,49 +312,83 @@ public class EnemyAI : LivingObject
     {
         return new SelectorNode
         (
-        new List<INode>()
-                {
+            new List<INode>()
+            {
+                new DecoratorNode
+                (
+                    () => IsGroggy,
+                    new ActionNode(GroggyTrueState) // 그로기 트루 펄스 따로
+                ),
+
+                new DecoratorNode
+                (
+                    () => !IsGroggy,
 
                     new SequenceNode
                     (
                         new List<INode>()
                         {
-                            new ConditionNode(IsPhaseOne),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseOne))
-                        }
-                    ),
+                            new ActionNode(GroggyFalseState), // 외부에서 그로기 펄스되면 실행하는 거를 분할해서 이렇게
 
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new InverterNode(new ConditionNode(IsPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseTwo)),
-                        }
-                    ),
+                            new SelectorNode
+                            (
+                                new List<INode>()
+                                {
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ConditionNode(IsPhaseOne),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseOne))
+                                        }
+                                    ),
 
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ActionNode(DetectPlayer),
-                            new ActionNode(TracePlayer),
-                        }
-                    ),
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new InverterNode(new ConditionNode(IsPhaseOne)),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseTwo)),
+                                        }
+                                    ),
 
-                }
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ActionNode(DetectPlayer),
+                                            new ActionNode(TracePlayer),
+                                        }
+                                    ),
+                                }
+                            )
+                        }
+                    )
+                )
+            }
         );
     }
 
+
+
     #endregion
 
-    #region 호랑이 행동트리
+    #region 에일리언 행동트리
     INode AlienBT()
     {
         return new SelectorNode
         (
         new List<INode>()
                 {
+
+                    new SequenceNode
+                    (
+                        new List<INode>()
+                        {
+                        //new ConditionNode(IsGrogy),
+                        new ActionNode(GroggyTrueState),
+                        }
+                    ),
 
                     new SequenceNode
                     (
@@ -403,6 +506,11 @@ public class EnemyAI : LivingObject
 
     private INode.EnemyState ExecuteAttackPattern(EnemyType enemytype, int[] pattern)
     {
+        //if (!IsGroggy)
+        //{
+        //    Debug.Log("123");
+        //}
+
         INode.EnemyState result = INode.EnemyState.Failure;
         int attackSequence = isTwoPhase ? phaseTwoAttackSequence : phaseOneAttackSequence;
 
@@ -418,6 +526,10 @@ public class EnemyAI : LivingObject
 
             case 3:
                 result = MelleAttackThree(enemytype, meleeAttackIndexThree);
+                break;
+
+            case 4:
+                result = RangeAttackOne(enemytype, meleeAttackIndexThree);
                 break;
         }
 
@@ -584,17 +696,14 @@ public class EnemyAI : LivingObject
         {
             case AttackType.A:
                 attackPrefab = attackTypeAPrefab;
-                //Debug.Log(attackPrefab + "케이스A");
                 break;
 
             case AttackType.B:
                 attackPrefab = attackTypeBPrefab;
-                //Debug.Log(attackPrefab + "케이스B");
                 break;
 
             case AttackType.C:
                 attackPrefab = attackTypeCPrefab;
-                //Debug.Log(attackPrefab + "케이스C");
                 break;
 
             case AttackType.D:
@@ -634,6 +743,11 @@ public class EnemyAI : LivingObject
 
             fanShape = attackPrefab.GetComponent<FanShape>();
 
+            /// 임시 추가
+            
+
+
+
             Vector3 cellSize = fanShape.Return(); // 부채꼴의 크기를 Vector3로 받음
             Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.01f, cellSize.z + 0.01f);
 
@@ -648,25 +762,10 @@ public class EnemyAI : LivingObject
             {
                 if (currentPattern.pattern[i])
                 {
-                    // 베어 어택 공격1 어택 오프셋 0,0,0 찍힘
-                    //Debug.Log(attackOffset);
-
                     Vector3 cellPosition = CalculateCellPosition(i, realOffset, enemyType, attackType);
                     GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
                     cell.SetActive(true);
                     cellInstances.Add(cell);
-
-
-                    //if (enemyType == EnemyType.Bear && attackType == AttackType.A) // 곰 A패턴 로테이션 임시 추가
-                    //{
-                    //    Vector3 directionToMonster = (transform.position - cellPosition).normalized;
-                    //    Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-
-                    //    Quaternion additionalRotation = Quaternion.Euler(0f, 330, 0f); // 120도 회전 추가
-
-                    //    cell.transform.rotation = initialRotation * additionalRotation;
-
-                    //}
 
                     if (i != 4)
                     {
@@ -684,9 +783,6 @@ public class EnemyAI : LivingObject
 
                     GameObject colliderObject = new GameObject("AttackCollider");
                     colliderObject.AddComponent<AttackCell>();
-                    // 공격셀 프리펩을 부모로 설정
-                    // 콜라이더의 로컬 위치 공격셀 중심으로잡고
-                    // 콜라이더의 로컬 회전을 기본값으로
 
                     colliderObject.transform.SetParent(cell.transform);
                     colliderObject.transform.localRotation = Quaternion.identity;
@@ -719,10 +815,8 @@ public class EnemyAI : LivingObject
                         switch (i) // 1, 3, 5, 7 인덱스
                         {
                             case 1:
-                                //Debug.Log("0");
                                 additionalOffset += new Vector3(0f, 0f, -2f); break;
                             case 3:
-                                //Debug.Log("2");
                                 additionalOffset += new Vector3(-2f, 0f, 0f); break;
                             case 5: additionalOffset += new Vector3(0f, 0f, 0f); break;
                             case 7: additionalOffset += new Vector3(0f, 0f, 0f); break;
@@ -735,43 +829,27 @@ public class EnemyAI : LivingObject
 
 
                     colliderObject.transform.localPosition = Vector3.zero + additionalOffset; // 위치 변경 뒤에 해야함
-
                     colliderObjects.Add(colliderObject);
-
                 }
             }
             // 어택 콜라이더가 자식이 되어서 수정이 필요함 // 아니면 공격판정이 당연히 안됨 같이 꺼져서
             // 액티브 펄스를 하는 방식에서 매쉬만 끄게 하는걸로
             attackRangeInstance.SetActive(false);
 
-            foreach (GameObject cell in cellInstances)
-            {
-                MeshRenderer cellMeshRenderer = cell.GetComponent<MeshRenderer>();
-                if (cellMeshRenderer != null)
-                {
-
-
-                    //Debug.Log("색깔 바뀌냐?");
-
-                    Material newMaterial = new Material(cellMeshRenderer.sharedMaterial);
-                    newMaterial.color = Color.yellow;
-                    cellMeshRenderer.material = newMaterial;
-
-                    //Debug.Log(cellMeshRenderer.material);
-
-                    cellMeshRenderer.enabled = true;
-                    // 초기 노랑색으로 추가
-                    //cellMeshRenderer.material.color = Color.yellow;
-                }
-            }
-
-
-            //MeshRenderer meshRenderer = attackRangeInstance.GetComponent<MeshRenderer>();
-            //if (meshRenderer != null)
+            //foreach (GameObject cell in cellInstances)
             //{
-            //    meshRenderer.enabled = false;
+            //    MeshRenderer cellMeshRenderer = cell.GetComponent<MeshRenderer>();
+            //    if (cellMeshRenderer != null)
+            //    {
+            //        Material newMaterial = new Material(cellMeshRenderer.sharedMaterial);
+            //        newMaterial.color = Color.yellow;
+            //        cellMeshRenderer.material = newMaterial;
+            //        //Debug.Log(cellMeshRenderer.material);
+            //        cellMeshRenderer.enabled = true;
+            //        // 초기 노랑색으로 추가
+            //        //cellMeshRenderer.material.color = Color.yellow;
+            //    }
             //}
-
         }
         else
         {
@@ -814,6 +892,11 @@ public class EnemyAI : LivingObject
 
     INode.EnemyState TracePlayer()
     {
+        //if (!IsGroggy)
+        //{
+        //    Debug.Log("1234");
+        //}
+
         if (detectedPlayer != null)
         {
             float actualMoveSpeed = isTwoPhase ? Stat.MoveSpeed * 1.5f : Stat.MoveSpeed;
@@ -926,6 +1009,38 @@ public class EnemyAI : LivingObject
         return INode.EnemyState.Success;
     }
 
+    INode.EnemyState RangeAttackOne(EnemyType enemyType, int attackPatternIndex)
+    {
+        if (isAttacking)
+            return INode.EnemyState.Failure;
+
+        if (detectedPlayer == null)
+            return INode.EnemyState.Failure;
+
+        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
+
+        if (distanceToPlayer >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
+        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        if (angleToPlayer > minAngle)
+            return INode.EnemyState.Failure;
+
+        isAttacking = true;
+
+        attackIndex = attackPatternIndex;
+
+        StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.D));
+        return INode.EnemyState.Success;
+    }
+
+    
+
     #endregion
 
     #region 페이즈 체크
@@ -935,25 +1050,18 @@ public class EnemyAI : LivingObject
         if (!isTwoPhase && HP <= phaseTwoHealthThreshold)
         {
             isTwoPhase = true;
-            //Debug.Log("페이즈 2로 전환");
 
-            // 여기에 Magic 자식 오브젝트를 활성화하는 코드를 추가
-            Transform magicObject = transform.Find("Magic");
+            Transform magicObject = transform.Find("Magic"); // 일단 곰만
             if (magicObject != null)
             {
                 magicObject.gameObject.SetActive(true);
             }
-            //else
-            //{
-            //    Debug.Log("Magic 오브젝트를 찾을 수 없음");
-            //}
+          
         }
         return !isTwoPhase;
     }
 
     #endregion
-
-
 
     #region 기즈모
 
@@ -1009,19 +1117,24 @@ public class EnemyAI : LivingObject
         {
             if (cell != null)
             {
-
                 AttackCell attackCell = cell.GetComponent<AttackCell>();
 
                 //Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
                 
                 if (attackCell != null && attackCell.playerInside)
                 {
+                    //Debug.Log("온어택 호출이 안됐으면 너가 그 몬스터의 애니메이션 이벤트를 안넣었겠지?");
                     ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
                     break;
                 }
             }
         }
     }
+
+    // 프레임단위로 지금 그로기 상태인가? 하드코딩
+    // 데미지를 받을때만 체크를 한다던가
+    // 정작 이 스크립에는 데미지를 받는 부분이 없음
+    // 공격 부분만 있음
 
     #endregion
 

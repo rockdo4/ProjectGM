@@ -53,7 +53,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4691967391105962301
 Transform:
   m_ObjectHideFlags: 0
@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea68372419c51084c8dfdbabb70ffdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackTarget: {fileID: 0}
 --- !u!114 &5956209694159090163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,10 +167,10 @@ MonoBehaviour:
     type: 3}
   attackTypeDPrefab: {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f,
     type: 3}
-  attackPreparationTime: 1
+  attackPreparationTime: 0.5
   detectRange: 50
   meleeAttackRange: 3
-  roarDuration: 3
+  roarDuration: 1
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
