@@ -70,6 +70,5 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Exit()
     {
-        controller.player.Animator.ResetTrigger("Evade");
     }
 }

@@ -30,7 +30,7 @@ public class PlayerAttackState2 : PlayerStateBase
 
     public override void Enter()
     {
-
+        Debug.Log("AttackState");
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Hand);
         animator = controller.player.Animator;
 
@@ -51,9 +51,6 @@ public class PlayerAttackState2 : PlayerStateBase
 
         if (currentAnimationInfo.IsName(clip.clip.name) && currentAnimationInfo.normalizedTime >= 0)
         {
-            animator.SetTrigger(triggerName);
-            Debug.Log("------------------------------------------------------");
-            Debug.Log($"{clip.clip.name} / {currentAnimationInfo.normalizedTime} / {clip.clip.length}");
         }
     }
 
@@ -68,7 +65,7 @@ public class PlayerAttackState2 : PlayerStateBase
 
     public override void Exit()
     {
-        controller.player.Animator.ResetTrigger(triggerName);
+        //controller.player.Animator.ResetTrigger(triggerName);
     }
 
     private AnimatorStateMachine GetStateMachine()

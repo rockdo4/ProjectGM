@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (player.isAttack)
+        if (currentState == State.Evade)
         {
             return;
         }
@@ -198,11 +198,11 @@ public class PlayerController : MonoBehaviour
     }
     private void HoldEnd()
     {
-        if (currentState == State.Hit || currentState == State.Death)
-        {
-            return;
-        }
-        player.canCombo = false;
+        //if (currentState == State.Hit || currentState == State.Death)
+        //{
+        //    return;
+        //}
+        //player.canCombo = false;
     }
     #endregion
 
@@ -259,7 +259,7 @@ public class PlayerController : MonoBehaviour
     private void StateInit()
     {
         states.Add(new PlayerIdleState(this));
-        states.Add(new PlayerAttackState(this));
+        states.Add(new PlayerAttackState2(this));
         states.Add(new PlayerSuperAttackState(this));
         states.Add(new PlayerEvadeState(this));
         states.Add(new PlayerSprintState(this));
