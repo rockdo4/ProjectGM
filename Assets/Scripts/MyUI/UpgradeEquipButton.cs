@@ -135,4 +135,11 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
 
         iconImage.color = Color.white;
     }
+
+    private void OnEnable()
+    {
+#if UNITY_STANDALONE || UNITY_EDITOR
+        transform.localScale = Vector3.one;
+#endif
+    }
 }

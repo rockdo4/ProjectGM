@@ -18,6 +18,8 @@ public class ItemButton : MonoBehaviour
     [Header("버튼")]
     public Button button;
 
+    public ItemButton sell = null;
+
     private void Awake()
     {
         iconImage = GetComponent<Image>();
