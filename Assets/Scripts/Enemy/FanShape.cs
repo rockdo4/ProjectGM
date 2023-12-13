@@ -1,30 +1,28 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class FanShape : MonoBehaviour
 {
-
-    // 기능을 여기 구현하고
-    // 동작만 에니미에서
-    // 공격 대기시간? 은 또 EnemyAi에서 관할하기때문에 이것도 정하는 건 에니미
-    
-
-    // 공격패턴마다 대기시간을 다 넘긴다 // 에니미에서
-
-    // gpt는 아 생성할때 enemyai스크립에서 정해도 됨!
-    // ㄱ,ㅡㄴ데 안돼
-
     public float radius = 5f;
     public float angle = 90f;
     public int segments = 50;
-    public int wifiSegments = 2;
+    public int wifiSegments = 1;
 
     public Vector3 centerPoint;
 
     public Mesh sharedMesh;
     private MeshCollider meshCollider;
 
+    private Material material;
+    private float startTime;
+
+    public EnemyAI Enemyai;
+
+    void Start()
+    {
+        material = GetComponent<Renderer>().material;
+        startTime = Time.time;
+    }
 
     void Awake()
     {
@@ -38,17 +36,12 @@ public class FanShape : MonoBehaviour
         CalculateCenterPoint();
     }
 
-    //void Start()
-    //{
-    //    MeshRenderer meshRenderer = attackRangeInstance.GetComponent<MeshRenderer>();
-    //    if (meshRenderer != null)
-    //    {
-    //        Material newMaterial = new Material(meshRenderer.material);
-    //        newMaterial.color = Color.red;  // 예시로 색상을 빨간색으로 변경
-    //        meshRenderer.material = newMaterial;
-    //    }
-    //}
+    void Update()
+    {
+        float t = Mathf.Clamp01((Time.time - startTime) / Enemyai.attackPreparationTime);
 
+        material.color = Color.Lerp(Color.yellow, Color.red, t);
+    }
 
     Mesh CreateFanMesh()
     {
@@ -66,7 +59,7 @@ public class FanShape : MonoBehaviour
 
         int vertexIndex = 0, triangleIndex = 0;
 
-        // 정점 생성
+        // 정점
         for (int i = 0; i <= segments; i++)
         {
             float currentAngle = angleStep * i; // 90도 추가 // 다시 수정 칼큘레이트 건드는걸로
@@ -82,7 +75,7 @@ public class FanShape : MonoBehaviour
             );
         }
 
-        // 삼각형 생성
+        // 삼각형
         for (int i = 0; i < segments; i++)
         {
             int baseIndex = i * 2;
