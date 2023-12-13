@@ -5,6 +5,8 @@ public class PlayerEvadeState : PlayerStateBase
     private Vector3 direction;
     private Vector3 startPosition;
 
+    private Vector3 targetPosition;
+
     public PlayerEvadeState(PlayerController controller) : base(controller)
     {
 
@@ -24,12 +26,13 @@ public class PlayerEvadeState : PlayerStateBase
             TouchManager.SwipeDirection.Right => Vector3.right,
             _ => Vector3.zero
         };
-
+        
         controller.player.Animator.SetFloat("X", direction.x);
         controller.player.Animator.SetFloat("Z", direction.z);
         controller.player.Animator.SetTrigger("Evade");
-
         startPosition = controller.player.Rigid.position;
+
+        controller.player.effects.PlayEffect(EffectType.Evade, direction);
     }
 
     public override void Update()
@@ -58,13 +61,14 @@ public class PlayerEvadeState : PlayerStateBase
         {
             var rotation = controller.player.Rigid.rotation;
             rotation.x = 0f;
-            var moveSpeed = controller.player.stat.MoveSpeed;
-            controller.player.Rigid.MovePosition(position + rotation * direction * moveSpeed * Time.deltaTime);
+            var moveSpeed = controller.player.Stat.MoveSpeed;
+            var force = rotation * direction * moveSpeed;
+            //controller.player.Rigid.MovePosition(position + rotation * direction * moveSpeed * Time.fixedDeltaTime);
+            controller.player.Rigid.AddForce(force, ForceMode.VelocityChange);
         }
     }
 
     public override void Exit()
     {
-        controller.player.Animator.ResetTrigger("Evade");
     }
 }

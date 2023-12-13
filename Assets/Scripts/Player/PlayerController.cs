@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
         }
         equipWeapon = PlayDataManager.curWeapon;
 
+
         foreach (var armor in PlayDataManager.curArmor)
         {
             if (armor.Value != null)
@@ -169,7 +170,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (player.isAttack)
+        if (currentState == State.Evade)
         {
             return;
         }
@@ -197,11 +198,11 @@ public class PlayerController : MonoBehaviour
     }
     private void HoldEnd()
     {
-        if (currentState == State.Hit || currentState == State.Death)
-        {
-            return;
-        }
-        player.canCombo = false;
+        //if (currentState == State.Hit || currentState == State.Death)
+        //{
+        //    return;
+        //}
+        //player.canCombo = false;
     }
     #endregion
 
@@ -271,7 +272,6 @@ public class PlayerController : MonoBehaviour
     private void ExecuteAttack(LivingObject attacker, LivingObject defender)
     {
         Attack attack = player.Stat.CreateAttack(attacker, defender, player.GroggyAttack);
-
         var attackables = defender.GetComponents<IAttackable>();
         foreach (var attackable in attackables)
         {

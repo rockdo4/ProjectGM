@@ -56,4 +56,9 @@ public class PlayerStat : Stat
         }
         return new Attack((int)damage, critical, groggy);
     }
+
+    public override string ToString()
+    {
+        return base.ToString() + $"\nevadeTime: {evadeTime}\tmaxEvadePoint: {maxEvadePoint}\tevadePoint: {evadePoint}\t\nevadeDamageRate: {evadeDamageRate}\tjustEvadeTime: {justEvadeTime}\tjustEvadePoint: {justEvadePoint}\t\nhitEvadePoint: {hitEvadePoint}\tgroggyTime: {groggyTime}\thitInvincibleTime: {hitInvincibleTime}t";
+    }
 }

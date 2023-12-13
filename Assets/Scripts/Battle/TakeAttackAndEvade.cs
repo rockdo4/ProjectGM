@@ -11,7 +11,6 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
     private EvadeSuccesss evade;
     private Player player;
 
-
     private void Awake()
     {
         player = GetComponent<Player>();
@@ -25,27 +24,28 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
         }
 
         var damage = attack.Damage;
-
         damage -= player.Stat.Defence;
+
+        EvadeCheck();
+        switch (evade)
+        {
+            case EvadeSuccesss.None:
+                player.effects.PlayEffect(EffectType.Hit);
+                player.IsGroggy = attack.IsGroggy;
+                break;
+            case EvadeSuccesss.Normal:
+                player.effects.PlayEffect(EffectType.Hit);
+                damage = (int)(damage * player.Stat.evadeDamageRate);
+                break;
+            case EvadeSuccesss.Just:
+                player.effects.PlayEffect(EffectType.JustEvade);
+                damage = 0;
+                break;
+        }
         if (damage <= 0)
         {
             damage = 0;
         }
-
-        EvadeCheck();
-
-        switch (evade)
-        {
-            case EvadeSuccesss.None:
-                player.IsGroggy = attack.IsGroggy;
-                break;
-            case EvadeSuccesss.Normal:
-                damage = (int)(damage * player.Stat.evadeDamageRate);
-                break;
-            case EvadeSuccesss.Just:
-                break;
-        }
-
         player.HP -= damage;
 
         if (player.HP <= 0)
