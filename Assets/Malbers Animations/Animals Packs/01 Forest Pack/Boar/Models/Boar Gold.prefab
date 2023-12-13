@@ -1995,7 +1995,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4998402249158530
 Transform:
   m_ObjectHideFlags: 0
@@ -2024,7 +2024,7 @@ Animator:
   m_GameObject: {fileID: 1964666256970230}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 59dc7eb140be69548819cbbdef4c5a29, type: 3}
-  m_Controller: {fileID: 9100000, guid: 264077771d56f6d4f806a98115c68e24, type: 2}
+  m_Controller: {fileID: 22100000, guid: a6431bc4e53aae343944766d66b8f7d9, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 1
   m_ApplyRootMotion: 1
@@ -2047,26 +2047,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stat: {fileID: 0}
+  stat: {fileID: 11400000, guid: f850de4678448954d8fe71b892de6df5, type: 2}
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
-  attackTypeAPrefab: {fileID: 0}
-  attackTypeBPrefab: {fileID: 0}
-  attackTypeCPrefab: {fileID: 0}
-  attackTypeDPrefab: {fileID: 0}
+  AttackPatternTypeAPrefab: {fileID: 9153738736741634195, guid: aaa21cefd58c5c442910061e8e46a4b6,
+    type: 3}
+  AttackPatternTypeBPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
+    type: 3}
+  AttackPatternTypeCPrefab: {fileID: 6896046466890514737, guid: 6d775c1817efc7240923737e0cdf662b,
+    type: 3}
+  AttackPatternTypeDPrefab: {fileID: 3694188551370226324, guid: 688248f3810a55444b5f5ee20a39e8dc,
+    type: 3}
   attackPreparationTime: 0.5
   detectRange: 100
   meleeAttackRange: 3
   roarDuration: 3
   playerLayerMask:
     serializedVersion: 2
-    m_Bits: 0
-  enemyType: 0
+    m_Bits: 8
+  enemyType: 2
   minAngle: 10
   rotationSpeed: 5
-  attackGrid: 000000000000000000
-  savedPatterns: []
+  attackGrid: 000000000100000000
+  savedPatterns:
+  - patternName: MelleAttack_A
+    pattern: 000101000100010001
+  - patternName: MelleAttack_B
+    pattern: 000000000100000000
+  - patternName: RangeAttack_A
+    pattern: 000000000100000000
+  - patternName: MelleAttack_C
+    pattern: 000000000100000000
+  rangeIndicator: {fileID: 0}
 --- !u!114 &8756163649462211507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2079,7 +2092,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea68372419c51084c8dfdbabb70ffdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackTarget: {fileID: 0}
 --- !u!114 &8748939880026415065
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TakeAttack : MonoBehaviour, IAttackable
 {
-    public LivingObject attackTarget;
+    private LivingObject attackTarget;
 
     private void Awake()
     {

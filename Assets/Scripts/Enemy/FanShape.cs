@@ -16,7 +16,7 @@ public class FanShape : MonoBehaviour
     private Material material;
     private float startTime;
 
-    public EnemyAI Enemyai;
+    public EnemyAI enemyAi;
 
     void Start()
     {
@@ -38,7 +38,11 @@ public class FanShape : MonoBehaviour
 
     void Update()
     {
-        float t = Mathf.Clamp01((Time.time - startTime) / Enemyai.attackPreparationTime);
+        if (enemyAi == null)
+            return;
+
+        //float t = Mathf.Clamp01((Time.time - startTime) / 0.5f);
+        float t = Mathf.Clamp01((Time.time - startTime) / enemyAi.attackPreparationTime);
 
         material.color = Color.Lerp(Color.yellow, Color.red, t);
     }

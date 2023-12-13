@@ -97,12 +97,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5bd55fee962b6c44b525ceadaf609ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 2.5
+  radius: 3.5
   angle: 360
   segments: 50
   wifiSegments: 1
   centerPoint: {x: 0, y: 0, z: 0}
   sharedMesh: {fileID: 0}
+  enemyAi: {fileID: 0}
 --- !u!64 &829135223555832440
 MeshCollider:
   m_ObjectHideFlags: 0
