@@ -174,6 +174,10 @@ public class PlayerController : MonoBehaviour
     }
     private void OnHold()
     {
+        if (player.Enemy == null)
+        {
+            return;
+        }
         if (currentState == State.Hit || currentState == State.Death)
         {
             return;
