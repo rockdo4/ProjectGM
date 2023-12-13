@@ -88,7 +88,7 @@ public class URPOutlineFeature : ScriptableRendererFeature
 
             Parameters.Antialiasing = renderingData.cameraData.cameraTargetDescriptor.msaaSamples;
 
-            Parameters.Target = RenderTargetUtility.ComposeTarget(Parameters, Renderer.cameraColorTarget);
+            Parameters.Target = RenderTargetUtility.ComposeTarget(Parameters, Renderer.cameraColorTargetHandle);
             Parameters.DepthTarget =
 #if UNITY_2019_3_OR_NEWER && !UNITY_2019_3_0 && !UNITY_2019_3_1 && !UNITY_2019_3_2 && !UNITY_2019_3_3 && !UNITY_2019_3_4 && !UNITY_2019_3_5 && !UNITY_2019_3_6 && !UNITY_2019_3_7 && !UNITY_2019_3_8
             RenderTargetUtility.ComposeTarget(Parameters, !IsDepthTextureAvailable(Renderer) ? GetColorTarget(Renderer) :

@@ -15,13 +15,6 @@ public class PlayerAttackState2 : PlayerStateBase
 {
     private Animator animator;
     private const string triggerName = "Attack";
-    private string subStateName = "Combo";
-
-    private int subStateHash;
-    private string currentClipName;
-
-    private bool isCombo = false;
-    private const float comboDuration = 0.5f;
 
     public PlayerAttackState2(PlayerController controller) : base(controller)
     {
@@ -30,11 +23,9 @@ public class PlayerAttackState2 : PlayerStateBase
 
     public override void Enter()
     {
-        Debug.Log("AttackState");
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Hand);
         animator = controller.player.Animator;
 
-        subStateHash = Animator.StringToHash(subStateName);
         animator.SetTrigger(triggerName);
     }
 
@@ -44,7 +35,6 @@ public class PlayerAttackState2 : PlayerStateBase
         {
             controller.SetState(PlayerController.State.Idle);
         }
-
 
         var currentAnimationInfo = animator.GetCurrentAnimatorStateInfo(0);
         var clip = animator.GetCurrentAnimatorClipInfo(0)[0];

@@ -32,7 +32,7 @@ public class PlayerEvadeState : PlayerStateBase
         controller.player.Animator.SetTrigger("Evade");
         startPosition = controller.player.Rigid.position;
 
-        controller.player.effectPool.PlayEffect(EffectType.Evade);
+        controller.player.effects.PlayEffect(EffectType.Evade, direction);
     }
 
     public override void Update()

@@ -259,7 +259,7 @@ public class PlayerController : MonoBehaviour
     private void StateInit()
     {
         states.Add(new PlayerIdleState(this));
-        states.Add(new PlayerAttackState2(this));
+        states.Add(new PlayerAttackState(this));
         states.Add(new PlayerSuperAttackState(this));
         states.Add(new PlayerEvadeState(this));
         states.Add(new PlayerSprintState(this));

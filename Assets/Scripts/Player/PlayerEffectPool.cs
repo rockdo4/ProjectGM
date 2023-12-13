@@ -1,10 +1,16 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
 
 public enum EffectType
 {
-    Evade, JustEvade
+    Evade, 
+    JustEvade,
+    Hit,
+    Attack,
+    SuperAttack,
+    Death
 }
 public class PlayerEffectPool : MonoBehaviour
 {
@@ -20,9 +26,11 @@ public class PlayerEffectPool : MonoBehaviour
     [SerializeField]
     private EffectInfo[] effectInfos = null;
     private Dictionary<EffectType, ObjectPool<ParticleSystem>> poolDictionary = new Dictionary<EffectType, ObjectPool<ParticleSystem>>();
+    private Rigidbody rigid;
 
     private void Awake()
     {
+        rigid = GetComponent<Rigidbody>();
         Debug.Log("Effect Pool Load......");
         for (int i = 0; i < effectInfos.Length; i++)
         {
@@ -42,7 +50,11 @@ public class PlayerEffectPool : MonoBehaviour
 
     private ParticleSystem CreateEffect(EffectType effectType, ParticleSystem prefab)
     {
-        var effect = Instantiate(prefab);
+        var effect = Instantiate(prefab);        
+        effect.transform.SetParent(transform);
+        effect.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        //effect.transform.localPosition = Vector3.zero;
+        //effect.transform.localRotation = Quaternion.identity;
         effect.GetComponent<EffectScript>().PlayEndListeners += () =>
         {
             poolDictionary[effectType].Release(effect);
@@ -65,17 +77,22 @@ public class PlayerEffectPool : MonoBehaviour
         return;
     }
 
-    public void PlayEffect(EffectType type, Transform tr = null)
+    public void PlayEffect(EffectType type, Vector3 direction = default)
     {
+        if (!poolDictionary.ContainsKey(type))
+        {
+            Debug.Log($"등록되지 않은 이펙트: {type}");
+            return;
+        }
         var effect = poolDictionary[type].Get();
-        if (tr != null)
+
+        if (direction != default)
         {
-            effect.transform.position = tr.position;
+            Vector3 normalizedDirection = direction.normalized;
+            Vector3 flattenedDirection = new Vector3(normalizedDirection.x, 0f, normalizedDirection.z);
+            effect.transform.localRotation = Quaternion.LookRotation(flattenedDirection);
         }
-        else
-        {
-            effect.transform.position = transform.position;
-        }
+
         effect.Play();
     }
 }
