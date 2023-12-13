@@ -28,8 +28,8 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
         switch (item.type)
         {
             case Equip.EquipType.Weapon:
-                iconImage.sprite = weaponIconSO.GetSprite(item.id / 100 * 100);
-
+                iconImage.sprite = weaponIconSO.GetSprite(item.id / 100 * 100 + 1);
+                // weapon icon level reset
                 break;
 
             case Equip.EquipType.Armor:
@@ -57,7 +57,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
             return false;
         }
 
-        if (mat.count < ct[item.id + 1].number_3)
+        if (mat.count < ct[item.id + 1].lvup_module_req)
         {
             Debug.Log("Lack Of Materials Count");
             return false;

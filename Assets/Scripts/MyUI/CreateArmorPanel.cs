@@ -50,7 +50,7 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         var mt = CsvTableMgr.GetTable<MatTable>().dataTable;
 
-        nameText.text = st[armor.Armor_name];
+        nameText.text = st[armor.name];
 
         if (ct[item.id].mf_module != -1) // 요구 재료마다 분기
         {
@@ -61,12 +61,12 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
             {
                 count = mat.count;
             }
-            go.matText.text = st[mt[ct[item.id].mf_module].item_name];
-            go.SetSlider(count, ct[item.id].number_1);
+            go.matText.text = st[mt[ct[item.id].mf_module].name];
+            go.SetSlider(count, ct[item.id].mf_module_req);
             go.Renewal();
         }
 
-        defText.text = armor.def.ToString();
+        defText.text = armor.defence.ToString();
         {
             if (armor.skill1_id != -1)
             {
@@ -89,7 +89,7 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
         var armor = new Armor(item.id);
 
         PlayDataManager.Purchase(ct[item.id].gold);
-        PlayDataManager.DecreaseMat(ct[item.id].mf_module, ct[item.id].number_1);
+        PlayDataManager.DecreaseMat(ct[item.id].mf_module, ct[item.id].mf_module_req);
         PlayDataManager.data.ArmorInventory.Add(armor);
         PlayDataManager.Save();
 
@@ -108,7 +108,7 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
             return false;
         }
 
-        if (mat.count < ct[item.id].number_1)
+        if (mat.count < ct[item.id].mf_module_req)
         {
             Debug.Log("Lack Of Materials Count");
             return false;

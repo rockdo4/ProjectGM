@@ -60,8 +60,8 @@ public class UpgradeWeaponPanel : MonoBehaviour, IRenewal
             return;
         }
 
-        beforeNameText.text = st[wt[item.id].weapon_name];
-        afterNameText.text = st[wt[item.id + 1].weapon_name];
+        beforeNameText.text = st[wt[item.id].name];
+        afterNameText.text = st[wt[item.id + 1].name];
 
         beforeInfoText.text = $"현재 공격력 : {wt[item.id].atk}\n현재 속성 : {wt[item.id].weakpoint}";
         afterInfoText.text = $"현재 공격력 : {wt[item.id + 1].atk}\n현재 속성 : {wt[item.id + 1].weakpoint}";
@@ -75,16 +75,16 @@ public class UpgradeWeaponPanel : MonoBehaviour, IRenewal
             {
                 count = mat.count;
             }
-            go.matText.text = st[mt[ct[item.id + 1].lvup_module].item_name];
-            go.SetSlider(count, ct[item.id + 1].number_3);
+            go.matText.text = st[mt[ct[item.id + 1].lvup_module].name];
+            go.SetSlider(count, ct[item.id + 1].lvup_module_req);
             go.Renewal();
         }
 
         if (ct[item.id + 1].ingredients != -1) // 요구 재료마다 분기
         {
             var go = Instantiate(require, content.transform);
-            go.matText.text = st[wt[ct[item.id + 1].ingredients].weapon_name];
-            go.SetSlider(1, ct[item.id + 1].number_4);
+            go.matText.text = st[wt[ct[item.id + 1].ingredients].name];
+            go.SetSlider(1, 1);
             go.Renewal();
         }
 
@@ -102,7 +102,7 @@ public class UpgradeWeaponPanel : MonoBehaviour, IRenewal
 
         var weapon = new Weapon(item.id + 1);
         PlayDataManager.Purchase(ct[item.id + 1].gold);
-        PlayDataManager.DecreaseMat(ct[item.id + 1].lvup_module, ct[item.id + 1].number_3);
+        PlayDataManager.DecreaseMat(ct[item.id + 1].lvup_module, ct[item.id + 1].lvup_module_req);
         if (item.isEquip)
         {
             PlayDataManager.WearItem(weapon);
@@ -127,7 +127,7 @@ public class UpgradeWeaponPanel : MonoBehaviour, IRenewal
             return false;
         }
 
-        if (mat.count < ct[item.id + 1].number_3)
+        if (mat.count < ct[item.id + 1].lvup_module_req)
         {
             Debug.Log("Lack Of Materials Count");
             return false;
