@@ -4,18 +4,18 @@ using UnityEngine;
 public class IconSO : ScriptableObject
 {
     [Header("재료 ID")]
-    public int[] IDs;
+    public int[] ID;
 
     [Header("이미지")]
-    public Sprite[] IMAGEs;
+    public Sprite[] IMAGE;
 
     public Sprite GetSprite(int id)
     {
-        for (int i = 0; i < IDs.Length; i++)
+        for (int i = 0; i < ID.Length; i++)
         {
-            if (IDs[i] == id)
+            if (ID[i] == id)
             {
-                return IMAGEs[i];
+                return IMAGE[i];
             }
         }
         return null;

@@ -57,7 +57,7 @@ public class UpgradeInfoPanel : MonoBehaviour, IRenewal
         {
             if (armor.Value != null)
             {
-                def += at[armor.Value.id].def;
+                def += at[armor.Value.id].defence;
             }
         }
 

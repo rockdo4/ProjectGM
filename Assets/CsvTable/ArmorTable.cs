@@ -9,30 +9,35 @@ public class ArmorTable : CsvTable
 {
     public class Data
     {
-        public int Armor_name { get; set; }
-        public Armor.ArmorType Armor_type { get; set; }
-        public int def { get; set; }
+        public int name { get; set; }
+        public Armor.ArmorType type { get; set; }
+        public int sellgold { get; set; }
+        public int defence { get; set; }
         public int skill1_id { get; set; }
         public int skill1_lv { get; set; }
         public int skill2_id { get; set; }
         public int skill2_lv { get; set; }
-        public int set_skill { get; set; }
+        public int set_skill_id { get; set; }
+        public int req_parts { get; set; }
         public int socket { get; set; }
         public int upgrade { get; set; }
 
-        public Data(int Armor_name, Armor.ArmorType Armor_type, int def,
+        public Data(int name, Armor.ArmorType type, int sellgold,
+            int defence,
             int skill1_id, int skill1_lv,
             int skill2_id, int skill2_lv,
-            int set_skill, int socket, int upgrade)
+            int set_skill_id, int req_parts, int socket, int upgrade)
         {
-            this.Armor_name = Armor_name;
-            this.Armor_type = Armor_type;
-            this.def = def;
+            this.name = name;
+            this.type = type;
+            this.sellgold = sellgold;
+            this.defence = defence;
             this.skill1_id = skill1_id;
             this.skill1_lv = skill1_lv;
             this.skill2_id = skill2_id;
             this.skill2_lv = skill2_lv;
-            this.set_skill = set_skill;
+            this.set_skill_id = set_skill_id;
+            this.req_parts = req_parts;
             this.socket = socket;
             this.upgrade = upgrade;
         }
@@ -64,16 +69,18 @@ public class ArmorTable : CsvTable
             dataTable.Add(int.Parse(csv.GetField(0)),
                 new Data
                 (
-                    csv.GetField<int>(1), // Armor_name
-                    (Armor.ArmorType)csv.GetField<int>(2), // Armor_type
-                    csv.GetField<int>(3), // def
-                    csv.GetField<int>(4), // skill1_id
-                    csv.GetField<int>(5), // skill1_lv
-                    csv.GetField<int>(6), // skill2_id
-                    csv.GetField<int>(7), // skill2_lv
-                    csv.GetField<int>(8), // set_skill
-                    csv.GetField<int>(9), // socket
-                    csv.GetField<int>(10) // upgrade
+                    csv.GetField<int>(1), // name
+                    (Armor.ArmorType)csv.GetField<int>(2), // type
+                    csv.GetField<int>(3), // sellgold
+                    csv.GetField<int>(4), // defence
+                    csv.GetField<int>(5), // skill1_id
+                    csv.GetField<int>(6), // skill1_lv
+                    csv.GetField<int>(7), // skill2_id
+                    csv.GetField<int>(8), // skill2_lv
+                    csv.GetField<int>(9), // set_skill_id
+                    csv.GetField<int>(10), // req_parts
+                    csv.GetField<int>(11), // socket
+                    csv.GetField<int>(12) // upgrade
                 )
             );
         }

@@ -11,31 +11,28 @@ public class CraftTable : CsvTable
     {
         public Equip.EquipType _class;
         public int mf_module { get; set; }
-        public int number_1 { get; set; }
+        public int mf_module_req { get; set; }
         public int mon_core { get; set; }
-        public int number_2 { get; set; }
+        public int mon_core_req { get; set; }
         public int lvup_module { get; set; }
-        public int number_3 { get; set; }
+        public int lvup_module_req { get; set; }
         public int ingredients { get; set; }
-        public int number_4 { get; set; }
         public int gold { get; set; }
 
         public Data(int _class,
-            int mf_module, int number_1,
-            int mon_core, int number_2,
-            int lvup_module, int number_3,
-            int ingredients, int number_4,
-            int gold)
+            int mf_module, int mf_module_req,
+            int mon_core, int mon_core_req,
+            int lvup_module, int lvup_module_req,
+            int ingredients, int gold)
         {
             this._class = (Equip.EquipType)_class;
             this.mf_module = mf_module;
-            this.number_1 = number_1;
+            this.mf_module_req = mf_module_req;
             this.mon_core = mon_core;
-            this.number_2 = number_2;
+            this.mon_core_req = mon_core_req;
             this.lvup_module = lvup_module;
-            this.number_3 = number_3;
+            this.lvup_module_req = lvup_module_req;
             this.ingredients = ingredients;
-            this.number_4 = number_4;
             this.gold = gold;
         }
     }
@@ -74,8 +71,7 @@ public class CraftTable : CsvTable
                     csv.GetField<int>(6), // lvup_module
                     csv.GetField<int>(7), // number_3
                     csv.GetField<int>(8), // ingredients
-                    csv.GetField<int>(9), // number_4
-                    csv.GetField<int>(10) // gold
+                    csv.GetField<int>(9) // gold
                 )
             );
         }

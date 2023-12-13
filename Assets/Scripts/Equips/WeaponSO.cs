@@ -29,7 +29,9 @@ public class WeaponSO : ScriptableObject
         int index = -1;
         for (int i = 0; i < ID.Length; i++)
         {
-            int original = weapon.id / 100 * 100; // 레벨 초기화
+            int original = weapon.id / 100 * 100 + 1;
+            // weapon icon level reset
+
             if (ID[i] == original)
             {
                 index = i;

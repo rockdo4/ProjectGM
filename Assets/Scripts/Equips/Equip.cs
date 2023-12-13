@@ -97,8 +97,8 @@ public class Armor : Equip
     {
         var table = CsvTableMgr.GetTable<ArmorTable>().dataTable;
 
-        armorType = table[id].Armor_type;
-        setSkill = table[id].set_skill;
+        armorType = table[id].type;
+        setSkill = table[id].set_skill_id;
         socket = table[id].socket;
 
     }

@@ -43,9 +43,9 @@ public class ItemPanel : MonoBehaviour, IRenewal
                 {
                     var table = CsvTableMgr.GetTable<WeaponTable>().dataTable[item.id];
                     //iconImage.sprite = ;
-                    nameText.text = st[table.weapon_name];
+                    nameText.text = st[table.name];
                     statText.text = $"[공격력] {table.atk}\n[무기속성] {table.property}";
-                    infoText.text = table.weapon_name.ToString(); // string table
+                    infoText.text = table.name.ToString(); // string table
                 }
                 
                 break;
@@ -55,9 +55,9 @@ public class ItemPanel : MonoBehaviour, IRenewal
                     var table = CsvTableMgr.GetTable<ArmorTable>().dataTable[item.id];
                     //iconImage.sprite = ;
 
-                    nameText.text = st[table.Armor_name];
-                    statText.text = $"[방어력] {table.def}\n[부위] {table.Armor_type}";
-                    infoText.text = $"[세트효과] {table.set_skill}";
+                    nameText.text = st[table.name];
+                    statText.text = $"[방어력] {table.defence}\n[부위] {table.type}";
+                    infoText.text = $"[세트효과] {table.set_skill_id}";
                 }
 
                 break;
