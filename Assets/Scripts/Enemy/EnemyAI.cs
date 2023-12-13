@@ -86,7 +86,7 @@ public class EnemyAI : LivingObject
     private int attackIndex = -1;
 
     private float grogySpeed = 0.5f;
-    private float grogyTimer = 5f;
+    private float grogyTimer = 100f;
 
     public bool[] attackGrid = new bool[9];
     public List<AttackPattern> savedPatterns = new List<AttackPattern>();
@@ -166,7 +166,8 @@ public class EnemyAI : LivingObject
 
         }
         animator = GetComponent<Animator>();
-        
+        animator.speed = 1f; // 기본 속도로 복귀
+
     }
 
     private void Update()
@@ -203,35 +204,7 @@ public class EnemyAI : LivingObject
 
     #region 그로기
 
-    private void SetGroggyState(bool isGroggy)
-    {
-        IsGroggy = isGroggy;
-        if (isGroggy)
-        {
-            animator.ResetTrigger("Attack_A");
-            animator.ResetTrigger("Attack_B");
-            animator.ResetTrigger("Attack_C");
 
-            animator.speed = grogySpeed;
-
-            animator.SetBool("Grogy", true);
-            //grogyTimer = 5f; // 그로기 상태 지속 시간 초기화
-        }
-        else
-        {
-
-            //GroggyFalseState();
-
-            //animator.ResetTrigger("Attack_A");
-            //animator.ResetTrigger("Attack_B");
-            //animator.ResetTrigger("Attack_C");
-
-            grogyTimer = 5f;
-            animator.speed = 1f; // 기본 속도로 복귀
-            Debug.Log("셋불 그로기 펄스 호출 - Set그로기 스테이트");
-            animator.SetBool("Grogy", false);
-        }
-    }
 
     INode.EnemyState GroggyTrueState()
     {
@@ -241,29 +214,28 @@ public class EnemyAI : LivingObject
             grogyTimer -= Time.deltaTime;
 
             IsGroggy = true;
-            if (IsGroggy)
-            {
-                animator.ResetTrigger("Attack_A");
-                animator.ResetTrigger("Attack_B");
-                animator.ResetTrigger("Attack_C");
 
-                animator.speed = grogySpeed;
+            animator.ResetTrigger("Attack_A");
+            animator.ResetTrigger("Attack_B");
+            animator.ResetTrigger("Attack_C");
 
-                animator.SetBool("Grogy", true);
-            }
+            //animator.speed = grogySpeed;
+
+            animator.SetBool("Grogy", true);
+
 
             Debug.Log(grogyTimer);
 
             if (grogyTimer <= 0)
             {
-                grogyTimer = 5f; // 그로기 상태 지속 시간 초기화
+                grogyTimer = 100f; // 그로기 상태 지속 시간 초기화
                 IsGroggy = false;
                 //GroggyFalseState();
             }
 
             return INode.EnemyState.Success; // 계속 그로기 상태 유지 // 러닝 or 석세스
         }
-        
+
         return INode.EnemyState.Failure;
     }
 
@@ -271,8 +243,8 @@ public class EnemyAI : LivingObject
     {
         //Debug.Log("그로기 상태가 해제되었습니다.");
 
-        grogyTimer = 5f;
-        animator.speed = 1f; // 기본 속도로 복귀
+        grogyTimer = 100f;
+        //animator.speed = 1f; // 기본 속도로 복귀
         Debug.Log("셋불 그로기 펄스 호출 - Set그로기 스테이트");
         animator.SetBool("Grogy", false);
 
@@ -328,7 +300,8 @@ public class EnemyAI : LivingObject
                     (
                         new List<INode>()
                         {
-                            new ActionNode(GroggyFalseState), // 외부에서 그로기 펄스되면 실행하는 거를 분할해서 이렇게
+                            // 외부에서 그로기 펄스되면 실행하는 거를 분할해서 이렇게
+                            new ActionNode(GroggyFalseState),
 
                             new SelectorNode
                             (
