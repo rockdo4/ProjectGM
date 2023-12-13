@@ -19,11 +19,20 @@ public class MatPanel : MonoBehaviour, IRenewal
     [SerializeField]
     private TextMeshProUGUI infoText;
 
+    [Header("개수")]
+    [SerializeField]
+    private TextMeshProUGUI countText;
+
     private Materials mat;
 
     public void SetMaterials(Materials mat)
     {
         this.mat = mat;
+    }
+
+    public void Renewal()
+    {
+        gameObject.SetActive(true);
 
         var table = CsvTableMgr.GetTable<MatTable>().dataTable;
         var st = CsvTableMgr.GetTable<StringTable>().dataTable;
@@ -31,13 +40,13 @@ public class MatPanel : MonoBehaviour, IRenewal
         nameText.text = st[table[mat.id].item_name];
         infoText.text = st[table[mat.id].item_script];
         sellText.text = $"판매 가격 : {table[mat.id].gold.ToString()}";
+        countText.text = $"{mat.count} / {mat.Capacity}";
     }
 
-    public void Renewal()
+    public void SellItem()
     {
-        gameObject.SetActive(true);
+        PlayDataManager.SellItem(mat, 1);
 
-
+        Renewal();
     }
-
 }
