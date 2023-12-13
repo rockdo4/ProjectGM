@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static EnemyAI;
 
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : LivingObject
@@ -45,7 +43,7 @@ public class EnemyAI : LivingObject
 
     [Header("공격 대기시간")]
     [SerializeField]
-    private float attackPreparationTime = 0.5f;
+    public float attackPreparationTime = 0.5f;
 
     [Header("몬스터의 탐지범위")]
     [SerializeField]
@@ -792,7 +790,7 @@ public class EnemyAI : LivingObject
             AttackPattern currentPattern = savedPatterns[attackIndex];
             cellInstances.Clear(); // 리스트 초기화
 
-            fanShape = attackPrefab.GetComponent<FanShape>();
+            fanShape = attackRangeInstance.GetComponent<FanShape>();
 
             Vector3 cellSize = fanShape.Return(); // 부채꼴의 크기를 Vector3로 받음
             Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.01f, cellSize.z + 0.01f);
@@ -810,6 +808,7 @@ public class EnemyAI : LivingObject
                     Vector3 cellPosition = CalculateCellPosition(i, realOffset, enemyType, AttackPatternType);
                     GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
                     cell.SetActive(true);
+                    cell.GetComponent<FanShape>().Enemyai = this;
                     cellInstances.Add(cell);
 
                     if (i != 4)

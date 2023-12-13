@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.26380953, g: 0.33237544, b: 0.4355742, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9049,9 +9049,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
         type: 3}
+      propertyPath: stat
+      value: 
+      objectReference: {fileID: 11400000, guid: c2e3b2e1a4e5aa94398e9d3e79ccaa7c,
+        type: 2}
+    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
+        type: 3}
       propertyPath: attackPreparationTime
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
+        type: 3}
+      propertyPath: AttackPatternTypeAPrefab
+      value: 
+      objectReference: {fileID: 4974148430569709096, guid: da44565a3c47a8f4cad84aa5d2251def,
+        type: 3}
+    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
+        type: 3}
+      propertyPath: AttackPatternTypeBPrefab
+      value: 
+      objectReference: {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f,
+        type: 3}
+    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
+        type: 3}
+      propertyPath: AttackPatternTypeCPrefab
+      value: 
+      objectReference: {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f,
+        type: 3}
+    - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
+        type: 3}
+      propertyPath: AttackPatternTypeDPrefab
+      value: 
+      objectReference: {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f,
+        type: 3}
     - target: {fileID: 3570399017614776302, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
         type: 3}
       propertyPath: OnDeathEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -15293,8 +15323,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 5000
-  field of view: 60.000004
+  far clip plane: 100
+  field of view: 60
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -15320,8 +15350,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1526050043}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 1.5210176}
+  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 12, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

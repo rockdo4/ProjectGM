@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -101,6 +101,8 @@ MonoBehaviour:
   angle: 90
   segments: 20
   wifiSegments: 2
+  centerPoint: {x: 0, y: 0, z: 0}
+  sharedMesh: {fileID: 0}
 --- !u!64 &7723432980954632975
 MeshCollider:
   m_ObjectHideFlags: 0
