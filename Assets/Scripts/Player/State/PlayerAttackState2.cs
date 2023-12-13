@@ -31,17 +31,8 @@ public class PlayerAttackState2 : PlayerStateBase
 
     public override void Update()
     {
-        if (!TouchManager.Instance.Holded)
-        {
-            controller.SetState(PlayerController.State.Idle);
-        }
-
         var currentAnimationInfo = animator.GetCurrentAnimatorStateInfo(0);
         var clip = animator.GetCurrentAnimatorClipInfo(0)[0];
-
-        if (currentAnimationInfo.IsName(clip.clip.name) && currentAnimationInfo.normalizedTime >= 0)
-        {
-        }
     }
 
     private void NextAnimation()

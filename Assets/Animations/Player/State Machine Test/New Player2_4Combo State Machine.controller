@@ -282,7 +282,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0.1
   m_TransitionOffset: 0
-  m_ExitTime: 0.9
+  m_ExitTime: 1
   m_HasExitTime: 1
   m_HasFixedDuration: 0
   m_InterruptionSource: 0
@@ -295,7 +295,10 @@ AnimatorTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: Hit
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4263078033336522048}
   m_Solo: 0
@@ -659,7 +662,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: hitted_head_front
+  m_Name: Hit
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -841,7 +844,7 @@ AnimatorStateMachine:
   m_AnyStatePosition: {x: 50, y: 20, z: 0}
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 950, y: 130, z: 0}
-  m_ParentStateMachinePosition: {x: 430, y: 100, z: 0}
+  m_ParentStateMachinePosition: {x: 440, y: 100, z: 0}
   m_DefaultState: {fileID: 7101083882903384557}
 --- !u!1101 &6479467527276710091
 AnimatorStateTransition:

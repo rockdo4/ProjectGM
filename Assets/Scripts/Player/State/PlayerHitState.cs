@@ -9,8 +9,7 @@ public class PlayerHitState : PlayerStateBase
 
     public override void Enter()
     {
-        controller.player.Animator.SetTrigger(triggerName);
-        
+        controller.player.Animator.Play(triggerName);
     }
 
     public override void Update()
