@@ -1,8 +1,20 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class FanShape : MonoBehaviour
 {
+
+    // 기능을 여기 구현하고
+    // 동작만 에니미에서
+    // 공격 대기시간? 은 또 EnemyAi에서 관할하기때문에 이것도 정하는 건 에니미
+    
+
+    // 공격패턴마다 대기시간을 다 넘긴다 // 에니미에서
+
+    // gpt는 아 생성할때 enemyai스크립에서 정해도 됨!
+    // ㄱ,ㅡㄴ데 안돼
+
     public float radius = 5f;
     public float angle = 90f;
     public int segments = 50;
@@ -13,17 +25,30 @@ public class FanShape : MonoBehaviour
     public Mesh sharedMesh;
     private MeshCollider meshCollider;
 
+
     void Awake()
     {
         MeshFilter meshFilter = GetComponent<MeshFilter>();
-        meshCollider = GetComponent<MeshCollider>(); // MeshCollider 컴포넌트 가져오기
+        meshCollider = GetComponent<MeshCollider>();
 
         sharedMesh = CreateFanMesh();
         meshFilter.mesh = sharedMesh;
-        meshCollider.sharedMesh = sharedMesh; // MeshCollider에 메시 설정
+        meshCollider.sharedMesh = sharedMesh;
 
         CalculateCenterPoint();
     }
+
+    //void Start()
+    //{
+    //    MeshRenderer meshRenderer = attackRangeInstance.GetComponent<MeshRenderer>();
+    //    if (meshRenderer != null)
+    //    {
+    //        Material newMaterial = new Material(meshRenderer.material);
+    //        newMaterial.color = Color.red;  // 예시로 색상을 빨간색으로 변경
+    //        meshRenderer.material = newMaterial;
+    //    }
+    //}
+
 
     Mesh CreateFanMesh()
     {
@@ -44,12 +69,7 @@ public class FanShape : MonoBehaviour
         // 정점 생성
         for (int i = 0; i <= segments; i++)
         {
-            //에일리언 B패턴일때는 120도여야하고
-            // 에일리언 C패턴일때는 60도기준 모든 삼각형의 꼭지점이 항상 플레이어 방향이어야됨
-
-
-
-            float currentAngle = angleStep * i + 0f; // 90도 추가
+            float currentAngle = angleStep * i; // 90도 추가 // 다시 수정 칼큘레이트 건드는걸로
             vertices[vertexIndex++] = new Vector3(
                 Mathf.Cos(currentAngle * Mathf.Deg2Rad) * innerRadius,
                 0,
@@ -109,17 +129,8 @@ public class FanShape : MonoBehaviour
             sum += vertex;
         }
         centerPoint = sum / sharedMesh.vertexCount;
-
-
-        //// 바운즈 센터 포기하고 메시의 모든 버텍스를 기반으로 중심점을 계산하는 걸로 변경
-        //if (sharedMesh == null)
-        //    return;
-
-        //// 메시의 Bounds를 이용해 중심점을 계산
-        //centerPoint = sharedMesh.bounds.center;
     }
 
-    // 중심점 정보를 반환하는 메서드
     public Vector3 GetCenterPoint()
     {
         return centerPoint;
