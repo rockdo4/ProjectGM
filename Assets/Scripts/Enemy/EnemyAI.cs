@@ -14,27 +14,34 @@ public class EnemyAI : LivingObject
     private int[] alienAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
     private int[] alienAttackPatternPhaseTwo = new int[] { 1, 2, 3 }; // abc
 
-    private int[] spiderAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
-    private int[] spiderAttackPatternPhaseTwo = new int[] { 1, 2, 3 }; // abc
+    // 공격 속도는 D<C<B<A 순서로 A가 제일 빠르다
+    private int[] wildBoarAttackPatternPhaseOne = new int[] { 1, 2, 5 }; // abd
+    private int[] wildBoarAttackPatternPhaseTwo = new int[] { 1, 2, 5, 3 }; // abdc
 
     private int[] wolfAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
     private int[] wolfAttackPatternPhaseTwo = new int[] { 1, 2, 1, 2, 2 }; // ababb
 
-    private int meleeAttackIndexOne = 0;
-    private int meleeAttackIndexTwo = 1;
-    private int meleeAttackIndexThree = 2;
+    private int EnemyMeleeAttackIndexOne = 0;
+    private int EnemyMeleeAttackIndexTwo = 1;
+    private int EnemyMeleeAttackIndexThree = 2;
+    private int EnemyMeleeAttackIndexFour = 3;
+
+    private int EnemyRangedAttackIndexOne = 0;
+    private int EnemyRangedAttackIndexTwo = 1;
+    private int EnemyRangedAttackIndexThree = 2;
+    private int EnemyRangedAttackIndexFour = 3;
 
     [Header("원 공격 타입 프리펩")]
-    public GameObject attackTypeAPrefab;
+    public GameObject AttackPatternTypeAPrefab;
 
     [Header("삼각형 공격 타입 프리펩")]
-    public GameObject attackTypeBPrefab;
+    public GameObject AttackPatternTypeBPrefab;
 
     [Header("부채꼴 공격 타입 프리펩")]
-    public GameObject attackTypeCPrefab;
+    public GameObject AttackPatternTypeCPrefab;
 
     [Header("와이파이 공격 타입 프리펩")]
-    public GameObject attackTypeDPrefab;
+    public GameObject AttackPatternTypeDPrefab;
 
     [Header("공격 대기시간")]
     [SerializeField]
@@ -86,7 +93,7 @@ public class EnemyAI : LivingObject
     private int attackIndex = -1;
 
     private float grogySpeed = 0.5f;
-    private float grogyTimer = 100f;
+    private float grogyTimer = 5f;
 
     public bool[] attackGrid = new bool[9];
     public List<AttackPattern> savedPatterns = new List<AttackPattern>();
@@ -94,25 +101,27 @@ public class EnemyAI : LivingObject
     private List<GameObject> colliderObjects = new List<GameObject>();
 
     FanShape fanShape = null;
-
-    //private bool isgroggy = false;
-
  
     public enum EnemyType
     {
         Bear,
         Alien,
-        Spider,
+        WildBoar,
         Wolf,
     }
 
-    public enum AttackType
+    public enum AttackPatternType
     {
         A,
         B,
         C,
         D,
+        RangeA,
+        RangeB,
+        RangeC,
+        RangeD,
     }
+    
 
     #region Interaction Player And Enemy
     public EnemyStat Stat
@@ -127,11 +136,6 @@ public class EnemyAI : LivingObject
 
     private void Start()
     {
-        //if (livingObject == null)
-        //{
-        //    Debug.Log("리빙오보젝트 참조가 설정되지 않음");
-        //}
-
         StartCoroutine(RoarInit());
     }
 
@@ -157,8 +161,8 @@ public class EnemyAI : LivingObject
             case EnemyType.Alien:
                 BTRunner = new BehaviorTreeRunner(AlienBT());
                 break;
-            case EnemyType.Spider:
-                BTRunner = new BehaviorTreeRunner(SpiderBT());
+            case EnemyType.WildBoar:
+                BTRunner = new BehaviorTreeRunner(WildBoarBT());
                 break;
             case EnemyType.Wolf:
                 BTRunner = new BehaviorTreeRunner(WolfBT());
@@ -223,12 +227,11 @@ public class EnemyAI : LivingObject
 
             animator.SetBool("Grogy", true);
 
-
-            Debug.Log(grogyTimer);
+            //Debug.Log(grogyTimer);
 
             if (grogyTimer <= 0)
             {
-                grogyTimer = 100f; // 그로기 상태 지속 시간 초기화
+                grogyTimer = 5f; // 그로기 상태 지속 시간 초기화
                 IsGroggy = false;
                 //GroggyFalseState();
             }
@@ -243,9 +246,9 @@ public class EnemyAI : LivingObject
     {
         //Debug.Log("그로기 상태가 해제되었습니다.");
 
-        grogyTimer = 100f;
+        grogyTimer = 5f;
         //animator.speed = 1f; // 기본 속도로 복귀
-        Debug.Log("셋불 그로기 펄스 호출 - Set그로기 스테이트");
+        //Debug.Log("셋불 그로기 펄스 호출 - Set그로기 스테이트");
         animator.SetBool("Grogy", false);
 
         IsGroggy = false;
@@ -254,19 +257,6 @@ public class EnemyAI : LivingObject
 
         // SetGroggyState(false); // 안전을 위해 상태 해제를 한번 더 호출
         return INode.EnemyState.Success;
-
-
-        if (!IsGroggy)
-        {
-            // 외부에서 그로기 상태가 해제되었을 때
-            //Debug.Log("그로기 상태가 해제되었습니다.");
-            isAttacking = false;
-            isPreparingAttack = false;
-
-            // SetGroggyState(false); // 안전을 위해 상태 해제를 한번 더 호출
-            return INode.EnemyState.Success; // 다음 행동으로 넘어감
-        }
-        return INode.EnemyState.Failure;
     }
 
     #endregion
@@ -289,7 +279,7 @@ public class EnemyAI : LivingObject
                 new DecoratorNode
                 (
                     () => IsGroggy,
-                    new ActionNode(GroggyTrueState) // 그로기 트루 펄스 따로
+                    new ActionNode(GroggyTrueState)
                 ),
 
                 new DecoratorNode
@@ -300,7 +290,6 @@ public class EnemyAI : LivingObject
                     (
                         new List<INode>()
                         {
-                            // 외부에서 그로기 펄스되면 실행하는 거를 분할해서 이렇게
                             new ActionNode(GroggyFalseState),
 
                             new SelectorNode
@@ -351,86 +340,123 @@ public class EnemyAI : LivingObject
     {
         return new SelectorNode
         (
-        new List<INode>()
-                {
+            new List<INode>()
+            {
+                new DecoratorNode
+                (
+                    () => IsGroggy,
+                    new ActionNode(GroggyTrueState)
+                ),
+
+                new DecoratorNode
+                (
+                    () => !IsGroggy,
 
                     new SequenceNode
                     (
                         new List<INode>()
                         {
-                        //new ConditionNode(IsGrogy),
-                        new ActionNode(GroggyTrueState),
-                        }
-                    ),
+                            new ActionNode(GroggyFalseState),
 
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ConditionNode(IsPhaseOne),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Alien, alienAttackPatternPhaseOne))
-                        }
-                    ),
+                            new SelectorNode
+                            (
+                                new List<INode>()
+                                {
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ConditionNode(IsPhaseOne),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Alien, alienAttackPatternPhaseOne))
+                                        }
+                                    ),
 
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new InverterNode(new ConditionNode(IsPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Alien, alienAttackPatternPhaseTwo)),
-                        }
-                    ),
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new InverterNode(new ConditionNode(IsPhaseOne)),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Alien, alienAttackPatternPhaseTwo)),
+                                        }
+                                    ),
 
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ActionNode(DetectPlayer),
-                            new ActionNode(TracePlayer),
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ActionNode(DetectPlayer),
+                                            new ActionNode(TracePlayer),
+                                        }
+                                    ),
+                                }
+                            )
                         }
-                    ),
-
-                }
+                    )
+                )
+            }
         );
     }
     #endregion
 
-    #region 거미 행동트리
-    INode SpiderBT()
+    #region 멧돼지 행동트리
+    INode WildBoarBT()
     {
         return new SelectorNode
         (
-        new List<INode>()
-                {
+            new List<INode>()
+            {
+                new DecoratorNode
+                (
+                    () => IsGroggy,
+                    new ActionNode(GroggyTrueState)
+                ),
+
+                new DecoratorNode
+                (
+                    () => !IsGroggy,
 
                     new SequenceNode
                     (
                         new List<INode>()
                         {
-                            new ConditionNode(IsPhaseOne),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Spider, spiderAttackPatternPhaseOne))
-                        }
-                    ),
+                            new ActionNode(GroggyFalseState),
 
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new InverterNode(new ConditionNode(IsPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Spider, spiderAttackPatternPhaseTwo)),
-                        }
-                    ),
+                            new SelectorNode
+                            (
+                                new List<INode>()
+                                {
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ConditionNode(IsPhaseOne),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.WildBoar, wildBoarAttackPatternPhaseOne))
+                                        }
+                                    ),
 
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ActionNode(DetectPlayer),
-                            new ActionNode(TracePlayer),
-                        }
-                    ),
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new InverterNode(new ConditionNode(IsPhaseOne)),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.WildBoar, wildBoarAttackPatternPhaseTwo)),
+                                        }
+                                    ),
 
-                }
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ActionNode(DetectPlayer),
+                                            new ActionNode(TracePlayer),
+                                        }
+                                    ),
+                                }
+                            )
+                        }
+                    )
+                )
+            }
         );
     }
     #endregion
@@ -440,37 +466,60 @@ public class EnemyAI : LivingObject
     {
         return new SelectorNode
         (
-        new List<INode>()
-                {
+            new List<INode>()
+            {
+                new DecoratorNode
+                (
+                    () => IsGroggy,
+                    new ActionNode(GroggyTrueState)
+                ),
+
+                new DecoratorNode
+                (
+                    () => !IsGroggy,
 
                     new SequenceNode
                     (
                         new List<INode>()
                         {
-                            new ConditionNode(IsPhaseOne),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Wolf, wolfAttackPatternPhaseOne))
-                        }
-                    ),
+                            new ActionNode(GroggyFalseState),
 
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new InverterNode(new ConditionNode(IsPhaseOne)),
-                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Wolf, wolfAttackPatternPhaseTwo)),
-                        }
-                    ),
+                            new SelectorNode
+                            (
+                                new List<INode>()
+                                {
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ConditionNode(IsPhaseOne),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseOne))
+                                        }
+                                    ),
 
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ActionNode(DetectPlayer),
-                            new ActionNode(TracePlayer),
-                        }
-                    ),
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new InverterNode(new ConditionNode(IsPhaseOne)),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseTwo)),
+                                        }
+                                    ),
 
-                }
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ActionNode(DetectPlayer),
+                                            new ActionNode(TracePlayer),
+                                        }
+                                    ),
+                                }
+                            )
+                        }
+                    )
+                )
+            }
         );
     }
     #endregion
@@ -479,32 +528,43 @@ public class EnemyAI : LivingObject
 
     private INode.EnemyState ExecuteAttackPattern(EnemyType enemytype, int[] pattern)
     {
-        //if (!IsGroggy)
-        //{
-        //    Debug.Log("123");
-        //}
-
         INode.EnemyState result = INode.EnemyState.Failure;
         int attackSequence = isTwoPhase ? phaseTwoAttackSequence : phaseOneAttackSequence;
 
         switch (pattern[attackSequence])
         {
             case 1:
-                result = MelleAttackOne(enemytype, meleeAttackIndexOne);
+                result = MelleAttackOne(enemytype, EnemyMeleeAttackIndexOne);
                 break;
 
             case 2:
-                result = MelleAttackTwo(enemytype, meleeAttackIndexTwo);
+                result = MelleAttackTwo(enemytype, EnemyMeleeAttackIndexTwo);
                 break;
 
             case 3:
-                result = MelleAttackThree(enemytype, meleeAttackIndexThree);
+                result = MelleAttackThree(enemytype, EnemyMeleeAttackIndexThree);
                 break;
 
             case 4:
-                result = RangeAttackOne(enemytype, meleeAttackIndexThree);
+                result = MelleAttackFour(enemytype, EnemyMeleeAttackIndexFour);
                 break;
-        }
+
+            case 5:
+                result = RangeAttackOne(enemytype, EnemyRangedAttackIndexOne);
+                break;
+
+            case 6:
+                result = RangeAttackTwo(enemytype, EnemyRangedAttackIndexTwo);
+                break;
+
+            case 7:
+                result = RangeAttackThree(enemytype, EnemyRangedAttackIndexThree);
+                break;
+
+            case 8:
+                result = RangeAttackFour(enemytype, EnemyRangedAttackIndexFour);
+                break;
+        } 
 
         if (result == INode.EnemyState.Success)
         {
@@ -520,10 +580,10 @@ public class EnemyAI : LivingObject
         return result;
     }
 
-    IEnumerator PrepareMeleeAttack(EnemyType enemytype, AttackType attackType)
+    IEnumerator PrepareMeleeAttack(EnemyType enemytype, AttackPatternType AttackPatternType) // 근접
     {
         isPreparingAttack = true;
-        ShowAttackRange(true, enemytype, attackType);
+        ShowMeleeAttackRange(true, enemytype, AttackPatternType);
 
         for (float speed = 0.5f; speed >= 0.0f; speed -= Time.deltaTime / attackPreparationTime)
         {
@@ -533,14 +593,39 @@ public class EnemyAI : LivingObject
 
         yield return new WaitForSeconds(attackPreparationTime);
 
-        ShowAttackRange(false, enemytype, attackType);
+        ShowMeleeAttackRange(false, enemytype, AttackPatternType);
         isPreparingAttack = false;
 
         player = detectedPlayer.GetComponent<Player>();
 
         if (player != null)
         {
-            string animationTrigger = $"{"Attack_"}{attackType}";
+            string animationTrigger = $"{"Attack_"}{AttackPatternType}";
+            StartCoroutine(IsAnimationRunning(animationTrigger));
+        }
+    }
+
+    IEnumerator PrepareRangedAttack(EnemyType enemytype, AttackPatternType AttackPatternType) // 원거리
+    {
+        isPreparingAttack = true;
+        ShowRangeAttackRange(true, enemytype, AttackPatternType);
+
+        for (float speed = 0.5f; speed >= 0.0f; speed -= Time.deltaTime / attackPreparationTime)
+        {
+            animator.SetFloat("MoveSpeed", speed);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(attackPreparationTime);
+
+        ShowRangeAttackRange(false, enemytype, AttackPatternType);
+        isPreparingAttack = false;
+
+        player = detectedPlayer.GetComponent<Player>();
+
+        if (player != null)
+        {
+            string animationTrigger = $"{"Attack_"}{AttackPatternType}";
             StartCoroutine(IsAnimationRunning(animationTrigger));
         }
     }
@@ -568,26 +653,26 @@ public class EnemyAI : LivingObject
         }
     }
 
-    private Vector3 GetAttackOffset(EnemyType enemyType, AttackType attackType)
+    private Vector3 GetAttackOffset(EnemyType enemyType, AttackPatternType AttackPatternType)
     {
         if (enemyType == EnemyType.Alien)
         {
-            switch (attackType)
+            switch (AttackPatternType)
             {
-                case AttackType.B:
+                case AttackPatternType.B:
                     return new Vector3(0f, 0f, -2f); // 세모위치 조정 에일리언 B패턴임
-                case AttackType.C:
+                case AttackPatternType.C:
                     return new Vector3(0f, 0f, 0f);
             }
         }
 
         if (enemyType == EnemyType.Bear)
         {
-            switch (attackType)
+            switch (AttackPatternType)
             {
-                case AttackType.B:
+                case AttackPatternType.B:
                     return new Vector3(0f, 0f, -2f); // 세모위치 조정 곰 B 패턴
-                case AttackType.C:
+                case AttackPatternType.C:
                     return new Vector3(0f, 0f, -2f); // 곰 C 패턴
             }
         }
@@ -624,7 +709,7 @@ public class EnemyAI : LivingObject
 
     #region 공격 타일 계산
 
-    Vector3 CalculateCellPosition(int index, Vector3 offset, EnemyType enemyType, AttackType attackType) // 칼큘
+    Vector3 CalculateCellPosition(int index, Vector3 offset, EnemyType enemyType, AttackPatternType AttackPatternType) // 칼큘
     {
         int x = index % 3;
         int z = index / 3;
@@ -633,26 +718,19 @@ public class EnemyAI : LivingObject
 
         if (index == 4)
         {
-            actualPosition -= offset; // realOffset 추가 적용
+            actualPosition -= offset;
         }
 
-        if (enemyType == EnemyType.Alien && attackType == AttackType.C) // 임시
+        if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.C) // 임시
         {
-
-
             switch (index)
             {
                 case 1: actualPosition += new Vector3(0, 0, -0.5f); break; // 뒤
                 case 3: actualPosition += new Vector3(-0.5f, 0, 0); break; // 오른쪽
                 case 5: actualPosition += new Vector3(0.5f, 0, 0); break; // 왼쪽
                 case 7: actualPosition += new Vector3(0, 0, 0.5f); break; // 앞
-
-                    // 여기서 딱히 로테이션은 건드리지 않았지만
-                    // 여기밖에 바뀔 이유가
             }
         }
-
-
 
         actualPosition = transform.rotation * actualPosition; // 이게 문젠가?
         return transform.position + actualPosition;
@@ -660,27 +738,27 @@ public class EnemyAI : LivingObject
 
     #endregion
 
-    private void ShowAttackRange(bool show, EnemyType enemyType, AttackType attackType) // 쇼
+    private void ShowMeleeAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
     {
         GameObject attackPrefab = null;
-        Vector3 attackOffset = GetAttackOffset(enemyType, attackType);
+        Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
 
-        switch (attackType)
+        switch (AttackPatternType)
         {
-            case AttackType.A:
-                attackPrefab = attackTypeAPrefab;
+            case AttackPatternType.A:
+                attackPrefab = AttackPatternTypeAPrefab;
                 break;
 
-            case AttackType.B:
-                attackPrefab = attackTypeBPrefab;
+            case AttackPatternType.B:
+                attackPrefab = AttackPatternTypeBPrefab;
                 break;
 
-            case AttackType.C:
-                attackPrefab = attackTypeCPrefab;
+            case AttackPatternType.C:
+                attackPrefab = AttackPatternTypeCPrefab;
                 break;
 
-            case AttackType.D:
-                attackPrefab = attackTypeDPrefab;
+            case AttackPatternType.D:
+                attackPrefab = AttackPatternTypeDPrefab;
                 break;
         }
 
@@ -716,11 +794,6 @@ public class EnemyAI : LivingObject
 
             fanShape = attackPrefab.GetComponent<FanShape>();
 
-            /// 임시 추가
-            
-
-
-
             Vector3 cellSize = fanShape.Return(); // 부채꼴의 크기를 Vector3로 받음
             Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.01f, cellSize.z + 0.01f);
 
@@ -729,13 +802,12 @@ public class EnemyAI : LivingObject
             Vector3 centerPointLocal = fanShape.GetCenterPoint();
             Vector3 centerPointWorld = attackRangeInstance.transform.TransformPoint(centerPointLocal);
 
-            //Debug.Log(cellSize + " 겟 콜라이더한 셀 사이즈");
 
             for (int i = 0; i < currentPattern.pattern.Length; i++)
             {
                 if (currentPattern.pattern[i])
                 {
-                    Vector3 cellPosition = CalculateCellPosition(i, realOffset, enemyType, attackType);
+                    Vector3 cellPosition = CalculateCellPosition(i, realOffset, enemyType, AttackPatternType);
                     GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
                     cell.SetActive(true);
                     cellInstances.Add(cell);
@@ -766,24 +838,24 @@ public class EnemyAI : LivingObject
 
                     Vector3 additionalOffset = Vector3.zero;
 
-                    if (enemyType == EnemyType.Bear && attackType == AttackType.A)
+                    if (enemyType == EnemyType.Bear && AttackPatternType == AttackPatternType.A)
                     {
                         additionalOffset = new Vector3(1.6f, 0f, 2.6f);
                     }
 
-                    if (enemyType == EnemyType.Bear && attackType == AttackType.B || attackType == AttackType.C)
+                    if (enemyType == EnemyType.Bear && AttackPatternType == AttackPatternType.B || AttackPatternType == AttackPatternType.C)
                     {
                         additionalOffset = new Vector3(0f, 0f, 2.5f);
                     }
 
-                    if (enemyType == EnemyType.Alien && attackType == AttackType.B)
+                    if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.B)
                     {
                         Vector3 currentSize = collider.size;
                         collider.size = new Vector3(currentSize.x / 1.8f, currentSize.y, currentSize.z);
                         additionalOffset = new Vector3(0f, 0f, 2.5f);
                     }
 
-                    if (enemyType == EnemyType.Alien && attackType == AttackType.C)
+                    if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.C)
                     {
                         switch (i) // 1, 3, 5, 7 인덱스
                         {
@@ -809,20 +881,128 @@ public class EnemyAI : LivingObject
             // 액티브 펄스를 하는 방식에서 매쉬만 끄게 하는걸로
             attackRangeInstance.SetActive(false);
 
-            //foreach (GameObject cell in cellInstances)
-            //{
-            //    MeshRenderer cellMeshRenderer = cell.GetComponent<MeshRenderer>();
-            //    if (cellMeshRenderer != null)
-            //    {
-            //        Material newMaterial = new Material(cellMeshRenderer.sharedMaterial);
-            //        newMaterial.color = Color.yellow;
-            //        cellMeshRenderer.material = newMaterial;
-            //        //Debug.Log(cellMeshRenderer.material);
-            //        cellMeshRenderer.enabled = true;
-            //        // 초기 노랑색으로 추가
-            //        //cellMeshRenderer.material.color = Color.yellow;
-            //    }
-            //}
+        }
+        else
+        {
+            foreach (GameObject cell in cellInstances)
+            {
+                if (cell != null)
+                {
+                    MeshRenderer cellMeshRenderer = cell.GetComponent<MeshRenderer>();
+                    if (cellMeshRenderer != null)
+                    {
+                        cellMeshRenderer.enabled = false;
+                    }
+                }
+            }
+        }
+    }
+
+    private void ShowRangeAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
+    {
+        GameObject attackPrefab = null;
+        Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
+
+        switch (AttackPatternType)
+        {
+            case AttackPatternType.A:
+                attackPrefab = AttackPatternTypeAPrefab;
+                break;
+
+            case AttackPatternType.B:
+                attackPrefab = AttackPatternTypeBPrefab;
+                break;
+
+            case AttackPatternType.C:
+                attackPrefab = AttackPatternTypeCPrefab;
+                break;
+
+            case AttackPatternType.D:
+                attackPrefab = AttackPatternTypeDPrefab;
+                break;
+        }
+
+        if (show)
+        {
+            if (attackRangeInstance != null) // 추후 수정
+            {
+                Destroy(attackRangeInstance);
+            }
+
+            attackRangeInstance = Instantiate(attackPrefab, transform);
+
+            foreach (GameObject cell in cellInstances)
+            {
+                if (cell != null)
+                {
+                    Destroy(cell);
+                }
+            }
+
+            foreach (GameObject colliderObject in colliderObjects)
+            {
+                if (colliderObject != null)
+                {
+                    Destroy(colliderObject);
+                }
+            }
+            colliderObjects.Clear();
+
+            AttackPattern currentPattern = savedPatterns[attackIndex];
+            cellInstances.Clear(); // 리스트 초기화
+
+            fanShape = attackPrefab.GetComponent<FanShape>();
+
+            Vector3 cellSize = fanShape.Return(); // 부채꼴의 크기를 Vector3로 받음
+            Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.01f, cellSize.z + 0.01f);
+
+            Vector3 realOffset = attackOffset;
+
+            Vector3 centerPointLocal = fanShape.GetCenterPoint();
+            Vector3 centerPointWorld = attackRangeInstance.transform.TransformPoint(centerPointLocal);
+
+
+            for (int i = 0; i < currentPattern.pattern.Length; i++)
+            {
+                if (currentPattern.pattern[i])
+                {
+                    Vector3 cellPosition = CalculateCellPosition(i, realOffset, enemyType, AttackPatternType);
+                    GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform);
+                    cell.SetActive(true);
+                    cellInstances.Add(cell);
+
+                    if (i != 4)
+                    {
+                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
+                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
+
+                        Quaternion additionalRotation = Quaternion.Euler(0f, 120, 0f);
+
+                        cell.transform.rotation = initialRotation * additionalRotation;
+                    }
+                    else
+                    {
+                        cell.transform.rotation = transform.rotation;
+                    }
+
+                    GameObject colliderObject = new GameObject("AttackCollider");
+                    colliderObject.AddComponent<AttackCell>();
+
+                    colliderObject.transform.SetParent(cell.transform);
+                    colliderObject.transform.localRotation = Quaternion.identity;
+
+                    BoxCollider collider = colliderObject.AddComponent<BoxCollider>();
+                    collider.size = new Vector3(cellSize.x, 0.015f, cellSize.z);
+                    collider.isTrigger = true;
+
+                    Vector3 additionalOffset = Vector3.zero;
+
+                    colliderObject.transform.localPosition = Vector3.zero + additionalOffset;
+                    colliderObjects.Add(colliderObject);
+                }
+            }
+            attackRangeInstance.SetActive(false);
+
         }
         else
         {
@@ -865,11 +1045,6 @@ public class EnemyAI : LivingObject
 
     INode.EnemyState TracePlayer()
     {
-        //if (!IsGroggy)
-        //{
-        //    Debug.Log("1234");
-        //}
-
         if (detectedPlayer != null)
         {
             float actualMoveSpeed = isTwoPhase ? Stat.MoveSpeed * 1.5f : Stat.MoveSpeed;
@@ -911,12 +1086,11 @@ public class EnemyAI : LivingObject
         if (angleToPlayer > minAngle)
             return INode.EnemyState.Failure;
 
-        //Debug.Log(isTwoPhase ? "페이즈2 공격A 준비" : "페이즈1 공격A 준비");
         isAttacking = true;
 
         attackIndex = attackPatternIndex; // 인덱스 바꾸고
 
-        StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.A));
+        StartCoroutine(PrepareMeleeAttack(enemyType, AttackPatternType.A));
         return INode.EnemyState.Success;
     }
 
@@ -942,12 +1116,11 @@ public class EnemyAI : LivingObject
         if (angleToPlayer > minAngle)
             return INode.EnemyState.Failure;
 
-        // Debug.Log(isTwoPhase ? "페이즈2 공격B 준비" : "페이즈1 공격B 준비");
         isAttacking = true;
 
         attackIndex = attackPatternIndex;
 
-        StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.B));
+        StartCoroutine(PrepareMeleeAttack(enemyType, AttackPatternType.B));
         return INode.EnemyState.Success;
     }
 
@@ -978,7 +1151,38 @@ public class EnemyAI : LivingObject
 
         attackIndex = attackPatternIndex;
 
-        StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.C));
+        StartCoroutine(PrepareMeleeAttack(enemyType, AttackPatternType.C));
+        return INode.EnemyState.Success;
+    }
+
+    INode.EnemyState MelleAttackFour(EnemyType enemyType, int attackPatternIndex)
+    {
+        if (isAttacking)
+            return INode.EnemyState.Failure;
+
+        if (detectedPlayer == null)
+            return INode.EnemyState.Failure;
+
+        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
+
+        if (distanceToPlayer >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
+        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        if (angleToPlayer > minAngle)
+            return INode.EnemyState.Failure;
+
+        //Debug.Log(isTwoPhase ? "페이즈2 공격C 준비" : "페이즈1 공격C 준비");
+        isAttacking = true;
+
+        attackIndex = attackPatternIndex;
+
+        StartCoroutine(PrepareMeleeAttack(enemyType, AttackPatternType.D));
         return INode.EnemyState.Success;
     }
 
@@ -1008,11 +1212,100 @@ public class EnemyAI : LivingObject
 
         attackIndex = attackPatternIndex;
 
-        StartCoroutine(PrepareMeleeAttack(enemyType, AttackType.D));
+        StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.RangeA));
         return INode.EnemyState.Success;
     }
 
-    
+    INode.EnemyState RangeAttackTwo(EnemyType enemyType, int attackPatternIndex)
+    {
+        if (isAttacking)
+            return INode.EnemyState.Failure;
+
+        if (detectedPlayer == null)
+            return INode.EnemyState.Failure;
+
+        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
+
+        if (distanceToPlayer >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
+        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        if (angleToPlayer > minAngle)
+            return INode.EnemyState.Failure;
+
+        isAttacking = true;
+
+        attackIndex = attackPatternIndex;
+
+        StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.RangeB));
+        return INode.EnemyState.Success;
+    }
+
+    INode.EnemyState RangeAttackThree(EnemyType enemyType, int attackPatternIndex)
+    {
+        if (isAttacking)
+            return INode.EnemyState.Failure;
+
+        if (detectedPlayer == null)
+            return INode.EnemyState.Failure;
+
+        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
+
+        if (distanceToPlayer >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
+        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        if (angleToPlayer > minAngle)
+            return INode.EnemyState.Failure;
+
+        isAttacking = true;
+
+        attackIndex = attackPatternIndex;
+
+        StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.RangeC));
+        return INode.EnemyState.Success;
+    }
+
+    INode.EnemyState RangeAttackFour(EnemyType enemyType, int attackPatternIndex)
+    {
+        if (isAttacking)
+            return INode.EnemyState.Failure;
+
+        if (detectedPlayer == null)
+            return INode.EnemyState.Failure;
+
+        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
+
+        if (distanceToPlayer >= meleeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
+
+        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        if (angleToPlayer > minAngle)
+            return INode.EnemyState.Failure;
+
+        isAttacking = true;
+
+        attackIndex = attackPatternIndex;
+
+        StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.RangeD));
+        return INode.EnemyState.Success;
+    }
+
 
     #endregion
 
@@ -1103,11 +1396,6 @@ public class EnemyAI : LivingObject
             }
         }
     }
-
-    // 프레임단위로 지금 그로기 상태인가? 하드코딩
-    // 데미지를 받을때만 체크를 한다던가
-    // 정작 이 스크립에는 데미지를 받는 부분이 없음
-    // 공격 부분만 있음
 
     #endregion
 
