@@ -12,7 +12,7 @@ public class PlayerEffects : MonoBehaviour
         [HideInInspector]
         public ParticleSystem effect = null;
         [Header("플레이어 기준 각도 보정")]
-        public Vector3 angleOffset;
+        public Vector3 directionOffset;
 
     }
 
@@ -47,7 +47,7 @@ public class PlayerEffects : MonoBehaviour
         effect.transform.position = transform.position;
         var rotation = transform.rotation;
 
-        var correctedRotation = Quaternion.Euler(rotation.eulerAngles + effectInfo.angleOffset);
+        var correctedRotation = Quaternion.Euler(rotation.eulerAngles + effectInfo.directionOffset);
         if (direction != default)
         {
             var normalizedDirection = direction.normalized;
