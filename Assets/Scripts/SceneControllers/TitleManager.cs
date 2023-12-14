@@ -22,16 +22,6 @@ public class TitleManager : MonoBehaviour
         moneyText.text = PlayDataManager.data.Gold.ToString();
     }
 
-    public void GoGame(string sceneName)
-    {
-        if (PlayDataManager.curWeapon == null)
-        {
-            Notice("무기를 먼저 장착해주십시오.");
-            return;
-        }
-        SceneManager.LoadScene(sceneName);
-    }
-
     private void Notice(string str)
     {
         noticeText.text = str;
