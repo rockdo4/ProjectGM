@@ -22,7 +22,6 @@ public class ItemButton : MonoBehaviour
 
     private void Awake()
     {
-        iconImage = GetComponent<Image>();
         button = GetComponent<Button>();
     }
 
