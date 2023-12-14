@@ -178,7 +178,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         {
             var go = buttonPool.Get();
 
-            go.iconImage.sprite = armorIconSO.GetSprite(armor.id);
+            go.iconImage.sprite = armorIconSO.GetSprite(armor.id / 100 * 100 + 1);
             go.iconImage.color = Color.white;
             go.OnEquip(armor.isEquip);
 
@@ -192,7 +192,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                         go.iconImage.color = Color.red;
 
                         var newGo = buttonPool.Get();
-                        newGo.iconImage.sprite = weaponIconSO.GetSprite(armor.id);
+                        newGo.iconImage.sprite = weaponIconSO.GetSprite(armor.id / 100 * 100 + 1);
                         newGo.OnEquip(armor.isEquip);
                         newGo.transform.SetParent(sellPanel.transform);
                         newGo.button.onClick.AddListener(() =>

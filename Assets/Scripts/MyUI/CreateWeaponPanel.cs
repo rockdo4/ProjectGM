@@ -94,19 +94,19 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         var mat = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mf_module);
         if (mat == null)
         {
-            Debug.Log("Not Exist Materials");
+            //Debug.Log("Not Exist Materials");
             return false;
         }
 
         if (mat.count < ct[item.id].mf_module_req)
         {
-            Debug.Log("Lack Of Materials Count");
+            //Debug.Log("Lack Of Materials Count");
             return false;
         }
 
         if (PlayDataManager.data.Gold < ct[item.id].gold)
         {
-            Debug.Log("Lack Of Gold");
+            //Debug.Log("Lack Of Gold");
             return false;
         }
         // 인벤토리 공간 부족 (추후 추가 필요)
