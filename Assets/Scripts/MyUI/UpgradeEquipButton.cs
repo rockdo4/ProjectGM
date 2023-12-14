@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class UpgradeEquipButton : MonoBehaviour, IRenewal
@@ -25,18 +26,11 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
 
     public void Renewal()
     {
-        switch (item.type)
+        iconImage.sprite = item.type switch
         {
-            case Equip.EquipType.Weapon:
-                iconImage.sprite = weaponIconSO.GetSprite(item.id / 100 * 100 + 1);
-                // weapon icon level reset
-                break;
-
-            case Equip.EquipType.Armor:
-                iconImage.sprite = armorIconSO.GetSprite(item.id);
-
-                break;
-        }
+            Equip.EquipType.Weapon => weaponIconSO.GetSprite(item.id / 100 * 100 + 1),
+            Equip.EquipType.Armor => armorIconSO.GetSprite(item.id / 100 * 100 + 1)
+        };
 
         upgradableImage.color = (IsUpgradable()) ? Color.blue : Color.gray;
     }
@@ -46,26 +40,26 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         if (!ct.ContainsKey(item.id + 1))
         {
-            Debug.Log($"{item.id} is Full Level");
+            //Debug.Log($"{item.id} is Full Level");
             return false;
         }
 
         var mat = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id + 1].lvup_module);
         if (mat == null)
         {
-            Debug.Log("Not Exist Materials");
+            //Debug.Log("Not Exist Materials");
             return false;
         }
 
         if (mat.count < ct[item.id + 1].lvup_module_req)
         {
-            Debug.Log("Lack Of Materials Count");
+            //Debug.Log("Lack Of Materials Count");
             return false;
         }
 
         if (PlayDataManager.data.Gold < ct[item.id + 1].gold)
         {
-            Debug.Log("Lack Of Gold");
+            //Debug.Log("Lack Of Gold");
             return false;
         }
         // 인벤토리 공간 부족 (추후 추가 필요)
@@ -98,7 +92,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
                 button.onClick.AddListener(() =>
                 {
                     um.createArmorPanel.SetEquip(item);
-                    //um.createArmorPanel.iconImage.sprite = iconImage.sprite;
+                    um.createArmorPanel.iconImage.sprite = iconImage.sprite;
                     um.createArmorPanel.Renewal();
                 });
                 break;
@@ -112,26 +106,20 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
     {
         button.onClick.RemoveAllListeners();
 
-        switch (item.type)
+        var umPanel = item.type switch
         {
-            case Equip.EquipType.Weapon:
-                button.onClick.AddListener(() => 
-                {
-                    um.upgradeWeaponPanel.SetEquip(item);
-                    um.upgradeWeaponPanel.SetButton(this);
-                    um.upgradeWeaponPanel.beforeIconImage.sprite = iconImage.sprite;
-                    um.upgradeWeaponPanel.afterIconImage.sprite = iconImage.sprite;
-                    um.upgradeWeaponPanel.Renewal();
-                });
-                break;
+            Equip.EquipType.Weapon => um.upgradeWeaponPanel,
+            Equip.EquipType.Armor => um.upgradeArmorPanel
+        };
 
-            case Equip.EquipType.Armor:
-                button.onClick.AddListener(() => 
-                {
-
-                });
-                break;
-        }
+        button.onClick.AddListener(() =>
+        {
+            umPanel.SetEquip(item);
+            umPanel.SetButton(this);
+            umPanel.beforeIconImage.sprite = iconImage.sprite;
+            umPanel.afterIconImage.sprite = iconImage.sprite;
+            umPanel.Renewal();
+        });
 
         iconImage.color = Color.white;
     }

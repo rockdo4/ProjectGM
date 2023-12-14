@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using SaveDataVC = SaveDataV5; // Version Change?
 
 public static class PlayDataManager
@@ -285,5 +284,10 @@ public static class PlayDataManager
 
         data.MatInventory.Find(x => x == item).count -= count;
         AddGold(table[item.id].sellgold * count);
+    }
+
+    public static bool IsExistItem(Materials item)
+    {
+        return (item != null && data.MatInventory.Contains(item));
     }
 }

@@ -16,7 +16,7 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
     [Header("스킬 텍스트")]
     public TextMeshProUGUI skillsText;
 
-    [Header("스킬 텍스트")]
+    [Header("세트 스킬 텍스트")]
     public TextMeshProUGUI setSkillText;
 
     [Header("요구 재료 패널")]
@@ -51,6 +51,11 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
         var mt = CsvTableMgr.GetTable<MatTable>().dataTable;
 
         nameText.text = st[armor.name];
+        defText.text = armor.defence.ToString();
+        setSkillText.text = (armor.set_skill_id == -1) ? string.Empty : armor.set_skill_id.ToString();
+        skillsText.text = (armor.skill1_id == -1) ? string.Empty : $"{armor.skill1_id} Lv.{armor.skill1_lv}\n";
+        skillsText.text += (armor.skill2_id == -1) ? string.Empty : $"{armor.skill2_id} Lv.{armor.skill2_lv}";
+        priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
 
         if (ct[item.id].mf_module != -1) // 요구 재료마다 분기
         {
@@ -65,16 +70,6 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
             go.SetSlider(count, ct[item.id].mf_module_req);
             go.Renewal();
         }
-
-        defText.text = armor.defence.ToString();
-        {
-            if (armor.skill1_id != -1)
-            {
-
-            }
-        }
-        skillsText.text = $"{armor.skill1_id} Lv.{armor.skill1_lv}";
-        priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
     }
 
     public void CraftEquip()
@@ -104,19 +99,19 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
         var mat = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mf_module);
         if (mat == null)
         {
-            Debug.Log("Not Exist Materials");
+            //Debug.Log("Not Exist Materials");
             return false;
         }
 
         if (mat.count < ct[item.id].mf_module_req)
         {
-            Debug.Log("Lack Of Materials Count");
+            //Debug.Log("Lack Of Materials Count");
             return false;
         }
 
         if (PlayDataManager.data.Gold < ct[item.id].gold)
         {
-            Debug.Log("Lack Of Gold");
+            //Debug.Log("Lack Of Gold");
             return false;
         }
         // 인벤토리 공간 부족 (추후 추가 필요)

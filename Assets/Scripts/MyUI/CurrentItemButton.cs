@@ -46,7 +46,7 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
 
                     break;
                 }
-                iconImage.sprite = armorIconSO.GetSprite(PlayDataManager.curArmor[armorType].id);
+                iconImage.sprite = armorIconSO.GetSprite(PlayDataManager.curArmor[armorType].id / 100 * 100 + 1);
                 break;
 
             default:
