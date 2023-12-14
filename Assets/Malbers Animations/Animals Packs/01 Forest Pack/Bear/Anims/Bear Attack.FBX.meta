@@ -408,15 +408,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.28235468
-        functionName: BearAttackEffectA
+      - time: 0.27942213
+        functionName: AttackEffectA
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
+        objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
           type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.29434606
+      - time: 0.28739002
         functionName: Attack
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
@@ -618,7 +618,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.24725467
+      - time: 0.28739002
+        functionName: AttackEffectB
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.3000406
         functionName: Attack
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,

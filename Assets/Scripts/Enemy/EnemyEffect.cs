@@ -1,0 +1,147 @@
+using UnityEngine;
+using static EnemyAI;
+
+public class EnemyEffect : MonoBehaviour
+{
+    [Header("A °ø°Ý ÀÌÆåÆ®")]
+    public GameObject EffectTypeA;
+
+    [Header("B °ø°Ý ÀÌÆåÆ®")]
+    public GameObject EffectTypeB;
+
+    [Header("C °ø°Ý ÀÌÆåÆ®")]
+    public GameObject EffectTypeC;
+
+    [Header("D °ø°Ý ÀÌÆåÆ®")]
+    public GameObject EffectTypeD;
+
+    Vector3 offset;
+
+    //private float offset = 1f;
+    //private float bearOffsetA = 1f;
+    //private float bearOffsetB = 3f;
+
+    private EnemyAI enemyAi;
+
+    private void Start()
+    {
+        enemyAi = GetComponent<EnemyAI>();
+    }
+
+
+    void EffectEnemyType(string pattern)
+    {
+        offset = Vector3.zero;
+
+        switch (pattern)
+        {
+            case "A":
+
+                switch (enemyAi.enemyType)
+                {
+                    case EnemyType.Bear:
+                    offset += new Vector3(0f, 1f, 1f);
+                    break;
+
+                    case EnemyType.Alien:
+                        offset = Vector3.zero;
+                        break;
+                }
+                break;
+
+            case "B":
+
+                switch (enemyAi.enemyType)
+                {
+                    case EnemyType.Bear:
+                        offset += new Vector3(0f, 3f, 2.5f);
+                        break;
+
+                    case EnemyType.Alien:
+                        offset += new Vector3(0f, 1f, 2.5f);
+                        break;
+                }
+                break;
+
+            case "C":
+
+                switch (enemyAi.enemyType)
+                {
+                    case EnemyType.Bear:
+                        offset += new Vector3(0f, 1f, 1f);
+                        break;
+
+                    case EnemyType.Alien:
+                        offset = Vector3.zero;
+                        break;
+                }
+                break;
+
+        }
+
+
+    }
+
+
+    public void AttackEffectA()
+    {
+        EffectEnemyType("A");
+
+        if (EffectTypeA != null)
+        {
+            GameObject effectInstance = Instantiate(EffectTypeA, transform.position + offset, transform.rotation);
+
+            DestroyEffect(effectInstance);
+        }
+    }
+
+    public void AttackEffectB()
+    {
+        EffectEnemyType("B");
+
+        if (EffectTypeB != null)
+        {
+            GameObject effectInstance = Instantiate(EffectTypeB, transform.position + offset, transform.rotation);
+
+            DestroyEffect(effectInstance);
+        }
+    }
+
+    public void AttackEffectC()
+    {
+        EffectEnemyType("C");
+
+        if (EffectTypeC != null)
+        {
+            GameObject effectInstance = Instantiate(EffectTypeC, transform.position + offset, transform.rotation);
+
+            DestroyEffect(effectInstance);
+        }
+    }
+
+    public void AttackEffectD()
+    {
+        EffectEnemyType("D");
+
+        if (EffectTypeD != null)
+        {
+            GameObject effectInstance = Instantiate(EffectTypeD, transform.position + offset, transform.rotation);
+
+            DestroyEffect(effectInstance);
+        }
+    }
+
+
+    public void DestroyEffect(GameObject instance)
+    {
+        ParticleSystem particleSystem = instance.GetComponent<ParticleSystem>();
+        if (particleSystem != null)
+        {
+            Destroy(instance, particleSystem.main.duration);
+        }
+        else
+        {
+            Destroy(instance, 1.5f);
+        }
+    }
+}

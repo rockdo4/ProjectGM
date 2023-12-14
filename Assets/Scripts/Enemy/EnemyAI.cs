@@ -73,7 +73,7 @@ public class EnemyAI : LivingObject
 
     [Header("몬스터의 타입")]
     [SerializeField]
-    private EnemyType enemyType;
+    public EnemyType enemyType;
 
     [Header("공격 조건중 몬스터가 플레이어를 바라볼때의 최소각도")]
     public float minAngle = 10f;
@@ -81,8 +81,11 @@ public class EnemyAI : LivingObject
     [Header("몬스터가 고개를 돌리는 속도")]
     public float rotationSpeed = 5f;
 
-    [Header("곰 A 공격 이펙트")]
-    public GameObject bearEffectTypeAPrefab;
+    //[Header("곰 A 공격 이펙트")]
+    //public GameObject bearEffectTypeAPrefab;
+
+    //[Header("곰 B 공격 이펙트")]
+    //public GameObject bearEffectTypeAPrefab2;
 
     BehaviorTreeRunner BTRunner;
     Transform detectedPlayer;
@@ -1485,22 +1488,7 @@ public class EnemyAI : LivingObject
 
     #region 몬스터 공격 이펙트
 
-    public void BearAttackEffectA()
-    {
-        float offset = 1f;   
-
-        GameObject effectInstance = Instantiate(bearEffectTypeAPrefab, transform.position + new Vector3(0, offset, 2f), Quaternion.identity);
-
-        ParticleSystem particleSystem = effectInstance.GetComponent<ParticleSystem>();
-        if (particleSystem != null)
-        {
-            Destroy(effectInstance, particleSystem.main.duration);
-        }
-        else
-        {
-            Destroy(effectInstance, 1.5f);
-        }
-    }
+    
 
     #endregion
     #region 애니메이션 이벤트후에 실제 데미지 주는 부분 - 영재가 추가
