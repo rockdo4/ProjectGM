@@ -822,12 +822,8 @@ public class EnemyAI : LivingObject
 
             Vector3 cellSize = fanShape.Return(); // 부채꼴의 크기를 Vector3로 받음
             Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
-
-            Vector3 realOffset = offset + attackOffset;
-
-            Vector3 centerPointLocal = fanShape.GetCenterPoint();
-            Vector3 centerPointWorld = attackRangeInstance.transform.TransformPoint(centerPointLocal);
-
+            //Vector3 centerPointLocal = fanShape.GetCenterPoint();
+            //Vector3 centerPointWorld = attackRangeInstance.transform.TransformPoint(centerPointLocal);
 
             for (int i = 0; i < currentPattern.pattern.Length; i++)
             {
