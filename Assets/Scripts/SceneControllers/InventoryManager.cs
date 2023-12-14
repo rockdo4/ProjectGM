@@ -25,15 +25,20 @@ public class InventoryManager : MonoBehaviour
 
     public ItemButton buttonPrefab;
 
-    [Header("무기/방어구")]
-    public ItemPanel itemPanel;
+    [Header("무기")]
+    public ItemPanel weaponPanel;
     public IconSO weaponIconSO;
+
+    [Space(10.0f)]
+
+    [Header("방어구")]
+    public ItemPanel armorPanel;
     public IconSO armorIconSO;
 
     [Space(10.0f)]
 
-    [Header("장식주")]
-    public GameObject decoPanel;
+    [Header("스킬코드")]
+    public GameObject skillCodePanel;
 
     [Space(10.0f)]
 
@@ -151,9 +156,9 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    itemPanel.SetItem(weapon);
-                    itemPanel.iconImage.sprite = go.iconImage.sprite;
-                    itemPanel.Renewal();
+                    weaponPanel.SetItem(weapon);
+                    weaponPanel.iconImage.sprite = go.iconImage.sprite;
+                    weaponPanel.Renewal();
                 }
                 
             });
@@ -213,9 +218,9 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    itemPanel.SetItem(armor);
-                    itemPanel.iconImage.sprite = go.iconImage.sprite;
-                    itemPanel.Renewal();
+                    armorPanel.SetItem(armor);
+                    armorPanel.iconImage.sprite = go.iconImage.sprite;
+                    armorPanel.Renewal();
                 }
                 
             });
@@ -224,7 +229,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void ShowDecorations(bool isOn)
+    public void ShowSkillCodes(bool isOn)
     {
         if (!isOn)
         {
