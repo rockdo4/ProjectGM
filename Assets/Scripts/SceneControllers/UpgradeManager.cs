@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -19,6 +20,12 @@ public class UpgradeManager : MonoBehaviour
     [Header("무기/방어구 업그레이드 패널")]
     public UpgradeEquipPanel upgradeWeaponPanel;
     public UpgradeEquipPanel upgradeArmorPanel;
+
+    [Space(10.0f)]
+
+    [Header("Notice")]
+    [SerializeField]
+    private TextMeshProUGUI noticeText;
 
     [Space(10.0f)]
 
@@ -170,5 +177,11 @@ public class UpgradeManager : MonoBehaviour
         }
 
         releaseList.Clear();
+    }
+
+    public void Notice(string str)
+    {
+        noticeText.text = str;
+        noticeText.gameObject.SetActive(true);
     }
 }
