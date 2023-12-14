@@ -361,17 +361,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  statLink: {fileID: 11400000, guid: 05059618f4ae8a74e9d787a1ec4c686e, type: 2}
   stat: {fileID: 11400000, guid: 05059618f4ae8a74e9d787a1ec4c686e, type: 2}
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
-  attackTypeAPrefab: {fileID: 5073490652078658777, guid: bb39c65592ede994dac151a2588b960b,
+  AttackPatternTypeAPrefab: {fileID: 5073490652078658777, guid: bb39c65592ede994dac151a2588b960b,
     type: 3}
-  attackTypeBPrefab: {fileID: 3694188551370226324, guid: 688248f3810a55444b5f5ee20a39e8dc,
+  AttackPatternTypeBPrefab: {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f,
     type: 3}
-  attackTypeCPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
+  AttackPatternTypeCPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
     type: 3}
-  attackTypeDPrefab: {fileID: 3694188551370226324, guid: 688248f3810a55444b5f5ee20a39e8dc,
+  AttackPatternTypeDPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
     type: 3}
   attackPreparationTime: 0.7
   detectRange: 100
@@ -391,6 +392,7 @@ MonoBehaviour:
     pattern: 000000000100000000
   - patternName: MelleAttack_C
     pattern: 000100010001000100
+  rangeIndicator: {fileID: 0}
 --- !u!114 &7664864199940454479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,7 +405,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea68372419c51084c8dfdbabb70ffdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackTarget: {fileID: 0}
 --- !u!114 &2499598893110829909
 MonoBehaviour:
   m_ObjectHideFlags: 0
