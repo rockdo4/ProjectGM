@@ -52,7 +52,6 @@ public class PlayerController : MonoBehaviour
         }
         equipWeapon = PlayDataManager.curWeapon;
 
-
         foreach (var armor in PlayDataManager.curArmor)
         {
             if (armor.Value != null)
@@ -174,48 +173,35 @@ public class PlayerController : MonoBehaviour
     }
     private void OnHold()
     {
-        if (player.Enemy == null)
+        if (currentState != State.Idle)
         {
             return;
         }
-        if (currentState == State.Hit || currentState == State.Death)
-        {
-            return;
-        }
-        if (currentState == State.Evade)
-        {
-            return;
-        }
-
-        if (player.DistanceToEnemy < player.CurrentWeapon.attackRange)
-        {
-            SetState((player.Enemy.IsGroggy) ? State.SuperAttack : State.Attack);
-        }
-        else
-        {
-            SetState(State.Sprint);
-        }
-    }
-    private void HoldEnd()
-    {
         //if (currentState == State.Hit || currentState == State.Death)
         //{
         //    return;
         //}
-        //player.canCombo = false;
+        //if (currentState == State.Evade)
+        //{
+        //    return;
+        //}
+
+        SetState(State.Sprint);
+    }
+    private void HoldEnd()
+    {
+
     }
     #endregion
 
     #region Animation Event
     private void BeforeAttack()
     {
-        player.isAttack = false;
-        player.canCombo = false;
+        player.attackState = Player.AttackState.Before;
     }
     private void Attack()
     {
-        player.isAttack = true;
-
+        player.attackState = Player.AttackState.Attack;
         if (player.CurrentWeapon == null)
         {
             return;
@@ -230,17 +216,17 @@ public class PlayerController : MonoBehaviour
                 player.evadePoint = 0f;
             }
         }
+        player.attackState = Player.AttackState.AfterStart;
     }
     private void AfterAttack()
     {
-        player.isAttack = false;
-        player.canCombo = true;
+        player.attackState = Player.AttackState.AfterEnd;
     }
     private void EndAttack()
     {
-        player.canCombo = false;
+        player.attackState = Player.AttackState.End;
     }
-    private void EndEvade()
+    private void EndAnimationDefault()
     {
         SetState(State.Idle);
     }
@@ -248,12 +234,13 @@ public class PlayerController : MonoBehaviour
 
     public void SetState(State newState)
     {
+        Debug.Log($"--------- ChangeState: {newState} ---------");
         if (newState == currentState)
         {
             return;
         }
 #if UNITY_EDITOR
-        Debug.Log($"--------- ChangeState: {newState} ---------");
+        //Debug.Log($"--------- ChangeState: {newState} ---------");
 #endif
         currentState = newState;
         stateManager?.ChangeState(states[(int)newState]);

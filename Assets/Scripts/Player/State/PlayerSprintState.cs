@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerSprintState : PlayerStateBase
 {
     private Vector3 direction = Vector3.forward;
-    private Vector3 startPosition;
+    private AnimationClip animation;
 
     public PlayerSprintState(PlayerController controller) : base(controller)
     {
@@ -13,44 +14,39 @@ public class PlayerSprintState : PlayerStateBase
     public override void Enter()
     {
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
-
         controller.player.Animator.SetTrigger("Sprint");
-
-        startPosition = controller.player.Rigid.position;
     }
 
     public override void Update()
     {
-
+        if (!controller.player.Animator.IsInTransition(0))
+        {
+            animation = controller.player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip;
+        }
     }
 
     public override void FixedUpdate()
     {
-        var position = controller.player.Rigid.position;
-        if (Vector3.Distance(startPosition, position) < controller.player.MoveDistance)
+        if (animation == null)
         {
-            var rotation = controller.player.Rigid.rotation;
-            rotation.x = 0f;
-
-            var moveSpeed = controller.player.stat.MoveSpeed;
-            controller.player.Rigid.MovePosition(position + rotation * direction * moveSpeed * Time.deltaTime);
-
-            if (controller.player.CanAttack)
+            return;
+        }
+        if (controller.player.CanAttack)
+        {
+            if (controller.player.Enemy.IsGroggy)
             {
-                if (controller.player.Enemy.IsGroggy)
-                {
-                    controller.SetState(PlayerController.State.SuperAttack);
-                }
-                else
-                {
-                    controller.SetState(PlayerController.State.Attack);
-                }
+                controller.SetState(PlayerController.State.SuperAttack);
+            }
+            else
+            {
+                controller.SetState(PlayerController.State.Attack);
             }
         }
-        else
-        {
-            controller.SetState(PlayerController.State.Idle);
-        }
+
+        var rotation = Quaternion.Euler(0, controller.player.Rigid.rotation.eulerAngles.y, controller.player.Rigid.rotation.eulerAngles.z);
+        float speed = controller.player.MoveDistance / animation.length;
+        var force = rotation * direction * speed;
+        controller.player.Rigid.AddForce(force, ForceMode.VelocityChange);
     }
 
     public override void Exit()

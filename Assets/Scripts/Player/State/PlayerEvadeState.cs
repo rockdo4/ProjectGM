@@ -6,12 +6,9 @@ using UnityEngine;
 public class PlayerEvadeState : PlayerStateBase
 {
     private Vector3 direction;
-    //private Vector3 startPosition;
     private const string triggerName = "Evade";
+    private AnimationClip animation;
 
-    private AnimationClip animationClip;
-    private float animationLength;
-    
     public PlayerEvadeState(PlayerController controller) : base(controller)
     {
 
@@ -19,17 +16,6 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Enter()
     {
-        //if (animationClip == null)
-        //{
-        //    animationClip = controller.player.Animator.runtimeAnimatorController.animationClips.FirstOrDefault(clip => clip.name == triggerName);
-
-        //    animationClip.AddEvent(new AnimationEvent()
-        //    {
-        //        time = animationClip.length,
-        //        functionName = "EvadeEnd",
-        //    });
-        //}
-        animationLength = 19f / 30f;
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
         controller.player.evadeTimer = 0f;
         direction = TouchManager.Instance.swipeDirection switch
@@ -40,34 +26,38 @@ public class PlayerEvadeState : PlayerStateBase
             TouchManager.SwipeDirection.Right => Vector3.right,
             _ => Vector3.zero
         };
+
         controller.player.Animator.SetFloat("X", direction.x);
         controller.player.Animator.SetFloat("Z", direction.z);
         controller.player.Animator.SetTrigger(triggerName);
-
-        //startPosition = controller.player.Rigid.position;
 
         controller.player.effects.PlayEffect(EffectType.Evade, direction);
     }
 
     public override void Update()
     {
+        if (!controller.player.Animator.IsInTransition(0))
+        {
+            animation = controller.player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip;
+        }
         controller.player.evadeTimer += Time.deltaTime;
     }
 
     public override void FixedUpdate()
     {
-        var rotation = controller.player.Rigid.rotation;
-        rotation.x = 0f;
-        float speed = controller.player.MoveDistance / animationLength;
+        if (animation == null)
+        {
+            return;
+        }
+
+        var rotation = Quaternion.Euler(0, controller.player.Rigid.rotation.eulerAngles.y, controller.player.Rigid.rotation.eulerAngles.z);
+        float speed = controller.player.MoveDistance / animation.length;
         var force = rotation * direction * speed;
         controller.player.Rigid.AddForce(force, ForceMode.VelocityChange);
     }
+
     public override void Exit()
     {
-    }
 
-    private void EvadeEnd()
-    {
-        controller.SetState(PlayerController.State.Idle);
     }
 }

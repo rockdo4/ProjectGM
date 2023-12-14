@@ -7,7 +7,9 @@ public class PlayerEffects : MonoBehaviour
     [System.Serializable]
     private class EffectInfo
     {
+        [Header("¿Ã∆Â∆Æ ¡æ∑˘")]
         public EffectType effectType;
+        [Header("¿Ã∆Â∆Æ «¡∏Æ∆È")]
         public ParticleSystem effectPrefab;
         [HideInInspector]
         public ParticleSystem effect = null;
@@ -18,7 +20,7 @@ public class PlayerEffects : MonoBehaviour
 
     }
 
-    [Header("¿Ã∆Â∆Æ ¡æ∑˘, ¿Ã∆Â∆Æ")]
+    [Header("¿Ã∆Â∆Æ µÓ∑œ")]
     [SerializeField]
     private List<EffectInfo> effectInfos = null;
 

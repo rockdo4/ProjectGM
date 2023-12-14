@@ -24,7 +24,6 @@ public class PlayerSuperAttackState : PlayerStateBase
 
     public override void Exit()
     {
-        controller.player.isAttack = false;
         controller.player.Animator.ResetTrigger(triggerName);
     }
 }
