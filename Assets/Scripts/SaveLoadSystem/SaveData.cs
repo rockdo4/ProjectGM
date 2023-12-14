@@ -95,6 +95,7 @@ public class SaveDataV4 : SaveData
     public override SaveData VersionUp()
     {
         var data = new SaveDataV5();
+        data.Gold = Gold;
 
         return data;
     }
