@@ -97,7 +97,7 @@ public class UpgradeManager : MonoBehaviour
         {
             if (data.Value._class != Equip.EquipType.Weapon)
             {
-                return;
+                continue;
             }
 
             if (data.Value.mf_module != -1)
@@ -136,15 +136,19 @@ public class UpgradeManager : MonoBehaviour
             releaseList.Add(go);
         }
 
-        /*
+        
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         foreach (var data in ct)
         {
+            if (data.Value._class != Equip.EquipType.Armor)
+            {
+                continue;
+            }
+
             if (data.Value.mf_module != -1)
             {
                 var item = new Armor(data.Key);
                 var go = buttonPool.Get();
-                go.transform.SetParent(content.transform);
 
                 go.SetEquip(item);
                 go.CreateMode(this);
@@ -154,7 +158,7 @@ public class UpgradeManager : MonoBehaviour
             }
 
         }
-        */
+        
     }
 
     public void Clear()

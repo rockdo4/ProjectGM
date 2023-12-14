@@ -48,6 +48,9 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         var mt = CsvTableMgr.GetTable<MatTable>().dataTable;
 
         nameText.text = st[weapon.name];
+        atkText.text = weapon.atk.ToString();
+        attackTypeText.text = weapon.property.ToString();
+        priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
 
         if (ct[item.id].mf_module != -1) // 요구 재료마다 분기
         {
@@ -62,10 +65,6 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
             go.SetSlider(count, ct[item.id].mf_module_req);
             go.Renewal();
         }
-
-        atkText.text = weapon.atk.ToString();
-        attackTypeText.text = weapon.property.ToString();
-        priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
     }
 
     public void CraftEquip()

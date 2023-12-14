@@ -98,7 +98,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
                 button.onClick.AddListener(() =>
                 {
                     um.createArmorPanel.SetEquip(item);
-                    //um.createArmorPanel.iconImage.sprite = iconImage.sprite;
+                    um.createArmorPanel.iconImage.sprite = iconImage.sprite;
                     um.createArmorPanel.Renewal();
                 });
                 break;
@@ -128,7 +128,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
             case Equip.EquipType.Armor:
                 button.onClick.AddListener(() => 
                 {
-
+                    Debug.Log("Upgrade Equip Button : Armor");
                 });
                 break;
         }
