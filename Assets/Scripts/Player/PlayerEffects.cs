@@ -11,8 +11,10 @@ public class PlayerEffects : MonoBehaviour
         public ParticleSystem effectPrefab;
         [HideInInspector]
         public ParticleSystem effect = null;
-        [Header("플레이어 기준 각도 보정")]
+        [Header("각도 보정")]
         public Vector3 directionOffset;
+        [Header("위치 보정")]
+        public Vector3 positionOffset;
 
     }
 
@@ -25,7 +27,7 @@ public class PlayerEffects : MonoBehaviour
         foreach(var info in effectInfos)
         {
             info.effect = Instantiate(info.effectPrefab);
-            info.effect.transform.SetParent(null);
+            info.effect.transform.SetParent(transform);
             info.effect.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         }
     }
@@ -45,17 +47,24 @@ public class PlayerEffects : MonoBehaviour
 
         var effect = effectInfo.effect;
         effect.transform.position = transform.position;
-        var rotation = transform.rotation;
 
+        var rotation = transform.rotation;
         var correctedRotation = Quaternion.Euler(rotation.eulerAngles + effectInfo.directionOffset);
+
         if (direction != default)
         {
             var normalizedDirection = direction.normalized;
             var finalRotation = Quaternion.LookRotation(normalizedDirection) * correctedRotation;
             effect.transform.rotation = finalRotation;
+            effect.transform.localPosition += new Vector3(
+                effectInfo.positionOffset.x * normalizedDirection.x,
+                effectInfo.positionOffset.y,
+                effectInfo.positionOffset.z * normalizedDirection.z
+            );
         }
         else
         {
+            effect.transform.localPosition += effectInfo.positionOffset;
             effect.transform.rotation = correctedRotation;
         }
 

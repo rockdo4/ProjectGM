@@ -240,6 +240,10 @@ public class PlayerController : MonoBehaviour
     {
         player.canCombo = false;
     }
+    private void EndEvade()
+    {
+        SetState(State.Idle);
+    }
     #endregion
 
     public void SetState(State newState)
