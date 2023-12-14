@@ -234,7 +234,6 @@ public class PlayerController : MonoBehaviour
 
     public void SetState(State newState)
     {
-        Debug.Log($"--------- ChangeState: {newState} ---------");
         if (newState == currentState)
         {
             return;

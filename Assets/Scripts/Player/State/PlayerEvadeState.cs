@@ -49,7 +49,7 @@ public class PlayerEvadeState : PlayerStateBase
         {
             return;
         }
-
+        controller.player.Rigid.velocity = Vector3.zero;
         var rotation = Quaternion.Euler(0, controller.player.Rigid.rotation.eulerAngles.y, controller.player.Rigid.rotation.eulerAngles.z);
         float speed = controller.player.MoveDistance / animation.length;
         var force = rotation * direction * speed;

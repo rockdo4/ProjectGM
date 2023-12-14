@@ -13,6 +13,8 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void Enter()
     {
+        AttackCheck();
+
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
         controller.player.Animator.SetTrigger("Sprint");
     }
@@ -31,6 +33,23 @@ public class PlayerSprintState : PlayerStateBase
         {
             return;
         }
+        controller.player.Rigid.velocity = Vector3.zero;
+
+        var rotation = Quaternion.Euler(0, controller.player.Rigid.rotation.eulerAngles.y, controller.player.Rigid.rotation.eulerAngles.z);
+        float speed = controller.player.MoveDistance / animation.length;
+        var force = rotation * direction * speed;
+        controller.player.Rigid.AddForce(force, ForceMode.VelocityChange);
+
+        AttackCheck();
+    }
+
+    public override void Exit()
+    {
+        controller.player.Animator.ResetTrigger("Sprint");
+    }
+
+    private void AttackCheck()
+    {
         if (controller.player.CanAttack)
         {
             if (controller.player.Enemy.IsGroggy)
@@ -42,15 +61,5 @@ public class PlayerSprintState : PlayerStateBase
                 controller.SetState(PlayerController.State.Attack);
             }
         }
-
-        var rotation = Quaternion.Euler(0, controller.player.Rigid.rotation.eulerAngles.y, controller.player.Rigid.rotation.eulerAngles.z);
-        float speed = controller.player.MoveDistance / animation.length;
-        var force = rotation * direction * speed;
-        controller.player.Rigid.AddForce(force, ForceMode.VelocityChange);
-    }
-
-    public override void Exit()
-    {
-        controller.player.Animator.ResetTrigger("Sprint");
     }
 }
