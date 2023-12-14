@@ -1,15 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Pool;
-using UnityEngine.UI;
-using static Unity.VisualScripting.Dependencies.Sqlite.SQLite3;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : MonoBehaviour, IRenewal
 {
     public enum ItemType
     {
@@ -25,15 +20,20 @@ public class InventoryManager : MonoBehaviour
 
     public ItemButton buttonPrefab;
 
-    [Header("무기/방어구")]
-    public ItemPanel itemPanel;
+    [Header("무기")]
+    public ItemPanel weaponPanel;
     public IconSO weaponIconSO;
+
+    [Space(10.0f)]
+
+    [Header("방어구")]
+    public ItemPanel armorPanel;
     public IconSO armorIconSO;
 
     [Space(10.0f)]
 
-    [Header("장식주")]
-    public GameObject decoPanel;
+    [Header("스킬코드")]
+    public GameObject skillCodePanel;
 
     [Space(10.0f)]
 
@@ -47,6 +47,11 @@ public class InventoryManager : MonoBehaviour
     public GameObject sellArea;
     public GameObject sellPanel;
     public GameObject sellButton;
+
+    [Space(10.0f)]
+
+    [Header("소지금 텍스트")]
+    public TextMeshProUGUI moneyText;
 
     private bool sellMode = false;
     private List<Equip> sellEquipList = new List<Equip>();
@@ -79,10 +84,7 @@ public class InventoryManager : MonoBehaviour
         },
         delegate (ItemButton button) // actionOnRelease
         {
-            button.OnCountAct();
-            button.iconImage.sprite = null;
-            button.iconImage.color = Color.white;
-            button.button.onClick.RemoveAllListeners();
+            button.Clear();
             button.transform.SetParent(gameObject.transform); // ItemButton Transform Reset
             button.gameObject.SetActive(false);
         });
@@ -93,7 +95,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         //TestAddItem();
-        ShowWeapons(true);
+        Renewal();
     }
 
     public void ShowWeapons(bool isOn)
@@ -151,9 +153,9 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    itemPanel.SetItem(weapon);
-                    itemPanel.iconImage.sprite = go.iconImage.sprite;
-                    itemPanel.Renewal();
+                    weaponPanel.SetItem(weapon);
+                    weaponPanel.iconImage.sprite = go.iconImage.sprite;
+                    weaponPanel.Renewal();
                 }
                 
             });
@@ -213,9 +215,9 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    itemPanel.SetItem(armor);
-                    itemPanel.iconImage.sprite = go.iconImage.sprite;
-                    itemPanel.Renewal();
+                    armorPanel.SetItem(armor);
+                    armorPanel.iconImage.sprite = go.iconImage.sprite;
+                    armorPanel.Renewal();
                 }
                 
             });
@@ -224,7 +226,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void ShowDecorations(bool isOn)
+    public void ShowSkillCodes(bool isOn)
     {
         if (!isOn)
         {
@@ -392,18 +394,45 @@ public class InventoryManager : MonoBehaviour
 
     }
 
+    public void Renewal()
+    {
+        switch (curType)
+        {
+            case ItemType.Weapon:
+                ShowWeapons(true);
+                break;
+
+            case ItemType.Armor:
+                ShowArmors(true);
+                break;
+
+            case ItemType.SkillCode:
+                ShowSkillCodes(true);
+                break;
+
+            case ItemType.Mat:
+                ShowMaterials(true);
+                break;
+        }
+
+        moneyText.text = PlayDataManager.data.Gold.ToString();
+    }
+
     public void Tester()
     {
-        PlayDataManager.data.MatInventory.Add(new Materials(610001, 99));
-        PlayDataManager.data.MatInventory.Add(new Materials(611001, 99));
-        PlayDataManager.data.MatInventory.Add(new Materials(612001, 99));
-        PlayDataManager.data.MatInventory.Add(new Materials(612002, 99));
-        PlayDataManager.data.MatInventory.Add(new Materials(612003, 99));
-        PlayDataManager.data.MatInventory.Add(new Materials(612004, 99));
-        PlayDataManager.data.MatInventory.Add(new Materials(612005, 99));
-        PlayDataManager.data.MatInventory.Add(new Materials(613001, 99));
-        PlayDataManager.data.MatInventory.Add(new Materials(613002, 99));
-        PlayDataManager.data.MatInventory.Add(new Materials(613003, 99));
+        if (PlayDataManager.data.MatInventory.Count <= 0)
+        {
+            PlayDataManager.data.MatInventory.Add(new Materials(610001, 99));
+            PlayDataManager.data.MatInventory.Add(new Materials(611001, 99));
+            PlayDataManager.data.MatInventory.Add(new Materials(612001, 99));
+            PlayDataManager.data.MatInventory.Add(new Materials(612002, 99));
+            PlayDataManager.data.MatInventory.Add(new Materials(612003, 99));
+            PlayDataManager.data.MatInventory.Add(new Materials(612004, 99));
+            PlayDataManager.data.MatInventory.Add(new Materials(612005, 99));
+            PlayDataManager.data.MatInventory.Add(new Materials(613001, 99));
+            PlayDataManager.data.MatInventory.Add(new Materials(613002, 99));
+            PlayDataManager.data.MatInventory.Add(new Materials(613003, 99));
+        }
 
         PlayDataManager.AddGold(100000);
 
@@ -441,5 +470,10 @@ public class InventoryManager : MonoBehaviour
             PlayDataManager.data.ArmorInventory.Add(armor);
             yield return new WaitForEndOfFrame();
         }
+
+        PlayDataManager.Save();
+        Renewal();
     }
+
+    
 }

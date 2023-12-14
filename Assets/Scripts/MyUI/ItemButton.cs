@@ -38,6 +38,15 @@ public class ItemButton : MonoBehaviour
         equipImage.gameObject.SetActive(isEquip);
     }
 
+    public void Clear()
+    {
+        OnCountAct();
+        OnEquip();
+        iconImage.sprite = null;
+        iconImage.color = Color.white;
+        button.onClick.RemoveAllListeners();
+    }
+
     private void OnEnable()
     {
 #if UNITY_STANDALONE || UNITY_EDITOR
