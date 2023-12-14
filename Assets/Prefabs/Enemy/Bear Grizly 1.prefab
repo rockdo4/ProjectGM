@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 5025585832631253386}
   - component: {fileID: 3570399017614776302}
   - component: {fileID: 5542212552224907592}
+  - component: {fileID: 1298584404431034611}
   m_Layer: 0
   m_Name: Bear Grizly 1
   m_TagString: Enemy
@@ -149,7 +150,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Win
+        m_MethodName: 
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 3570399017614776302}
@@ -211,6 +212,26 @@ CapsuleCollider:
   m_Height: 2.2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1298584404431034611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105006126220715780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTypeA: {fileID: 4309256389097262090, guid: a572d484565adff4aadccce8547208c3,
+    type: 3}
+  EffectTypeB: {fileID: 5314878214040996902, guid: 68883ff3e3f89354e80155533509777d,
+    type: 3}
+  EffectTypeC: {fileID: 5314878214040996902, guid: 68883ff3e3f89354e80155533509777d,
+    type: 3}
+  EffectTypeD: {fileID: 5314878214040996902, guid: 68883ff3e3f89354e80155533509777d,
+    type: 3}
 --- !u!1 &180714499914791022
 GameObject:
   m_ObjectHideFlags: 0

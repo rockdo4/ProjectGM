@@ -51,7 +51,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6896046466890514737}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -103,6 +103,7 @@ MonoBehaviour:
   wifiSegments: 1
   centerPoint: {x: 0, y: 0, z: 0}
   sharedMesh: {fileID: 0}
+  enemyAi: {fileID: 0}
 --- !u!64 &5269414562526136422
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -755,13 +755,14 @@ GameObject:
   - component: {fileID: 584540419188429084}
   - component: {fileID: 5734344529172665475}
   - component: {fileID: 4960954873712717530}
+  - component: {fileID: 1149885988399435205}
   m_Layer: 0
   m_Name: WildBoar
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7379042720375739373
 Transform:
   m_ObjectHideFlags: 0
@@ -792,7 +793,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: 59dc7eb140be69548819cbbdef4c5a29, type: 3}
   m_Controller: {fileID: 22100000, guid: a6431bc4e53aae343944766d66b8f7d9, type: 2}
   m_CullingMode: 1
-  m_UpdateMode: 1
+  m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -820,19 +821,19 @@ MonoBehaviour:
       m_Calls: []
   rangeIndicator: {fileID: 3680253550249829298, guid: 0102c2837d1e2d24abde1827bdfc7545,
     type: 3}
-  AttackPatternTypeAPrefab: {fileID: 4936685993914949568, guid: c350116d727defb45af8dc5f1dd58eee,
+  AttackPatternTypeAPrefab: {fileID: 1831290539580255820, guid: 9873b76cc3e585648914ba6347b8302e,
     type: 3}
-  AttackPatternTypeBPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
+  AttackPatternTypeBPrefab: {fileID: 9133502431824390224, guid: 4b36ed13b9b6d45498a509f6ac30cce0,
     type: 3}
-  AttackPatternTypeCPrefab: {fileID: 6896046466890514737, guid: 6d775c1817efc7240923737e0cdf662b,
+  AttackPatternTypeCPrefab: {fileID: 5418798597483176766, guid: ad0ced7f554739244b63c1355d51dd59,
     type: 3}
   AttackPatternTypeDPrefab: {fileID: 3694188551370226324, guid: 688248f3810a55444b5f5ee20a39e8dc,
     type: 3}
-  attackPreparationTime: 0.5
+  attackPreparationTime: 0.7
   detectRange: 100
   meleeAttackRange: 3
   rangeAttackRange: 6
-  roarDuration: 0.1
+  roarDuration: 2
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -842,10 +843,8 @@ MonoBehaviour:
   attackGrid: 000000000100000000
   savedPatterns:
   - patternName: MelleAttack_A
-    pattern: 000101000100010001
-  - patternName: MelleAttack_B
     pattern: 000000000100000000
-  - patternName: RangeAttack_A
+  - patternName: MelleAttack_B
     pattern: 000000000100000000
   - patternName: MelleAttack_C
     pattern: 000000000100000000
@@ -908,6 +907,26 @@ CapsuleCollider:
   m_Height: 2.2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1149885988399435205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2857295111879149241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTypeA: {fileID: 7205618435630654256, guid: 9ba52f78f050fe5468d088c0f631b255,
+    type: 3}
+  EffectTypeB: {fileID: 552655487938233760, guid: e32d9b76859a1594ebb7d6ebcefa0d16,
+    type: 3}
+  EffectTypeC: {fileID: 2499742346106410712, guid: b2b26b589e9f0544ebcf874263ccd1ea,
+    type: 3}
+  EffectTypeD: {fileID: 4834312597282954250, guid: aabf9be139702254a8599f5de5bb1f16,
+    type: 3}
 --- !u!1 &3092136239957578716
 GameObject:
   m_ObjectHideFlags: 0
