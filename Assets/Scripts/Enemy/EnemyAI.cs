@@ -707,8 +707,8 @@ public class EnemyAI : LivingObject
             {
                 case AttackPatternType.B:
                     return new Vector3(0f, 0f, -2f); // 세모위치 조정 에일리언 B패턴임
-                //case AttackPatternType.C:
-                //    return new Vector3(-5f, 0f, -2f);
+                case AttackPatternType.C:
+                    return Vector3.zero;
                 default: return Vector3.zero;
             }
         }
@@ -722,7 +722,7 @@ public class EnemyAI : LivingObject
                 case AttackPatternType.B:
                     return new Vector3(0f, 0f, -2f);
                 case AttackPatternType.C:
-                    return new Vector3(0f, 0f, -2f);
+                    return new Vector3(0f, 0f, -7f);
                 default: return Vector3.zero;
             }
         }
@@ -743,6 +743,11 @@ public class EnemyAI : LivingObject
         {
             actualPosition -= realoffset; // realOffset 추가 적용
         }
+
+        //if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.C) // 임시
+        //{
+        //    actualPosition += new Vector3(0, 0, 4f);
+        //}
 
         if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.C) // 임시
         {
@@ -873,15 +878,15 @@ public class EnemyAI : LivingObject
 
                         cell.transform.rotation = initialRotation * additionalRotation;
                     }
-                    else if (enemyType == EnemyType.WildBoar && AttackPatternType == AttackPatternType.C)
-                    {
-                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
-                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
+                    //else if (enemyType == EnemyType.WildBoar && AttackPatternType == AttackPatternType.C)
+                    //{
+                    //    Vector3 directionToMonster = (transform.position - cellPosition).normalized;
+                    //    Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
 
-                        Quaternion additionalRotation = Quaternion.Euler(0f, 180f, 0f);
+                    //    Quaternion additionalRotation = Quaternion.Euler(0f, 70f, 0f);
 
-                        cell.transform.rotation = initialRotation * additionalRotation;
-                    }
+                    //    cell.transform.rotation = initialRotation * additionalRotation;
+                    //}
                     else
                     {
                         cell.transform.rotation = transform.rotation;
@@ -931,6 +936,23 @@ public class EnemyAI : LivingObject
                         Vector3 currentSize = collider.size;
                         collider.size = new Vector3(currentSize.x / 1.5f, currentSize.y, currentSize.z / 1.5f);
 
+                    }
+
+                    if (enemyType == EnemyType.WildBoar && AttackPatternType == AttackPatternType.A)
+                    {
+                        additionalOffset = new Vector3(2f, 0f, 2f);
+                    }
+
+                    if (enemyType == EnemyType.WildBoar && AttackPatternType == AttackPatternType.B)
+                    {
+                        Vector3 currentSize = collider.size;
+                        collider.size = new Vector3(currentSize.x * 0.3f, currentSize.y, currentSize.z * 0.08f);
+                        additionalOffset = new Vector3(7f, 0, 0.7f);
+                    }
+
+                    if (enemyType == EnemyType.WildBoar && AttackPatternType == AttackPatternType.C)
+                    {
+                        additionalOffset = Vector3.zero;
                     }
 
 
