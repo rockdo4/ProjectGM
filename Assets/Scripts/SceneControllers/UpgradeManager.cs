@@ -95,6 +95,11 @@ public class UpgradeManager : MonoBehaviour
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         foreach (var data in ct)
         {
+            if (data.Value._class != Equip.EquipType.Weapon)
+            {
+                return;
+            }
+
             if (data.Value.mf_module != -1)
             {
                 var item = new Weapon(data.Key);
