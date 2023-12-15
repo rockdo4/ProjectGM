@@ -54,7 +54,7 @@ public class EnemyEffect : MonoBehaviour
                 switch (enemyAi.enemyType)
                 {
                     case EnemyType.Bear:
-                        offset += transform.forward * 2.5f + transform.up * 3f;
+                        offset += transform.forward * 3.0f + transform.up * 3f;
                         break;
 
                     case EnemyType.Alien:
