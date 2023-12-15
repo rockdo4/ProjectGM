@@ -1,20 +1,13 @@
-using UnityEditor.Animations;
 using UnityEngine;
-
-public struct ActionData
-{
-    public string ID { get; set; }
-    public string Name { get; set; }
-    public int ReadyFrameRate { get; set; }
-    public int ExcutionFrameRate { get; set; }
-    public int PostExcutionFrameRate { get; set; }
-    public int FinalFrameRate { get; set; }
-}
 
 public class PlayerAttackState2 : PlayerStateBase
 {
     private Animator animator;
     private const string triggerName = "Attack";
+    private float comboTimer = 0f;
+    private float comboTime = 0.5f;
+
+    private bool SetNextAttack = false;
 
     public PlayerAttackState2(PlayerController controller) : base(controller)
     {
@@ -23,29 +16,47 @@ public class PlayerAttackState2 : PlayerStateBase
 
     public override void Enter()
     {
-        controller.MoveWeaponPosition(PlayerController.WeaponPosition.Hand);
+        comboTimer = 0f;
         animator = controller.player.Animator;
+        SetNextAttack = false;
+
+        controller.MoveWeaponPosition(PlayerController.WeaponPosition.Hand);
 
         animator.SetTrigger(triggerName);
     }
 
     public override void Update()
     {
-        if (!TouchManager.Instance.Holded)
+        if (controller.player.Enemy.IsGroggy == true)
         {
             controller.SetState(PlayerController.State.Idle);
         }
 
-        var currentAnimationInfo = animator.GetCurrentAnimatorStateInfo(0);
-        var clip = animator.GetCurrentAnimatorClipInfo(0)[0];
-
-        if (currentAnimationInfo.IsName(clip.clip.name) && currentAnimationInfo.normalizedTime >= 0)
+        switch (controller.player.attackState)
         {
+            case Player.AttackState.Before:
+                comboTimer = 0f;
+                SetNextAttack = false;
+                break;
+            case Player.AttackState.Attack:
+                break;
+            case Player.AttackState.AfterStart:
+                if (!SetNextAttack && TouchManager.Instance.Holded)
+                {
+                    animator.SetTrigger(triggerName);
+                    SetNextAttack = true;
+                }
+                break;
+            case Player.AttackState.AfterEnd:
+                break;
+            case Player.AttackState.End:
+                comboTimer += Time.deltaTime;
+                if (comboTimer >= comboTime)
+                {
+                    controller.SetState(PlayerController.State.Idle);
+                }
+                break;
         }
-    }
-
-    private void NextAnimation()
-    {
     }
 
     public override void FixedUpdate()
@@ -55,16 +66,6 @@ public class PlayerAttackState2 : PlayerStateBase
 
     public override void Exit()
     {
-        //controller.player.Animator.ResetTrigger(triggerName);
-    }
-
-    private AnimatorStateMachine GetStateMachine()
-    {
-        return null;
-    }
-
-    private void OnAnimationEnd()
-    {
-
+        controller.player.Animator.ResetTrigger(triggerName);
     }
 }

@@ -9,6 +9,11 @@ public class Player : LivingObject
     public float evadePoint { get; set; } = 0;
     public bool GroggyAttack { get; set; }
 
+    public enum AttackState
+    {
+        Before, Attack, AfterStart, AfterEnd, End
+    }
+    public AttackState attackState { get; set; }
     public bool canCombo { get; set; }
     public bool isAttack { get; set; }
 
