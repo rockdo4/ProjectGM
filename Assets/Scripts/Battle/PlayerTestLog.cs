@@ -40,7 +40,7 @@ public class PlayerTestLog : MonoBehaviour
         stateUI.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "상태";
 
         attackUI = TestLogManager.Instance.MakeUI(AttackAction);
-        attackUI.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "공격 상태";
+        attackUI.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "공격 상세";
     }
 
     #region TestLog Events
@@ -100,12 +100,12 @@ public class PlayerTestLog : MonoBehaviour
         }
         attackUI.GetComponentsInChildren<TextMeshProUGUI>()[1].text = player.attackState switch
         {
-            AttackState.Before => $"<color=red>선딜레이</color>\n<color=green>회피 가능</color>",
-            AttackState.Attack => $"<color=orange>공격</color>\n<color=red>회피 불가</color>",
+            AttackState.Before => $"<color=yellow>선딜레이</color>\n<color=green>회피 가능</color>",
+            AttackState.Attack => $"<color=yellow>공격</color>\n<color=red>회피 불가</color>",
             AttackState.AfterStart => $"<color=yellow>후딜레이 시작</color>\n<color=red>회피 불가</color>",
-            AttackState.AfterEnd => $"<color=green>후딜레이 종료</color>\n<color=green>회피 가능</color>",
-            AttackState.End => $"<color=blue>공격 종료</color>\n<color=green>회피 가능</color>",
-            _ => $"<color=white></color>"
+            AttackState.AfterEnd => $"<color=yellow>후딜레이 종료</color>\n<color=green>회피 가능</color>",
+            AttackState.End => $"<color=yellow>공격 종료</color>\n<color=green>회피 가능</color>",
+            _ => $"<color=yellow></color>"
         };
     }
     #endregion

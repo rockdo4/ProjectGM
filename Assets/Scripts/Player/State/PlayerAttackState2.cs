@@ -5,7 +5,7 @@ public class PlayerAttackState2 : PlayerStateBase
     private Animator animator;
     private const string triggerName = "Attack";
     private float comboTimer = 0f;
-    private float comboTime = 1f;
+    private float comboTime = 0.5f;
 
     private bool SetNextAttack = false;
 

@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
         }
         subHandle = player.CurrentWeapon.transform.Find("LeftHandle");
 
-        MoveWeaponPosition(WeaponPosition.Hand);
+        MoveWeaponPosition(WeaponPosition.Wing);
         
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
