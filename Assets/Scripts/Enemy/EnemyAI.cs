@@ -674,8 +674,8 @@ public class EnemyAI : LivingObject
 
             if (stateInfo.IsName(stateName))
             {
-                Debug.Log(isAttacking);
-                Debug.Log("공격 애니메이션 재생 시간 : " + stateInfo.length);
+                //Debug.Log(isAttacking);
+                //Debug.Log("공격 애니메이션 재생 시간 : " + stateInfo.length);
                 yield return new WaitForSeconds(stateInfo.length);
                 isAttacking = false; // 공격상태 해제를 여기서 해주지 않으면 코루틴을 하는 의미가 없어짐
                 // 하지만 다음 공격버그가 생긴다면 여기일듯
@@ -696,7 +696,7 @@ public class EnemyAI : LivingObject
                 case AttackPatternType.B:
                     return new Vector3(0f, 0f, -2f); // 세모위치 조정 곰 B 패턴
                 case AttackPatternType.C:
-                    return new Vector3(4f, 0f, -2f); // 곰 C 패턴
+                    return new Vector3(0f, 0f, -2f); // 곰 C 패턴
                 default: return Vector3.zero;
             }
         }
@@ -722,7 +722,7 @@ public class EnemyAI : LivingObject
                 case AttackPatternType.B:
                     return new Vector3(0f, 0f, -2f);
                 case AttackPatternType.C:
-                    return new Vector3(0f, 0f, -7f);
+                    return new Vector3(0f, 0f, -4f);
                 default: return Vector3.zero;
             }
         }
@@ -911,7 +911,7 @@ public class EnemyAI : LivingObject
 
                     if (enemyType == EnemyType.Bear && AttackPatternType == AttackPatternType.B || AttackPatternType == AttackPatternType.C)
                     {
-                        additionalOffset = new Vector3(0f, 0f, 2.5f);
+                        additionalOffset = new Vector3(0f, 0f, 2f);
                     }
 
                     if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.B)

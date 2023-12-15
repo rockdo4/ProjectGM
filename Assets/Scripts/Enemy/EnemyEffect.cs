@@ -62,7 +62,7 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case EnemyType.WildBoar:
-                        offset += transform.forward * 2f + transform.up * 1f;
+                        offset += transform.forward * 3.5f + transform.up * 1f;
                         break;
                 }
                 break;
@@ -72,7 +72,7 @@ public class EnemyEffect : MonoBehaviour
                 switch (enemyAi.enemyType)
                 {
                     case EnemyType.Bear:
-                        offset += new Vector3(0f, 1f, 1f);
+                        offset += transform.forward * 2.5f + transform.up * 3f;
                         break;
 
                     case EnemyType.Alien:
@@ -80,7 +80,7 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case EnemyType.WildBoar:
-                        offset += transform.forward * 7f + transform.up * 1f;
+                        offset += transform.forward * 4f + transform.up * 1f;
                         break;
                 }
                 break;
