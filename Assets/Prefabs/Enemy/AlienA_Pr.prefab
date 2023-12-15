@@ -304,13 +304,14 @@ GameObject:
   - component: {fileID: 2499598893110829909}
   - component: {fileID: 4220553688828604778}
   - component: {fileID: 5933566281014549517}
+  - component: {fileID: 2338584616778913031}
   m_Layer: 0
   m_Name: AlienA_Pr
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &471950779080328446
 Transform:
   m_ObjectHideFlags: 0
@@ -361,21 +362,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  statLink: {fileID: 11400000, guid: 05059618f4ae8a74e9d787a1ec4c686e, type: 2}
   stat: {fileID: 11400000, guid: 05059618f4ae8a74e9d787a1ec4c686e, type: 2}
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
-  attackTypeAPrefab: {fileID: 5073490652078658777, guid: bb39c65592ede994dac151a2588b960b,
+  rangeIndicator: {fileID: 3680253550249829298, guid: 0102c2837d1e2d24abde1827bdfc7545,
     type: 3}
-  attackTypeBPrefab: {fileID: 3694188551370226324, guid: 688248f3810a55444b5f5ee20a39e8dc,
+  AttackPatternTypeAPrefab: {fileID: 5073490652078658777, guid: bb39c65592ede994dac151a2588b960b,
     type: 3}
-  attackTypeCPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
+  AttackPatternTypeBPrefab: {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f,
     type: 3}
-  attackTypeDPrefab: {fileID: 3694188551370226324, guid: 688248f3810a55444b5f5ee20a39e8dc,
+  AttackPatternTypeCPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
+    type: 3}
+  AttackPatternTypeDPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
     type: 3}
   attackPreparationTime: 0.7
   detectRange: 100
   meleeAttackRange: 3
+  rangeAttackRange: 6
   roarDuration: 3
   playerLayerMask:
     serializedVersion: 2
@@ -403,7 +408,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea68372419c51084c8dfdbabb70ffdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackTarget: {fileID: 0}
 --- !u!114 &2499598893110829909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,6 +455,26 @@ CapsuleCollider:
   m_Height: 2.2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2338584616778913031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992872293614820932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTypeA: {fileID: 6310052549181491267, guid: f19a3fe80ac98bc48b39d86e83bb8b1e,
+    type: 3}
+  EffectTypeB: {fileID: 7607187682346851089, guid: 65e6794c5fd3e4f4e94d0e55e6eb1498,
+    type: 3}
+  EffectTypeC: {fileID: 7607187682346851089, guid: 65e6794c5fd3e4f4e94d0e55e6eb1498,
+    type: 3}
+  EffectTypeD: {fileID: 7607187682346851089, guid: 65e6794c5fd3e4f4e94d0e55e6eb1498,
+    type: 3}
 --- !u!1 &1181045230853615107
 GameObject:
   m_ObjectHideFlags: 0
