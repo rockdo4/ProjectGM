@@ -13,7 +13,11 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void Enter()
     {
-        AttackCheck();
+        if (controller.player.CanAttack)
+        {
+            AttackCheck();
+            return;
+        }
 
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
         controller.player.Animator.SetTrigger("Sprint");
