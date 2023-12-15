@@ -19,25 +19,37 @@ public class MatPanel : MonoBehaviour, IRenewal
     [SerializeField]
     private TextMeshProUGUI infoText;
 
+    [Header("개수")]
+    [SerializeField]
+    private TextMeshProUGUI countText;
+
     private Materials mat;
 
     public void SetMaterials(Materials mat)
     {
         this.mat = mat;
-
-        var table = CsvTableMgr.GetTable<MatTable>().dataTable;
-        var st = CsvTableMgr.GetTable<StringTable>().dataTable;
-
-        nameText.text = st[table[mat.id].item_name];
-        infoText.text = st[table[mat.id].item_script];
-        sellText.text = $"판매 가격 : {table[mat.id].gold.ToString()}";
     }
 
     public void Renewal()
     {
         gameObject.SetActive(true);
 
+        var table = CsvTableMgr.GetTable<MatTable>().dataTable;
+        var st = CsvTableMgr.GetTable<StringTable>().dataTable;
 
+        nameText.text = st[table[mat.id].name];
+        infoText.text = st[table[mat.id].script];
+        sellText.text = table[mat.id].sellgold.ToString();
+        countText.text = $"{mat.count} / {mat.Capacity}";
     }
 
+    public void SellItem()
+    {
+        PlayDataManager.SellItem(mat, 1);
+
+        Renewal();
+        InventoryManager.Instance.Renewal();
+
+        gameObject.SetActive(PlayDataManager.IsExistItem(mat));
+    }
 }

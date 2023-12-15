@@ -9,17 +9,12 @@ public class PlayerHitState : PlayerStateBase
 
     public override void Enter()
     {
-        controller.player.Animator.SetTrigger(triggerName);
-        
+        controller.player.Animator.Play(triggerName);
     }
 
     public override void Update()
     {
-        var animation = controller.player.Animator.GetCurrentAnimatorStateInfo(0);
-        if (animation.normalizedTime >= 1f)
-        {
-            controller.SetState(PlayerController.State.Idle);
-        }
+
     }
 
     public override void FixedUpdate()
@@ -29,6 +24,5 @@ public class PlayerHitState : PlayerStateBase
     public override void Exit()
     {
         controller.player.IsGroggy = false;
-        controller.player.Animator.ResetTrigger(triggerName);
     }
 }

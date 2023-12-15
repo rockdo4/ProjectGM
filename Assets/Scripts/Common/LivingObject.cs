@@ -4,7 +4,10 @@ using UnityEngine.Events;
 public abstract class LivingObject : MonoBehaviour
 {
     [Header("Stat 연결")]
-    public Stat stat;
+    public Stat statLink;
+    [HideInInspector]
+    public Stat stat; //Copy
+
     public int HP { get; set; }
     public bool IsGroggy { get; set; }
     [Header("사망 시 이벤트")]
@@ -12,8 +15,8 @@ public abstract class LivingObject : MonoBehaviour
 
     protected virtual void Awake()
     {
+        stat = Instantiate(statLink);
         HP = stat.HP;
         IsGroggy = false;
     }
-
 }

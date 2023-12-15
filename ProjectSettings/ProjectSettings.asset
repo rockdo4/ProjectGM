@@ -42,8 +42,8 @@ PlayerSettings:
   m_SplashScreenLogos: []
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
-  defaultScreenWidth: 1024
-  defaultScreenHeight: 768
+  defaultScreenWidth: 540
+  defaultScreenHeight: 960
   defaultScreenWidthWeb: 960
   defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
@@ -77,8 +77,8 @@ PlayerSettings:
   androidMinimumWindowHeight: 300
   androidFullscreenMode: 1
   defaultIsNativeResolution: 1
-  macRetinaSupport: 1
-  runInBackground: 0
+  macRetinaSupport: 0
+  runInBackground: 1
   captureSingleScreen: 0
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
@@ -101,8 +101,8 @@ PlayerSettings:
   xboxEnableKinectAutoTracking: 0
   xboxEnableFitness: 0
   visibleInBackground: 1
-  allowFullscreenSwitch: 1
-  fullscreenMode: 1
+  allowFullscreenSwitch: 0
+  fullscreenMode: 3
   xboxSpeechDB: 0
   xboxEnableHeadOrientation: 0
   xboxEnableGuest: 0
@@ -802,7 +802,24 @@ PlayerSettings:
   webGLMemoryGeometricGrowthStep: 0.2
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Android: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    GameCoreScarlett: URP_OUTLINE
+    GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    LinuxHeadlessSimulation: URP_OUTLINE
+    Nintendo Switch: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    PS4: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    PS5: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    QNX: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    Stadia: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    Standalone: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    VisionOS: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    WebGL: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    Windows Store Apps: URP_OUTLINE
+    XboxOne: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
+    iPhone: URP_OUTLINE
+    tvOS: UNITY_POST_PROCESSING_STACK_V2;URP_OUTLINE
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

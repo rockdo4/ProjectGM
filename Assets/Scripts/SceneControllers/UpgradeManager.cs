@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
 
 public class UpgradeManager : MonoBehaviour
 {
+    public static UpgradeManager Instance;
+
     [Header("현재 장비 버튼들")]
     public List<CurrentItemButton> equipButtons;
 
@@ -15,7 +18,14 @@ public class UpgradeManager : MonoBehaviour
     public CreateArmorPanel createArmorPanel;
 
     [Header("무기/방어구 업그레이드 패널")]
-    public UpgradeWeaponPanel upgradeWeaponPanel;
+    public UpgradeEquipPanel upgradeWeaponPanel;
+    public UpgradeEquipPanel upgradeArmorPanel;
+
+    [Space(10.0f)]
+
+    [Header("Notice")]
+    [SerializeField]
+    private TextMeshProUGUI noticeText;
 
     [Space(10.0f)]
 
@@ -28,6 +38,8 @@ public class UpgradeManager : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
+
         if (PlayDataManager.data == null)
         {
             PlayDataManager.Init();
@@ -42,6 +54,7 @@ public class UpgradeManager : MonoBehaviour
             () => // createFunc
             {
                 var button = Instantiate(buttonPrefab);
+                button.transform.SetParent(content.transform);
                 button.gameObject.SetActive(false);
 
                 return button;
@@ -49,10 +62,12 @@ public class UpgradeManager : MonoBehaviour
         delegate (UpgradeEquipButton button) // actionOnGet
         {
             button.gameObject.SetActive(true);
+            button.transform.SetParent(content.transform);
         },
         delegate (UpgradeEquipButton button) // actionOnRelease
         {
             button.iconImage.sprite = null;
+            button.transform.SetParent(transform);
             button.gameObject.SetActive(false);
         });
 
@@ -77,7 +92,6 @@ public class UpgradeManager : MonoBehaviour
         foreach (var item in inv)
         {
             var go = buttonPool.Get();
-            go.transform.SetParent(content.transform);
 
             go.SetEquip(item);
             go.UpgradeMode(this);
@@ -89,11 +103,15 @@ public class UpgradeManager : MonoBehaviour
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         foreach (var data in ct)
         {
+            if (data.Value._class != Equip.EquipType.Weapon)
+            {
+                continue;
+            }
+
             if (data.Value.mf_module != -1)
             {
                 var item = new Weapon(data.Key);
                 var go = buttonPool.Get();
-                go.transform.SetParent(content.transform);
 
                 go.SetEquip(item);
                 go.CreateMode(this);
@@ -118,7 +136,6 @@ public class UpgradeManager : MonoBehaviour
         foreach (var item in inv)
         {
             var go = buttonPool.Get();
-            go.transform.SetParent(content.transform);
 
             go.SetEquip(item);
             go.UpgradeMode(this);
@@ -127,15 +144,19 @@ public class UpgradeManager : MonoBehaviour
             releaseList.Add(go);
         }
 
-        /*
+        
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         foreach (var data in ct)
         {
+            if (data.Value._class != Equip.EquipType.Armor)
+            {
+                continue;
+            }
+
             if (data.Value.mf_module != -1)
             {
                 var item = new Armor(data.Key);
                 var go = buttonPool.Get();
-                go.transform.SetParent(content.transform);
 
                 go.SetEquip(item);
                 go.CreateMode(this);
@@ -145,7 +166,7 @@ public class UpgradeManager : MonoBehaviour
             }
 
         }
-        */
+        
     }
 
     public void Clear()
@@ -156,5 +177,11 @@ public class UpgradeManager : MonoBehaviour
         }
 
         releaseList.Clear();
+    }
+
+    public void Notice(string str)
+    {
+        noticeText.text = str;
+        noticeText.gameObject.SetActive(true);
     }
 }

@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Serialization;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
@@ -9,7 +10,6 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
     }
     private EvadeSuccesss evade;
     private Player player;
-
 
     private void Awake()
     {
@@ -23,25 +23,35 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
             return;
         }
 
-        EvadeCheck();
+        var damage = attack.Damage;
+        damage -= player.Stat.Defence;
 
+        EvadeCheck();
         switch (evade)
         {
             case EvadeSuccesss.None:
-                player.HP -= attack.Damage;
+                //player.effects.PlayEffect(EffectType.Hit);
                 player.IsGroggy = attack.IsGroggy;
                 break;
             case EvadeSuccesss.Normal:
-                player.HP -= (int)(attack.Damage * player.Stat.evadeDamageRate);
+                //player.effects.PlayEffect(EffectType.Hit);
+                damage = (int)(damage * player.Stat.evadeDamageRate);
                 break;
             case EvadeSuccesss.Just:
+                player.effects.PlayEffect(EffectType.JustEvade);
+                damage = 0;
                 break;
         }
+        if (damage <= 0)
+        {
+            damage = 0;
+        }
+        player.HP -= damage;
 
         if (player.HP <= 0)
         {
             player.HP = 0;
-            player.GetComponent<PlayerController>().SetState(PlayerController.State.Dead);
+            player.GetComponent<PlayerController>().SetState(PlayerController.State.Death);
             var destructables = player.GetComponents<IDestructable>();
             foreach (var destructable in destructables)
             {

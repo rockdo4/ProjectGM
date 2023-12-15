@@ -9,8 +9,15 @@ public class Player : LivingObject
     public float evadePoint { get; set; } = 0;
     public bool GroggyAttack { get; set; }
 
+    public enum AttackState
+    {
+        Before, Attack, AfterStart, AfterEnd, End
+    }
+    public AttackState attackState { get; set; }
     public bool canCombo { get; set; }
     public bool isAttack { get; set; }
+
+    public bool IsHold { get; set; }
 
     public LivingObject Enemy { get; private set; }
     public Rigidbody Rigid { get; private set; }
@@ -20,6 +27,8 @@ public class Player : LivingObject
     public Animator Animator { get; private set; }// animator test code
     public WeaponPrefab CurrentWeapon { get; set; }
     public WeaponPrefab FakeWeapon { get; set; }
+
+    public PlayerEffects effects { get; private set; }
 
     public float MoveDistance
     {
@@ -59,6 +68,14 @@ public class Player : LivingObject
         }
     }
 
+    public PlayerController.State CurrentState
+    {
+        get
+        {
+            return GetComponent<PlayerController>().currentState;
+        }
+    }
+
     #region TestData
     public Slider slider { get; private set; }
     public int comboCount { get; set; } = 0;
@@ -72,15 +89,17 @@ public class Player : LivingObject
         Animator = GetComponent<Animator>();
         slider = GetComponentInChildren<Slider>();
         virtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
+        effects = GetComponent<PlayerEffects>();
     }
 
     private void Start()
     {
+       
+
         if (GameObject.FindGameObjectWithTag(Tags.enemy) == null)
         {
             return;
         }
         Enemy = GameObject.FindGameObjectWithTag(Tags.enemy).GetComponent<LivingObject>();
-        virtualCamera.Follow = transform;
     }
 }

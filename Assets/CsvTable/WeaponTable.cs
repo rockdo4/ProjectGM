@@ -9,21 +9,25 @@ public class WeaponTable : CsvTable
 {
     public class Data
     {
-        public int weapon_name { get; set; }
-        public int gold { get; set; }
+        public int name { get; set; }
+        public int sellgold { get; set; }
         public AttackType property { get; set; }
         public WeaponType type { get; set; }
         public float atk { get; set; }
         public float weakpoint { get; set; }
+        public int grade { get; set; }
 
-        public Data(int weapon_name, int gold, int property, int type, float atk, float weakpoint)
+        public Data(int name, int sellgold,
+            int property, int type,
+            float atk, float weakpoint, int grade)
         {
-            this.weapon_name = weapon_name;
-            this.gold = gold;
+            this.name = name;
+            this.sellgold = sellgold;
             this.property = (AttackType)property;
             this.type = (WeaponType)type;
             this.atk = atk;
             this.weakpoint = weakpoint;
+            this.grade = grade;
         }
     }
     public Dictionary<int, Data> dataTable = new Dictionary<int, Data>();
@@ -53,12 +57,13 @@ public class WeaponTable : CsvTable
             dataTable.Add(int.Parse(csv.GetField(0)),
                 new Data
                 (
-                    csv.GetField<int>(1), // weapon_name
-                    csv.GetField<int>(2), // gold
+                    csv.GetField<int>(1), // name
+                    csv.GetField<int>(2), // sellgold
                     csv.GetField<int>(3), // property
                     csv.GetField<int>(4), // type
                     csv.GetField<float>(5), // atk
-                    csv.GetField<float>(6) // weakpoint
+                    csv.GetField<float>(6), // weakpoint
+                    csv.GetField<int>(7) // grade
                 )
             );
         }

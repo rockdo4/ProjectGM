@@ -29,6 +29,7 @@ public class PlayerAttackState : PlayerStateBase
             controller.player.Animator.SetTrigger(triggerName);
         }
     }
+    
 
     public override void FixedUpdate()
     {

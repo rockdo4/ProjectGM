@@ -3,7 +3,8 @@ using UnityEngine;
 public class PlayerEvadeState : PlayerStateBase
 {
     private Vector3 direction;
-    private Vector3 startPosition;
+    private const string triggerName = "Evade";
+    private AnimationClip animation;
 
     public PlayerEvadeState(PlayerController controller) : base(controller)
     {
@@ -13,8 +14,6 @@ public class PlayerEvadeState : PlayerStateBase
     public override void Enter()
     {
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
-
-        controller.player.Animator.Play("Idle");
         controller.player.evadeTimer = 0f;
         direction = TouchManager.Instance.swipeDirection switch
         {
@@ -27,44 +26,35 @@ public class PlayerEvadeState : PlayerStateBase
 
         controller.player.Animator.SetFloat("X", direction.x);
         controller.player.Animator.SetFloat("Z", direction.z);
-        controller.player.Animator.SetTrigger("Evade");
+        controller.player.Animator.SetTrigger(triggerName);
 
-        startPosition = controller.player.Rigid.position;
+        controller.player.effects.PlayEffect(EffectType.Evade, direction);
     }
 
     public override void Update()
     {
-        controller.player.evadeTimer += Time.deltaTime;
-
-        if (controller.player.evadeTimer > controller.player.Stat.evadeTime)
+        if (!controller.player.Animator.IsInTransition(0))
         {
-            controller.SetState(PlayerController.State.Idle);
+            animation = controller.player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip;
         }
-
-        //var position = controller.player.transform.position;
-        //if (Vector3.Distance(startPosition, position) < controller.player.MoveDistance)
-        //{
-        //    var rotation = controller.player.transform.rotation;
-        //    rotation.x = 0f;
-        //    var moveSpeed = controller.player.stat.MoveSpeed;
-        //    controller.player.transform.position = (position + rotation * direction * moveSpeed * Time.deltaTime);
-        //}
+        controller.player.evadeTimer += Time.deltaTime;
     }
 
     public override void FixedUpdate()
     {
-        var position = controller.player.Rigid.position;
-        if (Vector3.Distance(startPosition, position) < controller.player.MoveDistance)
+        if (animation == null)
         {
-            var rotation = controller.player.Rigid.rotation;
-            rotation.x = 0f;
-            var moveSpeed = controller.player.stat.MoveSpeed;
-            controller.player.Rigid.MovePosition(position + rotation * direction * moveSpeed * Time.deltaTime);
+            return;
         }
+        controller.player.Rigid.velocity = Vector3.zero;
+        var rotation = Quaternion.Euler(0, controller.player.Rigid.rotation.eulerAngles.y, controller.player.Rigid.rotation.eulerAngles.z);
+        float speed = controller.player.MoveDistance / animation.length;
+        var force = rotation * direction * speed;
+        controller.player.Rigid.AddForce(force, ForceMode.VelocityChange);
     }
 
     public override void Exit()
     {
-        controller.player.Animator.ResetTrigger("Evade");
+
     }
 }

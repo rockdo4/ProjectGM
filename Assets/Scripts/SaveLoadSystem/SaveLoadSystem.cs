@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 public static class SaveLoadSystem
 {
-    public static int RecentlyVersion { get; } = 4; // Version Change?
+    public static int RecentlyVersion { get; } = 5; // Version Change?
 
     public static string SaveDirectory
     {
@@ -70,6 +70,9 @@ public static class SaveLoadSystem
                 case 4:
                     result = serializer.Deserialize<SaveDataV4>(reader);
                     break;
+                case 5:
+                    result = serializer.Deserialize<SaveDataV5>(reader);
+                    break;
                     
             }
             while (result.Version < RecentlyVersion)
@@ -78,5 +81,14 @@ public static class SaveLoadSystem
             }
         }
         return result;
+    }
+
+    public static void Remove(string fileName)
+    {
+        var path = Path.Combine(SaveDirectory, fileName);
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
     }
 }

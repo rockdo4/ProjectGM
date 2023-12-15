@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
         Evade,
         Sprint,
         Hit,
-        Dead
+        Death
     }
     private StateManager stateManager = new StateManager();
     private List<StateBase> states = new List<StateBase>();
@@ -52,6 +52,15 @@ public class PlayerController : MonoBehaviour
         }
         equipWeapon = PlayDataManager.curWeapon;
 
+        foreach (var armor in PlayDataManager.curArmor)
+        {
+            if (armor.Value != null)
+            {
+                var table = CsvTableMgr.GetTable<ArmorTable>().dataTable;
+                player.Stat.Defence += table[armor.Value.id].defence;
+            }
+        }
+
         StateInit();
     }
 
@@ -64,7 +73,7 @@ public class PlayerController : MonoBehaviour
         }
         subHandle = player.CurrentWeapon.transform.Find("LeftHandle");
 
-        MoveWeaponPosition(WeaponPosition.Hand);
+        MoveWeaponPosition(WeaponPosition.Wing);
         
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
@@ -84,10 +93,11 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        if (currentState == State.Dead)
+        if (currentState == State.Death)
         {
             return;
         }
+
         stateManager?.Update();
         Vector3 relativePos = player.Enemy.transform.position - transform.position;
         Quaternion rotation = Quaternion.LookRotation(relativePos);
@@ -123,10 +133,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             player.Stat.AttackDamage = (player.Stat.AttackDamage == 0) ? 70 : 0;
+            Debug.Log(player.Stat.AttackDamage);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             player.Stat.Defence = (player.Stat.Defence == 0) ? -100 : 0;
+            Debug.Log(player.Stat.Defence);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
@@ -152,57 +164,44 @@ public class PlayerController : MonoBehaviour
     #region Touch Event
     private void OnSwipe()
     {
-        if (currentState == State.Hit || currentState == State.Dead)
+        if (currentState == State.Hit || currentState == State.Death)
         {
             return;
         }
 
-        if (player.isAttack)
-        {
-            return;
-        }
         SetState(State.Evade);
     }
     private void OnHold()
     {
-        if (currentState == State.Hit || currentState == State.Dead)
+        if (currentState != State.Idle)
         {
             return;
         }
-        if (currentState == State.Evade)
-        {
-            return;
-        }
+        //if (currentState == State.Hit || currentState == State.Death)
+        //{
+        //    return;
+        //}
+        //if (currentState == State.Evade)
+        //{
+        //    return;
+        //}
 
-        if (player.DistanceToEnemy < player.CurrentWeapon.attackRange && player.Enemy != null)
-        {
-            SetState((player.Enemy.IsGroggy) ? State.SuperAttack : State.Attack);
-        }
-        else
-        {
-            SetState(State.Sprint);
-        }
+        SetState(State.Sprint);
     }
     private void HoldEnd()
     {
-        if (currentState == State.Hit || currentState == State.Dead)
-        {
-            return;
-        }
-        player.canCombo = false;
+
     }
     #endregion
 
     #region Animation Event
     private void BeforeAttack()
     {
-        player.isAttack = false;
-        player.canCombo = false;
+        player.attackState = Player.AttackState.Before;
     }
     private void Attack()
     {
-        player.isAttack = true;
-
+        player.attackState = Player.AttackState.Attack;
         if (player.CurrentWeapon == null)
         {
             return;
@@ -217,15 +216,18 @@ public class PlayerController : MonoBehaviour
                 player.evadePoint = 0f;
             }
         }
+        player.attackState = Player.AttackState.AfterStart;
     }
     private void AfterAttack()
     {
-        player.isAttack = false;
-        player.canCombo = true;
+        player.attackState = Player.AttackState.AfterEnd;
     }
     private void EndAttack()
     {
-        player.canCombo = false;
+        player.attackState = Player.AttackState.End;
+    }
+    private void EndAnimationDefault()
+    {
         SetState(State.Idle);
     }
     #endregion
@@ -246,12 +248,12 @@ public class PlayerController : MonoBehaviour
     private void StateInit()
     {
         states.Add(new PlayerIdleState(this));
-        states.Add(new PlayerAttackState(this));
+        states.Add(new PlayerAttackState2(this));
         states.Add(new PlayerSuperAttackState(this));
         states.Add(new PlayerEvadeState(this));
         states.Add(new PlayerSprintState(this));
         states.Add(new PlayerHitState(this));
-        states.Add(new PlayerDeadState(this));
+        states.Add(new PlayerDeathState(this));
 
         SetState(State.Idle);
     }
@@ -259,7 +261,6 @@ public class PlayerController : MonoBehaviour
     private void ExecuteAttack(LivingObject attacker, LivingObject defender)
     {
         Attack attack = player.Stat.CreateAttack(attacker, defender, player.GroggyAttack);
-
         var attackables = defender.GetComponents<IAttackable>();
         foreach (var attackable in attackables)
         {

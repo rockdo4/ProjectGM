@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using UnityEngineInternal;
-using SaveDataVC = SaveDataV4; // Version Change?
+using SaveDataVC = SaveDataV5; // Version Change?
 
 public static class PlayDataManager
 {
@@ -21,29 +19,30 @@ public static class PlayDataManager
 
             // 기본 무기 4종 지급
             {
-                var weapon = new Weapon(8100);
-                weapon.instanceID.AddSeconds(1);
+                var weapon = new Weapon(101001);
+                weapon.instanceID = weapon.instanceID.AddSeconds(1);
                 data.WeaponInventory.Add(weapon);
             }
             {
-                var weapon = new Weapon(8300);
-                weapon.instanceID.AddSeconds(2);
+                var weapon = new Weapon(102001);
+                weapon.instanceID = weapon.instanceID.AddSeconds(2);
                 data.WeaponInventory.Add(weapon);
             }
             {
-                var weapon = new Weapon(8500);
-                weapon.instanceID.AddSeconds(3);
+                var weapon = new Weapon(103001);
+                weapon.instanceID = weapon.instanceID.AddSeconds(3);
                 data.WeaponInventory.Add(weapon);
 
                 curWeapon = weapon;
             }
             {
-                var weapon = new Weapon(8700);
-                weapon.instanceID.AddSeconds(4);
+                var weapon = new Weapon(104001);
+                weapon.instanceID = weapon.instanceID.AddSeconds(4);
                 data.WeaponInventory.Add(weapon);
             }
+
+            SaveLoadSystem.Save(data, "savefile.json");
         }
-        SaveLoadSystem.Save(data, "savefile.json");
 
         // 무기 인벤토리를 순회해서 curWeapon에 할당
         foreach (var weapon in data.WeaponInventory)
@@ -77,10 +76,10 @@ public static class PlayDataManager
 
     public static void Reset()
     {
-        data = new SaveDataVC();
+        SaveLoadSystem.Remove("savefile.json");
         curWeapon = null;
         curArmor.Clear();
-        Save();
+        Init();
     }
 
     public static bool Purchase(int pay)
@@ -95,6 +94,7 @@ public static class PlayDataManager
         return true;
     }
 
+    /*
     public static void UnlockQuest(int quest)
     {
         if (data.Quest != quest)
@@ -105,6 +105,7 @@ public static class PlayDataManager
         data.Quest++;
         Save();
     }
+    */
 
     public static void WearItem(Equip item)
     {
@@ -171,11 +172,19 @@ public static class PlayDataManager
         switch (type)
         {
             case Equip.EquipType.Weapon:
+                if (curWeapon == null)
+                {
+                    return;
+                }
                 curWeapon.isEquip = false;
                 curWeapon = null;
                 break;
 
             case Equip.EquipType.Armor:
+                if (curArmor[armorType] == null)
+                {
+                    return;
+                }
                 curArmor[armorType].isEquip = false;
                 curArmor[armorType] = null;
                 break;
@@ -212,5 +221,73 @@ public static class PlayDataManager
             data.MatInventory.Remove(mat);
         }
         Save();
+    }
+
+    public static void SellItem(Weapon item)
+    {
+        if (item == null || !data.WeaponInventory.Contains(item))
+        {
+            return;
+        }
+        var table = CsvTableMgr.GetTable<WeaponTable>().dataTable;
+
+        if (item.isEquip)
+        {
+            item.isEquip = false;
+            curWeapon = null;
+        }
+        data.WeaponInventory.Remove(item);
+        AddGold(table[item.id].sellgold);
+    }
+
+    public static void SellItem(Armor item)
+    {
+        if (item == null || !data.ArmorInventory.Contains(item))
+        {
+            return;
+        }
+        var table = CsvTableMgr.GetTable<ArmorTable>().dataTable;
+
+        if (item.isEquip)
+        {
+            item.isEquip = false;
+            curArmor[item.armorType] = null;
+        }
+        data.ArmorInventory.Remove(item);
+        //AddGold(table[item.id].);
+    }
+
+    public static void SellItem(Materials item)
+    {
+        if (item == null || !data.MatInventory.Contains(item))
+        {
+            return;
+        }
+        var table = CsvTableMgr.GetTable<MatTable>().dataTable;
+
+        data.MatInventory.Remove(item);
+        AddGold(table[item.id].sellgold * item.count);
+    }
+
+    public static void SellItem(Materials item, int count)
+    {
+        if (item == null || !data.MatInventory.Contains(item) || count < 0 || item.count < count)
+        {
+            return;
+        }
+        if (item.count - count == 0)
+        {
+            SellItem(item);
+            return;
+        }
+        var table = CsvTableMgr.GetTable<MatTable>().dataTable;
+
+        data.MatInventory.Find(x => x == item).count -= count;
+        AddGold(table[item.id].sellgold * count);
+    }
+
+    public static bool IsExistItem(Materials item)
+    {
+        return (item != null && data.MatInventory.Contains(item));
     }
 }

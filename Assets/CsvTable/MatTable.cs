@@ -9,15 +9,15 @@ public class MatTable : CsvTable
 {
     public class Data
     {
-        public int item_name { get; set; }
-        public int item_script { get; set; }
-        public int gold { get; set; }
+        public int name { get; set; }
+        public int script { get; set; }
+        public int sellgold { get; set; }
 
-        public Data(int item_name, int item_script, int gold)
+        public Data(int name, int script, int sellgold)
         {
-            this.item_name = item_name;
-            this.item_script = item_script;
-            this.gold = gold;
+            this.name = name;
+            this.script = script;
+            this.sellgold = sellgold;
         }
     }
     public Dictionary<int, Data> dataTable = new Dictionary<int, Data>();
@@ -47,9 +47,9 @@ public class MatTable : CsvTable
             dataTable.Add(int.Parse(csv.GetField(0)),
                 new Data
                 (
-                    csv.GetField<int>(1), // item_name
-                    csv.GetField<int>(2), // item_script
-                    csv.GetField<int>(3) // gold
+                    csv.GetField<int>(1), // name
+                    csv.GetField<int>(2), // script
+                    csv.GetField<int>(3) // sellgold
                 )
             );
         }
