@@ -838,8 +838,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   enemyType: 2
-  minAngle: 10
-  rotationSpeed: 5
+  minAngle: 13
+  rotationSpeed: 10
   attackGrid: 000000000100000000
   savedPatterns:
   - patternName: MelleAttack_A
@@ -903,7 +903,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
+  m_Radius: 2.2
   m_Height: 2.2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
