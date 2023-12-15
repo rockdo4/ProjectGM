@@ -22,7 +22,6 @@ public class ItemButton : MonoBehaviour
 
     private void Awake()
     {
-        iconImage = GetComponent<Image>();
         button = GetComponent<Button>();
     }
 
@@ -36,6 +35,15 @@ public class ItemButton : MonoBehaviour
     public void OnEquip(bool isEquip = false)
     {
         equipImage.gameObject.SetActive(isEquip);
+    }
+
+    public void Clear()
+    {
+        OnCountAct();
+        OnEquip();
+        iconImage.sprite = null;
+        iconImage.color = Color.white;
+        button.onClick.RemoveAllListeners();
     }
 
     private void OnEnable()

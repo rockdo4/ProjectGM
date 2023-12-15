@@ -47,7 +47,10 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         var mt = CsvTableMgr.GetTable<MatTable>().dataTable;
 
-        nameText.text = st[weapon.weapon_name];
+        nameText.text = st[weapon.name];
+        atkText.text = weapon.atk.ToString();
+        attackTypeText.text = weapon.property.ToString();
+        priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
 
         if (ct[item.id].mf_module != -1) // 요구 재료마다 분기
         {
@@ -58,14 +61,10 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
             {
                 count = mat.count;
             }
-            go.matText.text = st[mt[ct[item.id].mf_module].item_name];
-            go.SetSlider(count, ct[item.id].number_1);
+            go.matText.text = st[mt[ct[item.id].mf_module].name];
+            go.SetSlider(count, ct[item.id].mf_module_req);
             go.Renewal();
         }
-
-        atkText.text = weapon.atk.ToString();
-        attackTypeText.text = weapon.property.ToString();
-        priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
     }
 
     public void CraftEquip()
@@ -80,7 +79,7 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         var weapon = new Weapon(item.id);
 
         PlayDataManager.Purchase(ct[item.id].gold);
-        PlayDataManager.DecreaseMat(ct[item.id].mf_module, ct[item.id].number_1);
+        PlayDataManager.DecreaseMat(ct[item.id].mf_module, ct[item.id].mf_module_req);
         PlayDataManager.data.WeaponInventory.Add(weapon);
         PlayDataManager.Save();
 
@@ -95,19 +94,19 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         var mat = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mf_module);
         if (mat == null)
         {
-            Debug.Log("Not Exist Materials");
+            //Debug.Log("Not Exist Materials");
             return false;
         }
 
-        if (mat.count < ct[item.id].number_1)
+        if (mat.count < ct[item.id].mf_module_req)
         {
-            Debug.Log("Lack Of Materials Count");
+            //Debug.Log("Lack Of Materials Count");
             return false;
         }
 
         if (PlayDataManager.data.Gold < ct[item.id].gold)
         {
-            Debug.Log("Lack Of Gold");
+            //Debug.Log("Lack Of Gold");
             return false;
         }
         // 인벤토리 공간 부족 (추후 추가 필요)

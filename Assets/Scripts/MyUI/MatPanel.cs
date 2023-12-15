@@ -37,9 +37,9 @@ public class MatPanel : MonoBehaviour, IRenewal
         var table = CsvTableMgr.GetTable<MatTable>().dataTable;
         var st = CsvTableMgr.GetTable<StringTable>().dataTable;
 
-        nameText.text = st[table[mat.id].item_name];
-        infoText.text = st[table[mat.id].item_script];
-        sellText.text = $"판매 가격 : {table[mat.id].gold.ToString()}";
+        nameText.text = st[table[mat.id].name];
+        infoText.text = st[table[mat.id].script];
+        sellText.text = table[mat.id].sellgold.ToString();
         countText.text = $"{mat.count} / {mat.Capacity}";
     }
 
@@ -48,5 +48,8 @@ public class MatPanel : MonoBehaviour, IRenewal
         PlayDataManager.SellItem(mat, 1);
 
         Renewal();
+        InventoryManager.Instance.Renewal();
+
+        gameObject.SetActive(PlayDataManager.IsExistItem(mat));
     }
 }

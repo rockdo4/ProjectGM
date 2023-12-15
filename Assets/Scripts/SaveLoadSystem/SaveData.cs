@@ -94,6 +94,30 @@ public class SaveDataV4 : SaveData
 
     public override SaveData VersionUp()
     {
+        var data = new SaveDataV5();
+        data.Gold = Gold;
+
+        return data;
+    }
+}
+
+public class SaveDataV5 : SaveData
+{
+    public SaveDataV5()
+    {
+        Version = 5;
+    }
+
+    public int Gold { get; set; } = 0;
+
+    public List<Weapon> WeaponInventory = new List<Weapon>();
+
+    public List<Armor> ArmorInventory = new List<Armor>();
+
+    public List<Materials> MatInventory = new List<Materials>();
+
+    public override SaveData VersionUp()
+    {
         return null;
     }
 }

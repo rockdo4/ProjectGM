@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
-using SaveDataVC = SaveDataV4; // Version Change?
+using SaveDataVC = SaveDataV5; // Version Change?
 
 public static class PlayDataManager
 {
@@ -20,24 +19,24 @@ public static class PlayDataManager
 
             // 기본 무기 4종 지급
             {
-                var weapon = new Weapon(8100);
+                var weapon = new Weapon(101001);
                 weapon.instanceID = weapon.instanceID.AddSeconds(1);
                 data.WeaponInventory.Add(weapon);
             }
             {
-                var weapon = new Weapon(8300);
+                var weapon = new Weapon(102001);
                 weapon.instanceID = weapon.instanceID.AddSeconds(2);
                 data.WeaponInventory.Add(weapon);
             }
             {
-                var weapon = new Weapon(8500);
+                var weapon = new Weapon(103001);
                 weapon.instanceID = weapon.instanceID.AddSeconds(3);
                 data.WeaponInventory.Add(weapon);
 
                 curWeapon = weapon;
             }
             {
-                var weapon = new Weapon(8700);
+                var weapon = new Weapon(104001);
                 weapon.instanceID = weapon.instanceID.AddSeconds(4);
                 data.WeaponInventory.Add(weapon);
             }
@@ -95,6 +94,7 @@ public static class PlayDataManager
         return true;
     }
 
+    /*
     public static void UnlockQuest(int quest)
     {
         if (data.Quest != quest)
@@ -105,6 +105,7 @@ public static class PlayDataManager
         data.Quest++;
         Save();
     }
+    */
 
     public static void WearItem(Equip item)
     {
@@ -236,7 +237,7 @@ public static class PlayDataManager
             curWeapon = null;
         }
         data.WeaponInventory.Remove(item);
-        AddGold(table[item.id].gold);
+        AddGold(table[item.id].sellgold);
     }
 
     public static void SellItem(Armor item)
@@ -265,7 +266,7 @@ public static class PlayDataManager
         var table = CsvTableMgr.GetTable<MatTable>().dataTable;
 
         data.MatInventory.Remove(item);
-        AddGold(table[item.id].gold * item.count);
+        AddGold(table[item.id].sellgold * item.count);
     }
 
     public static void SellItem(Materials item, int count)
@@ -282,6 +283,11 @@ public static class PlayDataManager
         var table = CsvTableMgr.GetTable<MatTable>().dataTable;
 
         data.MatInventory.Find(x => x == item).count -= count;
-        AddGold(table[item.id].gold * count);
+        AddGold(table[item.id].sellgold * count);
+    }
+
+    public static bool IsExistItem(Materials item)
+    {
+        return (item != null && data.MatInventory.Contains(item));
     }
 }

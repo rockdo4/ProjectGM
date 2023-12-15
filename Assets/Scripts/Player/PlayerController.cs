@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
             if (armor.Value != null)
             {
                 var table = CsvTableMgr.GetTable<ArmorTable>().dataTable;
-                player.Stat.Defence += table[armor.Value.id].def;
+                player.Stat.Defence += table[armor.Value.id].defence;
             }
         }
 

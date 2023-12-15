@@ -34,7 +34,8 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
 
                     break;
                 }
-                iconImage.sprite = weaponIconSO.GetSprite(PlayDataManager.curWeapon.id / 100 * 100);
+                iconImage.sprite = weaponIconSO.GetSprite(PlayDataManager.curWeapon.id / 100 * 100 + 1);
+                // weapon icon level reset
 
                 break;
 
@@ -45,7 +46,7 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
 
                     break;
                 }
-                iconImage.sprite = armorIconSO.GetSprite(PlayDataManager.curArmor[armorType].id);
+                iconImage.sprite = armorIconSO.GetSprite(PlayDataManager.curArmor[armorType].id / 100 * 100 + 1);
                 break;
 
             default:

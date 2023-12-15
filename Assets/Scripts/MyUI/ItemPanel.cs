@@ -13,8 +13,8 @@ public class ItemPanel : MonoBehaviour, IRenewal
 
     [Header("텍스트 모음")]
     public TextMeshProUGUI nameText;
-    public TextMeshProUGUI statText;
-    public TextMeshProUGUI infoText;
+    public TextMeshProUGUI valueText;
+    public TextMeshProUGUI additionalText;
 
     public Equip item = null;
 
@@ -22,19 +22,6 @@ public class ItemPanel : MonoBehaviour, IRenewal
     {
         gameObject.SetActive(true);
 
-        if (item.isEquip)
-        {
-            statText.color = Color.red;
-        }
-        else
-        {
-            statText.color = Color.white;
-        }
-    }
-
-    public void SetItem(Equip item)
-    {
-        this.item = item;
         var st = CsvTableMgr.GetTable<StringTable>().dataTable;
 
         switch (item.type)
@@ -43,11 +30,11 @@ public class ItemPanel : MonoBehaviour, IRenewal
                 {
                     var table = CsvTableMgr.GetTable<WeaponTable>().dataTable[item.id];
                     //iconImage.sprite = ;
-                    nameText.text = st[table.weapon_name];
-                    statText.text = $"[공격력] {table.atk}\n[무기속성] {table.property}";
-                    infoText.text = table.weapon_name.ToString(); // string table
+                    nameText.text = st[table.name];
+                    valueText.text = table.atk.ToString();
+                    additionalText.text = table.property.ToString();
                 }
-                
+
                 break;
 
             case Equip.EquipType.Armor:
@@ -55,15 +42,32 @@ public class ItemPanel : MonoBehaviour, IRenewal
                     var table = CsvTableMgr.GetTable<ArmorTable>().dataTable[item.id];
                     //iconImage.sprite = ;
 
-                    nameText.text = st[table.Armor_name];
-                    statText.text = $"[방어력] {table.def}\n[부위] {table.Armor_type}";
-                    infoText.text = $"[세트효과] {table.set_skill}";
+                    nameText.text = st[table.name];
+                    valueText.text = table.defence.ToString();
+                    additionalText.text = $"[세트효과] {table.set_skill_id}";
                 }
 
                 break;
         }
 
-        equipButton.interactable = !item.isEquip;
+        equipButton.gameObject.SetActive(!item.isEquip);
+
+        /*
+        if (item.isEquip)
+        {
+            valueText.color = Color.red;
+        }
+        else
+        {
+            valueText.color = Color.white;
+        }
+        */
+    }
+
+    public void SetItem(Equip item)
+    {
+        this.item = item;
+        
     }
 
     public void WearItem()
