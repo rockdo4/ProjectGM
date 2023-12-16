@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using SaveDataVC = SaveDataV5; // Version Change?
 
 public static class PlayDataManager
@@ -29,11 +30,9 @@ public static class PlayDataManager
                 data.WeaponInventory.Add(weapon);
             }
             {
-                var weapon = new Weapon(103001);
+                var weapon = new Weapon(103001, true);
                 weapon.instanceID = weapon.instanceID.AddSeconds(3);
                 data.WeaponInventory.Add(weapon);
-
-                curWeapon = weapon;
             }
             {
                 var weapon = new Weapon(104001);
@@ -203,6 +202,27 @@ public static class PlayDataManager
             return;
         }
         data.Gold += value;
+        Save();
+    }
+
+    public static void IncreaseMat(int id, int count)
+    {
+        if (count <= 0)
+        {
+            return;
+        }
+
+        var mat = data.MatInventory.Find(x => x.id == id);
+
+        if (mat == null)
+        {
+            data.MatInventory.Add(new Materials(id, count));
+        }
+        else 
+        {
+            mat.count = Mathf.Clamp(mat.count + count, mat.count, mat.Capacity);
+        }
+
         Save();
     }
 
