@@ -80,7 +80,7 @@ public class UpgradeManager : MonoBehaviour
         ShowWeapons(true);
     }
 
-    public void ShowWeapons(bool isOn)
+    public void ShowWeapons(bool isOn = true)
     {
         if (!isOn)
         {
@@ -123,7 +123,7 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    public void ShowArmors(bool isOn)
+    public void ShowArmors(bool isOn = true)
     {
         if (!isOn)
         {

@@ -58,6 +58,16 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
 
         if (!ct.ContainsKey(item.id + 1))
         {
+            switch (type)
+            {
+                case Equip.EquipType.Weapon:
+                    UpgradeManager.Instance.ShowWeapons();
+                    break;
+
+                case Equip.EquipType.Armor:
+                    UpgradeManager.Instance.ShowArmors();
+                    break;
+            }
             gameObject.SetActive(false);
             return;
         }
@@ -137,7 +147,7 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
                 break;
         }
 
-        
+
     }
 
     public void UpgradeEquip()
