@@ -11,7 +11,7 @@ public class PlayerDeathState : PlayerStateBase
     public override void Enter()
     {
         controller.player.Animator.SetTrigger(triggerName);
-        controller.player.virtualCamera.transform.parent = null;
+        controller.player.virtualCamera.enabled = false;
     }
 
     public override void Update()
