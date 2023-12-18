@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -122,7 +120,10 @@ public class PlayerController : MonoBehaviour
                 player.GroggyAttack = false;
             }
         }
-        player.slider.value = player.evadePoint;
+        if (player.slider != null)
+        {
+            player.slider.value = player.evadePoint;
+        }
         #endregion
 
         #region Test Input
