@@ -591,9 +591,9 @@ public class EnemyAI : LivingObject
                 result = MelleAttackFour(enemytype, EnemyMeleeAttackIndexFour);
                 break;
 
-            //case 5:
-            //    result = RangeAttackOne(enemytype, EnemyRangedAttackIndexOne);
-            //    break;
+            case 5:
+                result = RangeAttackOne(enemytype, EnemyRangedAttackIndexOne);
+                break;
 
             case 6:
                 result = RangeAttackTwo(enemytype, EnemyRangedAttackIndexTwo);
@@ -622,12 +622,12 @@ public class EnemyAI : LivingObject
         return result;
     }
 
-    IEnumerator PrepareMeleeAttack(EnemyType enemytype, AttackPatternType AttackPatternType) // 프리페어
+    IEnumerator PrepareMeleeAttack(EnemyType enemytype, AttackPatternType attackPatternType) // 프리페어
     {
         // animator.SetFloat("MoveSpeed", 0f);
 
         isPreparingAttack = true;
-        ShowMeleeAttackRange(true, enemytype, AttackPatternType);
+        ShowMeleeAttackRange(true, enemytype, attackPatternType);
 
         // 어웨이크, 스타트? 캐싱
 
@@ -642,40 +642,24 @@ public class EnemyAI : LivingObject
 
         foreach (var preparationTime in attackPreparationTimes) // 극단적으로 1000 10000 확장성을 고려했을때
         {
-            if (preparationTime.enemyType == enemytype && preparationTime.attackPatternType == AttackPatternType)
+            if (preparationTime.enemyType == enemytype && preparationTime.attackPatternType == attackPatternType)
             {
                 specificPreparationTime = preparationTime.preparationTime;
                 break;
             }
         }
 
-
-        //float specificPreparationTime = attackPreparationTimes
-        //.FirstOrDefault(ap => ap.enemyType == enemytype && ap.attackPatternType == AttackPatternType)
-        //.preparationTime;
-
-
-        //for (float speed = 0.5f; speed >= 0.0f; speed -= Time.deltaTime / attackPreparationTime)
-        //{
-        //    animator.SetFloat("MoveSpeed", speed);
-        //    yield return null;
-        //}
-
-        // yield return new WaitForSeconds(AttackPatternType.Bear_A);
-
-
-
         Debug.Log(specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
-        ShowMeleeAttackRange(false, enemytype, AttackPatternType);
+        ShowMeleeAttackRange(false, enemytype, attackPatternType);
         isPreparingAttack = false;
 
         player = detectedPlayer.GetComponent<Player>();
 
         if (player != null)
         {
-            string animationTrigger = $"{"Attack_"}{AttackPatternType}";
+            string animationTrigger = $"{"Attack_"}{attackPatternType}";
             StartCoroutine(IsAnimationRunning(animationTrigger));
         }
     }
@@ -685,27 +669,29 @@ public class EnemyAI : LivingObject
         isPreparingAttack = true;
         ShowRangeAttackRange(true, enemytype, attackPatternType);
 
-        for (float speed = 0.5f; speed >= 0.0f; speed -= Time.deltaTime / attackPreparationTime)
+        float specificPreparationTime = attackPreparationTime; // 기본값으로 초기화
+
+        foreach (var preparationTime in attackPreparationTimes) // 극단적으로 1000 10000 확장성을 고려했을때
         {
-            animator.SetFloat("MoveSpeed", speed);
-            yield return null;
+            if (preparationTime.enemyType == enemytype && preparationTime.attackPatternType == attackPatternType)
+            {
+                specificPreparationTime = preparationTime.preparationTime;
+                break;
+            }
         }
 
-        yield return new WaitForSeconds(attackPreparationTime);
+        Debug.Log(specificPreparationTime);
+        yield return new WaitForSeconds(specificPreparationTime);
 
-        ShowRangeAttackRange(false, enemytype, attackPatternType);
+        ShowMeleeAttackRange(false, enemytype, attackPatternType);
         isPreparingAttack = false;
 
         player = detectedPlayer.GetComponent<Player>();
 
         if (player != null)
         {
-            // 원거리 공격 시각화가 끝난 뒤 공격 애니메이션과 같이 실행
-            //MonsterRangedAttack(enemytype, AttackPatternType);
-
-            //string animationTrigger = $"{"Attack_"}{AttackPatternType.A}"; // 이거 임시임
-            //string animationTrigger = $"{"Attack_"}{AttackPatternType.A}";
-            //StartCoroutine(IsAnimationRunning(animationTrigger));
+            string animationTrigger = $"{"Attack_"}{attackPatternType}";
+            StartCoroutine(IsAnimationRunning(animationTrigger));
         }
     }
 
@@ -1366,40 +1352,40 @@ public class EnemyAI : LivingObject
         return INode.EnemyState.Success;
     }
 
-    //INode.EnemyState RangeAttackOne(EnemyType enemyType, int attackPatternIndex)
-    //{
-    //    if (isAttacking)
-    //        return INode.EnemyState.Failure;
+    INode.EnemyState RangeAttackOne(EnemyType enemyType, int attackPatternIndex)
+    {
+        if (isAttacking)
+            return INode.EnemyState.Failure;
 
-    //    if (detectedPlayer == null)
-    //        return INode.EnemyState.Failure;
+        if (detectedPlayer == null)
+            return INode.EnemyState.Failure;
 
-    //    float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
+        float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
 
-    //    if (distanceToPlayer >= rangeAttackRange)
-    //    {
-    //        isAttacking = false;
-    //        return INode.EnemyState.Failure;
-    //    }
+        if (distanceToPlayer >= rangeAttackRange)
+        {
+            isAttacking = false;
+            return INode.EnemyState.Failure;
+        }
 
-    //    Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
-    //    float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+        Vector3 directionToPlayer = (detectedPlayer.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
 
-    //    if (angleToPlayer > minAngle)
-    //        return INode.EnemyState.Failure;
+        if (angleToPlayer > minAngle)
+            return INode.EnemyState.Failure;
 
-    //    isAttacking = true;
-    //    attackIndex = attackPatternIndex;
+        isAttacking = true;
+        attackIndex = attackPatternIndex;
 
 
-    //    //attackIndex = 0; // 임시로 0
-    //    // 근데 레인지어택인덱스도 지금 0으로 설정 되어있긴함
-    //    //attackIndex = attackPatternIndex;
+        //attackIndex = 0; // 임시로 0
+        // 근데 레인지어택인덱스도 지금 0으로 설정 되어있긴함
+        //attackIndex = attackPatternIndex;
 
-    //    //StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.A)); // 이거 임시임
-    //    StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.RangeA));
-    //    return INode.EnemyState.Success;
-    //}
+        //StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.A)); // 이거 임시임
+        StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.RangeA));
+        return INode.EnemyState.Success;
+    }
 
     INode.EnemyState RangeAttackTwo(EnemyType enemyType, int attackPatternIndex)
     {
