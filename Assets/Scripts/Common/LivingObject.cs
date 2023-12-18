@@ -1,4 +1,3 @@
-using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -22,8 +21,7 @@ public abstract class LivingObject : MonoBehaviour
 
         if (OnDeathEvent.GetPersistentEventCount() == 0)
         {
-            UnityAction<LivingObject> unityAction = GameManager.instance.GameOver;
-            UnityEventTools.AddObjectPersistentListener(OnDeathEvent, unityAction, this);
+            OnDeathEvent.AddListener(() => { GameManager.instance.GameOver(this); });
         }
     }
 }

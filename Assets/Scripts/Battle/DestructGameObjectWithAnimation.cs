@@ -1,8 +1,4 @@
-using System;
-using UnityEditor.Events;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UIElements;
 
 public class DestructGameObjectWithAnimation : MonoBehaviour, IDestructable
 {
