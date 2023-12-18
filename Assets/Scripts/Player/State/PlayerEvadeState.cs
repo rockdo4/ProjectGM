@@ -37,12 +37,12 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Update()
     {
+        controller.player.evadeTimer += Time.deltaTime;
+
         if (!controller.player.Animator.IsInTransition(0))
         {
             animation = controller.player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip;
-            Debug.Log(animation.name);
         }
-        controller.player.evadeTimer += Time.deltaTime;
     }
 
     public override void FixedUpdate()

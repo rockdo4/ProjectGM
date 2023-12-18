@@ -19,29 +19,23 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverUI;
     public static readonly float gameOverTimeScale = 0f;
     public static readonly float originalTimeScale = 1f;
+    public bool IsGameOver { get; private set; }
+
     private void Awake()
     {
-        Time.timeScale = 1f;
         if (instance != this)
         {
             Destroy(gameObject);
         }
-        gameOverUI.SetActive(false);
+        IsGameOver = false;
+        Pause(false);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (gameOverUI.activeSelf)
-            {
-                Time.timeScale = originalTimeScale;
-                gameOverUI.SetActive(false);
-            }
-            else
-            {
-                EndGame();
-            }
+            Pause(!gameOverUI.activeSelf);
         }
     }
 
@@ -53,13 +47,34 @@ public class GameManager : MonoBehaviour
 
     public void Win(EnemyAI enemy)
     {
-        Debug.Log($"{enemy.name} 몬스터 때려잡았음");
-        EndGame();
+        Pause(true);
     }
 
     public void Lose(Player player)
     {
-        Debug.Log($"{player.Stat.AttackDamage + player.CurrentWeapon.attack}공격력으로 졌다...");
-        EndGame();
+        Pause(true);
+    }
+
+    public void GameOver(LivingObject deathObject)
+    {
+        IsGameOver = true;
+        if (deathObject is Player)
+        {
+            Lose(deathObject as Player);
+        }
+        else
+        {
+            Win(deathObject as EnemyAI);
+        }
+    }
+
+    public void Pause(bool active)
+    {
+        if (!active && IsGameOver)
+        {
+            return;
+        }
+        gameOverUI.SetActive(active);
+        Time.timeScale = active ? gameOverTimeScale : originalTimeScale;
     }
 }

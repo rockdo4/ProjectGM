@@ -1,3 +1,4 @@
+using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,5 +19,11 @@ public abstract class LivingObject : MonoBehaviour
         stat = Instantiate(statLink);
         HP = stat.HP;
         IsGroggy = false;
+
+        if (OnDeathEvent.GetPersistentEventCount() == 0)
+        {
+            UnityAction<LivingObject> unityAction = GameManager.instance.GameOver;
+            UnityEventTools.AddObjectPersistentListener(OnDeathEvent, unityAction, this);
+        }
     }
 }

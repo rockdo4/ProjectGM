@@ -1,6 +1,8 @@
 using System;
+using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class DestructGameObjectWithAnimation : MonoBehaviour, IDestructable
 {
@@ -10,6 +12,7 @@ public class DestructGameObjectWithAnimation : MonoBehaviour, IDestructable
     public void OnDestruction(GameObject attacker)
     {
         animator = GetComponent<Animator>();
+        
         if (animator == null)
         {
             return;
@@ -24,11 +27,8 @@ public class DestructGameObjectWithAnimation : MonoBehaviour, IDestructable
             if (animationStateInfo.IsTag("Die") && animationStateInfo.normalizedTime >= 1f)
             {
                 isDie = false;
-                var dieObject = GetComponent<LivingObject>();
-                if (dieObject.OnDeathEvent != null)
-                {
-                    dieObject.OnDeathEvent.Invoke();
-                }
+                GetComponent<LivingObject>().OnDeathEvent.Invoke();
+                Destroy(this);
             }
         }
     }
