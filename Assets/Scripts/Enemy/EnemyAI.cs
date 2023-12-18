@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
+using static EnemyAI;
 
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : LivingObject
@@ -37,6 +37,10 @@ public class EnemyAI : LivingObject
     private int EnemyRangedAttackIndexThree = 2;
     private int EnemyRangedAttackIndexFour = 3;
 
+    [Header("공격 준비 시간 설정")]
+    [SerializeField]
+    private List<AttackPreparationTime> attackPreparationTimes;
+
     [Header("슬래시 원거리 공격 타입 프리펩")]
     public GameObject rangeIndicator;
 
@@ -52,7 +56,7 @@ public class EnemyAI : LivingObject
     [Header("D공격 타입 프리펩")]
     public GameObject AttackPatternTypeDPrefab;
 
-    [Header("공격 대기시간")]
+    [Header("공격 대기시간 기본값")]
     [SerializeField]
     public float attackPreparationTime = 0.5f;
 
@@ -92,7 +96,6 @@ public class EnemyAI : LivingObject
 
     private Animator animator;
     private GameObject attackRangeInstance;
-    private Material attackRangeMaterial;
 
     private int phaseOneAttackSequence = 0;
     private int phaseTwoAttackSequence = 0;
@@ -115,10 +118,15 @@ public class EnemyAI : LivingObject
     private List<GameObject> colliderObjects = new List<GameObject>();
 
     FanShape fanShape = null;
-
     private bool isDie;
 
-    
+    [Serializable]
+    public struct AttackPreparationTime
+    {
+        public EnemyType enemyType;
+        public AttackPatternType attackPatternType;
+        public float preparationTime;
+    }
 
     public enum EnemyType
     {
@@ -167,6 +175,8 @@ public class EnemyAI : LivingObject
 
     protected override void Awake()
     {
+        //Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), GetComponentsInChildren<CapsuleCollider>()[1]);
+
         base.Awake();
         phaseTwoHealthThreshold = HP * 0.5f;
         isTwoPhase = false;
@@ -191,6 +201,8 @@ public class EnemyAI : LivingObject
         animator.speed = 1f; // 기본 속도로 복귀
         isDie = false;
 
+        //rigidbody = GetComponent<Rigidbody>();
+
     }
 
     private void Update()
@@ -199,6 +211,8 @@ public class EnemyAI : LivingObject
         //{
         //    rangeIndicator.SetActive(!rangeIndicator.activeSelf);
         //}
+
+        //rigidbody.velocity = Vector3.zero;
 
         if (Input.GetKeyDown(KeyCode.H))
         {
@@ -553,6 +567,9 @@ public class EnemyAI : LivingObject
 
     private INode.EnemyState ExecuteAttackPattern(EnemyType enemytype, int[] pattern)
     {
+        // 공격 준비부터 달리는 모션 나오는거 제거
+        animator.SetFloat("MoveSpeed", 0f);
+
         INode.EnemyState result = INode.EnemyState.Failure;
         int attackSequence = isTwoPhase ? phaseTwoAttackSequence : phaseOneAttackSequence;
 
@@ -605,18 +622,51 @@ public class EnemyAI : LivingObject
         return result;
     }
 
-    IEnumerator PrepareMeleeAttack(EnemyType enemytype, AttackPatternType AttackPatternType) // 근접
+    IEnumerator PrepareMeleeAttack(EnemyType enemytype, AttackPatternType AttackPatternType) // 프리페어
     {
+        // animator.SetFloat("MoveSpeed", 0f);
+
         isPreparingAttack = true;
         ShowMeleeAttackRange(true, enemytype, AttackPatternType);
 
-        for (float speed = 0.5f; speed >= 0.0f; speed -= Time.deltaTime / attackPreparationTime)
+        // 어웨이크, 스타트? 캐싱
+
+        // 캐싱 클래스를 새로 만들어서?
+
+        // 멤버변수 프라이빗 하나 만들고
+        // currentpreparationTime 하나 선언하고
+        // 메서드 , 어웨이크 
+
+        // 어웨이크때 하는
+        float specificPreparationTime = attackPreparationTime; // 기본값으로 초기화
+
+        foreach (var preparationTime in attackPreparationTimes) // 극단적으로 1000 10000 확장성을 고려했을때
         {
-            animator.SetFloat("MoveSpeed", speed);
-            yield return null;
+            if (preparationTime.enemyType == enemytype && preparationTime.attackPatternType == AttackPatternType)
+            {
+                specificPreparationTime = preparationTime.preparationTime;
+                break;
+            }
         }
 
-        yield return new WaitForSeconds(attackPreparationTime);
+
+        //float specificPreparationTime = attackPreparationTimes
+        //.FirstOrDefault(ap => ap.enemyType == enemytype && ap.attackPatternType == AttackPatternType)
+        //.preparationTime;
+
+
+        //for (float speed = 0.5f; speed >= 0.0f; speed -= Time.deltaTime / attackPreparationTime)
+        //{
+        //    animator.SetFloat("MoveSpeed", speed);
+        //    yield return null;
+        //}
+
+        // yield return new WaitForSeconds(AttackPatternType.Bear_A);
+
+
+
+        Debug.Log(specificPreparationTime);
+        yield return new WaitForSeconds(specificPreparationTime);
 
         ShowMeleeAttackRange(false, enemytype, AttackPatternType);
         isPreparingAttack = false;
@@ -1145,6 +1195,7 @@ public class EnemyAI : LivingObject
             detectedPlayer = overlapColliders[0].transform;
 
             Vector3 direction = detectedPlayer.position - transform.position;
+            // direction.Normalize();
             direction.y = 0;
 
             Quaternion lookRotation = Quaternion.LookRotation(direction);
@@ -1156,19 +1207,38 @@ public class EnemyAI : LivingObject
         return INode.EnemyState.Failure;
     }
 
-    INode.EnemyState TracePlayer()
+    INode.EnemyState TracePlayer() // 트레이스
     {
-        if (detectedPlayer != null)
+        if (detectedPlayer != null && !isAttacking && !isPreparingAttack)
         {
-            float actualMoveSpeed = isTwoPhase ? Stat.MoveSpeed * 1.5f : Stat.MoveSpeed;
+            float distanceToPlayer = Vector3.Distance(detectedPlayer.position, transform.position);
+            //Vector3 direction = (detectedPlayer.position - transform.position).normalized;
 
-            animator.SetFloat("MoveSpeed", 0.5f); // 속도는 바꿔주고 애니메이션은 일단 Run 유지하고
+            if (distanceToPlayer <= meleeAttackRange)
+            {
+                //Quaternion rotation = Quaternion.LookRotation(direction);
+                //transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
 
-            Vector3 direction = (detectedPlayer.position - transform.position).normalized;
-            transform.position += direction * actualMoveSpeed * Time.deltaTime;
+                animator.SetFloat("MoveSpeed", 0f);
+                return INode.EnemyState.Success;
+            }
+            else
+            {
+                Vector3 direction = (detectedPlayer.position - transform.position).normalized;
+                animator.SetFloat("MoveSpeed", 0.5f); // 애니메이션 속도 조정
+                transform.position += direction * Stat.MoveSpeed * Time.deltaTime;
+                Quaternion rotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
 
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f);
+
+
+                //animator.SetFloat("MoveSpeed", 0.5f); // 애니메이션 속도 조정
+                //transform.position += direction * Stat.MoveSpeed * Time.deltaTime;
+
+                //Quaternion rotation = Quaternion.LookRotation(direction);
+                //transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
+            }
+
             return INode.EnemyState.Running;
         }
         return INode.EnemyState.Failure;

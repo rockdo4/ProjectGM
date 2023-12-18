@@ -112,6 +112,8 @@ public class EnemyEffect : MonoBehaviour
         }
     }
 
+    // ¿Ã∞… ø÷ πŸ≤„æﬂµ≈?
+
     public void AttackEffectC()
     {
         EffectEnemyType("C");
