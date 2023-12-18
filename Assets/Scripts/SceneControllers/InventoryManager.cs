@@ -125,6 +125,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     if (weapon.isEquip) // Were Equip Exception
                     {
                         // Notice
+                        MyNotice.Instance.Notice("판매할 수 없습니다.");
                         return;
                     }
 

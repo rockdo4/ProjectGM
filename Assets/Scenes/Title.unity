@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2768,12 +2768,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 353971117}
   m_CullTransparentMesh: 1
---- !u!1 &358827702 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3163774376382633263, guid: 0988180b7f4524b418807ff56c5c9c7c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1098682064}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &377618733
 GameObject:
   m_ObjectHideFlags: 0
@@ -9332,28 +9326,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1998017322}
-        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-        m_MethodName: set_text
+      - m_Target: {fileID: 1998017326}
+        m_TargetAssemblyTypeName: MyNotice, Assembly-CSharp
+        m_MethodName: Notice
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: "\uC544\uC774\uD15C\uC774 \uCD94\uAC00\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 358827702}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: "\uC544\uC774\uD15C\uC774 \uC9C0\uAE09\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1061138051
@@ -9797,21 +9779,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3023258229288565642, guid: 0988180b7f4524b418807ff56c5c9c7c,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3023258229288565642, guid: 0988180b7f4524b418807ff56c5c9c7c,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3023258229288565642, guid: 0988180b7f4524b418807ff56c5c9c7c,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3023258229288565642, guid: 0988180b7f4524b418807ff56c5c9c7c,
-        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -9874,41 +9841,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Notice Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 3163774376382633263, guid: 0988180b7f4524b418807ff56c5c9c7c,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3163774376382633263, guid: 0988180b7f4524b418807ff56c5c9c7c,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 3165577897702953871, guid: 0988180b7f4524b418807ff56c5c9c7c,
-        type: 3}
-      propertyPath: m_fontColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3165577897702953871, guid: 0988180b7f4524b418807ff56c5c9c7c,
-        type: 3}
-      propertyPath: m_fontColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3165577897702953871, guid: 0988180b7f4524b418807ff56c5c9c7c,
-        type: 3}
-      propertyPath: m_fontColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3165577897702953871, guid: 0988180b7f4524b418807ff56c5c9c7c,
-        type: 3}
-      propertyPath: m_fontSizeMin
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 3165577897702953871, guid: 0988180b7f4524b418807ff56c5c9c7c,
-        type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 4278190335
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14531,7 +14463,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c88b3d087bcdec48a35e3a808fa261a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noticeText: {fileID: 1998017322}
   moneyText: {fileID: 1086611608}
 --- !u!1001 &1841932289
 PrefabInstance:
@@ -15654,24 +15585,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1969671796}
   m_CullTransparentMesh: 1
---- !u!114 &1998017322 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3165577897702953871, guid: 0988180b7f4524b418807ff56c5c9c7c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1098682064}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 358827702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1998017325 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3023258229288565642, guid: 0988180b7f4524b418807ff56c5c9c7c,
     type: 3}
   m_PrefabInstance: {fileID: 1098682064}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1998017326 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2511954720791643796, guid: 0988180b7f4524b418807ff56c5c9c7c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1098682064}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 662d5a9371c737d41b1ac29c28360116, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2001731660
 GameObject:
   m_ObjectHideFlags: 0

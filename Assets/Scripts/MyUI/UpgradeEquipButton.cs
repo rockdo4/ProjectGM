@@ -117,7 +117,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
             var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
             if (!ct.ContainsKey(item.id + 1))
             {
-                UpgradeManager.Instance.Notice("강화를 진행할 수 없습니다.");
+                MyNotice.Instance.Notice("강화를 진행할 수 없습니다.");
                 return;
             }
             umPanel.SetEquip(item);

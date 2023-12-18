@@ -23,12 +23,6 @@ public class UpgradeManager : MonoBehaviour
 
     [Space(10.0f)]
 
-    [Header("Notice")]
-    [SerializeField]
-    private TextMeshProUGUI noticeText;
-
-    [Space(10.0f)]
-
     public UpgradeEquipButton buttonPrefab;
 
     public GameObject content;
@@ -177,11 +171,5 @@ public class UpgradeManager : MonoBehaviour
         }
 
         releaseList.Clear();
-    }
-
-    public void Notice(string str)
-    {
-        noticeText.text = str;
-        noticeText.gameObject.SetActive(true);
     }
 }
