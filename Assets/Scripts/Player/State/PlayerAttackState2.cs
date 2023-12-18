@@ -16,8 +16,10 @@ public class PlayerAttackState2 : PlayerStateBase
 
     public override void Enter()
     {
+        animator ??= controller.player.Animator;
+        animator.speed = controller.player.Stat.globalSpeed.attackSpeed * controller.player.Stat.attackSpeed;
+
         comboTimer = 0f;
-        animator = controller.player.Animator;
         SetNextAttack = false;
 
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Hand);

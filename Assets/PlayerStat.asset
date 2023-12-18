@@ -18,6 +18,11 @@ MonoBehaviour:
   MoveSpeed: 10
   Critical: 0
   CriticalDamage: 1
+  globalSpeed:
+    evadeSpeed: 1
+    attackSpeed: 1
+    superAttackSpeed: 1
+    sprintSpeed: 1
   evadeTime: 0.3166667
   maxEvadePoint: 100
   evadePoint: 10
@@ -27,3 +32,4 @@ MonoBehaviour:
   hitEvadePoint: -5
   groggyTime: 10
   hitInvincibleTime: 0
+  attackSpeed: 0
