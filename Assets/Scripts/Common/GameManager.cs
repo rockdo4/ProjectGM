@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !IsGameOver)
         {
             Pause(!gameOverUI.activeSelf);
         }
@@ -70,10 +70,6 @@ public class GameManager : MonoBehaviour
 
     public void Pause(bool active)
     {
-        if (!active && IsGameOver)
-        {
-            return;
-        }
         gameOverUI.SetActive(active);
         Time.timeScale = active ? gameOverTimeScale : originalTimeScale;
     }
