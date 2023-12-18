@@ -253,8 +253,9 @@ public static class PlayDataManager
 
         if (item.isEquip)
         {
-            item.isEquip = false;
-            curWeapon = null;
+            //item.isEquip = false;
+            //curWeapon = null;
+            return;
         }
         data.WeaponInventory.Remove(item);
         AddGold(table[item.id].sellgold);
@@ -270,11 +271,12 @@ public static class PlayDataManager
 
         if (item.isEquip)
         {
-            item.isEquip = false;
-            curArmor[item.armorType] = null;
+            //item.isEquip = false;
+            //curArmor[item.armorType] = null;
+            return;
         }
         data.ArmorInventory.Remove(item);
-        //AddGold(table[item.id].);
+        AddGold(table[item.id].sellgold);
     }
 
     public static void SellItem(Materials item)
