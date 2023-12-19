@@ -16,12 +16,9 @@ public class CurrentItemButton : MonoBehaviour, IRenewal
     [Header("방어구 IconSO")]
     public IconSO armorIconSO;
 
+    [Header("아이콘 이미지")]
+    [SerializeField]
     private Image iconImage;
-
-    private void Awake()
-    {
-        iconImage = GetComponent<Image>();
-    }
 
     public void Renewal()
     {
