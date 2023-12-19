@@ -18,7 +18,7 @@ public class EnemyAI : LivingObject
     //private int[] wildBoarAttackPatternPhaseOne = new int[] { 5 }; 
 
     // 테스트
-    private int[] wildBoarAttackPatternPhaseOne = new int[] { 1, 2, 3 }; // abd
+    private int[] wildBoarAttackPatternPhaseOne = new int[] { 5, 6, 5, 6 }; // 테스트로 레인지A 인덱스 넣기
     private int[] wildBoarAttackPatternPhaseTwo = new int[] { 1, 2, 3 }; // abdc
 
     //private int[] wildBoarAttackPatternPhaseOne = new int[] { 1, 2, 5 }; // abd
@@ -32,10 +32,10 @@ public class EnemyAI : LivingObject
     private int EnemyMeleeAttackIndexThree = 2;
     private int EnemyMeleeAttackIndexFour = 3;
 
-    private int EnemyRangedAttackIndexOne = 0;
-    private int EnemyRangedAttackIndexTwo = 1;
-    private int EnemyRangedAttackIndexThree = 2;
-    private int EnemyRangedAttackIndexFour = 3;
+    private int EnemyRangedAttackIndexOne = 4;
+    private int EnemyRangedAttackIndexTwo = 5;
+    private int EnemyRangedAttackIndexThree = 6;
+    private int EnemyRangedAttackIndexFour = 7;
 
     [Header("공격 준비 시간 설정")]
     [SerializeField]
@@ -56,6 +56,18 @@ public class EnemyAI : LivingObject
     [Header("D공격 타입 프리펩")]
     public GameObject AttackPatternTypeDPrefab;
 
+    [Header("원거리 A공격 타입 프리펩")]
+    public GameObject RangeAttackPatternTypeAPrefab;
+
+    [Header("원거리 B공격 타입 프리펩")]
+    public GameObject RangeAttackPatternTypeBPrefab;
+
+    [Header("원거리 C공격 타입 프리펩")]
+    public GameObject RangeAttackPatternTypeCPrefab;
+
+    [Header("원거리 D공격 타입 프리펩")]
+    public GameObject RangeAttackPatternTypeDPrefab;
+
     [Header("공격 대기시간 기본값")]
     [SerializeField]
     public float attackPreparationTime = 0.5f;
@@ -68,7 +80,7 @@ public class EnemyAI : LivingObject
     [SerializeField]
     private float meleeAttackRange = 3f;
 
-    [Header("몬스터의 근접 공격 사거리")]
+    [Header("몬스터의 원거리 공격 사거리")]
     [SerializeField]
     private float rangeAttackRange = 6f;
 
@@ -657,10 +669,15 @@ public class EnemyAI : LivingObject
 
         player = detectedPlayer.GetComponent<Player>();
 
+
+
+
+
         if (player != null)
         {
-            string animationTrigger = $"{"Attack_"}{attackPatternType}";
-            StartCoroutine(IsAnimationRunning(animationTrigger));
+            string animationTrigger = $"{"Attack_"}{attackPatternType}"; //attackPatternType 이게 코드없이 되냐?
+            IsAnimationRunning(animationTrigger);
+            //StartCoroutine(IsAnimationRunning(animationTrigger));
         }
     }
 
@@ -669,9 +686,9 @@ public class EnemyAI : LivingObject
         isPreparingAttack = true;
         ShowRangeAttackRange(true, enemytype, attackPatternType);
 
-        float specificPreparationTime = attackPreparationTime; // 기본값으로 초기화
+        float specificPreparationTime = attackPreparationTime;
 
-        foreach (var preparationTime in attackPreparationTimes) // 극단적으로 1000 10000 확장성을 고려했을때
+        foreach (var preparationTime in attackPreparationTimes)
         {
             if (preparationTime.enemyType == enemytype && preparationTime.attackPatternType == attackPatternType)
             {
@@ -683,46 +700,45 @@ public class EnemyAI : LivingObject
         Debug.Log(specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
-        ShowMeleeAttackRange(false, enemytype, attackPatternType);
+        switch (attackPatternType)
+        {
+            case AttackPatternType.RangeA:
+                ShowRangeAttackRange(false, enemytype, attackPatternType); // 기존 공격 패턴 A
+                break;
+            case AttackPatternType.RangeB:
+                yield return StartCoroutine(RangeAttackPatternB()); // 공격 패턴 B
+                break;
+        }
+
         isPreparingAttack = false;
 
         player = detectedPlayer.GetComponent<Player>();
 
         if (player != null)
         {
-            string animationTrigger = $"{"Attack_"}{attackPatternType}";
-            StartCoroutine(IsAnimationRunning(animationTrigger));
+            // 임시 애니메이션 임시 원거리 공격 애니메이션 임시임시
+            string animationTrigger = $"{"Attack_"}{"A"}";
+            //string animationTrigger = $"{"Attack_"}{attackPatternType}";
+            IsAnimationRunning(animationTrigger);
+
         }
     }
 
-    private IEnumerator IsAnimationRunning(string stateName)
+    private void IsAnimationRunning(string stateName)
     {
         if (animator != null)
         {
             animator.SetTrigger(stateName);
-
-            yield return new WaitForEndOfFrame();
-            yield return new WaitForEndOfFrame();
-            yield return new WaitForEndOfFrame();
-            yield return new WaitForEndOfFrame();
-
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-            if (stateInfo.IsName(stateName))
-            {
-                //Debug.Log(isAttacking);
-                //Debug.Log("공격 애니메이션 재생 시간 : " + stateInfo.length);
-                yield return new WaitForSeconds(stateInfo.length);
-                isAttacking = false; // 공격상태 해제를 여기서 해주지 않으면 코루틴을 하는 의미가 없어짐
-                // 하지만 다음 공격버그가 생긴다면 여기일듯
-            }
         }
+    }
+
+    private void AnimationIsOver() // 애니메이션 이벤트 공격 애니메이션 끝나고 나서.
+    {
+        isAttacking = false;
     }
 
     private Vector3 GetAttackOffset(EnemyType enemyType, AttackPatternType AttackPatternType)
     {
-        
-
         if (enemyType == EnemyType.Bear)
         {
             switch (AttackPatternType)
@@ -759,6 +775,8 @@ public class EnemyAI : LivingObject
                     return new Vector3(0f, 0f, -2f);
                 case AttackPatternType.C:
                     return new Vector3(0f, 0f, -4f);
+                //case AttackPatternType.RangeA:
+                //    return new Vector3(0f, -4f, -4f);
                 default: return Vector3.zero;
             }
         }
@@ -773,17 +791,12 @@ public class EnemyAI : LivingObject
         int x = index % 3;
         int z = index / 3;
 
-        Vector3 actualPosition = new Vector3((x - 1) * offset.x, 0.015f, (z - 1) * offset.z);
+        Vector3 actualPosition = new Vector3((x - 1) * offset.x, 02.015f, (z - 1) * offset.z);
 
-        if (index == 4) // 중간 위치의 인덱스
+        if (index == 4)
         {
-            actualPosition -= realoffset; // realOffset 추가 적용
+            actualPosition -= realoffset;
         }
-
-        //if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.C) // 임시
-        //{
-        //    actualPosition += new Vector3(0, 0, 4f);
-        //}
 
         if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.C) // 임시
         {
@@ -1019,38 +1032,37 @@ public class EnemyAI : LivingObject
 
     private void ShowRangeAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
     {
-        Debug.Log("레인지 어택 호출 하는지?");
-
+        //Debug.Log("레인지 어택 호출 하는지?");
         GameObject attackPrefab = null;
         Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
 
         switch (AttackPatternType)
         {
-            case AttackPatternType.A:
-                Debug.Log("원거리 프리펩 A 할당 되었나");
-                attackPrefab = AttackPatternTypeAPrefab;
+            case AttackPatternType.RangeA:
+                //Debug.Log("원거리 프리펩 A 할당 되었나");
+                attackPrefab = RangeAttackPatternTypeAPrefab;
                 break;
 
             case AttackPatternType.RangeB:
-                attackPrefab = AttackPatternTypeBPrefab;
+                attackPrefab = RangeAttackPatternTypeBPrefab;
                 break;
 
             case AttackPatternType.RangeC:
-                attackPrefab = AttackPatternTypeCPrefab;
+                attackPrefab = RangeAttackPatternTypeCPrefab;
                 break;
 
             case AttackPatternType.RangeD:
-                attackPrefab = AttackPatternTypeDPrefab;
+                attackPrefab = RangeAttackPatternTypeDPrefab;
                 break;
         }
 
         if (show)
         {
-            if (attackRangeInstance != null) // 추후 수정
+            if (attackRangeInstance != null)
             {
                 Destroy(attackRangeInstance);
             }
-
+            //Debug.Log(attackPrefab);
             attackRangeInstance = Instantiate(attackPrefab, transform);
 
             foreach (GameObject cell in cellInstances)
@@ -1060,49 +1072,14 @@ public class EnemyAI : LivingObject
                     Destroy(cell);
                 }
             }
-            foreach (GameObject colliderObject in colliderObjects)
-            {
-                if (colliderObject != null)
-                {
-                    Destroy(colliderObject);
-                }
-            }
-            colliderObjects.Clear();
             cellInstances.Clear();
 
             AttackPattern currentPattern = savedPatterns[attackIndex];
+            Renderer renderer = attackRangeInstance.GetComponent<Renderer>();
+            Vector3 cellSize = renderer.bounds.size;
 
-            fanShape = attackRangeInstance.GetComponent<FanShape>();
-            fanShape.enemyAi = this;
-
-            Vector3 cellSize = fanShape.Return();
+            //Debug.Log("어택 프리펩 크기 : " + cellSize);
             Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
-
-
-            //if (rangeIndicator != null)
-            //{
-            //    // 원거리 공격 범위 설정
-            //    rangeIndicator.transform.position = transform.position; // 적 위치로 설정
-            //    rangeIndicator.transform.localScale = new Vector3(1.5f, 2f, 1.5f); // 적당한 크기로 조정
-
-            //    MeshRenderer meshRenderer = rangeIndicator.GetComponent<MeshRenderer>();
-            //    if (meshRenderer != null)
-            //    {
-            //        meshRenderer.sharedMaterial.color = new Color(1f, 0f, 0f, 0.5f);// 반투명
-            //    }
-            //    else
-            //    {
-            //        Debug.LogError("meshRenderer에 재질이 할당되지 않았습니다.");
-            //    }
-
-            //    rangeIndicator.SetActive(true); // 범위 표시 활성화
-            //}
-            //else
-            //{
-            //    Debug.LogError("meshRenderer가 널임.");
-            //}
-
-
 
             for (int i = 0; i < currentPattern.pattern.Length; i++)
             {
@@ -1121,51 +1098,64 @@ public class EnemyAI : LivingObject
         }
         else
         {
-            //if (rangeIndicator != null)
-            //{
-            //    rangeIndicator.SetActive(false); // 범위 표시 비활성화
-            //}
+            
 
-            // 범위 표시 비활성화 직후 원거리 공격 날리기 구현
-            //detectedPlayer
+            RangeAttackPatternA();
+        }
+    }
 
-            player = detectedPlayer.GetComponent<Player>();
-
-            if (player != null)
-            {
-                Vector3 targetPosition = player.transform.position;
-
-                foreach (GameObject cell in cellInstances)
-                {
-                    if (cell != null)
-                    {
-                        cell.transform.position = transform.position; // 시작 위치 설정
-                        cell.SetActive(true); // 활성화
-
-
-                        Rigidbody rb = cell.GetComponent<Rigidbody>();
-                        if (rb != null)
-                        {
-                            // 임펄스 계산
-                            Vector3 direction = (targetPosition - transform.position).normalized;
-                            float forceMagnitude = 10f; // 필요한 임펄스 힘 계산
-                            rb.AddForce(direction * forceMagnitude, ForceMode.Impulse);
-                        }
-                    }
-                }
-            }
+    private void RangeAttackPatternA()
+    {
+        if (detectedPlayer != null)
+        {
+            Vector3 targetPosition = detectedPlayer.transform.position;
 
             foreach (GameObject cell in cellInstances)
             {
                 if (cell != null)
                 {
-                    MeshRenderer cellMeshRenderer = cell.GetComponent<MeshRenderer>();
-                    if (cellMeshRenderer != null)
+                    cell.transform.position = transform.position; // 시작 위치 설정
+                    cell.SetActive(true); // 활성화
+
+                    Rigidbody rb = cell.GetComponent<Rigidbody>();
+                    if (rb != null)
                     {
-                        cellMeshRenderer.enabled = false;
+                        // 임펄스 계산
+                        Vector3 direction = (targetPosition - transform.position).normalized;
+                        float forceMagnitude = 100f; // 필요한 임펄스 힘 계산
+                        rb.AddForce(direction * forceMagnitude, ForceMode.Impulse);
                     }
                 }
             }
+        }
+    }
+
+    private IEnumerator RangeAttackPatternB()
+    {
+        if (detectedPlayer != null)
+        {
+
+            foreach (GameObject cell in cellInstances)
+            {
+                if (cell != null)
+                {
+                    cell.transform.position = transform.position; // 시작 위치 설정
+                    cell.SetActive(true); // 활성화
+
+                    Rigidbody rb = cell.GetComponent<Rigidbody>();
+                    if (rb != null)
+                    {
+                        Vector3 targetPosition = detectedPlayer.transform.position;
+
+                        Vector3 direction = (targetPosition - transform.position).normalized;
+                        float forceMagnitude = 100f; // 임펄스 힘 계산
+                        rb.AddForce(direction * forceMagnitude, ForceMode.Impulse);
+                    }
+
+                    yield return new WaitForSeconds(0.5f); // 0.2초 기다림
+                }
+            }
+            //isPreparingAttack = false;
         }
     }
 
@@ -1377,12 +1367,7 @@ public class EnemyAI : LivingObject
         isAttacking = true;
         attackIndex = attackPatternIndex;
 
-
-        //attackIndex = 0; // 임시로 0
-        // 근데 레인지어택인덱스도 지금 0으로 설정 되어있긴함
-        //attackIndex = attackPatternIndex;
-
-        //StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.A)); // 이거 임시임
+        //Debug.Log(attackPatternIndex);
         StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.RangeA));
         return INode.EnemyState.Success;
     }
