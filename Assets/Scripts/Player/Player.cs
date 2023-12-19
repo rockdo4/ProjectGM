@@ -76,26 +76,18 @@ public class Player : LivingObject
         }
     }
 
-    #region TestData
-    public Slider slider { get; private set; }
-    public int comboCount { get; set; } = 0;
-    #endregion
-
     protected override void Awake()
     {
         base.Awake();
         Rigid = GetComponent<Rigidbody>();
         Colldier = GetComponent<BoxCollider>();
         Animator = GetComponent<Animator>();
-        slider = GetComponentInChildren<Slider>();
         virtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
         effects = GetComponent<PlayerEffects>();
     }
 
     private void Start()
     {
-       
-
         if (GameObject.FindGameObjectWithTag(Tags.enemy) == null)
         {
             return;

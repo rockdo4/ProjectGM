@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class PlayerEvadeState : PlayerStateBase
 {
+    private Animator animator;
     private Vector3 direction;
     private const string triggerName = "Evade";
     private AnimationClip animation;
-
+    
     public PlayerEvadeState(PlayerController controller) : base(controller)
     {
 
@@ -13,6 +14,9 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Enter()
     {
+        animator ??= controller.player.Animator;
+        animator.speed = controller.player.Stat.globalSpeed.evadeSpeed;
+
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
         controller.player.evadeTimer = 0f;
         direction = TouchManager.Instance.swipeDirection switch
@@ -33,11 +37,12 @@ public class PlayerEvadeState : PlayerStateBase
 
     public override void Update()
     {
+        controller.player.evadeTimer += Time.deltaTime;
+
         if (!controller.player.Animator.IsInTransition(0))
         {
             animation = controller.player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip;
         }
-        controller.player.evadeTimer += Time.deltaTime;
     }
 
     public override void FixedUpdate()
@@ -48,7 +53,7 @@ public class PlayerEvadeState : PlayerStateBase
         }
         controller.player.Rigid.velocity = Vector3.zero;
         var rotation = Quaternion.Euler(0, controller.player.Rigid.rotation.eulerAngles.y, controller.player.Rigid.rotation.eulerAngles.z);
-        float speed = controller.player.MoveDistance / animation.length;
+        float speed = controller.player.MoveDistance * animator.speed / animation.length;
         var force = rotation * direction * speed;
         controller.player.Rigid.AddForce(force, ForceMode.VelocityChange);
     }

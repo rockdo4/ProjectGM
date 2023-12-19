@@ -637,7 +637,7 @@ public class EnemyAI : LivingObject
             }
         }
 
-        Debug.Log(specificPreparationTime);
+        Debug.Log("이번 공격 대기시간 : "  + specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
         ShowMeleeAttackRange(false, enemytype, attackPatternType);
@@ -647,8 +647,8 @@ public class EnemyAI : LivingObject
 
         if (player != null)
         {
-            Debug.Log(attackIndex);
-            Debug.Log(attackPatternType);
+            //Debug.Log(attackIndex);
+            //Debug.Log(attackPatternType);
 
             string animationTrigger = $"{"Attack_"}{attackPatternType}"; //attackPatternType 이게 코드없이 되냐?
             IsAnimationRunning(animationTrigger);
@@ -1186,8 +1186,6 @@ public class EnemyAI : LivingObject
                 //Quaternion rotation = Quaternion.LookRotation(direction);
                 //transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
 
-                Debug.Log("트레이스 플레이어 공격 사거리 안?");
-
                 animator.SetFloat("MoveSpeed", 0f);
                 return INode.EnemyState.Success;
             }
@@ -1240,13 +1238,13 @@ public class EnemyAI : LivingObject
 
         isAttacking = true;
 
-        Debug.Log(isAttacking);
+        //Debug.Log(isAttacking);
 
-        if (enemyType == EnemyType.Boar && 0 == attackPatternIndex)
-        {
-            Debug.Log("밀리어택 원 멧돼지");
+        //if (enemyType == EnemyType.Boar && 0 == attackPatternIndex)
+        //{
+        //    Debug.Log("밀리어택 원 멧돼지");
 
-        }
+        //}
 
         attackIndex = attackPatternIndex; // 인덱스 바꾸고
 
@@ -1368,7 +1366,7 @@ public class EnemyAI : LivingObject
         isAttacking = true;
         attackIndex = attackPatternIndex;
 
-        Debug.Log(attackPatternIndex);
+        //Debug.Log(attackPatternIndex);
         StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.RangeA));
         return INode.EnemyState.Success;
     }
@@ -1398,7 +1396,7 @@ public class EnemyAI : LivingObject
         isAttacking = true;
         attackIndex = attackPatternIndex;
 
-        Debug.Log(attackPatternIndex);
+        //Debug.Log(attackPatternIndex);
         StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.RangeB));
         return INode.EnemyState.Success;
     }

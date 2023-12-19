@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using SaveDataVC = SaveDataV5; // Version Change?
 
 public static class PlayDataManager
@@ -29,11 +30,9 @@ public static class PlayDataManager
                 data.WeaponInventory.Add(weapon);
             }
             {
-                var weapon = new Weapon(103001);
+                var weapon = new Weapon(103001, true);
                 weapon.instanceID = weapon.instanceID.AddSeconds(3);
                 data.WeaponInventory.Add(weapon);
-
-                curWeapon = weapon;
             }
             {
                 var weapon = new Weapon(104001);
@@ -206,6 +205,27 @@ public static class PlayDataManager
         Save();
     }
 
+    public static void IncreaseMat(int id, int count)
+    {
+        if (count <= 0)
+        {
+            return;
+        }
+
+        var mat = data.MatInventory.Find(x => x.id == id);
+
+        if (mat == null)
+        {
+            data.MatInventory.Add(new Materials(id, count));
+        }
+        else 
+        {
+            mat.IncreaseCount(count);
+        }
+
+        Save();
+    }
+
     public static void DecreaseMat(int id, int count)
     {
         var mat = data.MatInventory.Find(x => x.id == id);
@@ -233,8 +253,9 @@ public static class PlayDataManager
 
         if (item.isEquip)
         {
-            item.isEquip = false;
-            curWeapon = null;
+            //item.isEquip = false;
+            //curWeapon = null;
+            return;
         }
         data.WeaponInventory.Remove(item);
         AddGold(table[item.id].sellgold);
@@ -250,11 +271,12 @@ public static class PlayDataManager
 
         if (item.isEquip)
         {
-            item.isEquip = false;
-            curArmor[item.armorType] = null;
+            //item.isEquip = false;
+            //curArmor[item.armorType] = null;
+            return;
         }
         data.ArmorInventory.Remove(item);
-        //AddGold(table[item.id].);
+        AddGold(table[item.id].sellgold);
     }
 
     public static void SellItem(Materials item)
@@ -289,5 +311,15 @@ public static class PlayDataManager
     public static bool IsExistItem(Materials item)
     {
         return (item != null && data.MatInventory.Contains(item));
+    }
+
+    public static bool IsExistMat(int id)
+    {
+        return GetMaterials(id) != null;
+    }
+
+    public static Materials GetMaterials(int id)
+    {
+        return data.MatInventory.Find(x => x.id == id);
     }
 }

@@ -2360,12 +2360,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 298232222}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &304249946 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3258026739337276757, guid: b027432c7b49d3f4e98c271c8acbec51,
-    type: 3}
-  m_PrefabInstance: {fileID: 217775795}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &314187745
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10425,11 +10419,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: New Player
       objectReference: {fileID: 0}
-    - target: {fileID: 2587267489539564580, guid: 171fe1e25acf4a149ba01b146b19fc35,
-        type: 3}
-      propertyPath: OnDeathEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 304249946}
     - target: {fileID: 2635884456797727361, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -122,6 +122,13 @@ public class InventoryManager : MonoBehaviour, IRenewal
             {
                 if (sellMode && sellEquipList.Count < 10)
                 {
+                    if (weapon.isEquip) // Were Equip Exception
+                    {
+                        // Notice
+                        MyNotice.Instance.Notice("판매할 수 없습니다.");
+                        return;
+                    }
+
                     if (go.iconImage.color == Color.white)
                     {
                         sellEquipList.Add(weapon);
@@ -420,60 +427,12 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
     public void Tester()
     {
-        if (PlayDataManager.data.MatInventory.Count <= 0)
+        var table = CsvTableMgr.GetTable<MatTable>().dataTable;
+        foreach (var mat in table)
         {
-            PlayDataManager.data.MatInventory.Add(new Materials(610001, 99));
-            PlayDataManager.data.MatInventory.Add(new Materials(611001, 99));
-            PlayDataManager.data.MatInventory.Add(new Materials(612001, 99));
-            PlayDataManager.data.MatInventory.Add(new Materials(612002, 99));
-            PlayDataManager.data.MatInventory.Add(new Materials(612003, 99));
-            PlayDataManager.data.MatInventory.Add(new Materials(612004, 99));
-            PlayDataManager.data.MatInventory.Add(new Materials(612005, 99));
-            PlayDataManager.data.MatInventory.Add(new Materials(613001, 99));
-            PlayDataManager.data.MatInventory.Add(new Materials(613002, 99));
-            PlayDataManager.data.MatInventory.Add(new Materials(613003, 99));
+            PlayDataManager.IncreaseMat(mat.Key, 99);
         }
 
         PlayDataManager.AddGold(100000);
-
-        StartCoroutine(TestCoroutine());
     }
-
-    private IEnumerator TestCoroutine()
-    {
-        {
-            var armor = new Armor(201101);
-            PlayDataManager.data.ArmorInventory.Add(armor);
-            yield return new WaitForEndOfFrame();
-        }
-
-        {
-            var armor = new Armor(201201);
-            PlayDataManager.data.ArmorInventory.Add(armor);
-            yield return new WaitForEndOfFrame();
-        }
-
-        {
-            var armor = new Armor(201301);
-            PlayDataManager.data.ArmorInventory.Add(armor);
-            yield return new WaitForEndOfFrame();
-        }
-
-        {
-            var armor = new Armor(201401);
-            PlayDataManager.data.ArmorInventory.Add(armor);
-            yield return new WaitForEndOfFrame();
-        }
-
-        {
-            var armor = new Armor(201501);
-            PlayDataManager.data.ArmorInventory.Add(armor);
-            yield return new WaitForEndOfFrame();
-        }
-
-        PlayDataManager.Save();
-        Renewal();
-    }
-
-    
 }

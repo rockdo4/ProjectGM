@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class PlayerDeathState : PlayerStateBase
 {
     private const string triggerName = "Die";
@@ -10,8 +8,8 @@ public class PlayerDeathState : PlayerStateBase
 
     public override void Enter()
     {
-        controller.player.Animator.SetTrigger(triggerName);
-        controller.player.virtualCamera.transform.parent = null;
+        controller.player.Animator.Play(triggerName);
+        controller.player.virtualCamera.enabled = false;
     }
 
     public override void Update()

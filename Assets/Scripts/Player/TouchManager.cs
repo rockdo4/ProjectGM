@@ -12,16 +12,15 @@ public class TouchManager : Singleton<TouchManager>
     public bool Swiped { get; private set; }
 
     [Header("홀드 판단 시간")]
-    public float holdTime = 0.01f;
+    [SerializeField] private float holdTime = 0.01f;
     private float holdTimer = 0f;
 
     [Header("스와이프 판단 시간")]
-    [SerializeField]
-    public float swipeTime = 0.3f;
+    [SerializeField] private float swipeTime = 0.3f;
 
     [Header("스와이프 판정 거리")]
-    [Range(0f, 1f)]
-    public float swipeDistance = 0.15f;
+    [Range(0f, 5f)]
+    [SerializeField] private float swipeDistance = 0.5f;
 
     private Vector2 startPosition;
     private Vector2 endPosition;
@@ -41,13 +40,25 @@ public class TouchManager : Singleton<TouchManager>
     public event HoldEnd HoldEndListeners;
     #endregion
 
+    private float screenDPI;
+    private const float defaultDPI = 96;
+
+    private void Awake()
+    {
+        screenDPI = Screen.dpi;
+        if (screenDPI == 0)
+        {
+            screenDPI = defaultDPI;
+        }
+    }
+
     private void Update()
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
         if (Input.GetMouseButtonDown(0))
         {
-            startPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
-            endPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+            startPosition = new Vector2(Input.mousePosition.x , Input.mousePosition.y);
+            endPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             startTime = Time.time;
         }
         else if (Input.GetMouseButton(0))
@@ -73,7 +84,7 @@ public class TouchManager : Singleton<TouchManager>
 
             if (!Swiped)
             {
-                endPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+                endPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
                 SwipeDetected();
 
                 if (Swiped && SwipeListeners != null)
@@ -105,15 +116,14 @@ public class TouchManager : Singleton<TouchManager>
             return;
         }
 
-        Vector2 screenSize = new Vector2(Screen.width, Screen.height);
         Touch touch = Input.GetTouch(0);
 
         switch (touch.phase)
         {
             case TouchPhase.Began:
                 {
-                    startPosition = new Vector2(touch.position.x / screenSize.x, touch.position.y / screenSize.x);
-                    endPosition = new Vector2(touch.position.x / screenSize.x, touch.position.y / screenSize.x);
+                    startPosition = new Vector2(touch.position.x, touch.position.y);
+                    endPosition = new Vector2(touch.position.x, touch.position.y);
                     startTime = Time.time;
                 }
                 break;
@@ -145,7 +155,7 @@ public class TouchManager : Singleton<TouchManager>
 
                     if (!Swiped)
                     {
-                        endPosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+                        endPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
                         SwipeDetected();
 
                         if (Swiped && SwipeListeners != null)
@@ -177,6 +187,7 @@ public class TouchManager : Singleton<TouchManager>
             return;
         }
         Vector2 swipe = new Vector2(endPosition.x - startPosition.x, endPosition.y - startPosition.y);
+        swipe /= screenDPI;
         if (swipe.magnitude < swipeDistance)
         {
             return;

@@ -18,5 +18,10 @@ public abstract class LivingObject : MonoBehaviour
         stat = Instantiate(statLink);
         HP = stat.HP;
         IsGroggy = false;
+
+        if (OnDeathEvent.GetPersistentEventCount() == 0)
+        {
+            OnDeathEvent.AddListener(() => { GameManager.instance.GameOver(this); });
+        }
     }
 }
