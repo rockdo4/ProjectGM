@@ -205,9 +205,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1796425801}
-        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-        m_MethodName: set_text
+      - m_Target: {fileID: 1796425800}
+        m_TargetAssemblyTypeName: MyNotice, Assembly-CSharp
+        m_MethodName: Notice
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -216,18 +216,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: "\uBBF8\uAD6C\uD604\uB41C \uAE30\uB2A5\uC785\uB2C8\uB2E4."
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1796425800}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &67462417
 MonoBehaviour:
@@ -2212,7 +2200,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8c9c11090359d84d8b2b0594d3d608c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noticeText: {fileID: 1796425801}
   BLACK: {fileID: 1512372949}
 --- !u!1 &649679632
 GameObject:
@@ -7102,11 +7089,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Notice Text
       objectReference: {fileID: 0}
-    - target: {fileID: 3163774376382633263, guid: 0988180b7f4524b418807ff56c5c9c7c,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7118,22 +7100,16 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1796425798}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1796425800 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3163774376382633263, guid: 0988180b7f4524b418807ff56c5c9c7c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1796425798}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1796425801 stripped
+--- !u!114 &1796425800 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3165577897702953871, guid: 0988180b7f4524b418807ff56c5c9c7c,
+  m_CorrespondingSourceObject: {fileID: 2511954720791643796, guid: 0988180b7f4524b418807ff56c5c9c7c,
     type: 3}
   m_PrefabInstance: {fileID: 1796425798}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1796425800}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: 662d5a9371c737d41b1ac29c28360116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1803006649
@@ -8389,9 +8365,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1796425801}
-        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-        m_MethodName: set_text
+      - m_Target: {fileID: 1796425800}
+        m_TargetAssemblyTypeName: MyNotice, Assembly-CSharp
+        m_MethodName: Notice
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8400,18 +8376,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: "\uBBF8\uAD6C\uD604\uB41C \uAE30\uB2A5\uC785\uB2C8\uB2E4."
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1796425800}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &2008228096
 MonoBehaviour:

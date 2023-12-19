@@ -16,6 +16,9 @@ public class ItemPanel : MonoBehaviour, IRenewal
     public TextMeshProUGUI valueText;
     public TextMeshProUGUI additionalText;
 
+    [Header("업그레이드 패널")]
+    public UpgradeEquipPanel upgradePanel;
+
     public Equip item = null;
 
     public void Renewal()
@@ -92,5 +95,20 @@ public class ItemPanel : MonoBehaviour, IRenewal
         }
 
         Renewal();
+    }
+
+    public void UpgradeItem()
+    {
+        var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
+        if (!ct.ContainsKey(item.id + 1))
+        {
+            MyNotice.Instance.Notice("강화를 진행할 수 없습니다.");
+            return;
+        }
+
+        upgradePanel.SetEquip(item);
+        upgradePanel.SetIconImage(iconImage.sprite);
+        upgradePanel.SetItemPanel(this);
+        upgradePanel.Renewal();
     }
 }
