@@ -13,7 +13,7 @@ public class EnemyAI : LivingObject
     private int[] alienAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
     private int[] alienAttackPatternPhaseTwo = new int[] { 1, 2, 3 }; // abc
 
-    private int[] boarAttackPatternPhaseOne = new int[] { 1, 2, 3 }; // 테스트로 레인지A 인덱스 넣기
+    private int[] boarAttackPatternPhaseOne = new int[] { 5, 6, 5, 6 }; // 테스트로 레인지A 인덱스 넣기
     private int[] boarAttackPatternPhaseTwo = new int[] { 1, 2, 3}; // abdc
 
     private int[] wolfAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
@@ -658,53 +658,53 @@ public class EnemyAI : LivingObject
 
     IEnumerator PrepareRangedAttack(EnemyType enemytype, AttackPatternType attackPatternType) // 원거리
     {
-        //isPreparingAttack = true;
-        //ShowRangeAttackRange(true, enemytype, attackPatternType);
+        isPreparingAttack = true;
+        ShowRangeAttackRange(true, enemytype, attackPatternType);
 
-        //float specificPreparationTime = attackPreparationTime;
+        float specificPreparationTime = attackPreparationTime;
 
-        //foreach (var preparationTime in attackPreparationTimes)
-        //{
-        //    if (preparationTime.enemyType == enemytype && preparationTime.attackPatternType == attackPatternType)
-        //    {
-        //        specificPreparationTime = preparationTime.preparationTime;
-        //        break;
-        //    }
-        //}
+        foreach (var preparationTime in attackPreparationTimes)
+        {
+            if (preparationTime.enemyType == enemytype && preparationTime.attackPatternType == attackPatternType)
+            {
+                specificPreparationTime = preparationTime.preparationTime;
+                break;
+            }
+        }
 
 
 
-        //Debug.Log(specificPreparationTime);
-        //yield return new WaitForSeconds(specificPreparationTime);
-        yield return new WaitForSeconds(1f);
+        Debug.Log(specificPreparationTime);
+        yield return new WaitForSeconds(specificPreparationTime);
+        //yield return new WaitForSeconds(1f);
 
-        //switch (attackPatternType)
-        //{
-        //    case AttackPatternType.RangeA:
-        //        ShowRangeAttackRange(false, enemytype, attackPatternType); // 기존 공격 패턴 A
-        //        break;
-        //    case AttackPatternType.RangeB:
-        //        yield return StartCoroutine(RangeAttackPatternB()); // 공격 패턴 B
-        //        break;
-        //}
+        switch (attackPatternType)
+        {
+            case AttackPatternType.RangeA:
+                ShowRangeAttackRange(false, enemytype, attackPatternType); // 기존 공격 패턴 A
+                break;
+            case AttackPatternType.RangeB:
+                yield return StartCoroutine(RangeAttackPatternB()); // 공격 패턴 B
+                break;
+        }
 
-        //Debug.Log(isPreparingAttack);
+        Debug.Log(isPreparingAttack);
 
-        //isPreparingAttack = false;
+        isPreparingAttack = false;
 
-        //Debug.Log(isPreparingAttack);
-        //Debug.Log(isAttacking);
+        Debug.Log(isPreparingAttack);
+        Debug.Log(isAttacking);
 
-        //player = detectedPlayer.GetComponent<Player>();
+        player = detectedPlayer.GetComponent<Player>();
 
-        //if (player != null)
-        //{
-        //    // 임시 애니메이션 임시 원거리 공격 애니메이션 임시임시
-        //    //string animationTrigger = $"{"Attack_"}{"A"}";
-        //    string animationTrigger = $"{"Attack_"}{attackPatternType}";
-        //    IsAnimationRunning(animationTrigger);
+        if (player != null)
+        {
+            // 임시 애니메이션 임시 원거리 공격 애니메이션 임시임시
+            string animationTrigger = $"{"Attack_"}{"A"}";
+            //string animationTrigger = $"{"Attack_"}{attackPatternType}";
+            IsAnimationRunning(animationTrigger);
 
-        //}
+        }
     }
 
     private void IsAnimationRunning(string stateName)
