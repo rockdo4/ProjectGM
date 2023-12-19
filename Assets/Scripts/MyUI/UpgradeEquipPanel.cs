@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class UpgradeEquipPanel : MonoBehaviour, IRenewal
 {
-    [Header("무기/방어구 분류")]
-    public Equip.EquipType type = Equip.EquipType.None;
+    private Equip.EquipType type = Equip.EquipType.None;
 
     [Header("이름 텍스트")]
     public TextMeshProUGUI beforeNameText;
@@ -31,15 +30,24 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
 
     private UpgradeEquipButton button = null;
     private Equip item = null;
+    private ItemPanel itemPanel = null;
 
     public void SetEquip(Equip item)
     {
         this.item = item;
+
+        type = item.type;
     }
 
-    public void SetButton(UpgradeEquipButton button) 
-    { 
-        this.button = button;
+    public void SetItemPanel(ItemPanel itemPanel)
+    {
+        this.itemPanel = itemPanel;
+    }
+
+    public void SetIconImage(Sprite sprite)
+    {
+        beforeIconImage.sprite = sprite;
+        afterIconImage.sprite = sprite;
     }
 
     public void Renewal()
@@ -137,7 +145,7 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
                 break;
         }
 
-        
+
     }
 
     public void UpgradeEquip()
@@ -186,8 +194,9 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
                 break;
         }
 
-        
-        button.SetEquip(item);
+        itemPanel.SetItem(item);
+        itemPanel.Renewal();
+        InventoryManager.Instance.Renewal();
         Renewal();
     }
 
@@ -195,7 +204,8 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
     {
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
 
-        var mat = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id + 1].lvup_module);
+        //var mat = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id + 1].lvup_module);
+        var mat = PlayDataManager.GetMaterials(ct[item.id + 1].lvup_module);
         if (mat == null)
         {
             Debug.Log("Not Exist Materials");

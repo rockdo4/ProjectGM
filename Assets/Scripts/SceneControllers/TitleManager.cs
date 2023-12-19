@@ -1,13 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TitleManager : MonoBehaviour
+public class TitleManager : MonoBehaviour, IRenewal
 {
-    [Header("Notice")]
-    public TextMeshProUGUI noticeText;
-
     [Header("소지금 텍스트")]
     public TextMeshProUGUI moneyText;
 
@@ -18,20 +13,20 @@ public class TitleManager : MonoBehaviour
             PlayDataManager.Init();
         }
 
-        moneyText.text = PlayDataManager.data.Gold.ToString();
-    }
-
-    private void Notice(string str)
-    {
-        noticeText.text = str;
-        noticeText.gameObject.SetActive(true);
+        Renewal();
     }
 
     public void ClearData()
     {
         PlayDataManager.Reset();
-        Notice("데이터를 초기화 하였습니다.");
+        MyNotice.Instance.Notice("데이터를 초기화 하였습니다.");
         moneyText.text = PlayDataManager.data.Gold.ToString();
 
+        InventoryManager.Instance.Renewal();
+    }
+
+    public void Renewal()
+    {
+        moneyText.text = PlayDataManager.data.Gold.ToString();
     }
 }

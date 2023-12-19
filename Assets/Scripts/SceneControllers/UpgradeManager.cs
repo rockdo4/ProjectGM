@@ -23,12 +23,6 @@ public class UpgradeManager : MonoBehaviour
 
     [Space(10.0f)]
 
-    [Header("Notice")]
-    [SerializeField]
-    private TextMeshProUGUI noticeText;
-
-    [Space(10.0f)]
-
     public UpgradeEquipButton buttonPrefab;
 
     public GameObject content;
@@ -80,7 +74,7 @@ public class UpgradeManager : MonoBehaviour
         ShowWeapons(true);
     }
 
-    public void ShowWeapons(bool isOn)
+    public void ShowWeapons(bool isOn = true)
     {
         if (!isOn)
         {
@@ -88,6 +82,7 @@ public class UpgradeManager : MonoBehaviour
         }
         Clear();
 
+        /*
         var inv = PlayDataManager.data.WeaponInventory;
         foreach (var item in inv)
         {
@@ -99,6 +94,7 @@ public class UpgradeManager : MonoBehaviour
 
             releaseList.Add(go);
         }
+        */
 
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         foreach (var data in ct)
@@ -123,7 +119,7 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    public void ShowArmors(bool isOn)
+    public void ShowArmors(bool isOn = true)
     {
         if (!isOn)
         {
@@ -131,7 +127,7 @@ public class UpgradeManager : MonoBehaviour
         }
         Clear();
 
-
+        /*
         var inv = PlayDataManager.data.ArmorInventory;
         foreach (var item in inv)
         {
@@ -143,7 +139,7 @@ public class UpgradeManager : MonoBehaviour
 
             releaseList.Add(go);
         }
-
+        */
         
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         foreach (var data in ct)
@@ -177,11 +173,5 @@ public class UpgradeManager : MonoBehaviour
         }
 
         releaseList.Clear();
-    }
-
-    public void Notice(string str)
-    {
-        noticeText.text = str;
-        noticeText.gameObject.SetActive(true);
     }
 }
