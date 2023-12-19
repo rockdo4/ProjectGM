@@ -165,6 +165,10 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        if (player.attackState == Player.AttackState.AfterStart)
+        {
+            return;
+        }
 
         SetState(State.Evade);
     }

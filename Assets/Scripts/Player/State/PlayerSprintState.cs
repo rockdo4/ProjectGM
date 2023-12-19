@@ -43,7 +43,7 @@ public class PlayerSprintState : PlayerStateBase
         controller.player.Rigid.velocity = Vector3.zero;
 
         var rotation = Quaternion.Euler(0, controller.player.Rigid.rotation.eulerAngles.y, controller.player.Rigid.rotation.eulerAngles.z);
-        float speed = controller.player.MoveDistance * animator.speed / animation.length;
+        float speed = controller.player.Stat.moveDistance * animator.speed / animation.length;
         var force = rotation * direction * speed;
         controller.player.Rigid.AddForce(force, ForceMode.VelocityChange);
 

@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using UnityEngine;
 
 public class PlayerEvadeState : PlayerStateBase
@@ -6,7 +7,8 @@ public class PlayerEvadeState : PlayerStateBase
     private Vector3 direction;
     private const string triggerName = "Evade";
     private AnimationClip animation;
-    
+    private float distance;
+
     public PlayerEvadeState(PlayerController controller) : base(controller)
     {
 
@@ -26,6 +28,15 @@ public class PlayerEvadeState : PlayerStateBase
             TouchManager.SwipeDirection.Left => Vector3.left,
             TouchManager.SwipeDirection.Right => Vector3.right,
             _ => Vector3.zero
+        };
+
+        distance = TouchManager.Instance.swipeDirection switch
+        {
+            TouchManager.SwipeDirection.Up => controller.player.Stat.frontBackEvadeDistance,
+            TouchManager.SwipeDirection.Down => controller.player.Stat.frontBackEvadeDistance,
+            TouchManager.SwipeDirection.Left => controller.player.Stat.leftRightEvadeDistance,
+            TouchManager.SwipeDirection.Right => controller.player.Stat.leftRightEvadeDistance,
+            _ => 0f
         };
 
         controller.player.Animator.SetFloat("X", direction.x);
@@ -53,7 +64,7 @@ public class PlayerEvadeState : PlayerStateBase
         }
         controller.player.Rigid.velocity = Vector3.zero;
         var rotation = Quaternion.Euler(0, controller.player.Rigid.rotation.eulerAngles.y, controller.player.Rigid.rotation.eulerAngles.z);
-        float speed = controller.player.MoveDistance * animator.speed / animation.length;
+        float speed = distance * animator.speed / animation.length;
         var force = rotation * direction * speed;
         controller.player.Rigid.AddForce(force, ForceMode.VelocityChange);
     }
