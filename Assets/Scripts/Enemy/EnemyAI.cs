@@ -674,7 +674,7 @@ public class EnemyAI : LivingObject
 
 
 
-        Debug.Log(specificPreparationTime);
+        // Debug.Log(specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
         //yield return new WaitForSeconds(1f);
 
@@ -688,12 +688,12 @@ public class EnemyAI : LivingObject
                 break;
         }
 
-        Debug.Log(isPreparingAttack);
+        //Debug.Log(isPreparingAttack);
 
         isPreparingAttack = false;
 
-        Debug.Log(isPreparingAttack);
-        Debug.Log(isAttacking);
+        //Debug.Log(isPreparingAttack);
+        //Debug.Log(isAttacking);
 
         player = detectedPlayer.GetComponent<Player>();
 

@@ -99,7 +99,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
         }
         
 
-        iconImage.color = Color.black;
+        //iconImage.color = Color.black;
     }
 
     /*

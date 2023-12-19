@@ -11,6 +11,18 @@ public static class PlayDataManager
     public static readonly Dictionary<Armor.ArmorType, Armor> curArmor
         = new Dictionary<Armor.ArmorType, Armor>();
 
+    // 무기 최대 소지 개수
+    private static readonly int weaponsCapacity = 32;
+
+    // 방어구 최대 소지 개수
+    private static readonly int armorsCapacity = 140;
+
+    // 스킬 코드 최대 소지 개수
+    private static readonly int skillcodesCapacity = 260;
+
+    // 재료 최대 소지 개수
+    private static readonly int materialsCapacity = 40;
+
     public static void Init()
     {
         data = SaveLoadSystem.Load("savefile.json") as SaveDataVC;
@@ -216,6 +228,10 @@ public static class PlayDataManager
 
         if (mat == null)
         {
+            if (data.MatInventory.Count >= materialsCapacity)
+            {
+                return;
+            }
             data.MatInventory.Add(new Materials(id, count));
         }
         else 
@@ -321,5 +337,25 @@ public static class PlayDataManager
     public static Materials GetMaterials(int id)
     {
         return data.MatInventory.Find(x => x.id == id);
+    }
+
+    public static void AddItem(Weapon weapon)
+    {
+        if (weapon == null || data.WeaponInventory.Count >= weaponsCapacity)
+        {
+            return;
+        }
+
+        data.WeaponInventory.Add(weapon);
+    }
+
+    public static void AddItem(Armor armor)
+    {
+        if (armor == null || data.ArmorInventory.Count >= armorsCapacity)
+        {
+            return;
+        }
+
+        data.ArmorInventory.Add(armor);
     }
 }

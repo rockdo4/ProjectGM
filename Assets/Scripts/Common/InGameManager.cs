@@ -42,6 +42,7 @@ public class InGameManager : MonoBehaviour
 
     private void Awake()
     {
+        transform.Find("Battle UI").gameObject.SetActive(false);
         if (Instance != this)
         {
             Destroy(gameObject);
@@ -51,13 +52,13 @@ public class InGameManager : MonoBehaviour
         if (prefabCheck)
         {
             //Debug.LogError($"Not Prefab!!\nPlayer: {playerData.prefab != null}, Enemy: {enemyData.prefab != null}");
-            Destroy(gameObject);
+            Destroy(this);
             return;
         }
         if (transformCheck)
         {
             //Debug.LogError($"Not Transfrom!!\nPlayer: {playerData.startTransform != null}, Enemy: {enemyData.startTransform != null}");
-            Destroy(gameObject);
+            Destroy(this);
             return;
         }
         player = Instantiate(playerData.prefab, playerData.startTransform.position, Quaternion.identity);
