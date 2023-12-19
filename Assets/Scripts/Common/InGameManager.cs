@@ -50,13 +50,13 @@ public class InGameManager : MonoBehaviour
         var transformCheck = playerData.startTransform == null || enemyData.startTransform == null;
         if (prefabCheck)
         {
-            Debug.LogError($"Not Prefab!!\nPlayer: {playerData.prefab != null}, Enemy: {enemyData.prefab != null}");
+            //Debug.LogError($"Not Prefab!!\nPlayer: {playerData.prefab != null}, Enemy: {enemyData.prefab != null}");
             Destroy(gameObject);
             return;
         }
         if (transformCheck)
         {
-            Debug.LogError($"Not Transfrom!!\nPlayer: {playerData.startTransform != null}, Enemy: {enemyData.startTransform != null}");
+            //Debug.LogError($"Not Transfrom!!\nPlayer: {playerData.startTransform != null}, Enemy: {enemyData.startTransform != null}");
             Destroy(gameObject);
             return;
         }

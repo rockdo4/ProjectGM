@@ -99,15 +99,15 @@ public class FanShape : MonoBehaviour
         return mesh;
     }
 
-    void OnDrawGizmos()
-    {
-        if (sharedMesh == null)
-        {
-            sharedMesh = CreateFanMesh();
-        }
+    //void OnDrawGizmos()
+    //{
+    //    if (sharedMesh == null)
+    //    {
+    //        sharedMesh = CreateFanMesh();
+    //    }
 
-        Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, transform.localScale);
-    }
+    //    Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, transform.localScale);
+    //}
 
     public void ToggleMeshRendering(bool isEnabled)
     {

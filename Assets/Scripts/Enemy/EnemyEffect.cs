@@ -43,7 +43,7 @@ public class EnemyEffect : MonoBehaviour
                         offset = Vector3.zero;
                         break;
 
-                    case EnemyType.WildBoar:
+                    case EnemyType.Boar:
                         offset += transform.forward * 2f + transform.up * 1f;
                         break;
                 }
@@ -61,7 +61,7 @@ public class EnemyEffect : MonoBehaviour
                         offset += transform.forward * 2f + transform.up * 1f;
                         break;
 
-                    case EnemyType.WildBoar:
+                    case EnemyType.Boar:
                         offset += transform.forward * 3.5f + transform.up * 1f;
                         break;
                 }
@@ -79,7 +79,7 @@ public class EnemyEffect : MonoBehaviour
                         offset = Vector3.zero;
                         break;
 
-                    case EnemyType.WildBoar:
+                    case EnemyType.Boar:
                         offset += transform.forward * 4f + transform.up * 1f;
                         break;
                 }
@@ -111,6 +111,8 @@ public class EnemyEffect : MonoBehaviour
             DestroyEffect(effectInstance);
         }
     }
+
+    // ¿Ã∞… ø÷ πŸ≤„æﬂµ≈?
 
     public void AttackEffectC()
     {
