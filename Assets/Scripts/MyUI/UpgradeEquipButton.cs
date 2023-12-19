@@ -102,6 +102,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
         iconImage.color = Color.black;
     }
 
+    /*
     public void UpgradeMode(UpgradeManager um)
     {
         button.onClick.RemoveAllListeners();
@@ -129,6 +130,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
 
         iconImage.color = Color.white;
     }
+    */
 
     private void OnEnable()
     {

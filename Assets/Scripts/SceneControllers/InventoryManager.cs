@@ -427,16 +427,12 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
     public void Tester()
     {
-        if (PlayDataManager.data.MatInventory.Count <= 0)
+        var table = CsvTableMgr.GetTable<MatTable>().dataTable;
+        foreach (var mat in table)
         {
-            var table = CsvTableMgr.GetTable<MatTable>().dataTable;
-            foreach (var mat in table)
-            {
-                PlayDataManager.IncreaseMat(mat.Key, 99);
-            }
+            PlayDataManager.IncreaseMat(mat.Key, 99);
         }
 
         PlayDataManager.AddGold(100000);
-        PlayDataManager.Save();
     }
 }

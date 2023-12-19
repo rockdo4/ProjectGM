@@ -82,6 +82,7 @@ public class UpgradeManager : MonoBehaviour
         }
         Clear();
 
+        /*
         var inv = PlayDataManager.data.WeaponInventory;
         foreach (var item in inv)
         {
@@ -93,6 +94,7 @@ public class UpgradeManager : MonoBehaviour
 
             releaseList.Add(go);
         }
+        */
 
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         foreach (var data in ct)
@@ -125,7 +127,7 @@ public class UpgradeManager : MonoBehaviour
         }
         Clear();
 
-
+        /*
         var inv = PlayDataManager.data.ArmorInventory;
         foreach (var item in inv)
         {
@@ -137,7 +139,7 @@ public class UpgradeManager : MonoBehaviour
 
             releaseList.Add(go);
         }
-
+        */
         
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         foreach (var data in ct)

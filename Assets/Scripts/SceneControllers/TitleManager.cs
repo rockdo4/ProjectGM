@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TitleManager : MonoBehaviour
+public class TitleManager : MonoBehaviour, IRenewal
 {
     [Header("소지금 텍스트")]
     public TextMeshProUGUI moneyText;
@@ -15,7 +13,7 @@ public class TitleManager : MonoBehaviour
             PlayDataManager.Init();
         }
 
-        moneyText.text = PlayDataManager.data.Gold.ToString();
+        Renewal();
     }
 
     public void ClearData()
@@ -24,5 +22,11 @@ public class TitleManager : MonoBehaviour
         MyNotice.Instance.Notice("데이터를 초기화 하였습니다.");
         moneyText.text = PlayDataManager.data.Gold.ToString();
 
+        InventoryManager.Instance.Renewal();
+    }
+
+    public void Renewal()
+    {
+        moneyText.text = PlayDataManager.data.Gold.ToString();
     }
 }

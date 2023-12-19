@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2916,7 +2916,7 @@ RectTransform:
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 25}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &347267208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3162,10 +3162,10 @@ RectTransform:
   - {fileID: 1177638157}
   m_Father: {fileID: 1390071539}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 747.5, y: -250}
+  m_SizeDelta: {x: 465, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &356605867
 MonoBehaviour:
@@ -4770,13 +4770,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1814368822}
-        m_TargetAssemblyTypeName: UpgradeEquipPanel, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1814368824}
+        m_TargetAssemblyTypeName: ItemPanel, Assembly-CSharp
+        m_MethodName: UpgradeItem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -6114,6 +6114,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 600261056}
+  - component: {fileID: 600261057}
+  - component: {fileID: 600261058}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -6135,11 +6137,51 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1032974972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
-  m_Pivot: {x: 0, y: 1}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &600261057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600261055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 25
+    m_Right: 25
+    m_Top: 25
+    m_Bottom: 25
+  m_ChildAlignment: 4
+  m_Spacing: 25
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!114 &600261058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600261055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &610512961
 GameObject:
   m_ObjectHideFlags: 0
@@ -7693,7 +7735,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &719985255
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7727,7 +7769,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aae6c1fabdc65194eab6792a387798e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
   beforeNameText: {fileID: 1238196297}
   afterNameText: {fileID: 678924186}
   beforeIconImage: {fileID: 1057282529}
@@ -10087,7 +10128,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aae6c1fabdc65194eab6792a387798e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
   beforeNameText: {fileID: 887572664}
   afterNameText: {fileID: 891166502}
   beforeIconImage: {fileID: 1577392814}
@@ -12668,7 +12708,7 @@ GameObject:
   - component: {fileID: 1148596341}
   - component: {fileID: 1148596340}
   m_Layer: 5
-  m_Name: Create Button
+  m_Name: Upgrade Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12738,8 +12778,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 902072305}
-        m_TargetAssemblyTypeName: UpgradeWeaponPanel, Assembly-CSharp
+      - m_Target: {fileID: 719985256}
+        m_TargetAssemblyTypeName: UpgradeEquipPanel, Assembly-CSharp
         m_MethodName: UpgradeEquip
         m_Mode: 1
         m_Arguments:
@@ -14031,10 +14071,10 @@ RectTransform:
   - {fileID: 1953516026}
   m_Father: {fileID: 1390071539}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 232.5, y: -250}
+  m_SizeDelta: {x: 465, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1258896495
 MonoBehaviour:
@@ -17702,6 +17742,7 @@ MonoBehaviour:
   nameText: {fileID: 1483795769}
   valueText: {fileID: 303997932}
   additionalText: {fileID: 1235054580}
+  upgradePanel: {fileID: 719985256}
 --- !u!1 &1661560946
 GameObject:
   m_ObjectHideFlags: 0
@@ -18777,10 +18818,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1862995784}
-        m_TargetAssemblyTypeName: FadeEffects, Assembly-CSharp
-        m_MethodName: FadeOut
-        m_Mode: 5
+      - m_Target: {fileID: 1655899117}
+        m_TargetAssemblyTypeName: ItemPanel, Assembly-CSharp
+        m_MethodName: UpgradeItem
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -19119,6 +19160,7 @@ MonoBehaviour:
   nameText: {fileID: 1192369047}
   valueText: {fileID: 501907411}
   additionalText: {fileID: 861181650}
+  upgradePanel: {fileID: 719985256}
 --- !u!1 &1819503477
 GameObject:
   m_ObjectHideFlags: 0
