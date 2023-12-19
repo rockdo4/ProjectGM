@@ -22,7 +22,10 @@ public class TitleManager : MonoBehaviour, IRenewal
         MyNotice.Instance.Notice("데이터를 초기화 하였습니다.");
         moneyText.text = PlayDataManager.data.Gold.ToString();
 
-        InventoryManager.Instance.Renewal();
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.Renewal();
+        }
     }
 
     public void Renewal()
