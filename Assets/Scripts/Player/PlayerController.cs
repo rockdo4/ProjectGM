@@ -120,10 +120,6 @@ public class PlayerController : MonoBehaviour
                 player.GroggyAttack = false;
             }
         }
-        if (player.slider != null)
-        {
-            player.slider.value = player.evadePoint;
-        }
         #endregion
 
         #region Test Input
@@ -178,14 +174,6 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        //if (currentState == State.Hit || currentState == State.Death)
-        //{
-        //    return;
-        //}
-        //if (currentState == State.Evade)
-        //{
-        //    return;
-        //}
 
         SetState(State.Sprint);
     }
