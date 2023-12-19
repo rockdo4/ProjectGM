@@ -756,14 +756,13 @@ GameObject:
   - component: {fileID: 5734344529172665475}
   - component: {fileID: 4960954873712717530}
   - component: {fileID: 1149885988399435205}
-  - component: {fileID: -2405914742562192261}
   m_Layer: 6
   m_Name: WildBoar
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7379042720375739373
 Transform:
   m_ObjectHideFlags: 0
@@ -795,7 +794,7 @@ Animator:
   m_Controller: {fileID: 22100000, guid: a6431bc4e53aae343944766d66b8f7d9, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -833,6 +832,18 @@ MonoBehaviour:
   - enemyType: 2
     attackPatternType: 3
     preparationTime: 4
+  - enemyType: 2
+    attackPatternType: 4
+    preparationTime: 1
+  - enemyType: 2
+    attackPatternType: 5
+    preparationTime: 2
+  - enemyType: 2
+    attackPatternType: 6
+    preparationTime: 3
+  - enemyType: 2
+    attackPatternType: 7
+    preparationTime: 4
   rangeIndicator: {fileID: 3680253550249829298, guid: 0102c2837d1e2d24abde1827bdfc7545,
     type: 3}
   AttackPatternTypeAPrefab: {fileID: 1831290539580255820, guid: 9873b76cc3e585648914ba6347b8302e,
@@ -843,9 +854,17 @@ MonoBehaviour:
     type: 3}
   AttackPatternTypeDPrefab: {fileID: 3694188551370226324, guid: 688248f3810a55444b5f5ee20a39e8dc,
     type: 3}
+  RangeAttackPatternTypeAPrefab: {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3,
+    type: 3}
+  RangeAttackPatternTypeBPrefab: {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3,
+    type: 3}
+  RangeAttackPatternTypeCPrefab: {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3,
+    type: 3}
+  RangeAttackPatternTypeDPrefab: {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3,
+    type: 3}
   attackPreparationTime: 0.7
   detectRange: 100
-  meleeAttackRange: 3
+  meleeAttackRange: 4
   rangeAttackRange: 6
   roarDuration: 2
   playerLayerMask:
@@ -861,6 +880,16 @@ MonoBehaviour:
   - patternName: MelleAttack_B
     pattern: 000000000100000000
   - patternName: MelleAttack_C
+    pattern: 000000000100000000
+  - patternName: MelleAttack_D
+    pattern: 000000000100000000
+  - patternName: RangedAttack_A
+    pattern: 010001010100010100
+  - patternName: RangedAttack_B
+    pattern: 010001000100010001
+  - patternName: RangedAttack_C
+    pattern: 000000000100000000
+  - patternName: RangedAttack_D
     pattern: 000000000100000000
 --- !u!114 &2719082457135078936
 MonoBehaviour:
@@ -917,10 +946,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.2
-  m_Height: 2.2
+  m_Radius: 1.38
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0.000000059604645, y: 0.58, z: -0.00000008940697}
 --- !u!114 &1149885988399435205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -941,33 +970,6 @@ MonoBehaviour:
     type: 3}
   EffectTypeD: {fileID: 4834312597282954250, guid: aabf9be139702254a8599f5de5bb1f16,
     type: 3}
---- !u!54 &-2405914742562192261
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2857295111879149241}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &3092136239957578716
 GameObject:
   m_ObjectHideFlags: 0
