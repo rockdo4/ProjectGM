@@ -102,6 +102,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
         iconImage.color = Color.black;
     }
 
+    /*
     public void UpgradeMode(UpgradeManager um)
     {
         button.onClick.RemoveAllListeners();
@@ -117,7 +118,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
             var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
             if (!ct.ContainsKey(item.id + 1))
             {
-                UpgradeManager.Instance.Notice("강화를 진행할 수 없습니다.");
+                MyNotice.Instance.Notice("강화를 진행할 수 없습니다.");
                 return;
             }
             umPanel.SetEquip(item);
@@ -129,6 +130,7 @@ public class UpgradeEquipButton : MonoBehaviour, IRenewal
 
         iconImage.color = Color.white;
     }
+    */
 
     private void OnEnable()
     {

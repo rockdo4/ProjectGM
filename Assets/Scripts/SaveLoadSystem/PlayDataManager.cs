@@ -220,7 +220,7 @@ public static class PlayDataManager
         }
         else 
         {
-            mat.count = Mathf.Clamp(mat.count + count, mat.count, mat.Capacity);
+            mat.IncreaseCount(count);
         }
 
         Save();
@@ -253,8 +253,9 @@ public static class PlayDataManager
 
         if (item.isEquip)
         {
-            item.isEquip = false;
-            curWeapon = null;
+            //item.isEquip = false;
+            //curWeapon = null;
+            return;
         }
         data.WeaponInventory.Remove(item);
         AddGold(table[item.id].sellgold);
@@ -270,11 +271,12 @@ public static class PlayDataManager
 
         if (item.isEquip)
         {
-            item.isEquip = false;
-            curArmor[item.armorType] = null;
+            //item.isEquip = false;
+            //curArmor[item.armorType] = null;
+            return;
         }
         data.ArmorInventory.Remove(item);
-        //AddGold(table[item.id].);
+        AddGold(table[item.id].sellgold);
     }
 
     public static void SellItem(Materials item)
@@ -309,5 +311,15 @@ public static class PlayDataManager
     public static bool IsExistItem(Materials item)
     {
         return (item != null && data.MatInventory.Contains(item));
+    }
+
+    public static bool IsExistMat(int id)
+    {
+        return GetMaterials(id) != null;
+    }
+
+    public static Materials GetMaterials(int id)
+    {
+        return data.MatInventory.Find(x => x.id == id);
     }
 }

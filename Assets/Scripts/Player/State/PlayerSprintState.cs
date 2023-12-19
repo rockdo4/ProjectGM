@@ -1,8 +1,8 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class PlayerSprintState : PlayerStateBase
 {
+    private Animator animator;
     private Vector3 direction = Vector3.forward;
     private AnimationClip animation;
 
@@ -13,6 +13,9 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void Enter()
     {
+        animator ??= controller.player.Animator;
+        animator.speed = controller.player.Stat.globalSpeed.sprintSpeed;
+
         if (controller.player.CanAttack)
         {
             AttackCheck();
@@ -40,7 +43,7 @@ public class PlayerSprintState : PlayerStateBase
         controller.player.Rigid.velocity = Vector3.zero;
 
         var rotation = Quaternion.Euler(0, controller.player.Rigid.rotation.eulerAngles.y, controller.player.Rigid.rotation.eulerAngles.z);
-        float speed = controller.player.MoveDistance / animation.length;
+        float speed = controller.player.MoveDistance * animator.speed / animation.length;
         var force = rotation * direction * speed;
         controller.player.Rigid.AddForce(force, ForceMode.VelocityChange);
 

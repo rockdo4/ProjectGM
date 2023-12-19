@@ -3,6 +3,27 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerStat", menuName = "PlayerStat")]
 public class PlayerStat : Stat
 {
+    [System.Serializable]
+    public class GlobalAnimationSpeed
+    {
+        [Header("회피")]
+        [Range(0.1f, 5)]
+        public float evadeSpeed = 1f;
+        [Header("공격")]
+        [Range(0.1f, 5)]
+        public float attackSpeed = 1f;
+        [Header("특수공격")]
+        [Range(0.1f, 5)]
+        public float superAttackSpeed = 1f;
+        [Header("돌진")]
+        [Range(0.1f, 5)]
+        public float sprintSpeed = 1f;
+    }
+
+    [Header("기본 애니메이션 속도 배율")]
+    [SerializeField]
+    public GlobalAnimationSpeed globalSpeed;
+
     [Header("회피 판정 시간(sec)")]
     public float evadeTime;
 
@@ -33,6 +54,10 @@ public class PlayerStat : Stat
 
     [Header("피격 시 무적 시간(sec)")]
     public float hitInvincibleTime;
+
+    [Header("공격 속도")]
+    [Range(0.1f, 5f)]
+    public float attackSpeed = 1f;
 
     public override Attack CreateAttack(LivingObject attacker, LivingObject defender, bool groggy)
     {
