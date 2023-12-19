@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7424583434216773228}
   - component: {fileID: 8763300904159196873}
   - component: {fileID: 2587267489539564580}
-  - component: {fileID: 7879991670668483540}
+  - component: {fileID: 8509422310897549379}
   - component: {fileID: 536709237328956140}
   - component: {fileID: 5824792726949600810}
   - component: {fileID: 6182927657702814989}
@@ -116,7 +116,7 @@ MonoBehaviour:
       m_Calls: []
   evadeTimer: 0
   virtualCamera: {fileID: 0}
---- !u!114 &7879991670668483540
+--- !u!114 &8509422310897549379
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,22 +125,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 239229579990284695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f0f7a8bfc8a8df40a0d0717c19aa31c, type: 3}
+  m_Script: {fileID: 11500000, guid: d72547a484b604841bd5ba485f505604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   effectInfos:
   - effectType: 0
-    effectPrefab: {fileID: 5602110625683531556, guid: b9a7955b868131d428569a45d40e357e,
+    effect: {fileID: 2644269098243005993, guid: b9a7955b868131d428569a45d40e357e,
       type: 3}
-    effect: {fileID: 0}
-    directionOffset: {x: 0, y: 270, z: 0}
-    positionOffset: {x: -0.6, y: 0.5, z: -0.6}
   - effectType: 1
-    effectPrefab: {fileID: 4026665142206687700, guid: 3c14a126993a2c8448817a13b3e1423b,
+    effect: {fileID: -5784638281073924852, guid: 3c14a126993a2c8448817a13b3e1423b,
       type: 3}
-    effect: {fileID: 0}
-    directionOffset: {x: 0, y: 0, z: 0}
-    positionOffset: {x: 0, y: 0, z: 0}
 --- !u!95 &536709237328956140
 Animator:
   serializedVersion: 5

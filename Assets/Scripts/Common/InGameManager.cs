@@ -46,7 +46,6 @@ public class InGameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        Debug.Log("´ÙÇß³×");
         playerData.infoUI.SetActive(false);
         enemyData.infoUI.SetActive(false);
         var prefabCheck = playerData.prefab == null || enemyData.prefab == null;
