@@ -12,17 +12,19 @@ public static class PlayDataManager
     public static readonly Dictionary<Armor.ArmorType, Armor> curArmor
         = new Dictionary<Armor.ArmorType, Armor>();
 
+    #region Inventory Capacity
     // 무기 최대 소지 개수
-    private static readonly int weaponsCapacity = 32;
+    public static readonly int weaponsCapacity = 32;
 
     // 방어구 최대 소지 개수
-    private static readonly int armorsCapacity = 140;
+    public static readonly int armorsCapacity = 140;
 
     // 스킬 코드 최대 소지 개수
-    private static readonly int skillcodesCapacity = 260;
+    public static readonly int skillcodesCapacity = 260;
 
     // 재료 최대 소지 개수
-    private static readonly int materialsCapacity = 40;
+    public static readonly int materialsCapacity = 40;
+    #endregion
 
     public static void Init()
     {

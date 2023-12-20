@@ -28,6 +28,9 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
     [Header("요구 금액 텍스트")]
     public TextMeshProUGUI priceText;
 
+    [Header("체크 이미지")]
+    public Image checkImage;
+
     private UpgradeEquipButton button = null;
     private Equip item = null;
     private ItemPanel itemPanel = null;
@@ -145,7 +148,7 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
                 break;
         }
 
-
+        checkImage.gameObject.SetActive(IsUpgradable());
     }
 
     public void UpgradeEquip()
@@ -223,7 +226,27 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
             Debug.Log("Lack Of Gold");
             return false;
         }
-        // 인벤토리 공간 부족 (추후 추가 필요)
+
+        switch (type)
+        {
+            case Equip.EquipType.Weapon:
+                {
+                    if (PlayDataManager.data.WeaponInventory.Count >= PlayDataManager.weaponsCapacity)
+                    {
+                        return false;
+                    }
+                }
+                break;
+
+            case Equip.EquipType.Armor:
+                {
+                    if (PlayDataManager.data.ArmorInventory.Count >= PlayDataManager.armorsCapacity)
+                    {
+                        return false;
+                    }
+                }
+                break;
+        }
 
 
         return true;
