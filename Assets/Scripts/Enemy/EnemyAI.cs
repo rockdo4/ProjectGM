@@ -886,6 +886,16 @@ public class EnemyAI : LivingObject
                 case 7: actualPosition += new Vector3(0, 0, -4f); break; // 앞
             }
         }
+        if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.C) // 임시
+        {
+            switch (index)
+            {
+                case 1: actualPosition += new Vector3(0, 0, 4f); break; // 뒤
+                case 3: actualPosition += new Vector3(4f, 0, 0); break; // 오른쪽
+                case 5: actualPosition += new Vector3(-4f, 0, 0); break; // 왼쪽
+                case 7: actualPosition += new Vector3(0, 0, -4f); break; // 앞
+            }
+        }
         actualPosition = transform.rotation * actualPosition; // 이게 문젠가?
         // 이거를 스위치문 위에 올리면 위치는 이상하게 찍혀도 해결되긴함
         // 근데 위치가 가까워지면 여전히 로테이션이 붕뜨게된다
@@ -946,14 +956,50 @@ public class EnemyAI : LivingObject
             }
             colliderObjects.Clear();
 
-            AttackPattern currentPattern = savedPatterns[attackIndex];
+            
+
+            AttackPattern currentPattern = null;
+            
+
+            if (attackIndex >= 0 && attackIndex < savedPatterns.Count)
+            {
+                currentPattern = savedPatterns[attackIndex]; // 유효성 검사 후 값 할당
+            }
+            else
+            {
+                // 유효하지 않은 attackIndex에 대한 처리
+                Debug.LogError("attackIndex가 범위를 벗어났습니다: " + attackIndex);
+                return; // 또는 다른 오류 처리 로직
+            }
+
             cellInstances.Clear(); // 리스트 초기화
-
             fanShape = attackRangeInstance.GetComponent<FanShape>();
-            fanShape.enemyAi = this; // 대기시간 넣어야 돼서 추가
-            Vector3 cellSize = fanShape.Return(); // 부채꼴의 크기를 Vector3로 받음
-
+            fanShape.enemyAi = this;
+            Vector3 cellSize = fanShape.Return();
             Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
+
+            //if (currentPattern != null)
+            //{
+            //    cellInstances.Clear(); // 리스트 초기화
+            //    fanShape = attackRangeInstance.GetComponent<FanShape>();
+            //    fanShape.enemyAi = this;
+            //    Vector3 cellSize = fanShape.Return();
+            //    Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
+
+            //    for (int i = 0; i < currentPattern.pattern.Length; i++)
+            //    {
+            //        if (currentPattern.pattern[i])
+            //        {
+            //            // 패턴에 따른 처리
+            //        }
+            //    }
+            //}
+            //cellInstances.Clear(); // 리스트 초기화
+            //fanShape = attackRangeInstance.GetComponent<FanShape>();
+            //fanShape.enemyAi = this; // 대기시간 넣어야 돼서 추가
+            //Vector3 cellSize = fanShape.Return(); // 부채꼴의 크기를 Vector3로 받음
+
+            //Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
             //Vector3 centerPointLocal = fanShape.GetCenterPoint();
             //Vector3 centerPointWorld = attackRangeInstance.transform.TransformPoint(centerPointLocal);
 
@@ -1208,8 +1254,8 @@ public class EnemyAI : LivingObject
 
                     if (show)
                     {
-                        int numberOfPrefabs = 5;
-                        float radius = 10f;
+                        int numberOfPrefabs = 10;
+                        float radius = 5f;
                         CreatePrefabsAroundPlayer(attackPrefab, numberOfPrefabs, radius);
                         return;
                     }

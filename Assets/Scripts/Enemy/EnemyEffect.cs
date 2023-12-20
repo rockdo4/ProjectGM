@@ -48,7 +48,7 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case EnemyType.Wolf:
-                        offset += transform.forward * 2f + transform.up * 1f;
+                        offset += transform.forward * 4.5f + transform.up * 1f;
                         break;
                 }
                 break;
