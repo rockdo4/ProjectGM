@@ -42,7 +42,6 @@ public class InGameManager : MonoBehaviour
 
     private void Awake()
     {
-        transform.Find("Battle UI").gameObject.SetActive(false);
         if (Instance != this)
         {
             Destroy(gameObject);
