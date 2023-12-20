@@ -194,6 +194,13 @@ public class InventoryManager : MonoBehaviour, IRenewal
             {
                 if (sellMode && sellEquipList.Count < 10)
                 {
+                    if (armor.isEquip) // Were Equip Exception
+                    {
+                        // Notice
+                        MyNotice.Instance.Notice("판매할 수 없습니다.");
+                        return;
+                    }
+
                     if (go.iconImage.color == Color.white)
                     {
                         sellEquipList.Add(armor);
@@ -201,6 +208,8 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
                         var newGo = buttonPool.Get();
                         newGo.iconImage.sprite = weaponIconSO.GetSprite(armor.id / 100 * 100 + 1);
+                        // armor icon level reset
+
                         newGo.OnEquip(armor.isEquip);
                         newGo.transform.SetParent(sellPanel.transform);
                         newGo.button.onClick.AddListener(() =>
