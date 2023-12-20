@@ -13,7 +13,8 @@ public class EnemyAI : LivingObject
     private int[] alienAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
     private int[] alienAttackPatternPhaseTwo = new int[] { 1, 2, 3 }; // abc
 
-    private int[] boarAttackPatternPhaseOne = new int[] { 1,2,3,5,6 }; // 테스트로 레인지A 인덱스 넣기
+    [Header("멧돼지 공격 패턴")]
+    public int[] boarAttackPatternPhaseOne = new int[] { 8 }; // 테스트로 레인지A 인덱스 넣기
     private int[] boarAttackPatternPhaseTwo = new int[] { 1, 2, 3}; // abdc
 
     private int[] wolfAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
@@ -722,9 +723,9 @@ public class EnemyAI : LivingObject
                 case AttackPatternType.A:
                     return new Vector3(0f, 0f, -2f);
                 case AttackPatternType.B:
-                    return new Vector3(0f, 0f, -2f); // 세모위치 조정 곰 B 패턴
+                    return new Vector3(0f, 0f, -1.5f); // 세모위치 조정 곰 B 패턴
                 case AttackPatternType.C:
-                    return new Vector3(0f, 0f, -2f); // 곰 C 패턴
+                    return new Vector3(0f, 0f, -1.5f); // 곰 C 패턴
                 default: return Vector3.zero;
             }
         }
@@ -1058,27 +1059,41 @@ public class EnemyAI : LivingObject
                 case AttackPatternType.RangeA:
                     cellSize = renderer.bounds.size;
                     break;
+
                 case AttackPatternType.RangeB:
                     cellSize = renderer.bounds.size;
                     break;
+
                 case AttackPatternType.RangeC:
-                    fanShape = attackRangeInstance.GetComponent<FanShape>();
-                    fanShape.enemyAi = this;
-                    cellSize = fanShape.Return();
+                    if (show)
+                    {
+                        fanShape = attackRangeInstance.GetComponent<FanShape>();
+                        fanShape.enemyAi = this;
+                        CreatePrefabAtPlayer(attackPrefab); // C패턴 하나생성
+
+                        attackRangeInstance.SetActive(false);
+
+                        return;
+                    }
                     break;
+
                 case AttackPatternType.RangeD:
                     fanShape = attackRangeInstance.GetComponent<FanShape>();
                     fanShape.enemyAi = this;
                     cellSize = fanShape.Return();
-                    break;
+
+                    attackRangeInstance.SetActive(false);
+
+                    if (show)
+                    {
+                        int numberOfPrefabs = 5; // 예시: 생성할 프리팹의 개수
+                        float radius = 10f; // 예시: 프리팹을 생성할 반경
+                        CreatePrefabsAroundPlayer(attackPrefab, numberOfPrefabs, radius); // 플레이어 주변에 프리팹 랜덤 생성
+                    }
+
+                    return;
+                    //break;
             }
-
-            //fanShape = attackRangeInstance.GetComponent<FanShape>();
-            //fanShape.enemyAi = this;
-            //Vector3 cellSize = fanShape.Return();
-
-            //Vector3 cellSize = renderer.bounds.size;
-
 
             Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
 
@@ -1099,6 +1114,18 @@ public class EnemyAI : LivingObject
         }
         else
         {
+            //foreach (GameObject cell in cellInstances)
+            //{
+            //    if (cell != null)
+            //    {
+            //        MeshRenderer cellMeshRenderer = cell.GetComponent<MeshRenderer>();
+            //        if (cellMeshRenderer != null)
+            //        {
+            //            cellMeshRenderer.enabled = false;
+            //        }
+            //    }
+            //}
+
             RangeAttackPatternA();
         }
     }
@@ -1162,6 +1189,31 @@ public class EnemyAI : LivingObject
                 }
             }
         }
+    }
+
+    private void CreatePrefabAtPlayer(GameObject prefab)
+    {
+        Instantiate(prefab, detectedPlayer.transform.position + Vector3.up, Quaternion.identity);
+    }
+
+    // 플레이어 주변에 프리팹 랜덤 생성
+    private void CreatePrefabsAroundPlayer(GameObject prefab, int count, float radius)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 randomPosition = RandomCircle(detectedPlayer.transform.position, radius);
+            Instantiate(prefab, randomPosition, Quaternion.identity);
+        }
+    }
+
+    private Vector3 RandomCircle(Vector3 center, float radius)
+    {
+        float ang = UnityEngine.Random.value * 360;
+        Vector3 pos;
+        pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
+        pos.y = center.y;
+        pos.z = center.z + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
+        return pos;
     }
 
     #endregion 
