@@ -6552,22 +6552,169 @@ PrefabInstance:
     - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: rangeAttackRange
-      value: 0.1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: savedPatterns.Array.size
-      value: 3
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
+      propertyPath: RangeAttackPatternTypeCPrefab
+      value: 
+      objectReference: {fileID: 5073490652078658777, guid: bb39c65592ede994dac151a2588b960b,
+        type: 3}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: RangeAttackPatternTypeDPrefab
+      value: 
+      objectReference: {fileID: 5073490652078658777, guid: bb39c65592ede994dac151a2588b960b,
+        type: 3}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
       propertyPath: attackPreparationTimes.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: boarAttackPatternPhaseOne.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: boarAttackPatternPhaseOne.Array.data[0]
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: boarAttackPatternPhaseOne.Array.data[1]
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: boarAttackPatternPhaseOne.Array.data[2]
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: savedPatterns.Array.data[2].patternName
       value: MelleAttack_C
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[3].patternName
+      value: MelleAttack_D
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[4].patternName
+      value: RangeAttack_A
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[5].patternName
+      value: RangeAttack_B
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[6].patternName
+      value: RangeAttack_C
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[7].patternName
+      value: RangeAttack_D
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[1]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[2]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[3]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[5]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[6]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[7]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[5].pattern.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[5].pattern.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[5].pattern.Array.data[6]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: savedPatterns.Array.data[5].pattern.Array.data[8]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[0].preparationTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[1].preparationTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[2].preparationTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[3].preparationTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[4].preparationTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[5].preparationTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[6].preparationTime
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
@@ -6578,6 +6725,31 @@ PrefabInstance:
         type: 3}
       propertyPath: attackPreparationTimes.Array.data[1].attackPatternType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[2].attackPatternType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[3].attackPatternType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[4].attackPatternType
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[5].attackPatternType
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: attackPreparationTimes.Array.data[6].attackPatternType
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
@@ -6607,7 +6779,7 @@ PrefabInstance:
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 22.35
+      value: 22.13
       objectReference: {fileID: 0}
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
@@ -10050,3 +10222,4 @@ SceneRoots:
   - {fileID: 1480353275}
   - {fileID: 1403494085}
   - {fileID: 2024323708}
+  - {fileID: 1702226343}
