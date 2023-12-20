@@ -11,25 +11,34 @@ public class EnemyAI : LivingObject
     public int[] bearAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
 
     [Header("곰 페이즈2 공격 패턴")]
-    public int[] bearAttackPatternPhaseTwo = new int[] { 1, 2, 3, 2, 3 }; // abcbc
+    public int[] bearAttackPatternPhaseTwo = new int[] { 1, 2, 3, 2, 3 };
 
     [Header("에일리언 페이즈1 공격 패턴")]
-    public int[] alienAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
+    public int[] alienAttackPatternPhaseOne = new int[] { 1, 2 };
 
     [Header("에일리언 페이즈2 공격 패턴")]
-    public int[] alienAttackPatternPhaseTwo = new int[] { 1, 2, 3 }; // abc
+    public int[] alienAttackPatternPhaseTwo = new int[] { 1, 2, 3 };
 
     [Header("멧돼지 페이즈1 공격 패턴")]
-    public int[] boarAttackPatternPhaseOne = new int[] { 8 }; // 테스트로 레인지A 인덱스 넣기
+    public int[] boarAttackPatternPhaseOne = new int[] { 8 };
 
     [Header("멧돼지 페이즈2 공격 패턴")]
-    public int[] boarAttackPatternPhaseTwo = new int[] { 1, 2, 3}; // abdc
+    public int[] boarAttackPatternPhaseTwo = new int[] { 1, 2, 3};
 
-    [Header("멧돼지 발사 공격 간격")]
+    [Header("멧돼지 원거리 공격 발사 간격")]
     public float IntervalTime = 0.15f;
 
-    //private int[] wolfAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
-    //private int[] wolfAttackPatternPhaseTwo = new int[] { 1, 2, 1, 2, 2 }; // ababb
+    [Header("늑대 페이즈1 공격 패턴")]
+    public int[] wolfAttackPatternPhaseOne = new int[] { 1, 2, 2, 1, 1, 2}; // 테스트로 레인지A 인덱스 넣기
+
+    [Header("늑대 페이즈2 공격 패턴")]
+    public int[] wolfAttackPatternPhaseTwo = new int[] { 1, 2 };
+
+    [Header("거미 페이즈1 공격 패턴")]
+    public int[] spiderAttackPatternPhaseOne = new int[] { 1, 2, 3 }; // 테스트로 레인지A 인덱스 넣기
+
+    [Header("거미 페이즈2 공격 패턴")]
+    public int[] spiderAttackPatternPhaseTwo = new int[] { 1, 2, 3 };
 
     private int EnemyMeleeAttackIndexOne = 0;
     private int EnemyMeleeAttackIndexTwo = 1;
@@ -152,6 +161,7 @@ public class EnemyAI : LivingObject
         Alien,
         Boar,
         Wolf,
+        Spider,
     }
 
     public enum AttackPatternType
@@ -210,6 +220,9 @@ public class EnemyAI : LivingObject
                 break;
             case EnemyType.Wolf:
                 BTRunner = new BehaviorTreeRunner(WolfBT());
+                break;
+            case EnemyType.Spider:
+                BTRunner = new BehaviorTreeRunner(SpiderBT());
                 break;
 
         }
@@ -512,7 +525,7 @@ public class EnemyAI : LivingObject
             }
         );
     }
-   
+
     #endregion
 
     #region 늑대 행동트리
@@ -547,7 +560,7 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new ConditionNode(IsPhaseOne),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseOne))
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Wolf, wolfAttackPatternPhaseOne))
                                         }
                                     ),
 
@@ -556,7 +569,70 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new InverterNode(new ConditionNode(IsPhaseOne)),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseTwo)),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Wolf, wolfAttackPatternPhaseTwo)),
+                                        }
+                                    ),
+
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ActionNode(DetectPlayer),
+                                            new ActionNode(TracePlayer),
+                                        }
+                                    ),
+                                }
+                            )
+                        }
+                    )
+                )
+            }
+        );
+    }
+    #endregion
+
+    #region 거미 행동트리
+    INode SpiderBT()
+    {
+        return new SelectorNode
+        (
+            new List<INode>()
+            {
+                new DecoratorNode
+                (
+                    () => IsGroggy,
+                    new ActionNode(GroggyTrueState)
+                ),
+
+                new DecoratorNode
+                (
+                    () => !IsGroggy,
+
+                    new SequenceNode
+                    (
+                        new List<INode>()
+                        {
+                            new ActionNode(GroggyFalseState),
+
+                            new SelectorNode
+                            (
+                                new List<INode>()
+                                {
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ConditionNode(IsPhaseOne),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Spider, spiderAttackPatternPhaseOne))
+                                        }
+                                    ),
+
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new InverterNode(new ConditionNode(IsPhaseOne)),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Spider, spiderAttackPatternPhaseTwo)),
                                         }
                                     ),
 
@@ -771,6 +847,18 @@ public class EnemyAI : LivingObject
             }
         }
 
+        if (enemyType == EnemyType.Wolf)
+        {
+            switch (AttackPatternType)
+            {
+                case AttackPatternType.A:
+                    return new Vector3(0f, 0f, -2f);
+                case AttackPatternType.B:
+                    return new Vector3(0f, 0f, -2f);
+                default: return Vector3.zero;
+            }
+        }
+
         return Vector3.zero;
     }
 
@@ -896,6 +984,24 @@ public class EnemyAI : LivingObject
 
                         cell.transform.rotation = initialRotation * additionalRotation;
                     }
+                    else if (enemyType == EnemyType.Wolf && AttackPatternType == AttackPatternType.A)
+                    {
+                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
+                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
+
+                        Quaternion additionalRotation = Quaternion.Euler(0f, 120f, 0f);
+
+                        cell.transform.rotation = initialRotation * additionalRotation;
+                    }
+                    else if (enemyType == EnemyType.Wolf && AttackPatternType == AttackPatternType.B)
+                    {
+                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
+                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
+
+                        Quaternion additionalRotation = Quaternion.Euler(0f, 120f, 0f);
+
+                        cell.transform.rotation = initialRotation * additionalRotation;
+                    }
 
                     // 와일드 보어
 
@@ -934,6 +1040,7 @@ public class EnemyAI : LivingObject
 
                     Vector3 additionalOffset = Vector3.zero;
 
+                    // 곰 콜라이더 오프셋
                     if (enemyType == EnemyType.Bear && AttackPatternType == AttackPatternType.A)
                     {
                         additionalOffset = new Vector3(1.6f, 0f, 2.6f);
@@ -942,6 +1049,17 @@ public class EnemyAI : LivingObject
                     if (enemyType == EnemyType.Bear && AttackPatternType == AttackPatternType.B || AttackPatternType == AttackPatternType.C)
                     {
                         additionalOffset = new Vector3(0f, 0f, 2f);
+                    }
+
+                    // 늑대 콜라이더 오프셋
+                    if (enemyType == EnemyType.Wolf && AttackPatternType == AttackPatternType.A)
+                    {
+                        additionalOffset = new Vector3(1.9f, 0f, 1.1f);
+                    }
+
+                    if (enemyType == EnemyType.Wolf && AttackPatternType == AttackPatternType.B)
+                    {
+                        additionalOffset = new Vector3(1.1f, 0f, 0.6f);
                     }
 
                     if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.B)
@@ -1095,8 +1213,6 @@ public class EnemyAI : LivingObject
                         CreatePrefabsAroundPlayer(attackPrefab, numberOfPrefabs, radius);
                         return;
                     }
-
-                   
                     break;
             }
 
@@ -1108,6 +1224,7 @@ public class EnemyAI : LivingObject
                 {
                     Vector3 cellPosition = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
                     GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
+                    //cell.AddComponent<EnemyProjectile>();
                     cell.SetActive(true);
                     cellInstances.Add(cell);
 
@@ -1119,18 +1236,6 @@ public class EnemyAI : LivingObject
         }
         else
         {
-            //foreach (GameObject cell in cellInstances)
-            //{
-            //    if (cell != null)
-            //    {
-            //        MeshRenderer cellMeshRenderer = cell.GetComponent<MeshRenderer>();
-            //        if (cellMeshRenderer != null)
-            //        {
-            //            cellMeshRenderer.enabled = false;
-            //        }
-            //    }
-            //}
-
             RangeAttackPatternA();
         }
     }
@@ -1638,7 +1743,7 @@ public class EnemyAI : LivingObject
     #endregion
 
     #region 애니메이션 이벤트후에 실제 데미지 주는 부분 - 영재가 추가
-    private void ExecuteAttack(LivingObject attacker, LivingObject defender, float actualAttackDamage)
+    public void ExecuteAttack(LivingObject attacker, LivingObject defender, float actualAttackDamage)
     {
         Attack attack = Stat.CreateAttack(attacker, defender, true);
         attack.CheatAttack((int)actualAttackDamage);
@@ -1651,4 +1756,25 @@ public class EnemyAI : LivingObject
     }
 
     #endregion
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Player player = other.GetComponent<Player>();
+            if (player != null)
+            {
+                // 널체크, 초기화 확인
+                Debug.Log(gameObject.GetComponent<EnemyAI>());
+                Debug.Log(player);
+                Debug.Log(Stat.AttackDamage);
+
+                ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, Stat.AttackDamage);
+            }
+
+            Debug.Log(gameObject);
+            Destroy(gameObject);
+        }
+    }
 }

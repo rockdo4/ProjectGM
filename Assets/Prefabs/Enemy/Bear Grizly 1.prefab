@@ -55,7 +55,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4691967391105962301
 Transform:
   m_ObjectHideFlags: 0
@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea68372419c51084c8dfdbabb70ffdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitEffectPrefab: {fileID: 0}
 --- !u!114 &5956209694159090163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,6 +162,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  bearAttackPatternPhaseOne: 0100000002000000
+  bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
+  alienAttackPatternPhaseOne: 0100000002000000
+  alienAttackPatternPhaseTwo: 010000000200000003000000
+  boarAttackPatternPhaseOne: 08000000
+  boarAttackPatternPhaseTwo: 010000000200000003000000
+  IntervalTime: 0.15
   attackPreparationTimes:
   - enemyType: 0
     attackPatternType: 0

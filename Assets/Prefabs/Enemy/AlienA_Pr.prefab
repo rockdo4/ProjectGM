@@ -312,7 +312,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &471950779080328446
 Transform:
   m_ObjectHideFlags: 0
@@ -368,6 +368,13 @@ MonoBehaviour:
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
+  bearAttackPatternPhaseOne: 0100000002000000
+  bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
+  alienAttackPatternPhaseOne: 0100000002000000
+  alienAttackPatternPhaseTwo: 010000000200000003000000
+  boarAttackPatternPhaseOne: 08000000
+  boarAttackPatternPhaseTwo: 010000000200000003000000
+  IntervalTime: 0.15
   attackPreparationTimes:
   - enemyType: 1
     attackPatternType: 0
@@ -388,6 +395,10 @@ MonoBehaviour:
     type: 3}
   AttackPatternTypeDPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
     type: 3}
+  RangeAttackPatternTypeAPrefab: {fileID: 0}
+  RangeAttackPatternTypeBPrefab: {fileID: 0}
+  RangeAttackPatternTypeCPrefab: {fileID: 0}
+  RangeAttackPatternTypeDPrefab: {fileID: 0}
   attackPreparationTime: 0.7
   detectRange: 100
   meleeAttackRange: 3
@@ -419,6 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea68372419c51084c8dfdbabb70ffdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitEffectPrefab: {fileID: 0}
 --- !u!114 &2499598893110829909
 MonoBehaviour:
   m_ObjectHideFlags: 0

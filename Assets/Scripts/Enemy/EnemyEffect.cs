@@ -46,6 +46,10 @@ public class EnemyEffect : MonoBehaviour
                     case EnemyType.Boar:
                         offset += transform.forward * 2f + transform.up * 1f;
                         break;
+
+                    case EnemyType.Wolf:
+                        offset += transform.forward * 2f + transform.up * 1f;
+                        break;
                 }
                 break;
 
@@ -64,6 +68,14 @@ public class EnemyEffect : MonoBehaviour
                     case EnemyType.Boar:
                         offset += transform.forward * 3.5f + transform.up * 1f;
                         break;
+
+                    case EnemyType.Wolf:
+                        offset += transform.forward * 2f + transform.up * 1f;
+                        break;
+
+                    //case EnemyType.Spider:
+                    //    offset += transform.forward * 3.5f + transform.up * 1f;
+                    //    break;
                 }
                 break;
 

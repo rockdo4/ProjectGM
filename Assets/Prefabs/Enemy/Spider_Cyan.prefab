@@ -395,7 +395,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2069079120147748783}
   - component: {fileID: 5821439148287027105}
-  - component: {fileID: 5264025690926742652}
+  - component: {fileID: 5999511515223601274}
+  - component: {fileID: 5828766048717734968}
+  - component: {fileID: 1438742511549367765}
+  - component: {fileID: 5473430288010921690}
+  - component: {fileID: 6601101589454007712}
+  - component: {fileID: 180352389718400150}
   m_Layer: 0
   m_Name: Spider_Cyan
   m_TagString: Untagged
@@ -430,7 +435,7 @@ Animator:
   m_GameObject: {fileID: 2545784051288900843}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: a59a2976ab21ceb4db58ed90a6a64f3f, type: 3}
-  m_Controller: {fileID: 9100000, guid: 708422cd3ddd1ca4084acbbfe8cdfdff, type: 2}
+  m_Controller: {fileID: 22100000, guid: f729ef182ce6e3541b0b5b68f7276ea0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -441,7 +446,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5264025690926742652
+--- !u!114 &5999511515223601274
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -453,27 +458,146 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  statLink: {fileID: 11400000, guid: e9373622d3f82c64d9d801c9bc15e5be, type: 2}
   stat: {fileID: 11400000, guid: f850de4678448954d8fe71b892de6df5, type: 2}
-  detectRange: 10
-  meleeAttackRange: 2
-  roarDuration: 3
-  animator: {fileID: 0}
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  bearAttackPatternPhaseOne: 0100000002000000
+  bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
+  alienAttackPatternPhaseOne: 0100000002000000
+  alienAttackPatternPhaseTwo: 010000000200000003000000
+  boarAttackPatternPhaseOne: 0500000006000000010000000200000003000000
+  boarAttackPatternPhaseTwo: 0100000002000000030000000500000006000000
+  IntervalTime: 0.3
+  wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
+  wolfAttackPatternPhaseTwo: 0100000002000000
+  spiderAttackPatternPhaseOne: 010000000200000003000000
+  spiderAttackPatternPhaseTwo: 010000000200000003000000
+  attackPreparationTimes:
+  - enemyType: 4
+    attackPatternType: 0
+    preparationTime: 1
+  - enemyType: 4
+    attackPatternType: 1
+    preparationTime: 2
+  - enemyType: 4
+    attackPatternType: 2
+    preparationTime: 3
+  rangeIndicator: {fileID: 3680253550249829298, guid: 0102c2837d1e2d24abde1827bdfc7545,
+    type: 3}
+  AttackPatternTypeAPrefab: {fileID: 6896046466890514737, guid: 6d775c1817efc7240923737e0cdf662b,
+    type: 3}
+  AttackPatternTypeBPrefab: {fileID: 107145547354362451, guid: 4fb1d3457f7f0d9469aaa4c1e56a8667,
+    type: 3}
+  AttackPatternTypeCPrefab: {fileID: 1813953856839064042, guid: 7040f4ce47b7c8d44a938a4b413ba979,
+    type: 3}
+  AttackPatternTypeDPrefab: {fileID: 3694188551370226324, guid: 688248f3810a55444b5f5ee20a39e8dc,
+    type: 3}
+  RangeAttackPatternTypeAPrefab: {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3,
+    type: 3}
+  RangeAttackPatternTypeBPrefab: {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3,
+    type: 3}
+  RangeAttackPatternTypeCPrefab: {fileID: 1072892735035267309, guid: 205d7037e6369114cac3dcb658bd313d,
+    type: 3}
+  RangeAttackPatternTypeDPrefab: {fileID: 1072892735035267309, guid: 205d7037e6369114cac3dcb658bd313d,
+    type: 3}
+  attackPreparationTime: 0.7
+  detectRange: 100
+  meleeAttackRange: 5
+  rangeAttackRange: 6
+  roarDuration: 2
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  enemyType: 2
-  attackPreparationTime: 2
-  attackRangeMaterial: {fileID: 0}
-  attackRangePrefab: {fileID: 1080514216769029697, guid: 7530feac1963f144ebd4c09db4154cda,
-    type: 3}
-  attackGrid: 000100000100000100
+  enemyType: 4
+  minAngle: 3
+  rotationSpeed: 6
+  attackGrid: 000000000100000000
   savedPatterns:
-  - patternName: "\uAC70\uBBF8 \uACF5\uACA9 A"
-    pattern: 000100000100000100
-  - patternName: "\uAC70\uBBF8 \uACF5\uACA9 B"
-    pattern: 000000010101010101
-  - patternName: "\uAC70\uBBF8 \uACF5\uACA9 C"
-    pattern: 000100010101000100
+  - patternName: MelleAttack_A
+    pattern: 000000000100000000
+  - patternName: MelleAttack_B
+    pattern: 000000000100000000
+  - patternName: MelleAttack_B
+    pattern: 000000000100000000
+--- !u!114 &5828766048717734968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2545784051288900843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea68372419c51084c8dfdbabb70ffdc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitEffectPrefab: {fileID: 3141187684741176282, guid: 7cd89735a9621e04894a03a2eb9ba4d9,
+    type: 3}
+--- !u!114 &1438742511549367765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2545784051288900843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d82f8f5639bf7428d704feb7b94676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5473430288010921690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2545784051288900843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a079d8777880dd44a9bc9b2017b12620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!136 &6601101589454007712
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2545784051288900843}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.1
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0.000000059604645, y: 0.58, z: -0.00000008940697}
+--- !u!114 &180352389718400150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2545784051288900843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTypeA: {fileID: 0}
+  EffectTypeB: {fileID: 0}
+  EffectTypeC: {fileID: 0}
+  EffectTypeD: {fileID: 0}
 --- !u!1 &2615956738506003804
 GameObject:
   m_ObjectHideFlags: 0

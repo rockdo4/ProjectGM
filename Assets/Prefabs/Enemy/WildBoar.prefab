@@ -819,6 +819,13 @@ MonoBehaviour:
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
+  bearAttackPatternPhaseOne: 0100000002000000
+  bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
+  alienAttackPatternPhaseOne: 0100000002000000
+  alienAttackPatternPhaseTwo: 010000000200000003000000
+  boarAttackPatternPhaseOne: 0500000006000000010000000200000003000000
+  boarAttackPatternPhaseTwo: 0100000002000000030000000500000006000000
+  IntervalTime: 0.3
   attackPreparationTimes:
   - enemyType: 2
     attackPatternType: 0
@@ -858,9 +865,9 @@ MonoBehaviour:
     type: 3}
   RangeAttackPatternTypeBPrefab: {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3,
     type: 3}
-  RangeAttackPatternTypeCPrefab: {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3,
+  RangeAttackPatternTypeCPrefab: {fileID: 1072892735035267309, guid: 205d7037e6369114cac3dcb658bd313d,
     type: 3}
-  RangeAttackPatternTypeDPrefab: {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3,
+  RangeAttackPatternTypeDPrefab: {fileID: 1072892735035267309, guid: 205d7037e6369114cac3dcb658bd313d,
     type: 3}
   attackPreparationTime: 0.7
   detectRange: 100
@@ -884,9 +891,9 @@ MonoBehaviour:
   - patternName: MelleAttack_D
     pattern: 000000000100000000
   - patternName: RangedAttack_A
-    pattern: 010001010100010100
+    pattern: 000000000000000100
   - patternName: RangedAttack_B
-    pattern: 010001000100010001
+    pattern: 010101010101010101
   - patternName: RangedAttack_C
     pattern: 000000000100000000
   - patternName: RangedAttack_D
@@ -903,6 +910,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea68372419c51084c8dfdbabb70ffdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitEffectPrefab: {fileID: 3141187684741176282, guid: 7cd89735a9621e04894a03a2eb9ba4d9,
+    type: 3}
 --- !u!114 &584540419188429084
 MonoBehaviour:
   m_ObjectHideFlags: 0
