@@ -25,6 +25,9 @@ public class EnemyAI : LivingObject
     [Header("멧돼지 페이즈2 공격 패턴")]
     public int[] boarAttackPatternPhaseTwo = new int[] { 1, 2, 3}; // abdc
 
+    [Header("멧돼지 발사 공격 간격")]
+    public float IntervalTime = 0.15f;
+
     //private int[] wolfAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
     //private int[] wolfAttackPatternPhaseTwo = new int[] { 1, 2, 1, 2, 2 }; // ababb
 
@@ -38,7 +41,9 @@ public class EnemyAI : LivingObject
     private int EnemyRangedAttackIndexThree = 6;
     private int EnemyRangedAttackIndexFour = 7;
 
-    [Header("공격 준비 시간 설정")]
+    
+
+    [Header("공격 준비 시간 - 초기값(패턴에 따로 시간 지정해주지 않았을때만 적용)")]
     [SerializeField]
     public List<AttackPreparationTime> attackPreparationTimes;
 
@@ -671,7 +676,7 @@ public class EnemyAI : LivingObject
     IEnumerator PrepareRangedAttack(EnemyType enemytype, AttackPatternType attackPatternType) // 원거리
     {
         isPreparingAttack = true;
-        ShowRangeAttackRange(true, enemytype, attackPatternType);
+        ShowProjectileAttackRange(true, enemytype, attackPatternType);
 
         float specificPreparationTime = attackPreparationTime;
 
@@ -689,7 +694,7 @@ public class EnemyAI : LivingObject
         switch (attackPatternType)
         {
             case AttackPatternType.RangeA:
-                ShowRangeAttackRange(false, enemytype, attackPatternType); // 기존 공격 패턴 A
+                ShowProjectileAttackRange(false, enemytype, attackPatternType); // 기존 공격 패턴 A
                 break;
             case AttackPatternType.RangeB:
                 yield return StartCoroutine(RangeAttackPatternB()); // 공격 패턴 B
@@ -912,15 +917,6 @@ public class EnemyAI : LivingObject
 
                         cell.transform.rotation = initialRotation * additionalRotation;
                     }
-                    //else if (enemyType == EnemyType.WildBoar && AttackPatternType == AttackPatternType.C)
-                    //{
-                    //    Vector3 directionToMonster = (transform.position - cellPosition).normalized;
-                    //    Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-
-                    //    Quaternion additionalRotation = Quaternion.Euler(0f, 70f, 0f);
-
-                    //    cell.transform.rotation = initialRotation * additionalRotation;
-                    //}
                     else
                     {
                         cell.transform.rotation = transform.rotation;
@@ -1015,7 +1011,7 @@ public class EnemyAI : LivingObject
         }
     }
 
-    private void ShowRangeAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
+    private void ShowProjectileAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
     {
         //Debug.Log("레인지 어택 호출 하는지?");
         GameObject attackPrefab = null;
@@ -1075,7 +1071,7 @@ public class EnemyAI : LivingObject
                 case AttackPatternType.RangeC:
                     if (show)
                     {
-                        fanShape = attackRangeInstance.GetComponent<FanShape>();
+                        fanShape = attackPrefab.GetComponent<FanShape>();
                         fanShape.enemyAi = this;
                         CreatePrefabAtPlayer(attackPrefab); // C패턴 하나생성
 
@@ -1086,7 +1082,7 @@ public class EnemyAI : LivingObject
                     break;
 
                 case AttackPatternType.RangeD:
-                    fanShape = attackRangeInstance.GetComponent<FanShape>();
+                    fanShape = attackPrefab.GetComponent<FanShape>();
                     fanShape.enemyAi = this;
                     cellSize = fanShape.Return();
 
@@ -1094,13 +1090,14 @@ public class EnemyAI : LivingObject
 
                     if (show)
                     {
-                        int numberOfPrefabs = 5; // 예시: 생성할 프리팹의 개수
-                        float radius = 10f; // 예시: 프리팹을 생성할 반경
-                        CreatePrefabsAroundPlayer(attackPrefab, numberOfPrefabs, radius); // 플레이어 주변에 프리팹 랜덤 생성
+                        int numberOfPrefabs = 5;
+                        float radius = 10f;
+                        CreatePrefabsAroundPlayer(attackPrefab, numberOfPrefabs, radius);
+                        return;
                     }
 
-                    return;
-                    //break;
+                   
+                    break;
             }
 
             Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
@@ -1163,6 +1160,15 @@ public class EnemyAI : LivingObject
         }
     }
 
+    private void ShowFloorAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType)
+    {
+
+
+
+
+    }
+
+
     private IEnumerator RangeAttackPatternB()
     {
         //foreach (GameObject cell in cellInstances)
@@ -1193,7 +1199,7 @@ public class EnemyAI : LivingObject
                         rb.AddForce(direction * forceMagnitude, ForceMode.Impulse);
                     }
 
-                    yield return new WaitForSeconds(0.15f);
+                    yield return new WaitForSeconds(IntervalTime);
                 }
             }
         }
@@ -1201,10 +1207,12 @@ public class EnemyAI : LivingObject
 
     private void CreatePrefabAtPlayer(GameObject prefab)
     {
-        Instantiate(prefab, detectedPlayer.transform.position + Vector3.up, Quaternion.identity);
+        GameObject createdObject = Instantiate(prefab, detectedPlayer.transform.position + Vector3.up, Quaternion.identity);
+        cellInstances.Add(createdObject);
+
+        //        Instantiate(prefab, detectedPlayer.transform.position + Vector3.up, Quaternion.identity);
     }
 
-    // 플레이어 주변에 프리팹 랜덤 생성
     private void CreatePrefabsAroundPlayer(GameObject prefab, int count, float radius)
     {
         for (int i = 0; i < count; i++)
