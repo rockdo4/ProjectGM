@@ -12,6 +12,10 @@ public class ItemButton : MonoBehaviour
     [SerializeField]
     private Image equipImage;
 
+    [Header("업그레이드 이미지")]
+    [SerializeField]
+    private Image upgradeImage;
+
     [Header("아이콘 이미지")]
     public Image iconImage;
 

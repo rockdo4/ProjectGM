@@ -17,9 +17,11 @@ public class UpgradeManager : MonoBehaviour
     public CreateWeaponPanel createWeaponPanel;
     public CreateArmorPanel createArmorPanel;
 
+    /*
     [Header("무기/방어구 업그레이드 패널")]
     public UpgradeEquipPanel upgradeWeaponPanel;
     public UpgradeEquipPanel upgradeArmorPanel;
+    */
 
     [Space(10.0f)]
 
