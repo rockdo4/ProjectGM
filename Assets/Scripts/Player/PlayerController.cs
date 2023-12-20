@@ -18,7 +18,8 @@ public class PlayerController : MonoBehaviour
     }
     private StateManager stateManager = new StateManager();
     private List<StateBase> states = new List<StateBase>();
-    public State currentState { get; private set; }
+    public State CurrentState { get; private set; }
+    public State nextState = State.Idle;
 
     #region Weapon
     public enum WeaponPosition
@@ -71,7 +72,7 @@ public class PlayerController : MonoBehaviour
         }
         subHandle = player.CurrentWeapon.transform.Find("LeftHandle");
 
-        MoveWeaponPosition(WeaponPosition.Wing);
+        //MoveWeaponPosition(WeaponPosition.Wing);
         
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
@@ -91,7 +92,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        if (currentState == State.Death)
+        if (CurrentState == State.Death)
         {
             return;
         }
@@ -161,8 +162,9 @@ public class PlayerController : MonoBehaviour
     #region Touch Event
     private void OnSwipe()
     {
-        if (currentState == State.Hit || currentState == State.Death)
+        if (CurrentState == State.Hit || CurrentState == State.Death)
         {
+            nextState = State.Evade;
             return;
         }
 
@@ -170,8 +172,9 @@ public class PlayerController : MonoBehaviour
     }
     private void OnHold()
     {
-        if (currentState != State.Idle)
+        if (CurrentState != State.Idle)
         {
+            nextState = State.Sprint;
             return;
         }
 
@@ -187,6 +190,7 @@ public class PlayerController : MonoBehaviour
     private void BeforeAttack()
     {
         player.attackState = Player.AttackState.Before;
+        nextState = State.Idle;
     }
     private void Attack()
     {
@@ -206,6 +210,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         player.attackState = Player.AttackState.AfterStart;
+        nextState = State.Idle;
     }
     private void AfterAttack()
     {
@@ -223,14 +228,14 @@ public class PlayerController : MonoBehaviour
 
     public void SetState(State newState)
     {
-        if (newState == currentState)
+        if (newState == CurrentState)
         {
             return;
         }
 #if UNITY_EDITOR
         //Debug.Log($"--------- ChangeState: {newState} ---------");
 #endif
-        currentState = newState;
+        CurrentState = newState;
         stateManager?.ChangeState(states[(int)newState]);
     }
 
@@ -251,26 +256,49 @@ public class PlayerController : MonoBehaviour
     {
         Attack attack = player.Stat.CreateAttack(attacker, defender, player.GroggyAttack);
         var attackables = defender.GetComponents<IAttackable>();
+
+        Handheld.Vibrate();
+
+        //List<UnityEngine.XR.InputDevice> devices = new List<UnityEngine.XR.InputDevice>();
+        //UnityEngine.XR.InputDevices.GetDevicesWithCharacteristics(UnityEngine.XR.InputDeviceCharacteristics.Right, devices);
+
+        //foreach (var device in devices)
+        //{
+        //    UnityEngine.XR.HapticCapabilities capabilities;
+        //    if (device.TryGetHapticCapabilities(out capabilities))
+        //    {
+        //        if (capabilities.supportsImpulse)
+        //        {
+        //            uint channel = 0;
+        //            float amplitude = 0.5f;
+        //            float duration = 1.0f;
+        //            device.SendHapticImpulse(channel, amplitude, duration);
+        //        }
+        //    }
+        //}
+
         foreach (var attackable in attackables)
         {
             attackable.OnAttack(player.gameObject, attack);
         }
+
     }
 
     public void MoveWeaponPosition(WeaponPosition position)
     {
-        currentWeaponPosition = position;
-        switch (position)
-        {
-            case WeaponPosition.Hand:
-                player.CurrentWeapon.transform.SetParent(rightHand, false);
-                player.FakeWeapon?.transform.SetParent(leftHand, false);
-                break;
-            case WeaponPosition.Wing:
-                player.CurrentWeapon.transform.SetParent(rightWing, false);
-                player.FakeWeapon?.transform.SetParent(leftWing, false);
-                break;
-        }
+        return;
+        //currentWeaponPosition = position;
+        //switch (position)
+        //{
+        //    case WeaponPosition.Hand:
+        //        player.CurrentWeapon.transform.SetParent(rightHand, false);
+        //        player.FakeWeapon?.transform.SetParent(leftHand, false);
+        //        break;
+        //    case WeaponPosition.Wing:
+        //        player.CurrentWeapon.transform.SetParent(rightWing, false);
+        //        player.FakeWeapon?.transform.SetParent(leftWing, false);
+        //        break;
+        //}
     }
 
     private void OnAnimatorIK(int layerIndex)

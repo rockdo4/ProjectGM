@@ -72,7 +72,7 @@ public class Player : LivingObject
     {
         get
         {
-            return GetComponent<PlayerController>().currentState;
+            return GetComponent<PlayerController>().CurrentState;
         }
     }
 
