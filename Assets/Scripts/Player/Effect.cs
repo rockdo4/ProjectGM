@@ -7,11 +7,22 @@ public abstract class Effect : MonoBehaviour
     [Tooltip("파티클 시스템은 무시")]
     [SerializeField]
     private float duration;
-    [Header("프리팹")]
+    [Header("이펙트 오브젝트")]
     public GameObject prefab;
+    //[Header("이펙트 강제 중지 여부")]
+    //[Tooltip("유지 시간과 무관하게 행동이 끝나면 이펙트도 사라짐")]
+    //public bool useForceStop = false; // 생각안남...
 
     private float timer = 0f;
     private bool isPlay = false;
+
+    private void Awake()
+    {
+        if (gameObject.activeSelf)
+        {
+            gameObject.SetActive(false);
+        }
+    }
 
     protected virtual void Update()
     {
@@ -26,7 +37,7 @@ public abstract class Effect : MonoBehaviour
         }
     }
 
-    protected virtual void PlayEnd()
+    public virtual void PlayEnd()
     {
         gameObject.SetActive(isPlay = false);
     }
@@ -37,5 +48,5 @@ public abstract class Effect : MonoBehaviour
         gameObject.SetActive(isPlay = true);
     }
 
-    public abstract void Init(Transform transform = null);
+    public abstract void Init(Transform targetTransform = null);
 }

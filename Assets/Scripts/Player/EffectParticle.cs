@@ -9,18 +9,13 @@ public class EffectParticleSystem : Effect
     public Vector3 positionOffset;
     private Transform targetTransform;
 
-    private void Awake()
-    {
-        particle = GetComponent<ParticleSystem>();
-    }
-
     protected override void Update()
     {
         
     }
-    public override void Init(Transform transform = null)
+    public override void Init(Transform playerTransform = null)
     {
-        targetTransform = transform;
+        targetTransform = playerTransform;
         particle = Instantiate(prefab.GetComponent<ParticleSystem>());
         particle.transform.SetParent(targetTransform);
         particle.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -52,5 +47,8 @@ public class EffectParticleSystem : Effect
         particle.Play();
     }
 
-
+    public override void PlayEnd()
+    {
+        particle.Stop();
+    }
 }

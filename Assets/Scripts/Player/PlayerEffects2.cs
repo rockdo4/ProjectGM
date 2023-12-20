@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum PlayerEffectType
 {
+    Sprint,
     Evade,
     JustEvade,
     Hit,
@@ -40,6 +41,18 @@ public class PlayerEffects2 : MonoBehaviour
         foreach(var info in infos)
         {
             info.effect.PlayStart(direction);
+        }
+    }
+
+    public void StopEffect(PlayerEffectType type)
+    {
+        var infos = effectInfos.FindAll((x) =>
+        {
+            return x.effectType == type;
+        });
+        foreach (var info in infos)
+        {
+            info.effect.PlayEnd();
         }
     }
 }
