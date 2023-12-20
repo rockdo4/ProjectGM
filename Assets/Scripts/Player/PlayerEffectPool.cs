@@ -1,17 +1,8 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public enum EffectType
-{
-    Evade, 
-    JustEvade,
-    Hit,
-    Attack,
-    SuperAttack,
-    Death
-}
+
 public class PlayerEffectPool : MonoBehaviour
 {
     [System.Serializable]

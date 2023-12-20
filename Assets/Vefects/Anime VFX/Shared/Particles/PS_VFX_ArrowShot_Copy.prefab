@@ -107769,7 +107769,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 713857164547537394}
-  - component: {fileID: 627530661257819416}
+  - component: {fileID: -5784638281073924852}
   - component: {fileID: 4026665142206687700}
   - component: {fileID: 4939626660716641432}
   m_Layer: 0
@@ -107795,7 +107795,7 @@ Transform:
   - {fileID: 8328167513949473433}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &627530661257819416
+--- !u!114 &-5784638281073924852
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107804,9 +107804,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6130567110401474471}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03f0367df62577e4482ecde5c64cee4b, type: 3}
+  m_Script: {fileID: 11500000, guid: fe5ea191272161f4fa2ff6f53d2df318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  duration: 0
+  effectType: 1
+  prefab: {fileID: 6130567110401474471}
+  directionOffset: {x: 0, y: 0, z: 0}
+  positionOffset: {x: 0, y: 0, z: 0}
 --- !u!198 &4026665142206687700
 ParticleSystem:
   m_ObjectHideFlags: 0

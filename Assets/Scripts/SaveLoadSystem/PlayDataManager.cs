@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using SaveDataVC = SaveDataV5; // Version Change?
+using SaveDataVC = SaveDataV6; // Version Change?
 
 public static class PlayDataManager
 {
@@ -322,6 +322,16 @@ public static class PlayDataManager
 
         data.MatInventory.Find(x => x == item).count -= count;
         AddGold(table[item.id].sellgold * count);
+    }
+
+    public static void SellItem(SkillCode item)
+    {
+        //추가 구현 필요
+    }
+
+    public static void SellItem(SkillCode item, int count)
+    {
+        //추가 구현 필요
     }
 
     public static bool IsExistItem(Materials item)
