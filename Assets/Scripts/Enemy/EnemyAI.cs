@@ -7,18 +7,26 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : LivingObject
 {
-    private int[] bearAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
-    private int[] bearAttackPatternPhaseTwo = new int[] { 1, 2, 3, 2, 3 }; // abcbc
+    [Header("곰 페이즈1 공격 패턴")]
+    public int[] bearAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
 
-    private int[] alienAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
-    private int[] alienAttackPatternPhaseTwo = new int[] { 1, 2, 3 }; // abc
+    [Header("곰 페이즈2 공격 패턴")]
+    public int[] bearAttackPatternPhaseTwo = new int[] { 1, 2, 3, 2, 3 }; // abcbc
 
-    [Header("멧돼지 공격 패턴")]
+    [Header("에일리언 페이즈1 공격 패턴")]
+    public int[] alienAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
+
+    [Header("에일리언 페이즈2 공격 패턴")]
+    public int[] alienAttackPatternPhaseTwo = new int[] { 1, 2, 3 }; // abc
+
+    [Header("멧돼지 페이즈1 공격 패턴")]
     public int[] boarAttackPatternPhaseOne = new int[] { 8 }; // 테스트로 레인지A 인덱스 넣기
-    private int[] boarAttackPatternPhaseTwo = new int[] { 1, 2, 3}; // abdc
 
-    private int[] wolfAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
-    private int[] wolfAttackPatternPhaseTwo = new int[] { 1, 2, 1, 2, 2 }; // ababb
+    [Header("멧돼지 페이즈2 공격 패턴")]
+    public int[] boarAttackPatternPhaseTwo = new int[] { 1, 2, 3}; // abdc
+
+    //private int[] wolfAttackPatternPhaseOne = new int[] { 1, 1, 2 }; // aab
+    //private int[] wolfAttackPatternPhaseTwo = new int[] { 1, 2, 1, 2, 2 }; // ababb
 
     private int EnemyMeleeAttackIndexOne = 0;
     private int EnemyMeleeAttackIndexTwo = 1;
