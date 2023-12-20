@@ -24,6 +24,8 @@ public class PlayerSprintState : PlayerStateBase
 
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
         controller.player.Animator.SetTrigger("Sprint");
+
+        controller.player.effects.PlayEffect(PlayerEffectType.Sprint);
     }
 
     public override void Update()
@@ -52,6 +54,7 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void Exit()
     {
+        controller.player.effects.StopEffect(PlayerEffectType.Sprint);
         controller.player.Animator.ResetTrigger("Sprint");
     }
 

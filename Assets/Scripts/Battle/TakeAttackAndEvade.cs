@@ -38,7 +38,7 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
                 damage = (int)(damage * player.Stat.evadeDamageRate);
                 break;
             case EvadeSuccesss.Just:
-                player.effects.PlayEffect(EffectType.JustEvade);
+                player.effects.PlayEffect(PlayerEffectType.JustEvade);
                 damage = 0;
                 break;
         }
