@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using SaveDataVC = SaveDataV6; // Version Change?
 
@@ -259,6 +260,31 @@ public static class PlayDataManager
         Save();
     }
 
+    public static void IncreaseCode(int id, int count)
+    {
+        if (count <= 0)
+        {
+            return;
+        }
+
+        var code = data.CodeInventory.Find(x => x.id == id);
+
+        if (code == null)
+        {
+            if (data.CodeInventory.Count >= skillcodesCapacity)
+            {
+                return;
+            }
+            data.CodeInventory.Add(new SkillCode(id, count));
+        }
+        else
+        {
+            code.IncreaseCount(count);
+        }
+
+        Save();
+    }
+
     public static void SellItem(Weapon item)
     {
         if (item == null || !data.WeaponInventory.Contains(item))
@@ -326,12 +352,36 @@ public static class PlayDataManager
 
     public static void SellItem(SkillCode item)
     {
-        //추가 구현 필요
+        if (item == null || !data.CodeInventory.Contains(item))
+        {
+            return;
+        }
+        var table = CsvTableMgr.GetTable<CodeTable>().dataTable;
+
+        data.CodeInventory.Remove(item);
+        AddGold(table[item.id].sellgold * item.count);
     }
 
     public static void SellItem(SkillCode item, int count)
     {
-        //추가 구현 필요
+        if (item == null || !data.CodeInventory.Contains(item) || count < 0 || item.count < count)
+        {
+            return;
+        }
+        if (item.count - count == 0)
+        {
+            SellItem(item);
+            return;
+        }
+        var table = CsvTableMgr.GetTable<CodeTable>().dataTable;
+
+        data.CodeInventory.Find(x => x == item).count -= count;
+        AddGold(table[item.id].sellgold * count);
+    }
+
+    public static bool IsExistItem(SkillCode item)
+    {
+        return (item != null && data.CodeInventory.Contains(item));
     }
 
     public static bool IsExistItem(Materials item)

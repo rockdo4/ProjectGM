@@ -143,7 +143,7 @@ public class SaveDataV6 : SaveData
 
     public List<Materials> MatInventory = new List<Materials>();
 
-    public List<SkillCode> SkillCodeInventory = new List<SkillCode>();
+    public List<SkillCode> CodeInventory = new List<SkillCode>();
 
     public override SaveData VersionUp()
     {

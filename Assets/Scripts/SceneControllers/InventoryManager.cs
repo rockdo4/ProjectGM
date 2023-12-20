@@ -56,6 +56,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
     private bool sellMode = false;
     private List<Equip> sellEquipList = new List<Equip>();
+    private List<SkillCode> sellSkillCodeList = new List<SkillCode>();
     private List<Materials> sellMatList = new List<Materials>();
 
     private ObjectPool<ItemButton> buttonPool;
@@ -72,7 +73,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
             () => // createFunc
         {
             var button = Instantiate(buttonPrefab);
-            button.transform.SetParent(inventoryPanel.transform);
+            button.transform.SetParent(inventoryPanel.transform, true);
             button.OnCountAct();
             button.gameObject.SetActive(false);
 
@@ -81,12 +82,12 @@ public class InventoryManager : MonoBehaviour, IRenewal
         delegate (ItemButton button) // actionOnGet
         {
             button.gameObject.SetActive(true);
-            button.transform.SetParent(inventoryPanel.transform);
+            button.transform.SetParent(inventoryPanel.transform, true);
         },
         delegate (ItemButton button) // actionOnRelease
         {
             button.Clear();
-            button.transform.SetParent(gameObject.transform); // ItemButton Transform Reset
+            button.transform.SetParent(gameObject.transform, true); // ItemButton Transform Reset
             button.gameObject.SetActive(false);
         });
 
@@ -99,7 +100,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         Renewal();
     }
 
-    public void ShowWeapons(bool isOn)
+    public void ShowWeapons(bool isOn = true)
     {
         if (!isOn)
         {
@@ -140,7 +141,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                         // weapon icon level reset
 
                         newGo.OnEquip(weapon.isEquip);
-                        newGo.transform.SetParent(sellPanel.transform);
+                        newGo.transform.SetParent(sellPanel.transform, true);
                         newGo.button.onClick.AddListener(() => 
                         {
                             buttonPool.Release(go.sell);
@@ -172,7 +173,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
     }
 
-    public void ShowArmors(bool isOn)
+    public void ShowArmors(bool isOn = true)
     {
         if (!isOn)
         {
@@ -211,7 +212,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                         // armor icon level reset
 
                         newGo.OnEquip(armor.isEquip);
-                        newGo.transform.SetParent(sellPanel.transform);
+                        newGo.transform.SetParent(sellPanel.transform, true);
                         newGo.button.onClick.AddListener(() =>
                         {
                             buttonPool.Release(go.sell);
@@ -243,7 +244,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
     }
 
-    public void ShowSkillCodes(bool isOn)
+    public void ShowSkillCodes(bool isOn = true)
     {
         if (!isOn)
         {
@@ -252,14 +253,63 @@ public class InventoryManager : MonoBehaviour, IRenewal
         ClearItemButton();
         curType = ItemType.SkillCode;
 
-        var skillcodes = PlayDataManager.data.SkillCodeInventory;
+        var skillcodes = PlayDataManager.data.CodeInventory;
         foreach (var skillcode in skillcodes) 
         {
+            var go = buttonPool.Get();
+            var table = CsvTableMgr.GetTable<CodeTable>().dataTable;
 
+            go.transform.SetParent(inventoryPanel.transform, true);
+
+            go.OnCountAct(true, skillcode.count);
+            go.iconImage.sprite = skillIconSO.GetSprite(table[skillcode.id].type);
+            go.OnEquip();
+
+            go.GetComponent<ItemButton>().button.onClick.AddListener(() =>
+            {
+                if (sellMode && sellSkillCodeList.Count < 10)
+                {
+                    if (go.iconImage.color == Color.white)
+                    {
+                        sellSkillCodeList.Add(skillcode);
+                        go.iconImage.color = Color.red;
+
+                        var table = CsvTableMgr.GetTable<CodeTable>().dataTable;
+
+                        var newGo = buttonPool.Get();
+                        newGo.iconImage.sprite = skillIconSO.GetSprite(table[skillcode.id].type);
+                        newGo.transform.SetParent(sellPanel.transform, true);
+                        newGo.button.onClick.AddListener(() =>
+                        {
+                            buttonPool.Release(go.sell);
+                            go.sell = null;
+                            sellSkillCodeList.Remove(skillcode);
+                            go.iconImage.color = Color.white;
+                        });
+
+                        go.sell = newGo;
+                    }
+                    else
+                    {
+                        buttonPool.Release(go.sell);
+                        go.sell = null;
+                        sellSkillCodeList.Remove(skillcode);
+                        go.iconImage.color = Color.white;
+                    }
+                }
+                else
+                {
+                    skillCodePanel.SetSkillCode(skillcode);
+                    skillCodePanel.iconImage.sprite = go.iconImage.sprite;
+                    skillCodePanel.Renewal();
+                }
+            });
+
+            releaseList.Add(go);
         }
     }
 
-    public void ShowMaterials(bool isOn)
+    public void ShowMaterials(bool isOn = true)
     {
         if (!isOn)
         {
@@ -344,7 +394,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                 break;
 
             case ItemType.SkillCode:
-                // 구현 필요
+                sellSkillCodeList.Clear();
                 break;
 
             case ItemType.Mat:
@@ -383,7 +433,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     {
                         PlayDataManager.SellItem(item as Weapon);
                     }
-                    ShowWeapons(true);
+                    ShowWeapons();
                 }
                 break;
 
@@ -393,13 +443,17 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     {
                         PlayDataManager.SellItem(item as Armor);
                     }
-                    ShowArmors(true);
+                    ShowArmors();
                 }
                 break;
 
             case ItemType.SkillCode:
                 {
-                    // 구현 필요
+                    foreach (var item in sellSkillCodeList)
+                    {
+                        PlayDataManager.SellItem(item);
+                    }
+                    ShowSkillCodes();
                 }
                 break;
 
@@ -409,7 +463,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     {
                         PlayDataManager.SellItem(item);
                     }
-                    ShowMaterials(true);
+                    ShowMaterials();
                 }
                 break;
         }
@@ -422,19 +476,19 @@ public class InventoryManager : MonoBehaviour, IRenewal
         switch (curType)
         {
             case ItemType.Weapon:
-                ShowWeapons(true);
+                ShowWeapons();
                 break;
 
             case ItemType.Armor:
-                ShowArmors(true);
+                ShowArmors();
                 break;
 
             case ItemType.SkillCode:
-                ShowSkillCodes(true);
+                ShowSkillCodes();
                 break;
 
             case ItemType.Mat:
-                ShowMaterials(true);
+                ShowMaterials();
                 break;
         }
 
@@ -443,10 +497,16 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
     public void Tester()
     {
-        var table = CsvTableMgr.GetTable<MatTable>().dataTable;
-        foreach (var mat in table)
+        var mt = CsvTableMgr.GetTable<MatTable>().dataTable;
+        foreach (var mat in mt)
         {
             PlayDataManager.IncreaseMat(mat.Key, 99);
+        }
+
+        var sct = CsvTableMgr.GetTable<CodeTable>().dataTable;
+        foreach (var code in sct)
+        {
+            PlayDataManager.IncreaseCode(code.Key, 99);
         }
 
         PlayDataManager.AddGold(100000);

@@ -27,7 +27,7 @@ public class SkillCodePanel : MonoBehaviour
 
     private SkillCode skillcode;
 
-    public void SetMaterials(SkillCode skillcode)
+    public void SetSkillCode(SkillCode skillcode)
     {
         this.skillcode = skillcode;
     }
@@ -36,7 +36,7 @@ public class SkillCodePanel : MonoBehaviour
     {
         gameObject.SetActive(true);
 
-        var table = CsvTableMgr.GetTable<MatTable>().dataTable;
+        var table = CsvTableMgr.GetTable<CodeTable>().dataTable;
         var st = CsvTableMgr.GetTable<StringTable>().dataTable;
 
         nameText.text = st[table[skillcode.id].name];
@@ -52,6 +52,6 @@ public class SkillCodePanel : MonoBehaviour
         Renewal();
         InventoryManager.Instance.Renewal();
 
-        //gameObject.SetActive(PlayDataManager.IsExistItem(skillcode));
+        gameObject.SetActive(PlayDataManager.IsExistItem(skillcode));
     }
 }
