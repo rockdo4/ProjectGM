@@ -1,4 +1,5 @@
 using UnityEngine;
+using static EnemyAI;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class FanShape : MonoBehaviour
@@ -41,8 +42,7 @@ public class FanShape : MonoBehaviour
         if (enemyAi == null)
             return;
 
-        //float t = Mathf.Clamp01((Time.time - startTime) / 0.5f);
-        float t = Mathf.Clamp01((Time.time - startTime) / enemyAi.attackPreparationTime);
+        float t = Mathf.Clamp01((Time.time - startTime) / enemyAi.CurrentPreparationTime);
 
         material.color = Color.Lerp(Color.yellow, Color.red, t);
     }
