@@ -130,10 +130,6 @@ public class TouchManager : Singleton<TouchManager>
             case TouchPhase.Moved:
                 {
                     Holded = false;
-                }
-                break;
-            case TouchPhase.Stationary:
-                {
                     if (Swiped)
                     {
                         return;
@@ -163,6 +159,10 @@ public class TouchManager : Singleton<TouchManager>
                             SwipeListeners();
                         }
                     }
+                }
+                break;
+            case TouchPhase.Stationary:
+                {
                 }
                 break;
             case TouchPhase.Ended:
