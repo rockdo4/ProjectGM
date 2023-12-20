@@ -62,9 +62,11 @@ MonoBehaviour:
     infoUI: {fileID: 4730841798869771340}
     startTransform: {fileID: 0}
   enemyData:
-    prefab: {fileID: 316072021794067186, guid: 27fb17d2455922844aec615844f2755b, type: 3}
+    prefab: {fileID: 0}
     infoUI: {fileID: 8313877749248595517}
     startTransform: {fileID: 0}
+  player: {fileID: 0}
+  enemy: {fileID: 0}
 --- !u!223 &1637530966045709390
 Canvas:
   m_ObjectHideFlags: 0

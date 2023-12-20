@@ -34,9 +34,9 @@ public class InGameManager : MonoBehaviour
 
     [SerializeField] private PlayerData playerData;
     [SerializeField] private EnemyData enemyData;
-    private Player player;
+    [SerializeField] private Player player;
     private Slider playerHp;
-    private EnemyAI enemy;
+    [SerializeField] private EnemyAI enemy;
     private Slider enemyHp;
     private Slider evadePoint;
 
@@ -53,13 +53,11 @@ public class InGameManager : MonoBehaviour
         if (prefabCheck)
         {
             //Debug.LogError($"Not Prefab!!\nPlayer: {playerData.prefab != null}, Enemy: {enemyData.prefab != null}");
-            Destroy(this);
             return;
         }
         if (transformCheck)
         {
             //Debug.LogError($"Not Transfrom!!\nPlayer: {playerData.startTransform != null}, Enemy: {enemyData.startTransform != null}");
-            Destroy(this);
             return;
         }
         player = Instantiate(playerData.prefab, playerData.startTransform.position, Quaternion.identity);
