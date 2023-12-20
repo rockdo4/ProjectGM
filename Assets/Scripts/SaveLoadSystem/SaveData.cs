@@ -118,6 +118,35 @@ public class SaveDataV5 : SaveData
 
     public override SaveData VersionUp()
     {
+        var data = new SaveDataV6();
+        data.Gold = Gold;
+        data.WeaponInventory = WeaponInventory;
+        data.ArmorInventory = ArmorInventory;
+        data.MatInventory = MatInventory;
+
+        return data;
+    }
+}
+
+public class SaveDataV6 : SaveData
+{
+    public SaveDataV6() 
+    {
+        Version = 6;
+    }
+
+    public int Gold { get; set; } = 0;
+
+    public List<Weapon> WeaponInventory = new List<Weapon>();
+
+    public List<Armor> ArmorInventory = new List<Armor>();
+
+    public List<Materials> MatInventory = new List<Materials>();
+
+    public List<SkillCode> SkillCodeInventory = new List<SkillCode>();
+
+    public override SaveData VersionUp()
+    {
         return null;
     }
 }
