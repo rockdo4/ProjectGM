@@ -31,7 +31,6 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
     [Header("체크 이미지")]
     public Image checkImage;
 
-    private UpgradeEquipButton button = null;
     private Equip item = null;
     private ItemPanel itemPanel = null;
 

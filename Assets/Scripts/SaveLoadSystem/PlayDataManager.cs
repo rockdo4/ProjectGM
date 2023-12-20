@@ -287,6 +287,38 @@ public static class PlayDataManager
         Save();
     }
 
+    public static void DecreaseCode(SkillCode code, int count)
+    {
+        if (code == null || code.count < count)
+        {
+            return;
+        }
+        code.count -= count;
+
+        if (code.count <= 0)
+        {
+            data.CodeInventory.Remove(code);
+        }
+        Save();
+    }
+
+    public static void DecreaseCode(int id, int count)
+    {
+        var code = data.CodeInventory.Find(x => x.id == id);
+
+        if (code == null || code.count < count)
+        {
+            return;
+        }
+        code.count -= count;
+
+        if (code.count <= 0)
+        {
+            data.CodeInventory.Remove(code);
+        }
+        Save();
+    }
+
     public static void SellItem(Weapon item)
     {
         if (item == null || !data.WeaponInventory.Contains(item))
@@ -419,5 +451,41 @@ public static class PlayDataManager
         }
 
         data.ArmorInventory.Add(armor);
+    }
+
+    public static int GetSocket()
+    {
+        var table = CsvTableMgr.GetTable<ArmorTable>().dataTable;
+        var count = 0;
+        foreach (var armor in curArmor)
+        {
+            count += table[armor.Value.id].socket;
+        }
+        return count;
+    }
+
+    public static void EquipSkillCode(SkillCode code)
+    {
+        if (code == null || 
+            data.SkillCodes.Count + 1 > GetSocket() || 
+            !IsExistItem(code) || 
+            code.count - 1 <= 0)
+        {
+            return;
+        }
+
+        data.SkillCodes.Add(code.id);
+        DecreaseCode(code, 1);
+    }
+
+    public static void UnEquipSkillCode(int id)
+    {
+        if (!data.SkillCodes.Contains(id))
+        {
+            return;
+        }
+
+        data.SkillCodes.Remove(id);
+        IncreaseCode(id, 1);
     }
 }
