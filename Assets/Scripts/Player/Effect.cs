@@ -16,14 +16,6 @@ public abstract class Effect : MonoBehaviour
     private float timer = 0f;
     private bool isPlay = false;
 
-    private void Awake()
-    {
-        if (gameObject.activeSelf)
-        {
-            gameObject.SetActive(false);
-        }
-    }
-
     protected virtual void Update()
     {
         if (!isPlay)
