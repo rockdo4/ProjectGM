@@ -403,11 +403,11 @@ GameObject:
   - component: {fileID: 180352389718400150}
   m_Layer: 0
   m_Name: Spider_Cyan
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2069079120147748783
 Transform:
   m_ObjectHideFlags: 0
@@ -472,7 +472,7 @@ MonoBehaviour:
   IntervalTime: 0.3
   wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
   wolfAttackPatternPhaseTwo: 0100000002000000
-  spiderAttackPatternPhaseOne: 010000000200000003000000
+  spiderAttackPatternPhaseOne: 0800000001000000020000000300000007000000
   spiderAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
   - enemyType: 4
@@ -480,17 +480,20 @@ MonoBehaviour:
     preparationTime: 1
   - enemyType: 4
     attackPatternType: 1
-    preparationTime: 2
+    preparationTime: 1
   - enemyType: 4
     attackPatternType: 2
+    preparationTime: 2
+  - enemyType: 4
+    attackPatternType: 7
     preparationTime: 3
   rangeIndicator: {fileID: 3680253550249829298, guid: 0102c2837d1e2d24abde1827bdfc7545,
     type: 3}
-  AttackPatternTypeAPrefab: {fileID: 6896046466890514737, guid: 6d775c1817efc7240923737e0cdf662b,
+  AttackPatternTypeAPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
     type: 3}
-  AttackPatternTypeBPrefab: {fileID: 107145547354362451, guid: 4fb1d3457f7f0d9469aaa4c1e56a8667,
+  AttackPatternTypeBPrefab: {fileID: 1072892735035267309, guid: 205d7037e6369114cac3dcb658bd313d,
     type: 3}
-  AttackPatternTypeCPrefab: {fileID: 1813953856839064042, guid: 7040f4ce47b7c8d44a938a4b413ba979,
+  AttackPatternTypeCPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
     type: 3}
   AttackPatternTypeDPrefab: {fileID: 3694188551370226324, guid: 688248f3810a55444b5f5ee20a39e8dc,
     type: 3}
@@ -500,13 +503,13 @@ MonoBehaviour:
     type: 3}
   RangeAttackPatternTypeCPrefab: {fileID: 1072892735035267309, guid: 205d7037e6369114cac3dcb658bd313d,
     type: 3}
-  RangeAttackPatternTypeDPrefab: {fileID: 1072892735035267309, guid: 205d7037e6369114cac3dcb658bd313d,
+  RangeAttackPatternTypeDPrefab: {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe,
     type: 3}
   attackPreparationTime: 0.7
   detectRange: 100
   meleeAttackRange: 5
-  rangeAttackRange: 6
-  roarDuration: 2
+  rangeAttackRange: 15
+  roarDuration: 3
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -516,10 +519,20 @@ MonoBehaviour:
   attackGrid: 000000000100000000
   savedPatterns:
   - patternName: MelleAttack_A
-    pattern: 000000000100000000
+    pattern: 000000000000010101
   - patternName: MelleAttack_B
     pattern: 000000000100000000
-  - patternName: MelleAttack_B
+  - patternName: MelleAttack_C
+    pattern: 000100010001000100
+  - patternName: MelleAttack_D
+    pattern: 000000000100000000
+  - patternName: RangeAttack_A
+    pattern: 000000000100000000
+  - patternName: RangeAttack_B
+    pattern: 010001000100010001
+  - patternName: RangeAttack_C
+    pattern: 00000000010000000000
+  - patternName: RangeAttack_D
     pattern: 000000000100000000
 --- !u!114 &5828766048717734968
 MonoBehaviour:
@@ -594,8 +607,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EffectTypeA: {fileID: 0}
-  EffectTypeB: {fileID: 0}
+  EffectTypeA: {fileID: 6886290012110339338, guid: c7ddc2d5c0a3404428ebfd29663352e3,
+    type: 3}
+  EffectTypeB: {fileID: 6886290012110339338, guid: c7ddc2d5c0a3404428ebfd29663352e3,
+    type: 3}
   EffectTypeC: {fileID: 0}
   EffectTypeD: {fileID: 0}
 --- !u!1 &2615956738506003804

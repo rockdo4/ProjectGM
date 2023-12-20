@@ -73,9 +73,19 @@ public class EnemyEffect : MonoBehaviour
                         offset += transform.forward * 2f + transform.up * 1f;
                         break;
 
-                    //case EnemyType.Spider:
-                    //    offset += transform.forward * 3.5f + transform.up * 1f;
-                    //    break;
+                    case EnemyType.Spider:
+
+                        // 1. 셀인스턴스 리스트 받아오기
+                        // 2. 그 위치에 생성하기
+                        // 3. 대기시간 받아오기
+                        // 4. 대기시간만큼 애니메이션 지속시간 늘리기
+
+
+                        //offset += transform.forward * 2f + transform.up * 1f;
+                        break;
+                        //case EnemyType.Spider:
+                        //    offset += transform.forward * 3.5f + transform.up * 1f;
+                        //    break;
                 }
                 break;
 

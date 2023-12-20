@@ -43,7 +43,8 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: Event AnimationIsOver has a time (2.166667) outside
+      the clip's valid range (0.000000..2.166667). It will never be fired
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 1
@@ -81,6 +82,14 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.41160223
+        functionName: AttackEffectA
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 1
         functionName: AnimationIsOver
         data: 
@@ -118,15 +127,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9972826
-        functionName: AnimationIsOver
+      - time: 0.39502764
+        functionName: AttackEffectA
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
+        objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
           type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 1
+      - time: 0.9972826
         functionName: AnimationIsOver
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
@@ -249,11 +258,27 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.42541438
+        functionName: AttackEffectB
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: AnimationIsOver
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 205
     - serializedVersion: 16
       name: walk
       takeName: walk

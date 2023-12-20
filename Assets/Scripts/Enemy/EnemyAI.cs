@@ -761,6 +761,7 @@ public class EnemyAI : LivingObject
             if (preparationTime.enemyType == enemytype && preparationTime.attackPatternType == attackPatternType)
             {
                 specificPreparationTime = preparationTime.preparationTime;
+                CurrentPreparationTime = specificPreparationTime;
                 break;
             }
         }
@@ -1358,18 +1359,44 @@ public class EnemyAI : LivingObject
 
     private void CreatePrefabAtPlayer(GameObject prefab)
     {
-        GameObject createdObject = Instantiate(prefab, detectedPlayer.transform.position + Vector3.up, Quaternion.identity);
+        GameObject createdObject = Instantiate(prefab, detectedPlayer.transform.position + new Vector3(0, 0.015f, 0), Quaternion.identity);
         cellInstances.Add(createdObject);
-
-        //        Instantiate(prefab, detectedPlayer.transform.position + Vector3.up, Quaternion.identity);
     }
 
+    // 원거리 
     private void CreatePrefabsAroundPlayer(GameObject prefab, int count, float radius)
     {
         for (int i = 0; i < count; i++)
         {
-            Vector3 randomPosition = RandomCircle(detectedPlayer.transform.position, radius);
-            Instantiate(prefab, randomPosition, Quaternion.identity);
+            GameObject createdPrefab;
+            Vector3 position;
+
+            if (i == 0)
+            {
+                position = detectedPlayer.transform.position;
+                createdPrefab = Instantiate(prefab, position, Quaternion.identity);
+            }
+            else
+            {
+                position = RandomCircle(detectedPlayer.transform.position, radius);
+                createdPrefab = Instantiate(prefab, position, Quaternion.identity);
+            }
+
+            Vector3 updatedPosition = createdPrefab.transform.position;
+            updatedPosition.y += 0.015f;
+            createdPrefab.transform.position = updatedPosition;
+
+            cellInstances.Add(createdPrefab); // 리스트에 Add 추가 이거 중요함
+
+            //if (i == 0)
+            //{
+            //    Instantiate(prefab, detectedPlayer.transform.position, Quaternion.identity);
+            //}
+            //else
+            //{
+            //    Vector3 randomPosition = RandomCircle(detectedPlayer.transform.position, radius);
+            //    Instantiate(prefab, randomPosition, Quaternion.identity);
+            //}
         }
     }
 

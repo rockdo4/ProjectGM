@@ -762,7 +762,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7379042720375739373
 Transform:
   m_ObjectHideFlags: 0
@@ -826,6 +826,10 @@ MonoBehaviour:
   boarAttackPatternPhaseOne: 0500000006000000010000000200000003000000
   boarAttackPatternPhaseTwo: 0100000002000000030000000500000006000000
   IntervalTime: 0.3
+  wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
+  wolfAttackPatternPhaseTwo: 0100000002000000
+  spiderAttackPatternPhaseOne: 010000000200000003000000
+  spiderAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
   - enemyType: 2
     attackPatternType: 0
@@ -878,8 +882,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   enemyType: 2
-  minAngle: 13
-  rotationSpeed: 10
+  minAngle: 3
+  rotationSpeed: 6
   attackGrid: 000000000100000000
   savedPatterns:
   - patternName: MelleAttack_A
