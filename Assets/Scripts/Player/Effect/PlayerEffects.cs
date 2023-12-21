@@ -11,7 +11,7 @@ public enum PlayerEffectType
     Death
 }
 
-public class PlayerEffects2 : MonoBehaviour
+public class PlayerEffects : MonoBehaviour
 {
     [System.Serializable]
     private class EffectInfo
@@ -24,7 +24,7 @@ public class PlayerEffects2 : MonoBehaviour
     [SerializeField]
     private List<EffectInfo> effectInfos = null;
 
-    private void Awake()
+    private void Start()
     {
         foreach(var info in effectInfos)
         {

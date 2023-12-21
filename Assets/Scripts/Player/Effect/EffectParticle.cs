@@ -16,9 +16,9 @@ public class EffectParticleSystem : Effect
     public override void Init(Transform playerTransform = null)
     {
         targetTransform = playerTransform;
-        particle = Instantiate(prefab.GetComponent<ParticleSystem>());
-        particle.transform.SetParent(targetTransform);
-        particle.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        particle = prefab.GetComponent<ParticleSystem>();
+        //particle.transform.SetParent(targetTransform);
+        //particle.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
 
     public override void PlayStart(Vector3 direction = default)

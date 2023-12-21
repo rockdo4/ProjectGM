@@ -3167,7 +3167,33 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -12
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9082110688406815447, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: outlineTargets.Array.data[0].IsVisible
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9082110688406815447, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: outlineTargets.Array.data[1].IsVisible
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9082110688406815447, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: outlineTargets.Array.data[2].IsVisible
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9082110688406815447, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: outlineTargets.Array.data[3].IsVisible
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9082110688406815447, guid: 171fe1e25acf4a149ba01b146b19fc35,
+        type: 3}
+      propertyPath: outlineTargets.Array.data[4].IsVisible
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8509422310897549379, guid: 171fe1e25acf4a149ba01b146b19fc35, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
