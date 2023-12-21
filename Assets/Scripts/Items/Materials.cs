@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Materials
 {
+    public int id = -1;
     public int count = 0;
     public readonly int Capacity = 99;
-    public int id = -1;
 
     public Materials(int id, int count = 0)
     {

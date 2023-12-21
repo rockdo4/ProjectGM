@@ -1,7 +1,15 @@
-using CsvHelper;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EffectType
+{
+    Evade,
+    JustEvade,
+    Hit,
+    Attack,
+    SuperAttack,
+    Death
+}
 public class PlayerEffects : MonoBehaviour
 {
     [System.Serializable]

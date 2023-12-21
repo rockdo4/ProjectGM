@@ -33,7 +33,8 @@ public class InventoryManager : MonoBehaviour, IRenewal
     [Space(10.0f)]
 
     [Header("스킬코드")]
-    public GameObject skillCodePanel;
+    public SkillCodePanel skillCodePanel;
+    public IconSO skillIconSO;
 
     [Space(10.0f)]
 
@@ -241,6 +242,12 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
         ClearItemButton();
         curType = ItemType.SkillCode;
+
+        var skillcodes = PlayDataManager.data.SkillCodeInventory;
+        foreach (var skillcode in skillcodes) 
+        {
+
+        }
     }
 
     public void ShowMaterials(bool isOn)

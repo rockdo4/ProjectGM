@@ -169,7 +169,7 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
                         PlayDataManager.WearItem(weapon);
                     }
                     PlayDataManager.data.WeaponInventory.Remove(item as Weapon);
-                    PlayDataManager.data.WeaponInventory.Add(weapon);
+                    PlayDataManager.AddItem(weapon);
                     PlayDataManager.Save();
 
                     item = weapon;
@@ -186,7 +186,7 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
                         PlayDataManager.WearItem(armor);
                     }
                     PlayDataManager.data.ArmorInventory.Remove(item as Armor);
-                    PlayDataManager.data.ArmorInventory.Add(armor);
+                    PlayDataManager.AddItem(armor);
                     PlayDataManager.Save();
 
                     item = armor;

@@ -17,8 +17,8 @@ public class GameManager : MonoBehaviour
     private static GameManager m_instance;
 
     public GameObject gameOverUI;
-    public static readonly float gameOverTimeScale = 0f;
-    public static readonly float originalTimeScale = 1f;
+    public static readonly float pauseTimeScale = 0f;
+    private float prevTimeScale = 1f;
     public bool IsGameOver { get; private set; }
 
     private void Awake()
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         gameOverUI.SetActive(true);
-        Time.timeScale = gameOverTimeScale;
+        Time.timeScale = pauseTimeScale;
     }
 
     public void Win(EnemyAI enemy)
@@ -70,7 +70,8 @@ public class GameManager : MonoBehaviour
 
     public void Pause(bool active)
     {
+        prevTimeScale = (Time.timeScale == pauseTimeScale) ? 1f : Time.timeScale;
         gameOverUI.SetActive(active);
-        Time.timeScale = active ? gameOverTimeScale : originalTimeScale;
+        Time.timeScale = active ? pauseTimeScale : prevTimeScale;
     }
 }

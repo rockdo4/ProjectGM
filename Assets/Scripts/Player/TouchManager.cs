@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 
 public class TouchManager : Singleton<TouchManager>
@@ -12,7 +13,7 @@ public class TouchManager : Singleton<TouchManager>
     public bool Swiped { get; private set; }
 
     [Header("홀드 판단 시간")]
-    [SerializeField] private float holdTime = 0.01f;
+    [SerializeField] private float holdTime = 0.02f;
     private float holdTimer = 0f;
 
     [Header("스와이프 판단 시간")]
@@ -20,7 +21,7 @@ public class TouchManager : Singleton<TouchManager>
 
     [Header("스와이프 판정 거리")]
     [Range(0f, 5f)]
-    [SerializeField] private float swipeDistance = 0.5f;
+    [SerializeField] private float swipeDistance = 0.1f;
 
     private Vector2 startPosition;
     private Vector2 endPosition;
@@ -57,7 +58,7 @@ public class TouchManager : Singleton<TouchManager>
 #if UNITY_EDITOR || UNITY_STANDALONE
         if (Input.GetMouseButtonDown(0))
         {
-            startPosition = new Vector2(Input.mousePosition.x , Input.mousePosition.y);
+            startPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             endPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             startTime = Time.time;
         }
@@ -125,32 +126,18 @@ public class TouchManager : Singleton<TouchManager>
                     startPosition = new Vector2(touch.position.x, touch.position.y);
                     endPosition = new Vector2(touch.position.x, touch.position.y);
                     startTime = Time.time;
+                    if (HoldListeners != null)
+                    {
+                        HoldListeners();
+                    }
                 }
                 break;
             case TouchPhase.Moved:
                 {
                     Holded = false;
-                }
-                break;
-            case TouchPhase.Stationary:
-                {
                     if (Swiped)
                     {
                         return;
-                    }
-
-                    if (Holded && HoldListeners != null)
-                    {
-                        HoldListeners();
-                    }
-
-                    if (!Holded)
-                    {
-                        holdTimer += Time.deltaTime;
-                        if (holdTimer >= holdTime)
-                        {
-                            Holded = true;
-                        }
                     }
 
                     if (!Swiped)
@@ -162,6 +149,22 @@ public class TouchManager : Singleton<TouchManager>
                         {
                             SwipeListeners();
                         }
+                    }
+                }
+                break;
+            case TouchPhase.Stationary:
+                {
+                    if (!Holded)
+                    {
+                        holdTimer += Time.deltaTime;
+                        if (holdTimer >= holdTime)
+                        {
+                            Holded = true;
+                        }
+                    }
+                    if (Holded && HoldListeners != null)
+                    {
+                        HoldListeners();
                     }
                 }
                 break;

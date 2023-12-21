@@ -5,6 +5,11 @@ public class PlayerSprintState : PlayerStateBase
     private Animator animator;
     private Vector3 direction = Vector3.forward;
     private AnimationClip animation;
+    private const string triggerName = "Sprint";
+
+    private const float castingTime = 0.05f;
+    private float castingTimer = 0f;
+    private bool isCast = false;
 
     public PlayerSprintState(PlayerController controller) : base(controller)
     {
@@ -13,6 +18,9 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void Enter()
     {
+        castingTimer = 0f;
+        isCast = false;
+
         animator ??= controller.player.Animator;
         animator.speed = controller.player.Stat.globalSpeed.sprintSpeed;
 
@@ -23,11 +31,22 @@ public class PlayerSprintState : PlayerStateBase
         }
 
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
-        controller.player.Animator.SetTrigger("Sprint");
     }
 
     public override void Update()
     {
+        if (!isCast)
+        {
+            castingTimer += Time.deltaTime;
+            if (castingTimer >= castingTime)
+            {
+                controller.player.Animator.SetTrigger(triggerName);
+                controller.player.effects.PlayEffect(PlayerEffectType.Sprint);
+                isCast = true;
+            }
+            return;
+        }
+
         if (!controller.player.Animator.IsInTransition(0))
         {
             animation = controller.player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip;
@@ -36,6 +55,10 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void FixedUpdate()
     {
+        if (!isCast)
+        {
+            return;
+        }
         if (animation == null)
         {
             return;
@@ -52,6 +75,7 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void Exit()
     {
+        controller.player.effects.StopEffect(PlayerEffectType.Sprint);
         controller.player.Animator.ResetTrigger("Sprint");
     }
 

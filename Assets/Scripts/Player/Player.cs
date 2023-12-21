@@ -28,7 +28,7 @@ public class Player : LivingObject
     public WeaponPrefab CurrentWeapon { get; set; }
     public WeaponPrefab FakeWeapon { get; set; }
 
-    public PlayerEffects effects { get; private set; }
+    public PlayerEffects2 effects { get; private set; }
 
     public float MoveDistance
     {
@@ -72,7 +72,7 @@ public class Player : LivingObject
     {
         get
         {
-            return GetComponent<PlayerController>().currentState;
+            return GetComponent<PlayerController>().CurrentState;
         }
     }
 
@@ -83,7 +83,7 @@ public class Player : LivingObject
         Colldier = GetComponent<BoxCollider>();
         Animator = GetComponent<Animator>();
         virtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
-        effects = GetComponent<PlayerEffects>();
+        effects = GetComponent<PlayerEffects2>();
     }
 
     private void Start()
