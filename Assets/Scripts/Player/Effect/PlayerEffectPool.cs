@@ -8,7 +8,7 @@ public class PlayerEffectPool : MonoBehaviour
     [System.Serializable]
     private class EffectInfo
     {
-        public EffectType effectType;
+        public PlayerEffectType effectType;
         public ParticleSystem effectPrefab;
         public int defaultCount = 1;
     }
@@ -16,7 +16,7 @@ public class PlayerEffectPool : MonoBehaviour
     [Header("이펙트 타입, 이펙트, 초기 생성 수")]
     [SerializeField]
     private EffectInfo[] effectInfos = null;
-    private Dictionary<EffectType, ObjectPool<ParticleSystem>> poolDictionary = new Dictionary<EffectType, ObjectPool<ParticleSystem>>();
+    private Dictionary<PlayerEffectType, ObjectPool<ParticleSystem>> poolDictionary = new Dictionary<PlayerEffectType, ObjectPool<ParticleSystem>>();
     private Rigidbody rigid;
 
     private void Awake()
@@ -39,7 +39,7 @@ public class PlayerEffectPool : MonoBehaviour
         Debug.Log("......Complete");
     }
 
-    private ParticleSystem CreateEffect(EffectType effectType, ParticleSystem prefab)
+    private ParticleSystem CreateEffect(PlayerEffectType effectType, ParticleSystem prefab)
     {
         var effect = Instantiate(prefab);        
         effect.transform.SetParent(transform);
@@ -68,7 +68,7 @@ public class PlayerEffectPool : MonoBehaviour
         return;
     }
 
-    public void PlayEffect(EffectType type, Vector3 direction = default)
+    public void PlayEffect(PlayerEffectType type, Vector3 direction = default)
     {
         if (!poolDictionary.ContainsKey(type))
         {

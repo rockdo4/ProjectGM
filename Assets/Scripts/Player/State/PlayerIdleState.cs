@@ -12,8 +12,8 @@ public class PlayerIdleState : PlayerStateBase
         //controller.player.Animator.Play("Idle");
         if (controller.nextState != PlayerController.State.Idle)
         {
-            controller.SetState(controller.nextState);
-            controller.nextState = PlayerController.State.Idle;
+            //controller.SetState(controller.nextState);
+            //controller.nextState = PlayerController.State.Idle;
         }
     }
 
