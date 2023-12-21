@@ -822,6 +822,9 @@ MonoBehaviour:
     type: 3}
   EffectTypeD: {fileID: 4834312597282954250, guid: aabf9be139702254a8599f5de5bb1f16,
     type: 3}
+  EffectTypeRA: {fileID: 0}
+  EffectTypeRB: {fileID: 0}
+  EffectTypeRC: {fileID: 0}
 --- !u!114 &5173913202025656138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -843,7 +846,7 @@ MonoBehaviour:
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
   alienAttackPatternPhaseOne: 0100000002000000
   alienAttackPatternPhaseTwo: 010000000200000003000000
-  boarAttackPatternPhaseOne: 030000000200000001000000
+  boarAttackPatternPhaseOne: 01000000
   boarAttackPatternPhaseTwo: 0100000002000000030000000500000006000000
   IntervalTime: 0.3
   wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
@@ -902,6 +905,7 @@ MonoBehaviour:
   enemyType: 2
   minAngle: 3
   rotationSpeed: 6
+  detectedPlayer: {fileID: 0}
   attackGrid: 000000000100000000
   savedPatterns:
   - patternName: MelleAttack_A
@@ -977,7 +981,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.92
+  m_Radius: 1.1
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0.58, z: -0.00000008940697}

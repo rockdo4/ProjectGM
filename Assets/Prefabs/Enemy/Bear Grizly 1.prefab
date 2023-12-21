@@ -115,7 +115,8 @@ MonoBehaviour:
     type: 3}
   EffectTypeD: {fileID: 5314878214040996902, guid: 68883ff3e3f89354e80155533509777d,
     type: 3}
-  EffectTypeRA: {fileID: 0}
+  EffectTypeRA: {fileID: 41020541219441282, guid: fd51fe26d430ce544828b00933fdf4ab,
+    type: 3}
   EffectTypeRB: {fileID: 0}
   EffectTypeRC: {fileID: 0}
 --- !u!114 &6787471056299916835
@@ -161,7 +162,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  bearAttackPatternPhaseOne: 01000000020000000300000004000000
+  bearAttackPatternPhaseOne: 05000000
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
   alienAttackPatternPhaseOne: 0100000002000000
   alienAttackPatternPhaseTwo: 010000000200000003000000
@@ -192,10 +193,10 @@ MonoBehaviour:
     attackPatternType: 5
     preparationTime: 2
   - enemyType: 0
-    attackPatternType: 4
+    attackPatternType: 6
     preparationTime: 2
   - enemyType: 0
-    attackPatternType: 4
+    attackPatternType: 7
     preparationTime: 2
   - enemyType: 0
     attackPatternType: 4
@@ -220,7 +221,7 @@ MonoBehaviour:
   attackPreparationTime: 0.5
   detectRange: 100
   meleeAttackRange: 5
-  rangeAttackRange: 6
+  rangeAttackRange: 15
   roarDuration: 3
   playerLayerMask:
     serializedVersion: 2
@@ -228,6 +229,7 @@ MonoBehaviour:
   enemyType: 0
   minAngle: 3
   rotationSpeed: 6
+  detectedPlayer: {fileID: 0}
   attackGrid: 000000000100000000
   savedPatterns:
   - patternName: MelleAttack_A
@@ -238,6 +240,18 @@ MonoBehaviour:
     pattern: 000000000100000000
   - patternName: MelleAttack_D
     pattern: 000000000100000000
+  - patternName: MelleAttack_E
+    pattern: 000000000000000100
+  - patternName: MelleAttack_F
+    pattern: 000000000000000100
+  - patternName: RangeAttack_A
+    pattern: 000000000000000100
+  - patternName: RangeAttack_B
+    pattern: 000000000000000100
+  - patternName: RangeAttack_C
+    pattern: 000000000000000100
+  - patternName: RangeAttack_D
+    pattern: 000000000000000100
 --- !u!114 &5956209694159090163
 MonoBehaviour:
   m_ObjectHideFlags: 0

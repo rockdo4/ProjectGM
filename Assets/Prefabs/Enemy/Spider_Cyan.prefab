@@ -407,7 +407,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2069079120147748783
 Transform:
   m_ObjectHideFlags: 0
@@ -471,8 +471,8 @@ MonoBehaviour:
   boarAttackPatternPhaseTwo: 0100000002000000030000000500000006000000
   IntervalTime: 0.3
   wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
-  wolfAttackPatternPhaseTwo: 0100000002000000
-  spiderAttackPatternPhaseOne: 0800000001000000020000000300000007000000
+  wolfAttackPatternPhaseTwo: 07000000080000000100000002000000
+  spiderAttackPatternPhaseOne: 01000000020000000700000008000000
   spiderAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
   - enemyType: 4
@@ -487,8 +487,6 @@ MonoBehaviour:
   - enemyType: 4
     attackPatternType: 7
     preparationTime: 3
-  rangeIndicator: {fileID: 3680253550249829298, guid: 0102c2837d1e2d24abde1827bdfc7545,
-    type: 3}
   AttackPatternTypeAPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
     type: 3}
   AttackPatternTypeBPrefab: {fileID: 1072892735035267309, guid: 205d7037e6369114cac3dcb658bd313d,
@@ -501,7 +499,7 @@ MonoBehaviour:
     type: 3}
   RangeAttackPatternTypeBPrefab: {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3,
     type: 3}
-  RangeAttackPatternTypeCPrefab: {fileID: 1072892735035267309, guid: 205d7037e6369114cac3dcb658bd313d,
+  RangeAttackPatternTypeCPrefab: {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe,
     type: 3}
   RangeAttackPatternTypeDPrefab: {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe,
     type: 3}
@@ -516,12 +514,13 @@ MonoBehaviour:
   enemyType: 4
   minAngle: 3
   rotationSpeed: 6
+  detectedPlayer: {fileID: 0}
   attackGrid: 000000000100000000
   savedPatterns:
   - patternName: MelleAttack_A
     pattern: 000000000000010101
   - patternName: MelleAttack_B
-    pattern: 000000000100000000
+    pattern: 010101010001010101
   - patternName: MelleAttack_C
     pattern: 000100010001000100
   - patternName: MelleAttack_D
@@ -611,8 +610,12 @@ MonoBehaviour:
     type: 3}
   EffectTypeB: {fileID: 6886290012110339338, guid: c7ddc2d5c0a3404428ebfd29663352e3,
     type: 3}
-  EffectTypeC: {fileID: 0}
+  EffectTypeC: {fileID: 6886290012110339338, guid: c7ddc2d5c0a3404428ebfd29663352e3,
+    type: 3}
   EffectTypeD: {fileID: 0}
+  EffectTypeRA: {fileID: 0}
+  EffectTypeRB: {fileID: 0}
+  EffectTypeRC: {fileID: 0}
 --- !u!1 &2615956738506003804
 GameObject:
   m_ObjectHideFlags: 0
