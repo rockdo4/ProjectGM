@@ -58,8 +58,8 @@ public class PlayerTestLog : MonoBehaviour
     {
         evadeUI.GetComponentsInChildren<TextMeshProUGUI>()[1].text = player.evadeTimer switch
         {
-            float x when (player.GetComponent<PlayerController>().currentState == PlayerController.State.Evade && x < player.Stat.justEvadeTime) => "<color=green>저스트 회피</color>",
-            float x when (player.GetComponent<PlayerController>().currentState == PlayerController.State.Evade && x >= player.Stat.justEvadeTime && x < player.Stat.evadeTime) => "<color=yellow>일반 회피</color>",
+            float x when (player.GetComponent<PlayerController>().CurrentState == PlayerController.State.Evade && x < player.Stat.justEvadeTime) => "<color=green>저스트 회피</color>",
+            float x when (player.GetComponent<PlayerController>().CurrentState == PlayerController.State.Evade && x >= player.Stat.justEvadeTime && x < player.Stat.evadeTime) => "<color=yellow>일반 회피</color>",
             _ => "<color=red>통상</color>"
         };
         evadePointUI.GetComponentsInChildren<TextMeshProUGUI>()[1].text = player.GroggyAttack switch
@@ -78,7 +78,7 @@ public class PlayerTestLog : MonoBehaviour
     }
     private void StateAction()
     {
-        stateUI.GetComponentsInChildren<TextMeshProUGUI>()[1].text = player.GetComponent<PlayerController>().currentState switch
+        stateUI.GetComponentsInChildren<TextMeshProUGUI>()[1].text = player.GetComponent<PlayerController>().CurrentState switch
         {
             PlayerController.State.Death => $"<color=red>죽음</color>",
             PlayerController.State.Hit => $"<color=red>피격</color>",
@@ -93,7 +93,7 @@ public class PlayerTestLog : MonoBehaviour
 
     private void AttackAction()
     {
-        if (player.GetComponent<PlayerController>().currentState != PlayerController.State.Attack)
+        if (player.GetComponent<PlayerController>().CurrentState != PlayerController.State.Attack)
         {
             attackUI.GetComponentsInChildren<TextMeshProUGUI>()[1].text = $"<color=white>공격 아님</color>";
             return;

@@ -24,6 +24,15 @@ public class PlayerStat : Stat
     [SerializeField]
     public GlobalAnimationSpeed globalSpeed;
 
+    [Header("좌우 회피 거리")]
+    public float leftRightEvadeDistance = 2f;
+
+    [Header("전후 회피 거리")]
+    public float frontBackEvadeDistance = 2f;
+
+    [Header("접근 거리")]
+    public float moveDistance = 2f;
+
     [Header("회피 판정 시간(sec)")]
     public float evadeTime;
 

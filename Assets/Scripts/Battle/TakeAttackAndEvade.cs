@@ -62,7 +62,7 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
     
     private void EvadeCheck()
     {
-        if (player.GetComponent<PlayerController>().currentState != PlayerController.State.Evade)
+        if (player.GetComponent<PlayerController>().CurrentState != PlayerController.State.Evade)
         {
             evade = EvadeSuccesss.None;
             return;

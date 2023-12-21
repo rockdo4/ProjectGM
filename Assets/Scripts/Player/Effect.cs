@@ -6,7 +6,7 @@ public abstract class Effect : MonoBehaviour
     [Header("이펙트 유지 시간")]
     [Tooltip("파티클 시스템은 무시")]
     [SerializeField]
-    private float duration;
+    public float duration;
     [Header("이펙트 오브젝트")]
     public GameObject prefab;
     //[Header("이펙트 강제 중지 여부")]
@@ -14,11 +14,11 @@ public abstract class Effect : MonoBehaviour
     //public bool useForceStop = false; // 생각안남...
 
     private float timer = 0f;
-    private bool isPlay = false;
+    public bool IsPlay { get; protected set; } = false;
 
     protected virtual void Update()
     {
-        if (!isPlay)
+        if (!IsPlay)
         {
             return;
         }
@@ -31,13 +31,13 @@ public abstract class Effect : MonoBehaviour
 
     public virtual void PlayEnd()
     {
-        gameObject.SetActive(isPlay = false);
+        gameObject.SetActive(IsPlay = false);
     }
 
     public virtual void PlayStart(Vector3 direction = default)
     {
         timer = 0f;
-        gameObject.SetActive(isPlay = true);
+        gameObject.SetActive(IsPlay = true);
     }
 
     public abstract void Init(Transform targetTransform = null);

@@ -1,21 +1,22 @@
+using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Player Animation SO")]
 public class PlayerAnimationSO : ScriptableObject
 {
     [Header("톤파 애니메이션")]
-    public AnimatorOverrideController anim_Tonpa;
+    public AnimatorController anim_Tonpa;
 
     [Header("대검 애니메이션")]
-    public AnimatorOverrideController anim_Two_Hand_Sword;
+    public AnimatorController anim_Two_Hand_Sword;
 
     [Header("한손검 애니메이션")]
-    public AnimatorOverrideController anim_One_Hand_Sword;
+    public AnimatorController anim_One_Hand_Sword;
 
     [Header("창 애니메이션")]
-    public AnimatorOverrideController anim_Spear;
+    public AnimatorController anim_Spear;
 
-    public AnimatorOverrideController GetAnimator(int id)
+    public AnimatorController GetAnimator(int id)
     {
         var table = CsvTableMgr.GetTable<WeaponTable>().dataTable;
         switch (table[id].type)
