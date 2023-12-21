@@ -25,7 +25,7 @@ public class SkillCodePanel : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI countText;
 
-    private SkillCode skillcode;
+    private SkillCode skillcode = null;
 
     public void SetSkillCode(SkillCode skillcode)
     {

@@ -459,23 +459,30 @@ public static class PlayDataManager
         var count = 0;
         foreach (var armor in curArmor)
         {
-            count += table[armor.Value.id].socket;
+            if (armor.Value != null)
+            {
+                count += table[armor.Value.id].socket;
+            }
         }
         return count;
     }
 
-    public static void EquipSkillCode(SkillCode code)
+    public static bool EquipSkillCode(SkillCode code)
     {
         if (code == null || 
             data.SkillCodes.Count + 1 > GetSocket() || 
             !IsExistItem(code) || 
             code.count - 1 <= 0)
         {
-            return;
+            return false;
         }
 
         data.SkillCodes.Add(code.id);
         DecreaseCode(code, 1);
+
+        data.SkillCodes.Sort();
+
+        return true;
     }
 
     public static void UnEquipSkillCode(int id)
@@ -487,5 +494,7 @@ public static class PlayDataManager
 
         data.SkillCodes.Remove(id);
         IncreaseCode(id, 1);
+
+        data.SkillCodes.Sort();
     }
 }
