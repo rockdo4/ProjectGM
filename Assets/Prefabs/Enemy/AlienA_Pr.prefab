@@ -299,20 +299,19 @@ GameObject:
   m_Component:
   - component: {fileID: 471950779080328446}
   - component: {fileID: 1100120610399420234}
+  - component: {fileID: 2338584616778913031}
   - component: {fileID: 316072021794067186}
   - component: {fileID: 7664864199940454479}
   - component: {fileID: 2499598893110829909}
   - component: {fileID: 4220553688828604778}
   - component: {fileID: 5933566281014549517}
-  - component: {fileID: 2338584616778913031}
-  - component: {fileID: 5581083528160344810}
   m_Layer: 6
   m_Name: AlienA_Pr
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &471950779080328446
 Transform:
   m_ObjectHideFlags: 0
@@ -343,7 +342,7 @@ Animator:
   m_Controller: {fileID: 22100000, guid: 6159149ff391c094a8bf193aed536a7a, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -351,6 +350,28 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2338584616778913031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992872293614820932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTypeA: {fileID: 6310052549181491267, guid: f19a3fe80ac98bc48b39d86e83bb8b1e,
+    type: 3}
+  EffectTypeB: {fileID: 682603337115267339, guid: 82c04724857849d4fbd0225e0a4a69e4,
+    type: 3}
+  EffectTypeC: {fileID: 682603337115267339, guid: 82c04724857849d4fbd0225e0a4a69e4,
+    type: 3}
+  EffectTypeD: {fileID: 0}
+  EffectTypeRA: {fileID: 0}
+  EffectTypeRB: {fileID: 0}
+  EffectTypeRC: {fileID: 0}
 --- !u!114 &316072021794067186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,8 +391,8 @@ MonoBehaviour:
       m_Calls: []
   bearAttackPatternPhaseOne: 0400000003000000
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
-  alienAttackPatternPhaseOne: 04000000030000000200000001000000
-  alienAttackPatternPhaseTwo: 010000000200000003000000
+  alienAttackPatternPhaseOne: 0100000002000000020000000300000004000000
+  alienAttackPatternPhaseTwo: 020000000100000002000000020000000300000004000000
   boarAttackPatternPhaseOne: 08000000
   boarAttackPatternPhaseTwo: 010000000200000003000000
   IntervalTime: 0.15
@@ -382,23 +403,23 @@ MonoBehaviour:
   attackPreparationTimes:
   - enemyType: 1
     attackPatternType: 0
-    preparationTime: 2
+    preparationTime: 1.5
   - enemyType: 1
     attackPatternType: 1
-    preparationTime: 2
+    preparationTime: 0.8
   - enemyType: 1
     attackPatternType: 2
-    preparationTime: 2
+    preparationTime: 2.5
   - enemyType: 1
     attackPatternType: 3
     preparationTime: 2
-  AttackPatternTypeAPrefab: {fileID: 5073490652078658777, guid: bb39c65592ede994dac151a2588b960b,
+  AttackPatternTypeAPrefab: {fileID: 5106138004218964188, guid: cd81cf52c0f5545479a4949c598a3f92,
     type: 3}
-  AttackPatternTypeBPrefab: {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f,
+  AttackPatternTypeBPrefab: {fileID: 4478600404576023960, guid: 1c50f528017682241b179aaa96b72930,
     type: 3}
   AttackPatternTypeCPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
     type: 3}
-  AttackPatternTypeDPrefab: {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe,
+  AttackPatternTypeDPrefab: {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433,
     type: 3}
   RangeAttackPatternTypeAPrefab: {fileID: 0}
   RangeAttackPatternTypeBPrefab: {fileID: 0}
@@ -406,7 +427,7 @@ MonoBehaviour:
   RangeAttackPatternTypeDPrefab: {fileID: 0}
   attackPreparationTime: 0.7
   detectRange: 100
-  meleeAttackRange: 3
+  meleeAttackRange: 4
   rangeAttackRange: 6
   roarDuration: 3
   playerLayerMask:
@@ -414,7 +435,7 @@ MonoBehaviour:
     m_Bits: 8
   enemyType: 1
   minAngle: 3
-  rotationSpeed: 6
+  rotationSpeed: 7
   detectedPlayer: {fileID: 0}
   attackGrid: 000100010001000100
   savedPatterns:
@@ -424,6 +445,18 @@ MonoBehaviour:
     pattern: 000000000100000000
   - patternName: MelleAttack_C
     pattern: 000100010001000100
+  - patternName: MelleAttack_D
+    pattern: 000000000000010101
+  - patternName: MelleAttack_D
+    pattern: 000000000000010101
+  - patternName: MelleAttack_D
+    pattern: 000000000000010101
+  - patternName: MelleAttack_D
+    pattern: 000000000000010101
+  - patternName: MelleAttack_D
+    pattern: 000000000000010101
+  - patternName: MelleAttack_D
+    pattern: 000000000000010101
   - patternName: MelleAttack_D
     pattern: 000000000000010101
 --- !u!114 &7664864199940454479
@@ -483,60 +516,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.04
+  m_Radius: 0.96
   m_Height: 2.2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2338584616778913031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 992872293614820932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTypeA: {fileID: 6310052549181491267, guid: f19a3fe80ac98bc48b39d86e83bb8b1e,
-    type: 3}
-  EffectTypeB: {fileID: 7607187682346851089, guid: 65e6794c5fd3e4f4e94d0e55e6eb1498,
-    type: 3}
-  EffectTypeC: {fileID: 7607187682346851089, guid: 65e6794c5fd3e4f4e94d0e55e6eb1498,
-    type: 3}
-  EffectTypeD: {fileID: 7607187682346851089, guid: 65e6794c5fd3e4f4e94d0e55e6eb1498,
-    type: 3}
-  EffectTypeRA: {fileID: 0}
-  EffectTypeRB: {fileID: 0}
-  EffectTypeRC: {fileID: 0}
---- !u!54 &5581083528160344810
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 992872293614820932}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &1181045230853615107
 GameObject:
   m_ObjectHideFlags: 0

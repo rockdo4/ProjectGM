@@ -833,6 +833,8 @@ public class EnemyAI : LivingObject
                     return new Vector3(0f, 0f, -2f); // 세모위치 조정 에일리언 B패턴임
                 case AttackPatternType.C:
                     return Vector3.zero;
+                //case AttackPatternType.D:
+                //    return new Vector3(0f, 0f, -24f);
                 default: return Vector3.zero;
             }
         }
