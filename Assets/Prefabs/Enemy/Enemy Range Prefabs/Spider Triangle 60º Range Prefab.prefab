@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &107145547354362451
+--- !u!1 &1835696886489494526
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1283962342603182264}
-  - component: {fileID: 4831697006934007852}
-  - component: {fileID: 987705389451238223}
-  - component: {fileID: 4526065426013460659}
-  - component: {fileID: 9107369798672936116}
+  - component: {fileID: 6889216412011339773}
+  - component: {fileID: 3365245766884456410}
+  - component: {fileID: 8203813979898143080}
+  - component: {fileID: 7763248593417799164}
+  - component: {fileID: 7364696657400801304}
   m_Layer: 0
-  m_Name: "Wolf Division 60\xBA Range Prefab_B"
+  m_Name: "Spider Triangle 60\xBA Range Prefab"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1283962342603182264
+--- !u!4 &6889216412011339773
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 107145547354362451}
+  m_GameObject: {fileID: 1835696886489494526}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.08, y: 1.81, z: 6.910972}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13.08, y: 1.8100001, z: 6.9109726}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4831697006934007852
+--- !u!33 &3365245766884456410
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 107145547354362451}
+  m_GameObject: {fileID: 1835696886489494526}
   m_Mesh: {fileID: 0}
---- !u!23 &987705389451238223
+--- !u!23 &8203813979898143080
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 107145547354362451}
+  m_GameObject: {fileID: 1835696886489494526}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
@@ -85,32 +85,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4526065426013460659
+--- !u!114 &7763248593417799164
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 107145547354362451}
+  m_GameObject: {fileID: 1835696886489494526}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5bd55fee962b6c44b525ceadaf609ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 2.5
+  radius: 5
   angle: 60
-  segments: 20
+  segments: 1
   wifiSegments: 1
   centerPoint: {x: 0, y: 0, z: 0}
   sharedMesh: {fileID: 0}
   enemyAi: {fileID: 0}
---- !u!64 &9107369798672936116
+--- !u!64 &7364696657400801304
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 107145547354362451}
+  m_GameObject: {fileID: 1835696886489494526}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

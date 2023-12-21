@@ -7,6 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : LivingObject
 {
+   
+
     [Header("곰 페이즈1 공격 패턴")]
     public int[] bearAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
 
@@ -51,6 +53,7 @@ public class EnemyAI : LivingObject
     private int EnemyRangedAttackIndexTwo = 7;
     private int EnemyRangedAttackIndexThree = 8;
     private int EnemyRangedAttackIndexFour = 9;
+
 
     
 
@@ -843,7 +846,7 @@ public class EnemyAI : LivingObject
                 case AttackPatternType.B:
                     return new Vector3(0f, 0f, -2f);
                 case AttackPatternType.C:
-                    return new Vector3(0f, 0f, -8f);
+                    return new Vector3(0f, 0f, -5f);
                 //case AttackPatternType.RangeA:
                 //    return new Vector3(0f, -4f, -4f);
                 default: return Vector3.zero;
@@ -855,7 +858,7 @@ public class EnemyAI : LivingObject
             switch (AttackPatternType)
             {
                 case AttackPatternType.A:
-                    return new Vector3(0f, 0f, -2f);
+                    return new Vector3(0f, 0f, -5f);
                 case AttackPatternType.B:
                     return new Vector3(0f, 0f, -2f);
                 default: return Vector3.zero;
@@ -959,8 +962,6 @@ public class EnemyAI : LivingObject
             }
             colliderObjects.Clear();
 
-            
-
             AttackPattern currentPattern = null;
             
 
@@ -981,30 +982,6 @@ public class EnemyAI : LivingObject
             Vector3 cellSize = fanShape.Return();
             Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
 
-            //if (currentPattern != null)
-            //{
-            //    cellInstances.Clear(); // 리스트 초기화
-            //    fanShape = attackRangeInstance.GetComponent<FanShape>();
-            //    fanShape.enemyAi = this;
-            //    Vector3 cellSize = fanShape.Return();
-            //    Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
-
-            //    for (int i = 0; i < currentPattern.pattern.Length; i++)
-            //    {
-            //        if (currentPattern.pattern[i])
-            //        {
-            //            // 패턴에 따른 처리
-            //        }
-            //    }
-            //}
-            //cellInstances.Clear(); // 리스트 초기화
-            //fanShape = attackRangeInstance.GetComponent<FanShape>();
-            //fanShape.enemyAi = this; // 대기시간 넣어야 돼서 추가
-            //Vector3 cellSize = fanShape.Return(); // 부채꼴의 크기를 Vector3로 받음
-
-            //Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
-            //Vector3 centerPointLocal = fanShape.GetCenterPoint();
-            //Vector3 centerPointWorld = attackRangeInstance.transform.TransformPoint(centerPointLocal);
 
             for (int i = 0; i < currentPattern.pattern.Length; i++)
             {
@@ -1064,7 +1041,6 @@ public class EnemyAI : LivingObject
                     }
 
                     // 와일드 보어
-
                     else if (enemyType == EnemyType.Boar && AttackPatternType == AttackPatternType.A)
                     {
                         Vector3 directionToMonster = (transform.position - cellPosition).normalized;
@@ -1106,7 +1082,7 @@ public class EnemyAI : LivingObject
                         additionalOffset = new Vector3(1.6f, 0f, 2.6f);
                     }
 
-                    if (enemyType == EnemyType.Bear && AttackPatternType == AttackPatternType.B || AttackPatternType == AttackPatternType.C)
+                    if (enemyType == EnemyType.Bear && AttackPatternType == AttackPatternType.B || AttackPatternType == AttackPatternType.C || AttackPatternType == AttackPatternType.D)
                     {
                         additionalOffset = new Vector3(0f, 0f, 2f);
                     }
@@ -1114,7 +1090,7 @@ public class EnemyAI : LivingObject
                     // 늑대 콜라이더 오프셋
                     if (enemyType == EnemyType.Wolf && AttackPatternType == AttackPatternType.A)
                     {
-                        additionalOffset = new Vector3(1.9f, 0f, 1.1f);
+                        additionalOffset = new Vector3(0.7f, 0f, 0.4f);
                     }
 
                     if (enemyType == EnemyType.Wolf && AttackPatternType == AttackPatternType.B)
@@ -1155,7 +1131,7 @@ public class EnemyAI : LivingObject
                     {
                         Vector3 currentSize = collider.size;
                         collider.size = new Vector3(currentSize.x * 0.3f, currentSize.y, currentSize.z * 0.08f);
-                        additionalOffset = new Vector3(7f, 0, 0.7f);
+                        additionalOffset = new Vector3(6f, 0, 0.6f);
                     }
 
                     if (enemyType == EnemyType.Boar && AttackPatternType == AttackPatternType.C)

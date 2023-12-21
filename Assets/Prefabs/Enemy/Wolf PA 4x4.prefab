@@ -431,6 +431,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1292088765343267446}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ebf50a980a75076449f6c88bc720cf48,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1182414396333622413}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
@@ -448,10 +452,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5368899338333650167}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ebf50a980a75076449f6c88bc720cf48,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1292088765343267446}
   m_SourcePrefab: {fileID: 100100000, guid: ebf50a980a75076449f6c88bc720cf48, type: 3}
 --- !u!1 &3389897594519030041 stripped
 GameObject:
@@ -459,6 +459,27 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2578939944589276232}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1292088765343267446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3389897594519030041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTypeA: {fileID: 5694260570021509608, guid: 15402837011f45b4b981f4653ae654b4,
+    type: 3}
+  EffectTypeB: {fileID: 4518455575690605030, guid: 9871184f529f9df49b9a405ba5dd25fc,
+    type: 3}
+  EffectTypeC: {fileID: 0}
+  EffectTypeD: {fileID: 0}
+  EffectTypeRA: {fileID: 0}
+  EffectTypeRB: {fileID: 0}
+  EffectTypeRC: {fileID: 0}
 --- !u!114 &1182414396333622413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,18 +504,18 @@ MonoBehaviour:
   boarAttackPatternPhaseOne: 0500000006000000010000000200000003000000
   boarAttackPatternPhaseTwo: 0100000002000000030000000500000006000000
   IntervalTime: 0.3
-  wolfAttackPatternPhaseOne: 0100000002000000
-  wolfAttackPatternPhaseTwo: 0100000002000000
+  wolfAttackPatternPhaseOne: 010000000100000002000000
+  wolfAttackPatternPhaseTwo: 0200000001000000010000000200000001000000
   spiderAttackPatternPhaseOne: 010000000200000003000000
   spiderAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
   - enemyType: 3
     attackPatternType: 0
-    preparationTime: 1
+    preparationTime: 0.7
   - enemyType: 3
     attackPatternType: 1
-    preparationTime: 2
-  AttackPatternTypeAPrefab: {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe,
+    preparationTime: 2.2
+  AttackPatternTypeAPrefab: {fileID: 62629442425054540, guid: 09faef9d342e3a84dbe680ff6289292b,
     type: 3}
   AttackPatternTypeBPrefab: {fileID: 107145547354362451, guid: 4fb1d3457f7f0d9469aaa4c1e56a8667,
     type: 3}
@@ -512,7 +533,7 @@ MonoBehaviour:
     type: 3}
   attackPreparationTime: 0.7
   detectRange: 100
-  meleeAttackRange: 5
+  meleeAttackRange: 4.5
   rangeAttackRange: 6
   roarDuration: 2
   playerLayerMask:
@@ -585,28 +606,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.1
+  m_Radius: 0.77
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0.58, z: -0.00000008940697}
---- !u!114 &1292088765343267446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3389897594519030041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTypeA: {fileID: 5694260570021509608, guid: 15402837011f45b4b981f4653ae654b4,
-    type: 3}
-  EffectTypeB: {fileID: 4518455575690605030, guid: 9871184f529f9df49b9a405ba5dd25fc,
-    type: 3}
-  EffectTypeC: {fileID: 0}
-  EffectTypeD: {fileID: 0}
-  EffectTypeRA: {fileID: 0}
-  EffectTypeRB: {fileID: 0}
-  EffectTypeRC: {fileID: 0}

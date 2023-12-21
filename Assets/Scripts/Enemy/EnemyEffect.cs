@@ -56,7 +56,7 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case EnemyType.Wolf:
-                        offset += transform.forward * 4.5f + transform.up * 1f;
+                        offset += transform.forward * 4.5f + transform.up * 0.1f;
                         break;
                 }
                 break;
@@ -74,7 +74,7 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case EnemyType.Boar:
-                        offset += transform.forward * 8f + transform.up * 1f;
+                        offset += transform.forward * 3f + transform.up * 1f;
                         break;
 
                     case EnemyType.Wolf:
@@ -110,7 +110,7 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case EnemyType.Boar:
-                        offset += transform.forward * 6f + transform.up * 1f;
+                        offset += transform.forward * 5f + transform.up * 1f;
                         break;
                 }
                 break;
@@ -182,13 +182,15 @@ public class EnemyEffect : MonoBehaviour
     {
         EffectEnemyType("RA");
 
-        if (EffectTypeD != null)
+        if (EffectTypeRA != null)
         {
             GameObject effectInstance = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation);
             Rigidbody rb = effectInstance.GetComponent<Rigidbody>();
             Vector3 forceDirection = (enemyAi.detectedPlayer.position - transform.position).normalized; // 플레이어 방향으로 힘을 가합니다.
-            float forceMagnitude = 20f;
+            float forceMagnitude = 10f;
             rb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
+
+            effectInstance.GetComponent<EnemyProjectile>().enemyAi = enemyAi;
 
             DestroyEffect(effectInstance);
         }
