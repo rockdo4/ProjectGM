@@ -257,25 +257,7 @@ public class PlayerController : MonoBehaviour
         Attack attack = player.Stat.CreateAttack(attacker, defender, player.GroggyAttack);
         var attackables = defender.GetComponents<IAttackable>();
 
-        Handheld.Vibrate();
-
-        //List<UnityEngine.XR.InputDevice> devices = new List<UnityEngine.XR.InputDevice>();
-        //UnityEngine.XR.InputDevices.GetDevicesWithCharacteristics(UnityEngine.XR.InputDeviceCharacteristics.Right, devices);
-
-        //foreach (var device in devices)
-        //{
-        //    UnityEngine.XR.HapticCapabilities capabilities;
-        //    if (device.TryGetHapticCapabilities(out capabilities))
-        //    {
-        //        if (capabilities.supportsImpulse)
-        //        {
-        //            uint channel = 0;
-        //            float amplitude = 0.5f;
-        //            float duration = 1.0f;
-        //            device.SendHapticImpulse(channel, amplitude, duration);
-        //        }
-        //    }
-        //}
+        player.effects.PlayEffect(PlayerEffectType.Attack);
 
         foreach (var attackable in attackables)
         {
