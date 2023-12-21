@@ -25,7 +25,7 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
 
     [Header("잠금버튼 프리팹")]
     [SerializeField]
-    private GameObject lockPrefab;
+    private LockerButton lockPrefab;
 
     [Header("스킬코드 장착 패널")]
     [SerializeField]
@@ -34,10 +34,10 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
     private ObjectPool<ItemButton> buttonPool;
     private List<ItemButton> releaseList = new List<ItemButton>();
 
-    private ObjectPool<GameObject> lockPool;
-    private List<GameObject> lockList = new List<GameObject>();
+    private ObjectPool<LockerButton> lockPool;
+    private List<LockerButton> lockList = new List<LockerButton>();
 
-    private void Start()
+    private void Awake()
     {
         buttonPool = new ObjectPool<ItemButton>
             (() => // createFunc
@@ -60,22 +60,22 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
                 button.gameObject.SetActive(false);
             });
 
-        lockPool = new ObjectPool<GameObject>
+        lockPool = new ObjectPool<LockerButton>
             (() => // createFunc
             {
                 var go = Instantiate(lockPrefab, equipContent.transform);
-                go.SetActive(false);
+                go.gameObject.SetActive(false);
                 return go;
             },
-            delegate (GameObject go) // actionOnGet
+            delegate (LockerButton go) // actionOnGet
             {
-                go.SetActive(true);
+                go.gameObject.SetActive(true);
                 go.transform.SetParent(equipContent.transform, true);
             },
-            delegate (GameObject go) // actionOnRelease
+            delegate (LockerButton go) // actionOnRelease
             {
                 go.transform.SetParent(gameObject.transform, true);
-                go.SetActive(false);
+                go.gameObject.SetActive(false);
             });
 
         if (PlayDataManager.data == null)
@@ -133,9 +133,20 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
             releaseList.Add(go);
         }
 
-        for (int i = PlayDataManager.GetSocket() - PlayDataManager.data.SkillCodes.Count; i > 0; i--)
+        // Left Lock
+        var left = PlayDataManager.GetSocket() - PlayDataManager.data.SkillCodes.Count;
+        for (int i = left; i > 0; i--)
         {
             var go = lockPool.Get();
+            go.LockMode(false);
+
+            lockList.Add(go);
+        }
+        // Full Lock
+        for (int i = 15 - left; i > 0; i--)
+        {
+            var go = lockPool.Get();
+            go.LockMode();
 
             lockList.Add(go);
         }
@@ -169,10 +180,15 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
 
     public void Renewal()
     {
-        gameObject.SetActive(true);
         Clear();
 
         ShowAll(); // test code
         ShowEquip();
+    }
+
+    
+    private void OnEnable()
+    {
+        Renewal();
     }
 }
