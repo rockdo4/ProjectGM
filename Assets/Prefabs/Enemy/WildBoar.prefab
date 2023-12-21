@@ -750,12 +750,12 @@ GameObject:
   m_Component:
   - component: {fileID: 7379042720375739373}
   - component: {fileID: 4351040613524941017}
+  - component: {fileID: 1149885988399435205}
   - component: {fileID: 5173913202025656138}
   - component: {fileID: 2719082457135078936}
   - component: {fileID: 584540419188429084}
   - component: {fileID: 5734344529172665475}
   - component: {fileID: 4960954873712717530}
-  - component: {fileID: 1149885988399435205}
   m_Layer: 6
   m_Name: WildBoar
   m_TagString: Enemy
@@ -773,7 +773,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 18.93}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8186599165580984582}
@@ -802,6 +802,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1149885988399435205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2857295111879149241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTypeA: {fileID: 7205618435630654256, guid: 9ba52f78f050fe5468d088c0f631b255,
+    type: 3}
+  EffectTypeB: {fileID: 552655487938233760, guid: b2b26b589e9f0544ebcf874263ccd1ea,
+    type: 3}
+  EffectTypeC: {fileID: 2499742346106410712, guid: e32d9b76859a1594ebb7d6ebcefa0d16,
+    type: 3}
+  EffectTypeD: {fileID: 4834312597282954250, guid: aabf9be139702254a8599f5de5bb1f16,
+    type: 3}
 --- !u!114 &5173913202025656138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -823,7 +843,7 @@ MonoBehaviour:
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
   alienAttackPatternPhaseOne: 0100000002000000
   alienAttackPatternPhaseTwo: 010000000200000003000000
-  boarAttackPatternPhaseOne: 0500000006000000010000000200000003000000
+  boarAttackPatternPhaseOne: 030000000200000001000000
   boarAttackPatternPhaseTwo: 0100000002000000030000000500000006000000
   IntervalTime: 0.3
   wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
@@ -855,8 +875,6 @@ MonoBehaviour:
   - enemyType: 2
     attackPatternType: 7
     preparationTime: 4
-  rangeIndicator: {fileID: 3680253550249829298, guid: 0102c2837d1e2d24abde1827bdfc7545,
-    type: 3}
   AttackPatternTypeAPrefab: {fileID: 1831290539580255820, guid: 9873b76cc3e585648914ba6347b8302e,
     type: 3}
   AttackPatternTypeBPrefab: {fileID: 9133502431824390224, guid: 4b36ed13b9b6d45498a509f6ac30cce0,
@@ -875,9 +893,9 @@ MonoBehaviour:
     type: 3}
   attackPreparationTime: 0.7
   detectRange: 100
-  meleeAttackRange: 4
-  rangeAttackRange: 6
-  roarDuration: 2
+  meleeAttackRange: 8
+  rangeAttackRange: 12
+  roarDuration: 3
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -959,30 +977,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.38
+  m_Radius: 0.92
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0.58, z: -0.00000008940697}
---- !u!114 &1149885988399435205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2857295111879149241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTypeA: {fileID: 7205618435630654256, guid: 9ba52f78f050fe5468d088c0f631b255,
-    type: 3}
-  EffectTypeB: {fileID: 552655487938233760, guid: b2b26b589e9f0544ebcf874263ccd1ea,
-    type: 3}
-  EffectTypeC: {fileID: 2499742346106410712, guid: e32d9b76859a1594ebb7d6ebcefa0d16,
-    type: 3}
-  EffectTypeD: {fileID: 4834312597282954250, guid: aabf9be139702254a8599f5de5bb1f16,
-    type: 3}
 --- !u!1 &3092136239957578716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1757,7 +1755,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.1
   m_Height: 0.2413128
@@ -1780,7 +1778,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.17
   m_Height: 0.4712073

@@ -21,17 +21,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
@@ -483,7 +483,7 @@ MonoBehaviour:
   boarAttackPatternPhaseOne: 0500000006000000010000000200000003000000
   boarAttackPatternPhaseTwo: 0100000002000000030000000500000006000000
   IntervalTime: 0.3
-  wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
+  wolfAttackPatternPhaseOne: 0100000002000000
   wolfAttackPatternPhaseTwo: 0100000002000000
   spiderAttackPatternPhaseOne: 010000000200000003000000
   spiderAttackPatternPhaseTwo: 010000000200000003000000
@@ -494,9 +494,7 @@ MonoBehaviour:
   - enemyType: 3
     attackPatternType: 1
     preparationTime: 2
-  rangeIndicator: {fileID: 3680253550249829298, guid: 0102c2837d1e2d24abde1827bdfc7545,
-    type: 3}
-  AttackPatternTypeAPrefab: {fileID: 6896046466890514737, guid: 6d775c1817efc7240923737e0cdf662b,
+  AttackPatternTypeAPrefab: {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe,
     type: 3}
   AttackPatternTypeBPrefab: {fileID: 107145547354362451, guid: 4fb1d3457f7f0d9469aaa4c1e56a8667,
     type: 3}
@@ -523,6 +521,7 @@ MonoBehaviour:
   enemyType: 3
   minAngle: 3
   rotationSpeed: 6
+  detectedPlayer: {fileID: 0}
   attackGrid: 000000000100000000
   savedPatterns:
   - patternName: MelleAttack_A
@@ -608,3 +607,6 @@ MonoBehaviour:
     type: 3}
   EffectTypeC: {fileID: 0}
   EffectTypeD: {fileID: 0}
+  EffectTypeRA: {fileID: 0}
+  EffectTypeRB: {fileID: 0}
+  EffectTypeRC: {fileID: 0}

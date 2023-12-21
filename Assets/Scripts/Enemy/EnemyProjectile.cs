@@ -1,31 +1,40 @@
-//using UnityEngine;
+using UnityEngine;
 
-//public class EnemyProjectile : EnemyAI
-//{
-//    public float damage = 2f;
+public class EnemyProjectile : MonoBehaviour
+{
+    public float damage = 20f;
+    public EnemyAI enemyAi;
 
-//    // EnemyAI enemyAi;
+    private void Awake()
+    {
+        enemyAi = GetComponent<EnemyAI>();
+    }
 
-//    private void OnTriggerEnter(Collider other)
-//    {
-//        if (other.CompareTag("Player"))
-//        {
-//            Player player = other.GetComponent<Player>();
-//            if (player != null)
-//            {
-//                // 널체크, 초기화 확인
-//                Debug.Log(gameObject.GetComponent<EnemyAI>());
-//                Debug.Log(player);
-//                Debug.Log(damage);
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Player player = other.GetComponent<Player>();
+            if (player != null)
+            {
+                // 널체크, 초기화 확인
+                Debug.Log(gameObject.GetComponent<EnemyAI>());
+                Debug.Log(player);
+                Debug.Log(damage);
+                Debug.Log(enemyAi);
 
-//                // 데미지 받는 함수를 쓰기위해서
-//                ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, damage);
+                LivingObject livingObject = this.GetComponent<LivingObject>();
+                if (livingObject != null)
+                {
+                    enemyAi.ExecuteAttack(livingObject, player, damage);
+                }
 
-//                //player.TakeDamage(damage);
-//            }
+                //enemyAi.ExecuteAttack(this.gameObject, player, damage);
+                //enemyAi.ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, damage);
+            }
 
-//            Debug.Log(gameObject);
-//            Destroy(gameObject);
-//        }
-//    }
-//}
+            Debug.Log(gameObject);
+            //Destroy(gameObject);
+        }
+    }
+}

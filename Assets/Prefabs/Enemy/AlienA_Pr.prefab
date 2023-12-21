@@ -375,6 +375,10 @@ MonoBehaviour:
   boarAttackPatternPhaseOne: 08000000
   boarAttackPatternPhaseTwo: 010000000200000003000000
   IntervalTime: 0.15
+  wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
+  wolfAttackPatternPhaseTwo: 0100000002000000
+  spiderAttackPatternPhaseOne: 010000000200000003000000
+  spiderAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
   - enemyType: 1
     attackPatternType: 0
@@ -385,8 +389,6 @@ MonoBehaviour:
   - enemyType: 1
     attackPatternType: 2
     preparationTime: 3
-  rangeIndicator: {fileID: 3680253550249829298, guid: 0102c2837d1e2d24abde1827bdfc7545,
-    type: 3}
   AttackPatternTypeAPrefab: {fileID: 5073490652078658777, guid: bb39c65592ede994dac151a2588b960b,
     type: 3}
   AttackPatternTypeBPrefab: {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f,
@@ -430,7 +432,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea68372419c51084c8dfdbabb70ffdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 3141187684741176282, guid: 7cd89735a9621e04894a03a2eb9ba4d9,
+    type: 3}
 --- !u!114 &2499598893110829909
 MonoBehaviour:
   m_ObjectHideFlags: 0

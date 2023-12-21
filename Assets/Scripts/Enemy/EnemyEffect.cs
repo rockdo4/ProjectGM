@@ -15,6 +15,14 @@ public class EnemyEffect : MonoBehaviour
     [Header("D 공격 이펙트")]
     public GameObject EffectTypeD;
 
+    [Header("Range A 공격 이펙트")]
+    public GameObject EffectTypeRA;
+
+    [Header("Range B 공격 이펙트")]
+    public GameObject EffectTypeRB;
+
+    [Header("Range C 공격 이펙트")]
+    public GameObject EffectTypeRC;
     Vector3 offset;
 
     private EnemyAI enemyAi;
@@ -58,7 +66,7 @@ public class EnemyEffect : MonoBehaviour
                 switch (enemyAi.enemyType)
                 {
                     case EnemyType.Bear:
-                        offset += transform.forward * 3.0f + transform.up * 3f;
+                        offset += transform.forward * 7.0f + transform.up * 1f;
                         break;
 
                     case EnemyType.Alien:
@@ -66,7 +74,7 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case EnemyType.Boar:
-                        offset += transform.forward * 3.5f + transform.up * 1f;
+                        offset += transform.forward * 8f + transform.up * 1f;
                         break;
 
                     case EnemyType.Wolf:
@@ -102,7 +110,17 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case EnemyType.Boar:
-                        offset += transform.forward * 4f + transform.up * 1f;
+                        offset += transform.forward * 6f + transform.up * 1f;
+                        break;
+                }
+                break;
+
+            case "RA":
+
+                switch (enemyAi.enemyType)
+                {
+                    case EnemyType.Bear:
+                        offset += transform.forward * 1.5f + transform.up * 2.5f;
                         break;
                 }
                 break;
@@ -155,6 +173,22 @@ public class EnemyEffect : MonoBehaviour
         if (EffectTypeD != null)
         {
             GameObject effectInstance = Instantiate(EffectTypeD, transform.position + offset, transform.rotation);
+
+            DestroyEffect(effectInstance);
+        }
+    }
+
+    public void AttackEffectRA()
+    {
+        EffectEnemyType("RA");
+
+        if (EffectTypeD != null)
+        {
+            GameObject effectInstance = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation);
+            Rigidbody rb = effectInstance.GetComponent<Rigidbody>();
+            Vector3 forceDirection = (enemyAi.detectedPlayer.position - transform.position).normalized; // 플레이어 방향으로 힘을 가합니다.
+            float forceMagnitude = 20f;
+            rb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
 
             DestroyEffect(effectInstance);
         }
