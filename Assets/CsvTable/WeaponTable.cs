@@ -54,7 +54,7 @@ public class WeaponTable : CsvTable
 
         while (csv.Read())
         {
-            dataTable.Add(int.Parse(csv.GetField(0)),
+            dataTable.Add(csv.GetField<int>(0),
                 new Data
                 (
                     csv.GetField<int>(1), // name
