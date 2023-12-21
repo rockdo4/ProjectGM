@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using SaveDataVC = SaveDataV6; // Version Change?
 
@@ -11,17 +12,19 @@ public static class PlayDataManager
     public static readonly Dictionary<Armor.ArmorType, Armor> curArmor
         = new Dictionary<Armor.ArmorType, Armor>();
 
+    #region Inventory Capacity
     // 무기 최대 소지 개수
-    private static readonly int weaponsCapacity = 32;
+    public static readonly int weaponsCapacity = 32;
 
     // 방어구 최대 소지 개수
-    private static readonly int armorsCapacity = 140;
+    public static readonly int armorsCapacity = 140;
 
     // 스킬 코드 최대 소지 개수
-    private static readonly int skillcodesCapacity = 260;
+    public static readonly int skillcodesCapacity = 260;
 
     // 재료 최대 소지 개수
-    private static readonly int materialsCapacity = 40;
+    public static readonly int materialsCapacity = 40;
+    #endregion
 
     public static void Init()
     {
@@ -259,6 +262,63 @@ public static class PlayDataManager
         Save();
     }
 
+    public static void IncreaseCode(int id, int count)
+    {
+        if (count <= 0)
+        {
+            return;
+        }
+
+        var code = data.CodeInventory.Find(x => x.id == id);
+
+        if (code == null)
+        {
+            if (data.CodeInventory.Count >= skillcodesCapacity)
+            {
+                return;
+            }
+            data.CodeInventory.Add(new SkillCode(id, count));
+        }
+        else
+        {
+            code.IncreaseCount(count);
+        }
+
+        Save();
+    }
+
+    public static void DecreaseCode(SkillCode code, int count)
+    {
+        if (code == null || code.count < count)
+        {
+            return;
+        }
+        code.count -= count;
+
+        if (code.count <= 0)
+        {
+            data.CodeInventory.Remove(code);
+        }
+        Save();
+    }
+
+    public static void DecreaseCode(int id, int count)
+    {
+        var code = data.CodeInventory.Find(x => x.id == id);
+
+        if (code == null || code.count < count)
+        {
+            return;
+        }
+        code.count -= count;
+
+        if (code.count <= 0)
+        {
+            data.CodeInventory.Remove(code);
+        }
+        Save();
+    }
+
     public static void SellItem(Weapon item)
     {
         if (item == null || !data.WeaponInventory.Contains(item))
@@ -326,12 +386,36 @@ public static class PlayDataManager
 
     public static void SellItem(SkillCode item)
     {
-        //추가 구현 필요
+        if (item == null || !data.CodeInventory.Contains(item))
+        {
+            return;
+        }
+        var table = CsvTableMgr.GetTable<CodeTable>().dataTable;
+
+        data.CodeInventory.Remove(item);
+        AddGold(table[item.id].sellgold * item.count);
     }
 
     public static void SellItem(SkillCode item, int count)
     {
-        //추가 구현 필요
+        if (item == null || !data.CodeInventory.Contains(item) || count < 0 || item.count < count)
+        {
+            return;
+        }
+        if (item.count - count == 0)
+        {
+            SellItem(item);
+            return;
+        }
+        var table = CsvTableMgr.GetTable<CodeTable>().dataTable;
+
+        data.CodeInventory.Find(x => x == item).count -= count;
+        AddGold(table[item.id].sellgold * count);
+    }
+
+    public static bool IsExistItem(SkillCode item)
+    {
+        return (item != null && data.CodeInventory.Contains(item));
     }
 
     public static bool IsExistItem(Materials item)
@@ -367,5 +451,50 @@ public static class PlayDataManager
         }
 
         data.ArmorInventory.Add(armor);
+    }
+
+    public static int GetSocket()
+    {
+        var table = CsvTableMgr.GetTable<ArmorTable>().dataTable;
+        var count = 0;
+        foreach (var armor in curArmor)
+        {
+            if (armor.Value != null)
+            {
+                count += table[armor.Value.id].socket;
+            }
+        }
+        return count;
+    }
+
+    public static bool EquipSkillCode(SkillCode code)
+    {
+        if (code == null || 
+            data.SkillCodes.Count + 1 > GetSocket() || 
+            !IsExistItem(code) || 
+            code.count - 1 <= 0)
+        {
+            return false;
+        }
+
+        data.SkillCodes.Add(code.id);
+        DecreaseCode(code, 1);
+
+        data.SkillCodes.Sort();
+
+        return true;
+    }
+
+    public static void UnEquipSkillCode(int id)
+    {
+        if (!data.SkillCodes.Contains(id))
+        {
+            return;
+        }
+
+        data.SkillCodes.Remove(id);
+        IncreaseCode(id, 1);
+
+        data.SkillCodes.Sort();
     }
 }

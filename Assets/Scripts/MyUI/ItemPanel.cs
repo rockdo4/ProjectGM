@@ -12,12 +12,22 @@ public class ItemPanel : MonoBehaviour, IRenewal
     public Button equipButton;
 
     [Header("텍스트 모음")]
-    public TextMeshProUGUI nameText;
-    public TextMeshProUGUI valueText;
-    public TextMeshProUGUI additionalText;
+    [SerializeField]
+    private TextMeshProUGUI nameText;
+    [SerializeField]
+    private TextMeshProUGUI valueText;
+    [SerializeField]
+    private TextMeshProUGUI additionalText;
 
     [Header("업그레이드 패널")]
-    public UpgradeEquipPanel upgradePanel;
+    [SerializeField]
+    private UpgradeEquipPanel upgradePanel;
+
+    [Header("세트스킬 패널")]
+    [SerializeField]
+    private GameObject setSkillPanel;
+    [SerializeField]
+    private TextMeshProUGUI setSkillText;
 
     public Equip item = null;
 
@@ -48,6 +58,8 @@ public class ItemPanel : MonoBehaviour, IRenewal
                     nameText.text = st[table.name];
                     valueText.text = table.defence.ToString();
                     additionalText.text = $"[세트효과] {table.set_skill_id}";
+                    setSkillPanel.gameObject.SetActive(true);
+                    setSkillText.text = table.set_skill_id.ToString(); // 세트스킬 사용
                 }
 
                 break;
