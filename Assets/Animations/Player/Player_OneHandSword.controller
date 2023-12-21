@@ -351,7 +351,7 @@ AnimatorStateMachine:
     m_Position: {x: 100, y: 170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3770638993983204418}
-    m_Position: {x: -50, y: 290, z: 0}
+    m_Position: {x: -110, y: 280, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6375927624504533394}
     m_Position: {x: 100, y: 410, z: 0}
@@ -360,7 +360,7 @@ AnimatorStateMachine:
     m_Position: {x: 260, y: 70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5266436330583312742}
-    m_Position: {x: 510, y: -90, z: 0}
+    m_Position: {x: 300, y: -110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4263078033336522048}
     m_Position: {x: 420, y: 170, z: 0}
@@ -375,9 +375,9 @@ AnimatorStateMachine:
   - first: {fileID: 5763144138865523057}
     second: []
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 330, y: -90, z: 0}
+  m_AnyStatePosition: {x: 120, y: -110, z: 0}
   m_EntryPosition: {x: 120, y: 30, z: 0}
-  m_ExitPosition: {x: 930, y: -50, z: 0}
+  m_ExitPosition: {x: 420, y: -20, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -7116293153715288182}
 --- !u!1101 &-467755501075066324
@@ -435,7 +435,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Combo_04_3
-  m_Speed: 1
+  m_Speed: 1.7
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6891591814642194088}
@@ -877,7 +877,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Combo_04_4
-  m_Speed: 1
+  m_Speed: 1.1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -8846691454346873561}
@@ -908,7 +908,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Combo_04_2
-  m_Speed: 1
+  m_Speed: 1.7
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6879428177473767032}
@@ -1139,7 +1139,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Combo_04_1
-  m_Speed: 1
+  m_Speed: 1.7
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 5563912353925331840}
