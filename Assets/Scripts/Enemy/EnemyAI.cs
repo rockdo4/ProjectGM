@@ -1109,18 +1109,18 @@ public class EnemyAI : LivingObject
 
                     if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.C)
                     {
-                        switch (i) // 1, 3, 5, 7 인덱스
-                        {
-                            case 1:
-                                additionalOffset += new Vector3(0f, 0f, -2f); break;
-                            case 3:
-                                additionalOffset += new Vector3(-2f, 0f, 0f); break;
-                            case 5: additionalOffset += new Vector3(0f, 0f, 0f); break;
-                            case 7: additionalOffset += new Vector3(0f, 0f, 0f); break;
-                        }
+                        additionalOffset += new Vector3(2.2f, 0f, -1f);
+
+                        //switch (i) // 1, 3, 5, 7 인덱스
+                        //{
+                        //    case 1: additionalOffset += new Vector3(1.7f, 0f, 1f); break;
+                        //    case 3: additionalOffset += new Vector3(1.7f, 0f, 1f); break;
+                        //    case 5: additionalOffset += new Vector3(1.7f, 0f, 1f); ; break;
+                        //    case 7: additionalOffset += new Vector3(1.7f, 0f, 1f); break;
+                        //}
 
                         Vector3 currentSize = collider.size;
-                        collider.size = new Vector3(currentSize.x / 1.5f, currentSize.y, currentSize.z / 1.5f);
+                        collider.size = new Vector3(currentSize.x / 1.2f, currentSize.y, currentSize.z / 1.5f);
 
                     }
 

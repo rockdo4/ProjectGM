@@ -2454,6 +2454,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 316072021794067186, guid: 27fb17d2455922844aec615844f2755b,
+        type: 3}
+      propertyPath: alienAttackPatternPhaseOne.Array.data[0]
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 471950779080328446, guid: 27fb17d2455922844aec615844f2755b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2509,6 +2514,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: AlienA_Pr
       objectReference: {fileID: 0}
+    - target: {fileID: 2338584616778913031, guid: 27fb17d2455922844aec615844f2755b,
+        type: 3}
+      propertyPath: EffectTypeB
+      value: 
+      objectReference: {fileID: 7828710258260486950, guid: 7587f653d963d45418aa64d31e8cb925,
+        type: 3}
+    - target: {fileID: 2338584616778913031, guid: 27fb17d2455922844aec615844f2755b,
+        type: 3}
+      propertyPath: EffectTypeC
+      value: 
+      objectReference: {fileID: 3983184956064993578, guid: a8523a7147a54cd4abebec5c69337c5f,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
