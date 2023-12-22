@@ -20,6 +20,8 @@ public static class CsvTableMgr
         tables.Add(typeof(CraftTable), new CraftTable());
 
         tables.Add(typeof(CodeTable), new CodeTable());
+
+        tables.Add(typeof(SkillTable), new SkillTable());
     }
 
     public static T GetTable<T>() where T : CsvTable

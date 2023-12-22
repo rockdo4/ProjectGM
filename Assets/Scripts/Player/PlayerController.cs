@@ -138,19 +138,12 @@ public class PlayerController : MonoBehaviour
             player.Stat.Defence = (player.Stat.Defence == 0) ? -100 : 0;
             Debug.Log(player.Stat.Defence);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+#if UNITY_EDITOR
+        if (Input.GetKey(KeyCode.Alpha4))
         {
-            if (player.FakeWeapon == null)
-            {
-                player.FakeWeapon = Instantiate(player.CurrentWeapon);
-                MoveWeaponPosition(WeaponPosition.Wing);
-            }
-            else
-            {
-                Destroy(player.FakeWeapon.gameObject);
-                player.FakeWeapon = null;
-            }
+            Debug.Log($"--------- CurrentState: {CurrentState} ---------");
         }
+#endif
         #endregion
     }
 
@@ -167,7 +160,7 @@ public class PlayerController : MonoBehaviour
             nextState = State.Evade;
             return;
         }
-        if (player.attackState == Player.AttackState.AfterStart)
+        if (player.attackState == Player.AttackState.AfterStart || CurrentState == State.SuperAttack)
         {
             return;
         }
@@ -236,9 +229,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-#if UNITY_EDITOR
-        //Debug.Log($"--------- ChangeState: {newState} ---------");
-#endif
+
         CurrentState = newState;
         stateManager?.ChangeState(states[(int)newState]);
     }

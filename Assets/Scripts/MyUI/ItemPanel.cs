@@ -12,12 +12,22 @@ public class ItemPanel : MonoBehaviour, IRenewal
     public Button equipButton;
 
     [Header("텍스트 모음")]
-    public TextMeshProUGUI nameText;
-    public TextMeshProUGUI valueText;
-    public TextMeshProUGUI additionalText;
+    [SerializeField]
+    private TextMeshProUGUI nameText;
+    [SerializeField]
+    private TextMeshProUGUI valueText;
+    [SerializeField]
+    private TextMeshProUGUI additionalText;
 
     [Header("업그레이드 패널")]
-    public UpgradeEquipPanel upgradePanel;
+    [SerializeField]
+    private UpgradeEquipPanel upgradePanel;
+
+    [Header("세트스킬 패널")]
+    [SerializeField]
+    private GameObject setSkillPanel;
+    [SerializeField]
+    private TextMeshProUGUI setSkillText;
 
     public Equip item = null;
 
@@ -32,7 +42,7 @@ public class ItemPanel : MonoBehaviour, IRenewal
             case Equip.EquipType.Weapon:
                 {
                     var table = CsvTableMgr.GetTable<WeaponTable>().dataTable[item.id];
-                    //iconImage.sprite = ;
+
                     nameText.text = st[table.name];
                     valueText.text = table.atk.ToString();
                     additionalText.text = table.property.ToString();
@@ -43,11 +53,23 @@ public class ItemPanel : MonoBehaviour, IRenewal
             case Equip.EquipType.Armor:
                 {
                     var table = CsvTableMgr.GetTable<ArmorTable>().dataTable[item.id];
-                    //iconImage.sprite = ;
+                    var skt = CsvTableMgr.GetTable<SkillTable>().dataTable;
 
                     nameText.text = st[table.name];
                     valueText.text = table.defence.ToString();
-                    additionalText.text = $"[세트효과] {table.set_skill_id}";
+
+                    additionalText.text = (table.skill1_id != -1) ?
+                    $"{st[skt[table.skill1_id].name]}\tLv.{table.skill1_lv}\n" :
+                    string.Empty;
+
+                    additionalText.text += (table.skill2_id != -1) ?
+                        $"{st[skt[table.skill2_id].name]} \tLv. {table.skill2_lv}\n" :
+                        string.Empty;
+
+                    setSkillPanel.gameObject.SetActive(true);
+                    setSkillText.text = (table.set_skill_id != -1) ? 
+                        st[skt[table.set_skill_id].name] : 
+                        "세트효과 없음";
                 }
 
                 break;

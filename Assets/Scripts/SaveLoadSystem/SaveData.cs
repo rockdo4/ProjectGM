@@ -145,6 +145,8 @@ public class SaveDataV6 : SaveData
 
     public List<SkillCode> CodeInventory = new List<SkillCode>();
 
+    public List<int> SkillCodes = new List<int>();
+
     public override SaveData VersionUp()
     {
         return null;

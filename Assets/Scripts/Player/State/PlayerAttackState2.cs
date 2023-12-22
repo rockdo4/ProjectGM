@@ -68,6 +68,7 @@ public class PlayerAttackState2 : PlayerStateBase
 
     public override void Exit()
     {
+        controller.player.attackState = Player.AttackState.None;
         controller.player.Animator.ResetTrigger(triggerName);
     }
 }
