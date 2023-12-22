@@ -143,7 +143,7 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
             lockList.Add(go);
         }
         // Full Lock
-        for (int i = 15 - left; i > 0; i--)
+        for (int i = 15 - PlayDataManager.GetSocket(); i > 0; i--)
         {
             var go = lockPool.Get();
             go.LockMode();
