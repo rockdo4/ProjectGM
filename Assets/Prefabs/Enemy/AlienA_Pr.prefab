@@ -311,7 +311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &471950779080328446
 Transform:
   m_ObjectHideFlags: 0
@@ -391,7 +391,7 @@ MonoBehaviour:
       m_Calls: []
   bearAttackPatternPhaseOne: 0400000003000000
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
-  alienAttackPatternPhaseOne: 0300000002000000020000000300000004000000
+  alienAttackPatternPhaseOne: 0100000002000000020000000300000004000000
   alienAttackPatternPhaseTwo: 020000000100000002000000020000000300000004000000
   boarAttackPatternPhaseOne: 08000000
   boarAttackPatternPhaseTwo: 010000000200000003000000
@@ -435,7 +435,7 @@ MonoBehaviour:
     m_Bits: 8
   enemyType: 1
   minAngle: 3
-  rotationSpeed: 7
+  rotationSpeed: 8.5
   detectedPlayer: {fileID: 0}
   attackGrid: 000100010001000100
   savedPatterns:

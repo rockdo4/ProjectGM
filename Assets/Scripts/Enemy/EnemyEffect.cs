@@ -58,6 +58,10 @@ public class EnemyEffect : MonoBehaviour
                     case EnemyType.Wolf:
                         offset += transform.forward * 4.5f + transform.up * 0.1f;
                         break;
+
+                    case EnemyType.Spider:
+                        offset += transform.forward * 5f + transform.up * 0.1f;
+                        break;
                 }
                 break;
 
@@ -66,7 +70,7 @@ public class EnemyEffect : MonoBehaviour
                 switch (enemyAi.enemyType)
                 {
                     case EnemyType.Bear:
-                        offset += transform.forward * 7.0f + transform.up * 1f;
+                        offset += transform.forward * 5.0f + transform.up * 0.1f;
                         break;
 
                     case EnemyType.Alien:
@@ -82,18 +86,8 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case EnemyType.Spider:
-
-                        // 1. 셀인스턴스 리스트 받아오기
-                        // 2. 그 위치에 생성하기
-                        // 3. 대기시간 받아오기
-                        // 4. 대기시간만큼 애니메이션 지속시간 늘리기
-
-
-                        //offset += transform.forward * 2f + transform.up * 1f;
+                        offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
-                        //case EnemyType.Spider:
-                        //    offset += transform.forward * 3.5f + transform.up * 1f;
-                        //    break;
                 }
                 break;
 
@@ -110,7 +104,7 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case EnemyType.Boar:
-                        offset += transform.forward * 5f + transform.up * 1f;
+                        offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
                 }
                 break;
@@ -182,7 +176,7 @@ public class EnemyEffect : MonoBehaviour
     {
         EffectEnemyType("RA");
 
-        if (EffectTypeRA != null)
+        if (EffectTypeRA != null && enemyAi.enemyType == EnemyType.Bear)
         {
             GameObject effectInstance = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation);
             Rigidbody rb = effectInstance.GetComponent<Rigidbody>();
@@ -191,6 +185,12 @@ public class EnemyEffect : MonoBehaviour
             rb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
 
             effectInstance.GetComponent<EnemyProjectile>().enemyAi = enemyAi;
+
+            DestroyEffect(effectInstance);
+        }
+        else // (EffectTypeRA != null)
+        {
+            GameObject effectInstance = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation);
 
             DestroyEffect(effectInstance);
         }

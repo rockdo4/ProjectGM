@@ -291,7 +291,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
@@ -541,7 +541,7 @@ MonoBehaviour:
     m_Bits: 8
   enemyType: 3
   minAngle: 3
-  rotationSpeed: 7
+  rotationSpeed: 8.5
   detectedPlayer: {fileID: 0}
   attackGrid: 000000000100000000
   savedPatterns:

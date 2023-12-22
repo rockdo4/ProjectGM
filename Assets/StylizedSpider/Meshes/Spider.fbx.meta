@@ -43,8 +43,7 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: Event AnimationIsOver has a time (2.166667) outside
-      the clip's valid range (0.000000..2.166667). It will never be fired
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 1
@@ -82,18 +81,18 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.38276553
-        functionName: Attack
+      - time: 0.014863098
+        functionName: AttackEffectC
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
+        objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
           type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.41160223
-        functionName: AttackEffectA
+      - time: 0.38276553
+        functionName: Attack
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
+        objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
           type: 3}
         floatParameter: 0
         intParameter: 0

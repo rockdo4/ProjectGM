@@ -394,20 +394,20 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2069079120147748783}
+  - component: {fileID: 180352389718400150}
   - component: {fileID: 5821439148287027105}
   - component: {fileID: 5999511515223601274}
   - component: {fileID: 5828766048717734968}
   - component: {fileID: 1438742511549367765}
   - component: {fileID: 5473430288010921690}
   - component: {fileID: 6601101589454007712}
-  - component: {fileID: 180352389718400150}
   m_Layer: 0
   m_Name: Spider_Cyan
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2069079120147748783
 Transform:
   m_ObjectHideFlags: 0
@@ -425,6 +425,28 @@ Transform:
   - {fileID: 7439550026239271650}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &180352389718400150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2545784051288900843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTypeA: {fileID: 5694260570021509608, guid: 15402837011f45b4b981f4653ae654b4,
+    type: 3}
+  EffectTypeB: {fileID: 5694260570021509608, guid: 15402837011f45b4b981f4653ae654b4,
+    type: 3}
+  EffectTypeC: {fileID: 3983184956064993578, guid: a8523a7147a54cd4abebec5c69337c5f,
+    type: 3}
+  EffectTypeD: {fileID: 0}
+  EffectTypeRA: {fileID: 0}
+  EffectTypeRB: {fileID: 0}
+  EffectTypeRC: {fileID: 0}
 --- !u!95 &5821439148287027105
 Animator:
   serializedVersion: 5
@@ -472,8 +494,8 @@ MonoBehaviour:
   IntervalTime: 0.3
   wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
   wolfAttackPatternPhaseTwo: 07000000080000000100000002000000
-  spiderAttackPatternPhaseOne: 0100000002000000020000000300000002000000
-  spiderAttackPatternPhaseTwo: 010000000200000003000000
+  spiderAttackPatternPhaseOne: 0200000002000000030000000200000003000000
+  spiderAttackPatternPhaseTwo: 030000000200000002000000020000000200000003000000020000000200000003000000
   attackPreparationTimes:
   - enemyType: 4
     attackPatternType: 0
@@ -483,7 +505,7 @@ MonoBehaviour:
     preparationTime: 0.5
   - enemyType: 4
     attackPatternType: 2
-    preparationTime: 2
+    preparationTime: 2.2
   - enemyType: 4
     attackPatternType: 6
     preparationTime: 1
@@ -522,7 +544,7 @@ MonoBehaviour:
     m_Bits: 8
   enemyType: 4
   minAngle: 3
-  rotationSpeed: 7
+  rotationSpeed: 8.5
   detectedPlayer: {fileID: 0}
   attackGrid: 000000000100000000
   savedPatterns:
@@ -607,28 +629,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0.58, z: -0.00000008940697}
---- !u!114 &180352389718400150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2545784051288900843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTypeA: {fileID: 5694260570021509608, guid: 15402837011f45b4b981f4653ae654b4,
-    type: 3}
-  EffectTypeB: {fileID: 6886290012110339338, guid: c7ddc2d5c0a3404428ebfd29663352e3,
-    type: 3}
-  EffectTypeC: {fileID: 6886290012110339338, guid: c7ddc2d5c0a3404428ebfd29663352e3,
-    type: 3}
-  EffectTypeD: {fileID: 0}
-  EffectTypeRA: {fileID: 0}
-  EffectTypeRB: {fileID: 0}
-  EffectTypeRC: {fileID: 0}
 --- !u!1 &2615956738506003804
 GameObject:
   m_ObjectHideFlags: 0

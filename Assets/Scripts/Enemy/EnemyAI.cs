@@ -651,7 +651,7 @@ public class EnemyAI : LivingObject
     }
     #endregion
 
-    #region 행동트리 -> 어택 패턴 -> 애니메이션 업데이트
+     #region 행동트리 -> 어택 패턴 -> 애니메이션 업데이트
 
     private INode.EnemyState ExecuteAttackPattern(EnemyType enemytype, int[] pattern)
     {
@@ -867,6 +867,18 @@ public class EnemyAI : LivingObject
             }
         }
 
+        if (enemyType == EnemyType.Spider)
+        {
+            switch (AttackPatternType)
+            {
+                //case AttackPatternType.A:
+                //    return new Vector3(0f, 0f, -7f);
+                case AttackPatternType.B:
+                    return new Vector3(0f, 0f, -2f);
+                default: return Vector3.zero;
+            }
+        }
+
         return Vector3.zero;
     }
 
@@ -884,7 +896,7 @@ public class EnemyAI : LivingObject
             actualPosition -= realoffset;
         }
 
-        if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.C) // 임시
+        if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.C)
         {
             switch (index)
             {
@@ -894,7 +906,7 @@ public class EnemyAI : LivingObject
                 case 7: actualPosition += new Vector3(0, 0, -4f); break; // 앞
             }
         }
-        if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.C) // 임시
+        if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.C)
         {
             switch (index)
             {
@@ -904,9 +916,18 @@ public class EnemyAI : LivingObject
                 case 7: actualPosition += new Vector3(0, 0, -4f); break; // 앞
             }
         }
-        actualPosition = transform.rotation * actualPosition; // 이게 문젠가?
-        // 이거를 스위치문 위에 올리면 위치는 이상하게 찍혀도 해결되긴함
-        // 근데 위치가 가까워지면 여전히 로테이션이 붕뜨게된다
+
+        if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.A)
+        {
+            switch (index)
+            {
+                case 7: actualPosition += new Vector3(0f, 0, -4f); break; 
+                case 8: actualPosition += new Vector3(0, 0, -3f); break;
+                case 9: actualPosition += new Vector3(-4f, 0, 0f); break;
+            }
+        }
+
+        actualPosition = transform.rotation * actualPosition;
 
         return transform.position + actualPosition;
     }
@@ -1061,6 +1082,17 @@ public class EnemyAI : LivingObject
 
                         cell.transform.rotation = initialRotation * additionalRotation;
                     }
+
+                    // 거미
+                    else if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.B)
+                    {
+                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
+                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
+
+                        Quaternion additionalRotation = Quaternion.Euler(0f, 120f, 0f);
+
+                        cell.transform.rotation = initialRotation * additionalRotation;
+                    }
                     else
                     {
                         cell.transform.rotation = transform.rotation;
@@ -1111,17 +1143,21 @@ public class EnemyAI : LivingObject
                     {
                         additionalOffset += new Vector3(2.2f, 0f, -1f);
 
-                        //switch (i) // 1, 3, 5, 7 인덱스
-                        //{
-                        //    case 1: additionalOffset += new Vector3(1.7f, 0f, 1f); break;
-                        //    case 3: additionalOffset += new Vector3(1.7f, 0f, 1f); break;
-                        //    case 5: additionalOffset += new Vector3(1.7f, 0f, 1f); ; break;
-                        //    case 7: additionalOffset += new Vector3(1.7f, 0f, 1f); break;
-                        //}
+                        Vector3 currentSize = collider.size;
+                        collider.size = new Vector3(currentSize.x / 1.2f, currentSize.y, currentSize.z / 1.5f);
+                    }
+
+                    if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.C)
+                    {
+                        additionalOffset += new Vector3(2.2f, 0f, -1f);
 
                         Vector3 currentSize = collider.size;
                         collider.size = new Vector3(currentSize.x / 1.2f, currentSize.y, currentSize.z / 1.5f);
+                    }
 
+                    if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.B)
+                    {
+                        additionalOffset = new Vector3(2f, 0f, 2f);
                     }
 
                     if (enemyType == EnemyType.Boar && AttackPatternType == AttackPatternType.A)

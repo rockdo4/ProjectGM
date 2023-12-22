@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3322698, g: 0.53614986, b: 0.40486473, a: 1}
+  m_IndirectSpecularColor: {r: 0.3322725, g: 0.53358763, b: 0.40487114, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -266,6 +266,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WildBoar
+      objectReference: {fileID: 0}
+    - target: {fileID: 2857295111879149241, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
@@ -853,6 +858,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Bear Grizly 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 105006126220715780, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4691967391105962301, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
         type: 3}
@@ -1916,6 +1926,18 @@ Transform:
   - {fileID: 596242257}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1412095795 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
+    type: 3}
+  m_PrefabInstance: {fileID: 201556235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1419921986 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5224366525265110282, guid: 40a86a144964031449e7e0665079e216,
@@ -2441,6 +2463,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spider_Cyan
       objectReference: {fileID: 0}
+    - target: {fileID: 2545784051288900843, guid: b3d533bd1e3970f41bac7c7776963bba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2714,18 +2741,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c196544281a05d3458d7463c28062c02, type: 3}
---- !u!114 &1844172111 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5999511515223601274, guid: b3d533bd1e3970f41bac7c7776963bba,
-    type: 3}
-  m_PrefabInstance: {fileID: 1561049140}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1967430043
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3336,7 +3351,7 @@ PrefabInstance:
         type: 3}
       propertyPath: enemy
       value: 
-      objectReference: {fileID: 1844172111}
+      objectReference: {fileID: 1412095795}
     - target: {fileID: 8316218615567040161, guid: b027432c7b49d3f4e98c271c8acbec51,
         type: 3}
       propertyPath: player
@@ -3944,6 +3959,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Wolf PA 4x4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3389897594519030041, guid: 94831c2a2aeba7d4f90b121bd1f396ca,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
