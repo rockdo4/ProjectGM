@@ -6,8 +6,12 @@ public class TitleManager : MonoBehaviour, IRenewal
     [Header("소지금 텍스트")]
     public TextMeshProUGUI moneyText;
 
+    public static TitleManager Instance;
+
     private void Awake()
     {
+        Instance = this;
+
         if (PlayDataManager.data == null)
         {
             PlayDataManager.Init();

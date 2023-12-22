@@ -51,9 +51,6 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
     [Space(10.0f)]
 
-    [Header("소지금 텍스트")]
-    public TextMeshProUGUI moneyText;
-
     private bool sellMode = false;
     private List<Equip> sellEquipList = new List<Equip>();
     private List<SkillCode> sellSkillCodeList = new List<SkillCode>();
@@ -467,8 +464,9 @@ public class InventoryManager : MonoBehaviour, IRenewal
                 }
                 break;
         }
-        SellMode(false);
+        TitleManager.Instance.Renewal();
 
+        SellMode(false);
     }
 
     public void Renewal()
@@ -492,7 +490,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                 break;
         }
 
-        moneyText.text = PlayDataManager.data.Gold.ToString();
+        TitleManager.Instance.Renewal();
     }
 
     public void Tester()
@@ -510,5 +508,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
 
         PlayDataManager.AddGold(100000);
+
+        TitleManager.Instance.Renewal();
     }
 }
