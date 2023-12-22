@@ -11,7 +11,7 @@ public class Player : LivingObject
 
     public enum AttackState
     {
-        Before, Attack, AfterStart, AfterEnd, End
+        None, Before, Attack, AfterStart, AfterEnd, End
     }
     public AttackState attackState { get; set; }
     public bool canCombo { get; set; }
