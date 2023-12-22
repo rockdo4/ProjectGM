@@ -13,7 +13,7 @@ public abstract class Effect : MonoBehaviour
     //[Tooltip("유지 시간과 무관하게 행동이 끝나면 이펙트도 사라짐")]
     //public bool useForceStop = false; // 생각안남...
 
-    private float timer = 0f;
+    public float Timer { get; private set; }
     public bool IsPlay { get; protected set; } = false;
 
     protected virtual void Awake()
@@ -27,8 +27,8 @@ public abstract class Effect : MonoBehaviour
         {
             return;
         }
-        timer += Time.deltaTime;
-        if (timer > duration)
+        Timer += Time.deltaTime;
+        if (Timer > duration)
         {
             PlayEnd();
         }
@@ -41,7 +41,7 @@ public abstract class Effect : MonoBehaviour
 
     public virtual void PlayStart(Vector3 direction = default)
     {
-        timer = 0f;
+        Timer = 0f;
         gameObject.SetActive(IsPlay = true);
     }
 
