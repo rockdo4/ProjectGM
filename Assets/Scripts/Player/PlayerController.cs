@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
         player.CurrentWeapon = weaponSO.MakeWeapon(equipWeapon, rightHand, player.Animator);
         if (equipWeapon.weaponType == WeaponType.Tonpa)
         {
-            player.FakeWeapon = Instantiate(player.CurrentWeapon);
+            player.FakeWeapon = Instantiate(player.CurrentWeapon, leftHand);
         }
         subHandle = player.CurrentWeapon.transform.Find("LeftHandle");
 
@@ -197,15 +197,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (player.DistanceToEnemy < player.CurrentWeapon.attackRange)
+        ExecuteAttack(player, player.Enemy);
+        if (player.GroggyAttack)
         {
-            ExecuteAttack(player, player.Enemy);
-            if (player.GroggyAttack)
-            {
-                player.GroggyAttack = false;
-                player.evadePoint = 0f;
-            }
+            player.GroggyAttack = false;
+            player.evadePoint = 0f;
         }
+
         player.attackState = Player.AttackState.AfterStart;
         nextState = State.Idle;
     }

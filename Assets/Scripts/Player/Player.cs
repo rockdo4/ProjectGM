@@ -21,7 +21,7 @@ public class Player : LivingObject
 
     public LivingObject Enemy { get; private set; }
     public Rigidbody Rigid { get; private set; }
-    public BoxCollider Colldier { get; private set; }
+    public BoxCollider Collider { get; private set; }
     [Header("가상 카메라 연결")]
     public CinemachineVirtualCamera virtualCamera;
     public Animator Animator { get; private set; }// animator test code
@@ -34,7 +34,7 @@ public class Player : LivingObject
     {
         get
         {
-            return Colldier.bounds.size.y * 2;
+            return Collider.bounds.size.y * 2;
         }
     }
     public float DistanceToEnemy
@@ -56,7 +56,9 @@ public class Player : LivingObject
             {
                 return false;
             }
-            return DistanceToEnemy < CurrentWeapon.attackRange;
+
+            Vector3 direction = Enemy.transform.position - transform.position;
+            return direction.magnitude < CurrentWeapon.attackRange;
         }
     }
 
@@ -80,7 +82,7 @@ public class Player : LivingObject
     {
         base.Awake();
         Rigid = GetComponent<Rigidbody>();
-        Colldier = GetComponent<BoxCollider>();
+        Collider = GetComponent<BoxCollider>();
         Animator = GetComponent<Animator>();
         virtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
         effects = GetComponent<PlayerEffects>();
