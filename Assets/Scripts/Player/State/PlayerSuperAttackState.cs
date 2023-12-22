@@ -20,7 +20,20 @@ public class PlayerSuperAttackState : PlayerStateBase
 
     public override void Update()
     {
+        switch (controller.player.attackState)
+        {
+            case Player.AttackState.Before:
+                break;
+            case Player.AttackState.Attack:
+                break;
+            case Player.AttackState.AfterStart:
 
+            case Player.AttackState.AfterEnd:
+                break;
+            case Player.AttackState.End:
+                controller.SetState(PlayerController.State.Idle);
+                break;
+        }
     }
 
     public override void FixedUpdate()

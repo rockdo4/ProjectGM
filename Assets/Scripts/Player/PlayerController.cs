@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
             nextState = State.Evade;
             return;
         }
-        if (player.attackState == Player.AttackState.AfterStart)
+        if (player.attackState == Player.AttackState.AfterStart || CurrentState == State.SuperAttack)
         {
             return;
         }

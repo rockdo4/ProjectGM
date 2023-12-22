@@ -70,7 +70,11 @@ public class PlayerSprintState : PlayerStateBase
         var force = rotation * direction * speed;
         controller.player.Rigid.AddForce(force, ForceMode.VelocityChange);
 
-        AttackCheck();
+        if (controller.player.CanAttack)
+        {
+            AttackCheck();
+            return;
+        }
     }
 
     public override void Exit()
@@ -81,16 +85,13 @@ public class PlayerSprintState : PlayerStateBase
 
     private void AttackCheck()
     {
-        if (controller.player.CanAttack)
+        if (controller.player.Enemy.IsGroggy)
         {
-            if (controller.player.Enemy.IsGroggy)
-            {
-                controller.SetState(PlayerController.State.SuperAttack);
-            }
-            else
-            {
-                controller.SetState(PlayerController.State.Attack);
-            }
+            controller.SetState(PlayerController.State.SuperAttack);
+        }
+        else
+        {
+            controller.SetState(PlayerController.State.Attack);
         }
     }
 }
