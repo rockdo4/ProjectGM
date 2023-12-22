@@ -54,12 +54,17 @@ public class SkillCodeEquipPanel : MonoBehaviour, IRenewal
         gameObject.SetActive(true);
 
         var code = CsvTableMgr.GetTable<CodeTable>().dataTable[skillcode.id];
+        var skt = CsvTableMgr.GetTable<SkillTable>().dataTable;
         var st = CsvTableMgr.GetTable<StringTable>().dataTable;
 
         nameText.text = st[code.name];
 
-        //스킬 사용
-        infoText.text = (code.skill1_id != -1) ? $"{code.skill1_id}\tLv.{code.skill1_lv}\n" : string.Empty;
-        infoText.text += (code.skill2_id != -1) ? $"{code.skill2_id}\tLv.{code.skill2_lv}\n" : string.Empty;
+        infoText.text = (code.skill1_id != -1) ? 
+            $"{st[skt[code.skill1_id].name]}\tLv.{code.skill1_lv}\n" : 
+            string.Empty;
+
+        infoText.text += (code.skill2_id != -1) ? 
+            $"{st[skt[code.skill2_id].name]}\tLv.{code.skill2_lv}\n" : 
+            string.Empty;
     }
 }
