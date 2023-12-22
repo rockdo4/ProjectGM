@@ -23,6 +23,8 @@ public class FanShape : MonoBehaviour
     {
         material = GetComponent<Renderer>().material;
         startTime = Time.time;
+
+        material.SetFloat("UVSpeed", 1.0f);
     }
 
     void Awake()
@@ -43,8 +45,10 @@ public class FanShape : MonoBehaviour
             return;
 
         float t = Mathf.Clamp01((Time.time - startTime) / enemyAi.CurrentPreparationTime);
-
         material.color = Color.Lerp(Color.yellow, Color.red, t);
+
+        float uvSpeed = Mathf.Lerp(1.0f, 2.0f, t);
+        material.SetFloat("UVSpeed", uvSpeed);
     }
 
     Mesh CreateFanMesh()

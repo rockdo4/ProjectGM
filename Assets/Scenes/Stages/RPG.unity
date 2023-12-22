@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.029313687, g: 0.22938596, b: 0.5843531, a: 1}
+  m_IndirectSpecularColor: {r: 0.008259695, g: 0.07485927, b: 0.15082099, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -720,7 +720,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 15, y: 5, z: 1}
+  m_Size: {x: 15, y: 5, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &116694823
 PrefabInstance:
@@ -6589,267 +6589,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -2405914742562192261, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1064022289178630517, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2857295111879149241, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: m_Name
       value: WildBoar
-      objectReference: {fileID: 0}
-    - target: {fileID: 2857295111879149241, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4960954873712717530, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: m_Radius
-      value: 1.13
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: minAngle
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: roarDuration
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: rotationSpeed
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: meleeAttackRange
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: rangeAttackRange
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: RangeAttackPatternTypeCPrefab
-      value: 
-      objectReference: {fileID: 5073490652078658777, guid: bb39c65592ede994dac151a2588b960b,
-        type: 3}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: RangeAttackPatternTypeDPrefab
-      value: 
-      objectReference: {fileID: 5073490652078658777, guid: bb39c65592ede994dac151a2588b960b,
-        type: 3}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: boarAttackPatternPhaseOne.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: boarAttackPatternPhaseOne.Array.data[0]
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: boarAttackPatternPhaseOne.Array.data[1]
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: boarAttackPatternPhaseOne.Array.data[2]
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[2].patternName
-      value: MelleAttack_C
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[3].patternName
-      value: MelleAttack_D
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[4].patternName
-      value: RangeAttack_A
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[5].patternName
-      value: RangeAttack_B
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[6].patternName
-      value: RangeAttack_C
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[7].patternName
-      value: RangeAttack_D
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[0]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[1]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[2]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[3]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[5]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[6]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[4].pattern.Array.data[7]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[5].pattern.Array.data[0]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[5].pattern.Array.data[2]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[5].pattern.Array.data[6]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: savedPatterns.Array.data[5].pattern.Array.data[8]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[0].preparationTime
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[1].preparationTime
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[2].preparationTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[3].preparationTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[4].preparationTime
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[5].preparationTime
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[6].preparationTime
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[0].attackPatternType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[1].attackPatternType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[2].attackPatternType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[3].attackPatternType
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[4].attackPatternType
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[5].attackPatternType
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5173913202025656138, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: attackPreparationTimes.Array.data[6].attackPatternType
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
@@ -7132,7 +6875,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 17, y: 5, z: 1}
+  m_Size: {x: 17, y: 5, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1496699250
 PrefabInstance:
@@ -9803,7 +9546,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 20, y: 5, z: 1}
+  m_Size: {x: 20, y: 5, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2029222020
 PrefabInstance:
@@ -10226,6 +9969,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1149545082}
     m_Modifications:
+    - target: {fileID: 3341815833313960051, guid: fe72b6e11d2c66d41bef6871fef6bd82,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5081640972541322713, guid: fe72b6e11d2c66d41bef6871fef6bd82,
         type: 3}
       propertyPath: m_Name
