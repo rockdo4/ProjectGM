@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EffectParticleSystem : Effect
+public class EffectParticleSystem : EffectBase
 {
     private ParticleSystem particle;
     [Header("각도 보정")]
@@ -16,7 +16,7 @@ public class EffectParticleSystem : Effect
     public override void Init(Transform playerTransform = null)
     {
         targetTransform = playerTransform;
-        particle = prefab.GetComponent<ParticleSystem>();
+        particle = GetComponent<ParticleSystem>();
         //particle.transform.SetParent(targetTransform);
         //particle.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
@@ -44,11 +44,13 @@ public class EffectParticleSystem : Effect
             particle.transform.localPosition += positionOffset;
             particle.transform.rotation = correctedRotation;
         }
+        particle.gameObject.SetActive(true);
         particle.Play();
     }
 
     public override void PlayEnd()
     {
         particle.Stop();
+        particle.gameObject.SetActive(false);
     }
 }

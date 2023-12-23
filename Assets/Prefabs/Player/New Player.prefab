@@ -94,6 +94,8 @@ MonoBehaviour:
     effect: {fileID: 1340711182804352153}
   - effectType: 3
     effect: {fileID: 967160612749063132}
+  - effectType: 2
+    effect: {fileID: 6377593837582897725}
 --- !u!114 &8763300904159196873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,10 +378,56 @@ Transform:
   - {fileID: 8776870843604973459}
   - {fileID: 9151254813142206445}
   - {fileID: 5609508947259601609}
+  - {fileID: 2196289550386868456}
   - {fileID: 8667083914466560093}
   - {fileID: 5594976186743354476}
   m_Father: {fileID: 2635884456797727361}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3142170944918534339
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2196289550386868456}
+  - component: {fileID: 6377593837582897725}
+  m_Layer: 0
+  m_Name: Vignette
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2196289550386868456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3142170944918534339}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -13, y: 0, z: -15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6264997036068425412}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6377593837582897725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3142170944918534339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5bf0d367bf53b641927cad602c2c368, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1
 --- !u!1 &3722354777385974244
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,7 +444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &9151254813142206445
 Transform:
   m_ObjectHideFlags: 0
@@ -543,7 +591,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5609508947259601609
 Transform:
   m_ObjectHideFlags: 0
@@ -1166,7 +1214,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2027119157944486081, guid: 995b668567ae1e04698dab1e9c760a96, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1347,11 +1396,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SlowMotion
-      objectReference: {fileID: 0}
-    - target: {fileID: 1208720272600144329, guid: f692b981395da0c4c8a78a1121ac067a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1725046670735061160, guid: f692b981395da0c4c8a78a1121ac067a,
         type: 3}

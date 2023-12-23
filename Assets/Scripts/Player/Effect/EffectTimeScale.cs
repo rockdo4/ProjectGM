@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EffectTimeScale : Effect
+public class EffectTimeScale : EffectBase
 {
     [Header("적용할 시간 배율")]
     [Range(0.1f, 3f)]
