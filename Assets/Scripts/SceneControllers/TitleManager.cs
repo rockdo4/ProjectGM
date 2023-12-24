@@ -1,10 +1,15 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TitleManager : MonoBehaviour, IRenewal
 {
     [Header("소지금 텍스트")]
     public TextMeshProUGUI moneyText;
+
+    [Header("진동기능")]
+    [SerializeField]
+    private Toggle vibeToggle;
 
     public static TitleManager Instance;
 
@@ -16,6 +21,7 @@ public class TitleManager : MonoBehaviour, IRenewal
         {
             PlayDataManager.Init();
         }
+        vibeToggle.isOn = PlayDataManager.data.Vibration;
 
         Renewal();
     }
@@ -35,5 +41,11 @@ public class TitleManager : MonoBehaviour, IRenewal
     public void Renewal()
     {
         moneyText.text = PlayDataManager.data.Gold.ToString();
+    }
+
+    public void OnVibe(bool value)
+    {
+        PlayDataManager.data.Vibration = value;
+        PlayDataManager.Save();
     }
 }

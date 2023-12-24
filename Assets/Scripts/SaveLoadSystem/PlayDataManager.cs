@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using SaveDataVC = SaveDataV6; // Version Change?
+using SaveDataVC = SaveDataV7; // Version Change?
 
 public static class PlayDataManager
 {
@@ -211,7 +211,7 @@ public static class PlayDataManager
 
     public static void AddGold(int value)
     {
-        if (data.Gold + value >= int.MaxValue)
+        if ((uint)data.Gold + (uint)value >= int.MaxValue)
         {
             data.Gold = int.MaxValue;
             return;
