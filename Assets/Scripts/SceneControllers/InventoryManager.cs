@@ -119,8 +119,14 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
             go.button.onClick.AddListener(() => 
             {
-                if (sellMode && sellEquipList.Count < 10)
+                if (sellMode)
                 {
+                    if (sellEquipList.Count >= 10) // Over Count Exception
+                    {
+                        MyNotice.Instance.Notice("최대 판매 개수를 넘길 수 없습니다.");
+                        return;
+                    }
+
                     if (weapon.isEquip) // Were Equip Exception
                     {
                         // Notice
@@ -146,6 +152,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                             sellEquipList.Remove(weapon);
                             go.iconImage.color = Color.white;
                         });
+                        releaseList.Add(newGo);
 
                         go.sell = newGo;
                     }
@@ -190,8 +197,14 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
             go.button.onClick.AddListener(() =>
             {
-                if (sellMode && sellEquipList.Count < 10)
+                if (sellMode)
                 {
+                    if (sellEquipList.Count >= 10) // Over Count Exception
+                    {
+                        MyNotice.Instance.Notice("최대 판매 개수를 넘길 수 없습니다.");
+                        return;
+                    }
+
                     if (armor.isEquip) // Were Equip Exception
                     {
                         // Notice
@@ -217,6 +230,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                             sellEquipList.Remove(armor);
                             go.iconImage.color = Color.white;
                         });
+                        releaseList.Add(newGo);
 
                         go.sell = newGo;
                     }
@@ -264,8 +278,14 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
             go.GetComponent<ItemButton>().button.onClick.AddListener(() =>
             {
-                if (sellMode && sellSkillCodeList.Count < 10)
+                if (sellMode)
                 {
+                    if (sellSkillCodeList.Count >= 10)
+                    {
+                        MyNotice.Instance.Notice("최대 판매 개수를 넘길 수 없습니다.");
+                        return;
+                    }
+
                     if (go.iconImage.color == Color.white)
                     {
                         sellSkillCodeList.Add(skillcode);
@@ -283,6 +303,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                             sellSkillCodeList.Remove(skillcode);
                             go.iconImage.color = Color.white;
                         });
+                        releaseList.Add(newGo);
 
                         go.sell = newGo;
                     }
@@ -327,8 +348,14 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
             go.GetComponent<ItemButton>().button.onClick.AddListener(() =>
             {
-                if (sellMode && sellMatList.Count < 10)
+                if (sellMode)
                 {
+                    if (sellMatList.Count >= 10)
+                    {
+                        MyNotice.Instance.Notice("최대 판매 개수를 넘길 수 없습니다.");
+                        return;
+                    }
+
                     if (go.iconImage.color == Color.white)
                     {
                         sellMatList.Add(mat);
@@ -344,6 +371,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                             sellMatList.Remove(mat);
                             go.iconImage.color = Color.white;
                         });
+                        releaseList.Add(newGo);
 
                         go.sell = newGo;
                     }

@@ -5,8 +5,14 @@ using UnityEngine.Pool;
 
 public class SkillCodeManager : MonoBehaviour, IRenewal
 {
-    //[Header("스킬코드 패널")]
-    //public SkillCodePanel skillCodePanel
+    [Header("스킬 정보 프리팹")]
+    [SerializeField]
+    private SkillCodeInfoPanel infoPrefab;
+
+    [Header("스킬 정보 Content")]
+    [SerializeField]
+    private GameObject infoContent;
+
     [Header("스킬코드 IconSO")]
     [SerializeField]
     private IconSO skillcodeIconSO;
@@ -37,6 +43,9 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
     private ObjectPool<LockerButton> lockPool;
     private List<LockerButton> lockList = new List<LockerButton>();
 
+    private ObjectPool<SkillCodeInfoPanel> infoPool;
+    private List<SkillCodeInfoPanel> infoList = new List<SkillCodeInfoPanel>();
+
     private void Awake()
     {
         buttonPool = new ObjectPool<ItemButton>
@@ -63,7 +72,7 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
         lockPool = new ObjectPool<LockerButton>
             (() => // createFunc
             {
-                var go = Instantiate(lockPrefab, equipContent.transform);
+                var go = Instantiate(lockPrefab, equipContent.transform, true);
                 go.gameObject.SetActive(false);
                 return go;
             },
@@ -78,12 +87,63 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
                 go.gameObject.SetActive(false);
             });
 
+        infoPool = new ObjectPool<SkillCodeInfoPanel>
+            (() => // createFunc
+            {
+                var go = Instantiate(infoPrefab, infoContent.transform, true);
+                go.gameObject.SetActive(false);
+                return go;
+            },
+            delegate (SkillCodeInfoPanel go)
+            {
+                go.gameObject.SetActive(true);
+                go.transform.SetParent(infoContent.transform, true);
+            },
+            delegate (SkillCodeInfoPanel go)
+            {
+                go.transform.SetParent(gameObject.transform, true);
+                go.gameObject.SetActive(false);
+            });
+
         if (PlayDataManager.data == null)
         {
             PlayDataManager.Init();
         }
 
         Renewal();
+    }
+
+    public void ShowInfo()
+    {
+        // Clear InfoPanel
+        foreach (var item in infoList) 
+        {
+            infoPool.Release(item);
+        }
+        infoList.Clear();
+
+        var ct = CsvTableMgr.GetTable<CodeTable>().dataTable;
+        var skt = CsvTableMgr.GetTable<SkillTable>().dataTable;
+        var st = CsvTableMgr.GetTable<StringTable>().dataTable;
+        
+
+        foreach (var id in PlayDataManager.data.SkillCodes)
+        {
+            var go1 = infoPool.Get();
+            go1.nameText.text = st[skt[ct[id].skill1_id].name];
+            go1.levelText.text = $"Lv.{ct[id].skill1_lv}"; // 수정 요구
+            infoList.Add(go1);
+
+            if (ct[id].skill2_id != -1)
+            {
+                var go2 = infoPool.Get();
+                go2.nameText.text = st[skt[ct[id].skill2_id].name];
+                go2.levelText.text = $"Lv.{ct[id].skill2_lv}"; // 수정 요구
+                infoList.Add(go2);
+            }
+
+        }
+
     }
 
     public void ShowAll()
@@ -178,14 +238,19 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
         lockList.Clear();
     }
 
+    public void SortSkillCode(int codename)
+    {
+        
+    }
+
     public void Renewal()
     {
         Clear();
 
+        ShowInfo();
         ShowAll(); // test code
         ShowEquip();
     }
-
     
     private void OnEnable()
     {

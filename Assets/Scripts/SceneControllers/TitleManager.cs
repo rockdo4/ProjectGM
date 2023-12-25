@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class TitleManager : MonoBehaviour, IRenewal
 {
     [Header("소지금 텍스트")]
-    public TextMeshProUGUI moneyText;
+    [SerializeField]
+    private TextMeshProUGUI moneyText;
 
     [Header("진동기능")]
     [SerializeField]
