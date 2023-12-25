@@ -16,6 +16,7 @@ public class PlayerAttackState2 : PlayerStateBase
 
     public override void Enter()
     {
+        controller.player.attackState = Player.AttackState.None;
         animator ??= controller.player.Animator;
         animator.speed = controller.player.Stat.globalSpeed.attackSpeed * controller.player.Stat.attackSpeed;
 
@@ -29,9 +30,10 @@ public class PlayerAttackState2 : PlayerStateBase
 
     public override void Update()
     {
-        if (controller.player.Enemy.IsGroggy == true)
+        if (controller.player.Enemy.IsGroggy)
         {
             controller.SetState(PlayerController.State.Idle);
+            return;
         }
 
         switch (controller.player.attackState)
@@ -41,6 +43,11 @@ public class PlayerAttackState2 : PlayerStateBase
                 SetNextAttack = false;
                 break;
             case Player.AttackState.Attack:
+                //if (controller.player.evadePoint >= controller.player.Stat.maxEvadePoint)
+                //{
+                //    controller.player.evadePoint = 0f;
+                //    controller.player.Enemy.IsGroggy = true;
+                //}
                 break;
             case Player.AttackState.AfterStart:
                 if (!SetNextAttack && TouchManager.Instance.Holded)

@@ -20,7 +20,10 @@ public class TakeAttack : MonoBehaviour, IAttackable
         }
 
         attackTarget.HP -= attack.Damage;
-        attackTarget.IsGroggy = attack.IsGroggy; // 트루 펄스 할당하는 부분
+        if (attackTarget.IsGroggy != attack.IsGroggy)
+        {
+            attackTarget.IsGroggy = attack.IsGroggy; // 트루 펄스 할당하는 부분
+        }
 
         CreateHitEffect(transform.position);
 
