@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UI;
@@ -23,6 +24,10 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
     [Header("착용중 Content")]
     [SerializeField]
     private GameObject equipContent;
+
+    [Header("확장 Content")]
+    [SerializeField]
+    private GameObject exContent;
 
     [Header("인벤토리 Content")]
     [SerializeField]
@@ -157,6 +162,24 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
 
         }
 
+    }
+
+    public void ExpandInfo()
+    {
+        // Clear
+        var infos = exContent.GetComponentsInChildren<SkillCodeInfoPanel>();
+        foreach (var info in infos)
+        {
+            infoPool.Release(info);
+        }
+
+        foreach (var info in infoList)
+        {
+            var go = infoPool.Get();
+            go.nameText.text = info.nameText.text;
+            go.levelText.text = info.levelText.text;
+            go.transform.SetParent(exContent.transform, true);
+        }
     }
 
     public void ShowAll()
