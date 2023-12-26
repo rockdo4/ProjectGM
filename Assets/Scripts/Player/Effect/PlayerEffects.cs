@@ -14,10 +14,11 @@ public enum PlayerEffectType
 public class PlayerEffects : MonoBehaviour
 {
     [System.Serializable]
+    [RequireComponent(typeof(EffectBase))]
     private class EffectInfo
     {
         public PlayerEffectType effectType;
-        public Effect effect;
+        public EffectBase effect;
     }
 
     [Header("¿Ã∆Â∆Æ µÓ∑œ")]
@@ -29,6 +30,7 @@ public class PlayerEffects : MonoBehaviour
         foreach(var info in effectInfos)
         {
             info.effect.Init(transform);
+            info.effect.gameObject.SetActive(false);
         }
     }
 

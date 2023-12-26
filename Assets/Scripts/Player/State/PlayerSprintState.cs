@@ -41,7 +41,7 @@ public class PlayerSprintState : PlayerStateBase
             if (castingTimer >= castingTime)
             {
                 controller.player.Animator.SetTrigger(triggerName);
-                controller.player.effects.PlayEffect(PlayerEffectType.Sprint);
+                controller.player.Effects.PlayEffect(PlayerEffectType.Sprint);
                 isCast = true;
             }
             return;
@@ -79,7 +79,7 @@ public class PlayerSprintState : PlayerStateBase
 
     public override void Exit()
     {
-        controller.player.effects.StopEffect(PlayerEffectType.Sprint);
+        controller.player.Effects.StopEffect(PlayerEffectType.Sprint);
         controller.player.Animator.ResetTrigger("Sprint");
     }
 

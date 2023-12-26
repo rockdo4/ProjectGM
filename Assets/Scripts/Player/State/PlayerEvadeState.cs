@@ -43,7 +43,7 @@ public class PlayerEvadeState : PlayerStateBase
         controller.player.Animator.SetFloat("Z", direction.z);
         controller.player.Animator.SetTrigger(triggerName);
 
-        controller.player.effects.PlayEffect(PlayerEffectType.Evade, direction);
+        controller.player.Effects.PlayEffect(PlayerEffectType.Evade, direction);
     }
 
     public override void Update()

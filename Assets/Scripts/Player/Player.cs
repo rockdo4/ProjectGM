@@ -1,6 +1,5 @@
 using Cinemachine;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Player : LivingObject
 {
@@ -21,33 +20,13 @@ public class Player : LivingObject
 
     public LivingObject Enemy { get; private set; }
     public Rigidbody Rigid { get; private set; }
-    public BoxCollider Colldier { get; private set; }
-    [Header("가상 카메라 연결")]
-    public CinemachineVirtualCamera virtualCamera;
+    public CinemachineVirtualCamera VirtualCamera { get; private set; }
     public Animator Animator { get; private set; }// animator test code
     public WeaponPrefab CurrentWeapon { get; set; }
     public WeaponPrefab FakeWeapon { get; set; }
 
-    public PlayerEffects effects { get; private set; }
+    public PlayerEffects Effects { get; private set; }
 
-    public float MoveDistance
-    {
-        get
-        {
-            return Colldier.bounds.size.y * 2;
-        }
-    }
-    public float DistanceToEnemy
-    {
-        get
-        {
-            if (Enemy == null)
-            {
-                return 0f;
-            }
-            return Vector3.Distance(transform.position, Enemy.transform.position);
-        }
-    }
     public bool CanAttack
     {
         get
@@ -56,7 +35,9 @@ public class Player : LivingObject
             {
                 return false;
             }
-            return DistanceToEnemy < CurrentWeapon.attackRange;
+
+            Vector3 direction = Enemy.transform.position - transform.position;
+            return direction.magnitude < CurrentWeapon.attackRange;
         }
     }
 
@@ -68,22 +49,13 @@ public class Player : LivingObject
         }
     }
 
-    public PlayerController.State CurrentState
-    {
-        get
-        {
-            return GetComponent<PlayerController>().CurrentState;
-        }
-    }
-
     protected override void Awake()
     {
         base.Awake();
         Rigid = GetComponent<Rigidbody>();
-        Colldier = GetComponent<BoxCollider>();
         Animator = GetComponent<Animator>();
-        virtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
-        effects = GetComponent<PlayerEffects>();
+        VirtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
+        Effects = GetComponent<PlayerEffects>();
     }
 
     private void Start()

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EffectTimeScale : Effect
+public class EffectTimeScale : EffectBase
 {
     [Header("적용할 시간 배율")]
     [Range(0.1f, 3f)]
@@ -9,6 +9,10 @@ public class EffectTimeScale : Effect
 
     protected override void Update()
     {
+        if (GameManager.instance.IsPaused)
+        {
+            return;
+        }
         base.Update();
         Time.timeScale += (1f / duration) * Time.unscaledDeltaTime;
         Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);

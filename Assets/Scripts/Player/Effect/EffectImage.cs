@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EffectImage : Effect
+public class EffectImage : EffectBase
 {
     [Header("페이드 아웃 사용 여부")]
     [SerializeField]
@@ -15,7 +15,7 @@ public class EffectImage : Effect
 
     public override void Init(Transform targetTransform = null)
     {
-        image = prefab.GetComponent<Image>();
+        image = GetComponent<Image>();
         originalColor = image.color;
         gameObject.SetActive(false);
     }
