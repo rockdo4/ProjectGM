@@ -32,41 +32,62 @@ public class CameraManager : MonoBehaviour
         playerCameras = GameObject.FindWithTag(Tags.player)?.GetComponentsInChildren<CinemachineVirtualCamera>();
         enemyCameras = GameObject.FindWithTag(Tags.enemy)?.GetComponentsInChildren<CinemachineVirtualCamera>();
 
-        currentVirtualCamera = GetComponent<CinemachineVirtualCamera>();
-        noise = currentVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        currentVirtualCamera = playerCameras[0];
     }
 
     private void Start()
     {
         playerCameras = GameObject.FindWithTag(Tags.player)?.GetComponentsInChildren<CinemachineVirtualCamera>();
         enemyCameras = GameObject.FindWithTag(Tags.enemy)?.GetComponentsInChildren<CinemachineVirtualCamera>();
-        SetCamera(Tags.player);
+        SetCameraWithTag(Tags.player);
     }
 
-    public void SetCamera(string tag, int index = 0)
+    private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.T))
+        {
+            SetCameraWithTag(Tags.player);
+        }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            SetCameraWithTag(Tags.enemy);
+        }
+    }
+
+    public void SetCameraWithTag(string tag, int index = 0)
+    {
+        currentVirtualCamera.gameObject.SetActive(false);
         if (tag == Tags.player)
         {
-            if (playerCameras.Length <= index)
+            for(int i = 0; i < playerCameras.Length; i++)
             {
-                return;
+                if (i == index)
+                {
+                    currentVirtualCamera = playerCameras[i];
+                    noise = currentVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                }
             }
-            currentVirtualCamera = playerCameras[index];
         }
         else if (tag == Tags.enemy)
         {
-            if (enemyCameras.Length <= index)
+            for (int i = 0; i < enemyCameras.Length; i++)
             {
-                return;
+                if (i == index)
+                {
+                    currentVirtualCamera = enemyCameras[i];
+                }
             }
-            currentVirtualCamera = enemyCameras[index];
         }
-
-        currentVirtualCamera.enabled = true;    
+        currentVirtualCamera.gameObject.SetActive(true);
     }
 
     public void Noise(float amplitudeGain, float frequencyGain, Vector3 pivotOffset = default)
     {
+        if (noise == null)
+        {
+            return;
+        }
+
         noise.m_AmplitudeGain = amplitudeGain;
         noise.m_FrequencyGain = frequencyGain;
         if (pivotOffset != default)
