@@ -105,4 +105,9 @@ public class GameManager : MonoBehaviour
         gameOverUI.SetActive(!active);
         Time.timeScale = !active ? pauseTimeScale : prevTimeScale;
     }
+
+    private void OnDestroy()
+    {
+        Time.timeScale = 1f;
+    }
 }
