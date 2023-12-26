@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4349,6 +4349,7 @@ MonoBehaviour:
   lockPrefab: {fileID: 8150462643779686195, guid: c25ea6923a831d14298324cceed8c6e6,
     type: 3}
   equipPanel: {fileID: 1638002286}
+  dropdown: {fileID: 2009359857}
 --- !u!1001 &399501819
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12258,7 +12259,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 2}
-  m_SizeDelta: {x: 0, y: 400}
+  m_SizeDelta: {x: 0, y: 600}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &978359747
 MonoBehaviour:
@@ -25935,24 +25936,6 @@ MonoBehaviour:
   m_Options:
     m_Options:
     - m_Text: "\uBAA8\uB450\uBCF4\uAE30"
-      m_Image: {fileID: 0}
-    - m_Text: "\uD63C\uC2E0"
-      m_Image: {fileID: 0}
-    - m_Text: "\uBD88\uAD74"
-      m_Image: {fileID: 0}
-    - m_Text: "\uD2C8\uC0C8"
-      m_Image: {fileID: 0}
-    - m_Text: "\uCD95\uC801"
-      m_Image: {fileID: 0}
-    - m_Text: "\uC120\uC81C"
-      m_Image: {fileID: 0}
-    - m_Text: "\uD559\uC2B5"
-      m_Image: {fileID: 0}
-    - m_Text: "\uB3C4\uC804"
-      m_Image: {fileID: 0}
-    - m_Text: "\uC591\uB150"
-      m_Image: {fileID: 0}
-    - m_Text: "\uC800\uB3CC"
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

@@ -12,6 +12,9 @@ public static class PlayDataManager
     public static readonly Dictionary<Armor.ArmorType, Armor> curArmor
         = new Dictionary<Armor.ArmorType, Armor>();
 
+    public static readonly Dictionary<int, int> curSkill 
+        = new Dictionary<int, int>();
+
     #region Inventory Capacity
     // 무기 최대 소지 개수
     public static readonly int weaponsCapacity = 32;
@@ -81,6 +84,8 @@ public static class PlayDataManager
                 curArmor[armor.armorType] = armor;
             }
         }
+
+        OrganizeSkill();
     }
 
     public static void Save()
@@ -482,6 +487,9 @@ public static class PlayDataManager
 
         data.SkillCodes.Sort();
 
+        OrganizeSkill();
+        Save();
+
         return true;
     }
 
@@ -496,5 +504,47 @@ public static class PlayDataManager
         IncreaseCode(id, 1);
 
         data.SkillCodes.Sort();
+
+        OrganizeSkill();
+        Save();
+
+    }
+
+    public static void OrganizeSkill()
+    {
+        curSkill.Clear();
+
+        var ct = CsvTableMgr.GetTable<CodeTable>().dataTable;
+        var skt = CsvTableMgr.GetTable<SkillTable>().dataTable;
+
+        foreach (var id in data.SkillCodes) 
+        {
+            var id1 = ct[id].skill1_id;
+            var lv1 = ct[id].skill1_lv;
+            if (!curSkill.ContainsKey(id1))
+            {
+                curSkill.Add(id1, lv1);
+            }
+            else 
+            {
+                curSkill[id1] = Mathf.Clamp(curSkill[id1] + lv1, 1, skt[id1].max_lv);
+            }
+            
+            var id2 = ct[id].skill2_id;
+            var lv2 = ct[id].skill2_lv;
+            if (id2 != -1)
+            {
+                if (!curSkill.ContainsKey(id2))
+                {
+                    curSkill.Add(id2, lv2);
+                }
+                else
+                {
+                    curSkill[id2] = Mathf.Clamp(curSkill[id2] + lv2, 1, skt[id2].max_lv);
+
+                }
+            }
+
+        }
     }
 }

@@ -152,7 +152,6 @@ public class InventoryManager : MonoBehaviour, IRenewal
                             sellEquipList.Remove(weapon);
                             go.iconImage.color = Color.white;
                         });
-                        releaseList.Add(newGo);
 
                         go.sell = newGo;
                     }
@@ -230,7 +229,6 @@ public class InventoryManager : MonoBehaviour, IRenewal
                             sellEquipList.Remove(armor);
                             go.iconImage.color = Color.white;
                         });
-                        releaseList.Add(newGo);
 
                         go.sell = newGo;
                     }
@@ -303,7 +301,6 @@ public class InventoryManager : MonoBehaviour, IRenewal
                             sellSkillCodeList.Remove(skillcode);
                             go.iconImage.color = Color.white;
                         });
-                        releaseList.Add(newGo);
 
                         go.sell = newGo;
                     }
@@ -371,7 +368,6 @@ public class InventoryManager : MonoBehaviour, IRenewal
                             sellMatList.Remove(mat);
                             go.iconImage.color = Color.white;
                         });
-                        releaseList.Add(newGo);
 
                         go.sell = newGo;
                     }

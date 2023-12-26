@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.UI;
 
 public class SkillCodeManager : MonoBehaviour, IRenewal
 {
@@ -36,6 +39,10 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
     [Header("스킬코드 장착 패널")]
     [SerializeField]
     private SkillCodeEquipPanel equipPanel;
+
+    [Header("정렬 Dropdown")]
+    [SerializeField]
+    private TMP_Dropdown dropdown;
 
     private ObjectPool<ItemButton> buttonPool;
     private List<ItemButton> releaseList = new List<ItemButton>();
@@ -109,8 +116,24 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
         {
             PlayDataManager.Init();
         }
+        DropdownInit();
 
         Renewal();
+    }
+
+    private void DropdownInit()
+    {
+        var skt = CsvTableMgr.GetTable<SkillTable>().dataTable;
+        var st = CsvTableMgr.GetTable<StringTable>().dataTable;
+
+        foreach (var item in skt) 
+        {
+            if (item.Value.type != 1)
+            {
+                continue;
+            }
+            dropdown.options.Add(new TMP_Dropdown.OptionData(st[item.Value.name]));
+        }
     }
 
     public void ShowInfo()
@@ -122,25 +145,15 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
         }
         infoList.Clear();
 
-        var ct = CsvTableMgr.GetTable<CodeTable>().dataTable;
         var skt = CsvTableMgr.GetTable<SkillTable>().dataTable;
         var st = CsvTableMgr.GetTable<StringTable>().dataTable;
-        
 
-        foreach (var id in PlayDataManager.data.SkillCodes)
+        foreach (var skill in PlayDataManager.curSkill)
         {
-            var go1 = infoPool.Get();
-            go1.nameText.text = st[skt[ct[id].skill1_id].name];
-            go1.levelText.text = $"Lv.{ct[id].skill1_lv}"; // 수정 요구
-            infoList.Add(go1);
-
-            if (ct[id].skill2_id != -1)
-            {
-                var go2 = infoPool.Get();
-                go2.nameText.text = st[skt[ct[id].skill2_id].name];
-                go2.levelText.text = $"Lv.{ct[id].skill2_lv}"; // 수정 요구
-                infoList.Add(go2);
-            }
+            var go = infoPool.Get();
+            go.nameText.text = st[skt[skill.Key].name];
+            go.levelText.text = $"Lv.{skill.Value}"; // 수정 요구
+            infoList.Add(go);
 
         }
 
@@ -240,7 +253,42 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
 
     public void SortSkillCode(int codename)
     {
-        
+        if (codename == 0)
+        {
+            ShowAll();
+            return;
+        }
+
+        ClearItemButton();
+        ShowEquip();
+
+        var skt = CsvTableMgr.GetTable<SkillTable>().dataTable;
+        var ct = CsvTableMgr.GetTable<CodeTable>().dataTable;
+        var st = CsvTableMgr.GetTable<StringTable>().dataTable;
+
+        var str = st.FirstOrDefault(x => x.Value == dropdown.options[codename].text).Key;
+        var target = skt.FirstOrDefault(x => x.Value.name == str).Key;
+
+        foreach (var code in PlayDataManager.data.CodeInventory)
+        {
+            if (ct[code.id].skill1_id != target && ct[code.id].skill2_id != target)
+            {
+                continue;
+            }
+            var go = buttonPool.Get();
+
+            go.iconImage.sprite = skillcodeIconSO.GetSprite(ct[code.id].type);
+            go.OnCountAct(true, code.count);
+
+            go.button.onClick.AddListener(() =>
+            {
+                equipPanel.iconImage.sprite = go.iconImage.sprite;
+                equipPanel.SetSkillCode(code);
+                equipPanel.EquipMode();
+                equipPanel.Renewal();
+            });
+            releaseList.Add(go);
+        }
     }
 
     public void Renewal()
