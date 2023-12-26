@@ -233,7 +233,7 @@ public class TouchManager : Singleton<TouchManager>
         }
 
         EventSystem eventSystem = EventSystem.current;
-
+        var result = false;
 #if UNITY_EDITOR
         if (eventSystem != null && eventSystem.IsPointerOverGameObject())
         {
@@ -241,20 +241,19 @@ public class TouchManager : Singleton<TouchManager>
 
             if (ui != null && ui.tag != Tags.ignoreUI)
             {
-                return true;
+                result = true;
             }
         }
-        return false;
 #elif UNITY_ANDROID || UNITY_IOS
         if (eventSystem != null && eventSystem.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
         {
             GameObject ui = eventSystem.currentSelectedGameObject;
             if (ui != null && ui.tag != Tags.ignoreUI)
             {
-                return true;
+                result = true;
             }
         }
-        return false;
 #endif
+        return result;
     }
 }
