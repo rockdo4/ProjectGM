@@ -37,10 +37,16 @@ public class EnemyAI : LivingObject
     public int[] wolfAttackPatternPhaseTwo = new int[] { 1, 2 };
 
     [Header("거미 페이즈1 공격 패턴")]
-    public int[] spiderAttackPatternPhaseOne = new int[] { 1, 2, 3 }; // 테스트로 레인지A 인덱스 넣기
+    public int[] spiderAttackPatternPhaseOne = new int[] { 1, 2, 3 };
 
     [Header("거미 페이즈2 공격 패턴")]
     public int[] spiderAttackPatternPhaseTwo = new int[] { 1, 2, 3 };
+
+    [Header("드래곤 페이즈1 공격 패턴")]
+    public int[] dragonAttackPatternPhaseOne = new int[] { 1, 2, 3 };
+
+    [Header("드래곤 페이즈2 공격 패턴")]
+    public int[] dragonAttackPatternPhaseTwo = new int[] { 1, 2, 3 };
 
     private int EnemyMeleeAttackIndexOne = 0;
     private int EnemyMeleeAttackIndexTwo = 1;
@@ -117,7 +123,7 @@ public class EnemyAI : LivingObject
     public float minAngle = 10f;
 
     [Header("몬스터가 고개를 돌리는 속도")]
-    public float rotationSpeed = 5f;
+    public float rotationSpeed = 8f;
 
     BehaviorTreeRunner BTRunner;
     public Transform detectedPlayer;
@@ -164,6 +170,7 @@ public class EnemyAI : LivingObject
         Boar,
         Wolf,
         Spider,
+        Dragon
     }
 
     public enum AttackPatternType
@@ -229,6 +236,9 @@ public class EnemyAI : LivingObject
                 break;
             case EnemyType.Spider:
                 BTRunner = new BehaviorTreeRunner(SpiderBT());
+                break;
+            case EnemyType.Dragon:
+                BTRunner = new BehaviorTreeRunner(DragonBT());
                 break;
 
         }
@@ -651,7 +661,71 @@ public class EnemyAI : LivingObject
     }
     #endregion
 
-     #region 행동트리 -> 어택 패턴 -> 애니메이션 업데이트
+    #region 드래곤 행동트리
+    INode DragonBT()
+    {
+        return new SelectorNode
+        (
+            new List<INode>()
+            {
+                new DecoratorNode
+                (
+                    () => IsGroggy,
+                    new ActionNode(GroggyTrueState)
+                ),
+
+                new DecoratorNode
+                (
+                    () => !IsGroggy,
+
+                    new SequenceNode
+                    (
+                        new List<INode>()
+                        {
+                            new ActionNode(GroggyFalseState),
+
+                            new SelectorNode
+                            (
+                                new List<INode>()
+                                {
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ConditionNode(IsPhaseOne),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Dragon, dragonAttackPatternPhaseOne))
+                                        }
+                                    ),
+
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new InverterNode(new ConditionNode(IsPhaseOne)),
+                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Dragon, dragonAttackPatternPhaseTwo)),
+                                        }
+                                    ),
+
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ActionNode(DetectPlayer),
+                                            new ActionNode(TracePlayer),
+                                        }
+                                    ),
+                                }
+                            )
+                        }
+                    )
+                )
+            }
+        );
+    }
+    #endregion
+
+
+    #region 행동트리 -> 어택 패턴 -> 애니메이션 업데이트
 
     private INode.EnemyState ExecuteAttackPattern(EnemyType enemytype, int[] pattern)
     {
@@ -1893,28 +1967,4 @@ public class EnemyAI : LivingObject
     }
 
     #endregion
-
-
-
-    // 투사체 온트리거 엔터
-    // 몬스터 온
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("Player"))
-    //    {
-    //        Player player = other.GetComponent<Player>();
-    //        if (player != null)
-    //        {
-    //            // 널체크, 초기화 확인
-    //            //Debug.Log(gameObject.GetComponent<EnemyAI>());
-    //            //Debug.Log(player);
-    //            //Debug.Log(Stat.AttackDamage);
-
-    //            ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, Stat.AttackDamage);
-    //        }
-
-    //        Debug.Log(gameObject);
-    //        Destroy(gameObject);
-    //    }
-    //}
 }
