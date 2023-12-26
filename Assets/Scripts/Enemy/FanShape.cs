@@ -49,6 +49,25 @@ public class FanShape : MonoBehaviour
 
         float uvSpeed = Mathf.Lerp(1.0f, 2.0f, t);
         material.SetFloat("UVSpeed", uvSpeed);
+
+        PerformRaycastDamageCheck();
+    }
+
+    void PerformRaycastDamageCheck()
+    {
+        for (int i = 0; i < sharedMesh.vertexCount; i++)
+        {
+            Vector3 vertex = transform.TransformPoint(sharedMesh.vertices[i]);
+            RaycastHit hit;
+
+            if (Physics.Raycast(vertex, transform.forward, out hit, 1f))
+            {
+                if (hit.collider.CompareTag("Player"))
+                {
+                    
+                }
+            }
+        }
     }
 
     Mesh CreateFanMesh()

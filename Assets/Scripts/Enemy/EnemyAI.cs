@@ -1041,6 +1041,20 @@ public class EnemyAI : LivingObject
 
             attackRangeInstance = Instantiate(attackPrefab, transform);
 
+            //MeshCollider meshCollider = attackRangeInstance.GetComponent<MeshCollider>();
+            //if (meshCollider == null)
+            //{
+            //    meshCollider = attackRangeInstance.AddComponent<MeshCollider>();
+            //    meshCollider.convex = true;
+            //    meshCollider.isTrigger = true;
+            //}
+
+            //AttackCell triggerHandler = attackRangeInstance.GetComponent<AttackCell>();
+            //if (triggerHandler == null)
+            //{
+            //    triggerHandler = attackRangeInstance.AddComponent<AttackCell>();
+            //}
+
             foreach (GameObject cell in cellInstances) // 리스트의 모든 셀 인스턴스를 순회
             {
                 if (cell != null)
@@ -1050,17 +1064,7 @@ public class EnemyAI : LivingObject
                 }
             }
 
-            foreach (GameObject colliderObject in colliderObjects)
-            {
-                if (colliderObject != null)
-                {
-                    Destroy(colliderObject);
-                }
-            }
-            colliderObjects.Clear();
-
             AttackPattern currentPattern = null;
-            
 
             if (attackIndex >= 0 && attackIndex < savedPatterns.Count)
             {
@@ -1087,7 +1091,26 @@ public class EnemyAI : LivingObject
                     Vector3 cellPosition = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
                     GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
                     cell.SetActive(true);
+
+                    //MeshCollider meshCollider = cell.GetComponent<MeshCollider>();
+                    //if (meshCollider == null)
+                    //{
+                    //    meshCollider = cell.AddComponent<MeshCollider>();
+                    //    meshCollider.convex = true;
+                    //    meshCollider.isTrigger = true;
+                    //}
+
+                    //AttackCell attackCellComponent = cell.GetComponent<AttackCell>();
+                    //if (attackCellComponent == null)
+                    //{
+                    //    attackCellComponent = cell.AddComponent<AttackCell>();
+                    //}
+
                     cellInstances.Add(cell);
+
+                    
+
+
 
                     if (i != 4)
                     {
@@ -1172,92 +1195,9 @@ public class EnemyAI : LivingObject
                         cell.transform.rotation = transform.rotation;
                     }
 
-                    GameObject colliderObject = new GameObject("AttackCollider");
-                    colliderObject.AddComponent<AttackCell>();
 
-                    colliderObject.transform.SetParent(cell.transform);
-                    colliderObject.transform.localRotation = Quaternion.identity;
-
-                    BoxCollider collider = colliderObject.AddComponent<BoxCollider>();
-                    collider.size = new Vector3(cellSize.x, 0.015f, cellSize.z);
-                    collider.isTrigger = true;
-
-                    Vector3 additionalOffset = Vector3.zero;
-
-                    // 곰 콜라이더 오프셋
-                    if (enemyType == EnemyType.Bear && AttackPatternType == AttackPatternType.A)
-                    {
-                        additionalOffset = new Vector3(1.6f, 0f, 2.6f);
-                    }
-
-                    if (enemyType == EnemyType.Bear && AttackPatternType == AttackPatternType.B || AttackPatternType == AttackPatternType.C || AttackPatternType == AttackPatternType.D)
-                    {
-                        additionalOffset = new Vector3(0f, 0f, 2f);
-                    }
-
-                    // 늑대 콜라이더 오프셋
-                    if (enemyType == EnemyType.Wolf && AttackPatternType == AttackPatternType.A)
-                    {
-                        additionalOffset = new Vector3(0.7f, 0f, 0.4f);
-                    }
-
-                    if (enemyType == EnemyType.Wolf && AttackPatternType == AttackPatternType.B)
-                    {
-                        additionalOffset = new Vector3(1.1f, 0f, 0.6f);
-                    }
-
-                    if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.B)
-                    {
-                        Vector3 currentSize = collider.size;
-                        collider.size = new Vector3(currentSize.x / 1.8f, currentSize.y, currentSize.z);
-                        additionalOffset = new Vector3(0f, 0f, 2.5f);
-                    }
-
-                    if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.C)
-                    {
-                        additionalOffset += new Vector3(2.2f, 0f, -1f);
-
-                        Vector3 currentSize = collider.size;
-                        collider.size = new Vector3(currentSize.x / 1.2f, currentSize.y, currentSize.z / 1.5f);
-                    }
-
-                    if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.C)
-                    {
-                        additionalOffset += new Vector3(2.2f, 0f, -1f);
-
-                        Vector3 currentSize = collider.size;
-                        collider.size = new Vector3(currentSize.x / 1.2f, currentSize.y, currentSize.z / 1.5f);
-                    }
-
-                    if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.B)
-                    {
-                        additionalOffset = new Vector3(2f, 0f, 2f);
-                    }
-
-                    if (enemyType == EnemyType.Boar && AttackPatternType == AttackPatternType.A)
-                    {
-                        additionalOffset = new Vector3(2f, 0f, 2f);
-                    }
-
-                    if (enemyType == EnemyType.Boar && AttackPatternType == AttackPatternType.B)
-                    {
-                        Vector3 currentSize = collider.size;
-                        collider.size = new Vector3(currentSize.x * 0.3f, currentSize.y, currentSize.z * 0.08f);
-                        additionalOffset = new Vector3(6f, 0, 0.6f);
-                    }
-
-                    if (enemyType == EnemyType.Boar && AttackPatternType == AttackPatternType.C)
-                    {
-                        additionalOffset = Vector3.zero;
-                    }
-
-
-                    colliderObject.transform.localPosition = Vector3.zero + additionalOffset; // 위치 변경 뒤에 해야함
-                    colliderObjects.Add(colliderObject);
                 }
             }
-            // 어택 콜라이더가 자식이 되어서 수정이 필요함 // 아니면 공격판정이 당연히 안됨 같이 꺼져서
-            // 액티브 펄스를 하는 방식에서 매쉬만 끄게 하는걸로
             attackRangeInstance.SetActive(false);
 
         }
@@ -1884,7 +1824,29 @@ public class EnemyAI : LivingObject
 
     private void OnDrawGizmos()
     {
+        if (cellInstances == null) return;
+
+        Gizmos.color = Color.red; // 레이캐스트의 색상 설정
+        float raycastDistance = 100f; // 레이캐스트의 거리
+
+        foreach (GameObject cell in cellInstances)
+        {
+            if (cell != null)
+            {
+                Bounds bounds = cell.GetComponent<Renderer>().bounds;
+                Gizmos.DrawWireCube(bounds.center, bounds.size);
+
+                //Vector3 cellPosition = cell.transform.position;
+                //// cell의 위치에서 적의 전방 방향으로 레이캐스트 그리기
+                //Vector3 direction = transform.forward * raycastDistance;
+                //Gizmos.DrawRay(cellPosition, direction);
+            }
+        }
+
 #if UNITY_EDITOR
+
+
+
         if (!EditorApplication.isPlaying)
         {
             Gizmos.color = Color.green;
@@ -1933,22 +1895,43 @@ public class EnemyAI : LivingObject
     {
         float actualAttackDamage = isTwoPhase ? Stat.AttackDamage * 2 : Stat.AttackDamage;
 
-        foreach (GameObject cell in colliderObjects)
+        foreach (GameObject cell in cellInstances)
         {
             if (cell != null)
             {
-                AttackCell attackCell = cell.GetComponent<AttackCell>();
+                RaycastHit hit;
+                float yOffset = 0.5f; // Y축 오프셋 값
+                Vector3 cellPosition = cell.transform.position + new Vector3(0, yOffset, 0);
 
-                //Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
-                
-                if (attackCell != null && attackCell.playerInside)
+                // 레이캐스팅을 사용하여 플레이어와의 충돌 검사
+                if (Physics.Raycast(cellPosition, transform.forward, out hit, rangeAttackRange, playerLayerMask))
                 {
-                    //Debug.Log("온어택 호출이 안됐으면 너가 그 몬스터의 애니메이션 이벤트를 안넣었겠지?");
-                    ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
-                    break;
+                    if (hit.collider.CompareTag("Player")) // 'Player'는 플레이어의 태그입니다.
+                    {
+                        Debug.Log("123");
+                        ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
+                        break;
+                    }
                 }
             }
         }
+
+        //foreach (GameObject cell in cellInstances)
+        //{
+        //    if (cell != null)
+        //    {
+        //        AttackCell attackCell = cell.GetComponent<AttackCell>();
+
+        //        Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
+                
+        //        if (attackCell != null && attackCell.playerInside)
+        //        {
+        //            //Debug.Log("온어택 호출이 안됐으면 너가 그 몬스터의 애니메이션 이벤트를 안넣었겠지?");
+        //            ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
+        //            break;
+        //        }
+        //    }
+        //}
     }
 
     #endregion
