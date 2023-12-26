@@ -43,14 +43,6 @@ public class CameraManager : MonoBehaviour
         SetCamera(Tags.player);
     }
 
-    private void Update()
-    {
-        if (true)
-        {
-
-        }
-    }
-
     public void SetCamera(string tag, int index = 0)
     {
         if (tag == Tags.player)

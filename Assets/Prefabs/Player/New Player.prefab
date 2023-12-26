@@ -107,7 +107,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7e69d905b99ec4088b79ebb3e985bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextState: 0
   leftHand: {fileID: 3446526013813627044}
   rightHand: {fileID: 2647309340549258145}
   leftWing: {fileID: 427092248617595725}
@@ -449,7 +448,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17b6b3c66b1e8174db93e72c8d05e446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 1
+  duration: 0.4
+  amplitude: 5
+  frequency: 5
 --- !u!1 &6120406501853401992
 GameObject:
   m_ObjectHideFlags: 0
