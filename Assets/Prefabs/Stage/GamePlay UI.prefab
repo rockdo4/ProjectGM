@@ -390,7 +390,7 @@ PrefabInstance:
     - target: {fileID: 6078977065813914203, guid: bd3528f74beed2f42820d7af88d3c4d2,
         type: 3}
       propertyPath: m_Interactable
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6517140707363460496, guid: bd3528f74beed2f42820d7af88d3c4d2,
         type: 3}
@@ -495,12 +495,12 @@ PrefabInstance:
     - target: {fileID: 7140426274178407813, guid: bd3528f74beed2f42820d7af88d3c4d2,
         type: 3}
       propertyPath: m_Interactable
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7393605607130578986, guid: bd3528f74beed2f42820d7af88d3c4d2,
         type: 3}
       propertyPath: m_Interactable
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8299506624817659818, guid: bd3528f74beed2f42820d7af88d3c4d2,
         type: 3}
@@ -819,6 +819,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6be9ec9474f31e4fba2527883be4fa0, type: 3}
+--- !u!1 &1230214736616549954 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8199888373327514512, guid: e6be9ec9474f31e4fba2527883be4fa0,
+    type: 3}
+  m_PrefabInstance: {fileID: 6978682555208836562}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4138186180445050914 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6463941624021630448, guid: e6be9ec9474f31e4fba2527883be4fa0,
@@ -899,6 +905,11 @@ PrefabInstance:
       propertyPath: gameOverUI
       value: 
       objectReference: {fileID: 8177406431491422508}
+    - target: {fileID: 8609004134944152520, guid: 19b7dbc4008f0d94bad493634814d61f,
+        type: 3}
+      propertyPath: cancleButton
+      value: 
+      objectReference: {fileID: 1230214736616549954}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
