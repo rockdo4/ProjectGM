@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class TouchManager : Singleton<TouchManager>
 {
@@ -233,9 +232,9 @@ public class TouchManager : Singleton<TouchManager>
             return false;
         }
 
-
         EventSystem eventSystem = EventSystem.current;
 
+#if UNITY_EDITOR
         if (eventSystem != null && eventSystem.IsPointerOverGameObject())
         {
             GameObject ui = eventSystem.currentSelectedGameObject;
@@ -246,5 +245,16 @@ public class TouchManager : Singleton<TouchManager>
             }
         }
         return false;
+#elif UNITY_ANDROID || UNITY_IOS
+        if (eventSystem != null && eventSystem.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        {
+            GameObject ui = eventSystem.currentSelectedGameObject;
+            if (ui != null && ui.tag != Tags.ignoreUI)
+            {
+                return true;
+            }
+        }
+        return false;
+#endif
     }
 }

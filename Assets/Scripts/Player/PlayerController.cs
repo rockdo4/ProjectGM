@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetState(State newState)
     {
-        if (newState == CurrentState)
+        if (newState == CurrentState || CurrentState == State.Death)
         {
             return;
         }

@@ -357,6 +357,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Battle UI
       objectReference: {fileID: 0}
+    - target: {fileID: 2291675540455081102, guid: bd3528f74beed2f42820d7af88d3c4d2,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 51.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3245453269547988735, guid: bd3528f74beed2f42820d7af88d3c4d2,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 51.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4749684640037375451, guid: bd3528f74beed2f42820d7af88d3c4d2,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -503,7 +513,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4948610371860496505, guid: bd3528f74beed2f42820d7af88d3c4d2, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd3528f74beed2f42820d7af88d3c4d2, type: 3}
@@ -573,6 +584,16 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 9201833193626430024}
+    - target: {fileID: 1553148829911593522, guid: e6be9ec9474f31e4fba2527883be4fa0,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: RPG
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258420126275043021, guid: e6be9ec9474f31e4fba2527883be4fa0,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 2850676672613956276, guid: e6be9ec9474f31e4fba2527883be4fa0,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
