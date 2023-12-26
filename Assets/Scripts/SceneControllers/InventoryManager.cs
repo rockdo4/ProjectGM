@@ -105,6 +105,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
         ClearItemButton();
         curType = ItemType.Weapon;
+        SellMode(false);
 
         var weapons = PlayDataManager.data.WeaponInventory;
         foreach (var weapon in weapons)
@@ -184,6 +185,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
         ClearItemButton();
         curType = ItemType.Armor;
+        SellMode(false);
 
         var armors = PlayDataManager.data.ArmorInventory;
         foreach (var armor in armors)
@@ -261,6 +263,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
         ClearItemButton();
         curType = ItemType.SkillCode;
+        SellMode(false);
 
         var skillcodes = PlayDataManager.data.CodeInventory;
         foreach (var skillcode in skillcodes) 
@@ -332,6 +335,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
         ClearItemButton();
         curType = ItemType.Mat;
+        SellMode(false);
 
         var mats = PlayDataManager.data.MatInventory;
         foreach (var mat in mats)
@@ -404,8 +408,6 @@ public class InventoryManager : MonoBehaviour, IRenewal
     public void SellMode(bool mode)
     {
         sellMode = mode;
-        sellArea.SetActive(mode);
-        sellButton.SetActive(!mode);
 
         switch (curType)
         {
@@ -442,6 +444,9 @@ public class InventoryManager : MonoBehaviour, IRenewal
                 }
                 break;
         }
+
+        sellArea.SetActive(mode);
+        sellButton.SetActive(!mode);
     }
 
     public void SellItem()
@@ -454,6 +459,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     {
                         PlayDataManager.SellItem(item as Weapon);
                     }
+                    SellMode(false);
                     ShowWeapons();
                 }
                 break;
@@ -464,6 +470,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     {
                         PlayDataManager.SellItem(item as Armor);
                     }
+                    SellMode(false);
                     ShowArmors();
                 }
                 break;
@@ -474,6 +481,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     {
                         PlayDataManager.SellItem(item);
                     }
+                    SellMode(false);
                     ShowSkillCodes();
                 }
                 break;
@@ -484,13 +492,13 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     {
                         PlayDataManager.SellItem(item);
                     }
+                    SellMode(false);
                     ShowMaterials();
                 }
                 break;
         }
-        TitleManager.Instance.Renewal();
 
-        SellMode(false);
+        TitleManager.Instance.Renewal();
     }
 
     public void Renewal()
