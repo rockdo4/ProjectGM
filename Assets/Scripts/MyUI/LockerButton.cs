@@ -11,4 +11,11 @@ public class LockerButton : MonoBehaviour
     {
         lockImage.gameObject.SetActive(isLock);
     }
+
+    private void OnEnable()
+    {
+#if UNITY_STANDALONE || UNITY_EDITOR
+        transform.localScale = Vector3.one;
+#endif
+    }
 }

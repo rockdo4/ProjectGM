@@ -12,7 +12,7 @@ public static class PlayDataManager
     public static readonly Dictionary<Armor.ArmorType, Armor> curArmor
         = new Dictionary<Armor.ArmorType, Armor>();
 
-    public static readonly Dictionary<int, int> curSkill 
+    public static Dictionary<int, int> curSkill 
         = new Dictionary<int, int>();
 
     #region Inventory Capacity
@@ -541,10 +541,11 @@ public static class PlayDataManager
                 else
                 {
                     curSkill[id2] = Mathf.Clamp(curSkill[id2] + lv2, 1, skt[id2].max_lv);
-
                 }
             }
 
         }
+
+        curSkill = curSkill.OrderByDescending((x) => x.Value).ThenBy(x => x.Key).ToDictionary(x => x.Key, y => y.Value);
     }
 }
