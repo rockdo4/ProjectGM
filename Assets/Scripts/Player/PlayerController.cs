@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     private StateManager stateManager = new StateManager();
     private List<StateBase> states = new List<StateBase>();
     public State CurrentState { get; private set; }
-    public State nextState = State.Idle;
+    public State NextState { get; set; }
 
     #region Weapon
     public enum WeaponPosition
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
         player.CurrentWeapon = weaponSO.MakeWeapon(equipWeapon, rightHand, player.Animator);
         if (equipWeapon.weaponType == WeaponType.Tonpa)
         {
-            player.FakeWeapon = Instantiate(player.CurrentWeapon);
+            player.FakeWeapon = Instantiate(player.CurrentWeapon, leftHand);
         }
         subHandle = player.CurrentWeapon.transform.Find("LeftHandle");
 
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
         {
             player.GroggyAttack = true;
         }
-        if (player.GroggyAttack)
+        if (player.GroggyAttack && !player.Enemy.IsGroggy)
         {
             player.evadePoint -= Time.deltaTime * (player.Stat.maxEvadePoint / player.Stat.groggyTime);
             if (player.evadePoint <= 0f)
@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
     {
         if (CurrentState == State.Hit || CurrentState == State.Death)
         {
-            nextState = State.Evade;
+            NextState = State.Evade;
             return;
         }
         if (player.attackState == Player.AttackState.AfterStart || CurrentState == State.SuperAttack)
@@ -171,7 +171,7 @@ public class PlayerController : MonoBehaviour
     {
         if (CurrentState != State.Idle)
         {
-            nextState = State.Sprint;
+            NextState = State.Sprint;
             return;
         }
 
@@ -187,7 +187,6 @@ public class PlayerController : MonoBehaviour
     private void BeforeAttack()
     {
         player.attackState = Player.AttackState.Before;
-        nextState = State.Idle;
     }
     private void Attack()
     {
@@ -197,17 +196,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (player.DistanceToEnemy < player.CurrentWeapon.attackRange)
-        {
-            ExecuteAttack(player, player.Enemy);
-            if (player.GroggyAttack)
-            {
-                player.GroggyAttack = false;
-                player.evadePoint = 0f;
-            }
-        }
+        ExecuteAttack(player, player.Enemy);
+
         player.attackState = Player.AttackState.AfterStart;
-        nextState = State.Idle;
     }
     private void AfterAttack()
     {
@@ -225,12 +216,13 @@ public class PlayerController : MonoBehaviour
 
     public void SetState(State newState)
     {
-        if (newState == CurrentState)
+        if (newState == CurrentState || CurrentState == State.Death)
         {
             return;
         }
-
         CurrentState = newState;
+        NextState = State.Idle;
+        //Debug.Log($"--------- CurrentState: {CurrentState} \t{player.attackState} ---------");
         stateManager?.ChangeState(states[(int)newState]);
     }
 
@@ -250,14 +242,19 @@ public class PlayerController : MonoBehaviour
     private void ExecuteAttack(LivingObject attacker, LivingObject defender)
     {
         Attack attack = player.Stat.CreateAttack(attacker, defender, player.GroggyAttack);
-        var attackables = defender.GetComponents<IAttackable>();
+        if (!player.Enemy.IsGroggy && player.GroggyAttack)
+        {
+            player.evadePoint = 0f;
+        }
 
-        player.effects.PlayEffect(PlayerEffectType.Attack);
+        var attackables = defender.GetComponents<IAttackable>();
+        player.Effects.PlayEffect(PlayerEffectType.Attack);
 
         foreach (var attackable in attackables)
         {
             attackable.OnAttack(player.gameObject, attack);
         }
+
 
     }
 
@@ -286,5 +283,24 @@ public class PlayerController : MonoBehaviour
         }
         player.Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
         player.Animator.SetIKPosition(AvatarIKGoal.LeftHand, subHandle.transform.position);
+    }
+
+    public void GroggyAttack()
+    {
+        if (player.evadePoint < player.Stat.maxEvadePoint)
+        {
+            return;
+        }
+        player.GroggyAttack = true;
+        player.evadePoint = 0f;
+    }
+
+    public void CheckNextState()
+    {
+        if (NextState == State.Idle)
+        {
+            return;
+        }
+        SetState(NextState);
     }
 }

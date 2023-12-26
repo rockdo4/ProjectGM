@@ -28,4 +28,5 @@ public class StateManager
             currentState.FixedUpdate();
         }
     }
+
 }

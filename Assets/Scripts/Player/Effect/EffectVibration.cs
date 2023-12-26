@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EffectVibration : Effect
+public class EffectVibration : EffectBase
 {
     public override void Init(Transform targetTransform = null)
     {

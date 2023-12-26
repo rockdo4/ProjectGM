@@ -149,19 +149,7 @@ MonoBehaviour:
   stat: {fileID: 11400000, guid: c2e3b2e1a4e5aa94398e9d3e79ccaa7c, type: 2}
   OnDeathEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 3570399017614776302}
-          m_ObjectArgumentAssemblyTypeName: EnemyAI, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   bearAttackPatternPhaseOne: 01000000020000000300000004000000050000000300000004000000
   bearAttackPatternPhaseTwo: 03000000040000000500000003000000040000000300000001000000020000000500000004000000
   alienAttackPatternPhaseOne: 0100000002000000

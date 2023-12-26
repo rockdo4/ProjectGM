@@ -9,7 +9,7 @@ public class PlayerDeathState : PlayerStateBase
     public override void Enter()
     {
         controller.player.Animator.Play(triggerName);
-        controller.player.virtualCamera.enabled = false;
+        controller.player.VirtualCamera.enabled = false;
     }
 
     public override void Update()
