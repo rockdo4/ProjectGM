@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class TouchManager : Singleton<TouchManager>
 {
@@ -54,6 +56,11 @@ public class TouchManager : Singleton<TouchManager>
 
     private void Update()
     {
+        if (UICheck())
+        {
+            return;
+        }
+
 #if UNITY_EDITOR || UNITY_STANDALONE
         if (Input.GetMouseButtonDown(0))
         {
@@ -218,5 +225,26 @@ public class TouchManager : Singleton<TouchManager>
             }
         }
         Swiped = true;
+    }
+    public bool UICheck()
+    {
+        if (EventSystem.current == null)
+        {
+            return false;
+        }
+
+
+        EventSystem eventSystem = EventSystem.current;
+
+        if (eventSystem != null && eventSystem.IsPointerOverGameObject())
+        {
+            GameObject ui = eventSystem.currentSelectedGameObject;
+
+            if (ui != null && ui.tag != Tags.ignoreUI)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -20,6 +20,13 @@ public class GameManager : MonoBehaviour
     public static readonly float pauseTimeScale = 0f;
     private float prevTimeScale = 1f;
     public bool IsGameOver { get; private set; }
+    public bool IsPaused
+    {
+        get
+        {
+            return gameOverUI.activeSelf;
+        }
+    }
 
     private void Awake()
     {
@@ -70,8 +77,17 @@ public class GameManager : MonoBehaviour
 
     public void Pause(bool active)
     {
+        TouchManager.Instance.enabled = !active;
         prevTimeScale = (Time.timeScale == pauseTimeScale) ? 1f : Time.timeScale;
         gameOverUI.SetActive(active);
         Time.timeScale = active ? pauseTimeScale : prevTimeScale;
+    }
+    public void Pause()
+    {
+        prevTimeScale = (Time.timeScale == pauseTimeScale) ? 1f : Time.timeScale;
+        bool active = gameOverUI.activeSelf;
+        TouchManager.Instance.enabled = active;
+        gameOverUI.SetActive(!active);
+        Time.timeScale = !active ? pauseTimeScale : prevTimeScale;
     }
 }
