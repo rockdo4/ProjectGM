@@ -1062,113 +1062,107 @@ public class EnemyAI : LivingObject
         switch (attackPatternType)
         {
             case AttackPatternType.A:
-
-                switch (enemyType)
-                {
-                    case EnemyType.Bear:
-
-                        break;
-
-                    case EnemyType.Alien:
-
-                        break;
-
-                    case EnemyType.Boar:
-
-                        break;
-
-                    case EnemyType.Wolf:
-
-                        break;
-
-                    case EnemyType.Spider:
-
-                        break;
-                }
-                break;
+                return 0;
 
             case AttackPatternType.B:
-
-                switch (enemyType)
-                {
-                    case EnemyType.Bear:
-
-                        break;
-
-                    case EnemyType.Alien:
-
-                        break;
-
-                    case EnemyType.Boar:
-
-                        break;
-
-                    case EnemyType.Wolf:
-
-                        break;
-
-                    case EnemyType.Spider:
-
-                        break;
-                }
-                break;
+                return 1;
 
             case AttackPatternType.C:
-
-                switch (enemyType)
-                {
-                    case EnemyType.Bear:
-
-                        break;
-
-                    case EnemyType.Alien:
-
-                        break;
-
-                    case EnemyType.Boar:
-
-                        break;
-
-                    case EnemyType.Wolf:
-
-                        break;
-
-                    case EnemyType.Spider:
-
-                        break;
-                }
-                break;
+                return 2;
 
             case AttackPatternType.D:
+                return 3;
 
-                switch (enemyType)
-                {
-                    case EnemyType.Bear:
+            case AttackPatternType.E:
+                return 4;
 
-                        break;
+            case AttackPatternType.F:
+                return 5;
 
-                    case EnemyType.Alien:
+            case AttackPatternType.RangeA:
+                return 6;
 
-                        break;
+            case AttackPatternType.RangeB:
+                return 7;
 
-                    case EnemyType.Boar:
+            case AttackPatternType.RangeC:
+                return 8;
 
-                        break;
-
-                    case EnemyType.Wolf:
-
-                        break;
-
-                    case EnemyType.Spider:
-
-                        break;
-                }
-                break;
-
+            case AttackPatternType.RangeD:
+                return 9;
         }
 
-        return (int)attackPatternType;
+        return 0;
     }
+
+    Quaternion CalculateRotation(EnemyType enemyType, AttackPatternType attackPatternType, Vector3 monsterPosition, Vector3 fanShapePosition)
+    {
+        Vector3 directionToMonster = (monsterPosition - fanShapePosition).normalized;
+        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
+        Quaternion additionalRotation = Quaternion.identity;
+
+        // 식 변경으로 기본값은 180f
+
+        switch (enemyType)
+        {
+            case EnemyType.Bear:
+                if (attackPatternType == AttackPatternType.A)
+                    additionalRotation = Quaternion.Euler(0f, 150f, 0f);
+                else if (attackPatternType == AttackPatternType.B)
+                    additionalRotation = Quaternion.Euler(0f, 180f, 0f);
+                else if (attackPatternType == AttackPatternType.C)
+                    additionalRotation = Quaternion.Euler(0f, 180f, 0f);
+                else if (attackPatternType == AttackPatternType.D)
+                    additionalRotation = Quaternion.Euler(0f, 125f, 0f);
+                break;
+
+            case EnemyType.Boar:
+                if (attackPatternType == AttackPatternType.A)
+                    additionalRotation = Quaternion.Euler(0f, 135f, 0f);
+
+                else if (attackPatternType == AttackPatternType.B)
+                    additionalRotation = Quaternion.Euler(0f, 105f, 0f);
+
+                else if (attackPatternType == AttackPatternType.C)
+                    additionalRotation = Quaternion.Euler(0f, 180f, 0f);
+
+                break;
+
+            case EnemyType.Alien:
+                if (attackPatternType == AttackPatternType.A)
+                    additionalRotation = Quaternion.Euler(-90f, 0f, 0f);
+                else if (attackPatternType == AttackPatternType.B)
+                    additionalRotation = Quaternion.Euler(0f, 180f, 0f);
+                else if (attackPatternType == AttackPatternType.C)
+                    additionalRotation = Quaternion.Euler(0f, 140f, 0f);
+                else if (attackPatternType == AttackPatternType.D)
+                    additionalRotation = Quaternion.Euler(0f, 180f, 0f);
+                break;
+
+            case EnemyType.Spider:
+                if (attackPatternType == AttackPatternType.A)
+                    additionalRotation = Quaternion.Euler(0f, 180f, 0f);
+                else if (attackPatternType == AttackPatternType.B)
+                    additionalRotation = Quaternion.Euler(0f, 120f, 0f);
+                else if (attackPatternType == AttackPatternType.C)
+                    additionalRotation = Quaternion.Euler(0f, 140f, 0f);
+                break;
+
+            case EnemyType.Wolf:
+                if (attackPatternType == AttackPatternType.A)
+                    additionalRotation = Quaternion.Euler(0.172f, 180f, 0f);
+
+                else if (attackPatternType == AttackPatternType.B)
+                    additionalRotation = Quaternion.Euler(0f, 120f, 0f);
+                break;
+
+            default:
+                break;
+        }
+
+        return initialRotation * additionalRotation;
+    }
+
 
     private void ShowMeleeAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
     {
@@ -1213,13 +1207,17 @@ public class EnemyAI : LivingObject
                     Vector3 cellSize = fanShape.Return();
                     Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
 
+
                     fanShapeInstance.transform.SetParent(transform, false);
                     fanShapeInstance.transform.position = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
+
+                    fanShapeInstance.transform.rotation = CalculateRotation(enemyType, AttackPatternType, transform.position, fanShapeInstance.transform.position);
+
+
                     activeFanShapes.Add(fanShapeInstance);
                 }
             }
 
-            //attackRangeInstance.SetActive(false);
         }
         else
         {
