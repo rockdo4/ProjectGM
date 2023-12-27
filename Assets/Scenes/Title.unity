@@ -6691,8 +6691,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 515, y: -685.0625}
-  m_SizeDelta: {x: 1030, y: 1370.125}
+  m_AnchoredPosition: {x: 743.6957, y: -417.5}
+  m_SizeDelta: {x: 1487.3914, y: 835}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &449215489
 PrefabInstance:
@@ -8183,6 +8183,7 @@ MonoBehaviour:
   require: {fileID: 8255992761684028029, guid: 34e71b6ea0eacc445ac5164e24503acf, type: 3}
   content: {fileID: 1791167338}
   priceText: {fileID: 1114410159}
+  craftButton: {fileID: 165500801}
 --- !u!1 &535982035
 GameObject:
   m_ObjectHideFlags: 0
@@ -24290,8 +24291,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 778.75, y: -75}
-  m_SizeDelta: {x: 502.5, y: 150}
+  m_AnchoredPosition: {x: 1121.7935, y: -75}
+  m_SizeDelta: {x: 731.1957, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1471887362
 MonoBehaviour:
@@ -27102,8 +27103,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 515, y: -2055.1875}
-  m_SizeDelta: {x: 1030, y: 1370.125}
+  m_AnchoredPosition: {x: 743.6957, y: -1252.5}
+  m_SizeDelta: {x: 1487.3914, y: 835}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1628330983
 GameObject:
@@ -29718,7 +29719,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 25}
-  m_SizeDelta: {x: 0, y: 50}
+  m_SizeDelta: {x: -50, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1812630564
 MonoBehaviour:
@@ -29742,7 +29743,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 005d8c1c0872bc340a62032ae62aa262, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -33124,7 +33125,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 502.5, y: 150}
+  m_SizeDelta: {x: 731.1957, y: 150}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1971579184
 MonoBehaviour:
@@ -35114,6 +35115,7 @@ MonoBehaviour:
   require: {fileID: 8255992761684028029, guid: 34e71b6ea0eacc445ac5164e24503acf, type: 3}
   content: {fileID: 2003178124}
   priceText: {fileID: 645933069}
+  craftButton: {fileID: 2105449809}
 --- !u!114 &2085236754
 MonoBehaviour:
   m_ObjectHideFlags: 0

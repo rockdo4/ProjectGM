@@ -5,25 +5,35 @@ using UnityEngine.UI;
 public class CreateWeaponPanel : MonoBehaviour, IRenewal
 {
     [Header("무기 이름 텍스트")]
-    public TextMeshProUGUI nameText;
+    [SerializeField]
+    private TextMeshProUGUI nameText;
 
     [Header("아이콘 이미지")]
     public Image iconImage;
 
     [Header("공격력 텍스트")]
-    public TextMeshProUGUI atkText;
+    [SerializeField]
+    private TextMeshProUGUI atkText;
 
     [Header("공격 속성 텍스트")]
-    public TextMeshProUGUI attackTypeText;
+    [SerializeField] 
+    private TextMeshProUGUI attackTypeText;
 
     [Header("요구 재료 패널")]
-    public RequireMatPanel require;
+    [SerializeField]
+    private RequireMatPanel require;
 
     [Header("요구 재료 패널 영역")]
-    public GameObject content;
+    [SerializeField]
+    private GameObject content;
 
     [Header("요구 금액 텍스트")]
-    public TextMeshProUGUI priceText;
+    [SerializeField] 
+    private TextMeshProUGUI priceText;
+
+    [Header("장착하기 버튼")]
+    [SerializeField]
+    private Button craftButton;
 
     private Equip item = null;
 
@@ -52,7 +62,7 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         attackTypeText.text = weapon.property.ToString();
         priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
 
-        if (ct[item.id].mf_module != -1) // 요구 재료마다 분기
+        if (ct[item.id].mf_module != -1)
         {
             var go = Instantiate(require, content.transform);
             var mat = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mf_module);
@@ -65,6 +75,8 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
             go.SetSlider(count, ct[item.id].mf_module_req);
             go.Renewal();
         }
+
+        craftButton.gameObject.SetActive(IsCraftable());
     }
 
     public void CraftEquip()
@@ -82,6 +94,8 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         PlayDataManager.DecreaseMat(ct[item.id].mf_module, ct[item.id].mf_module_req);
         PlayDataManager.data.WeaponInventory.Add(weapon);
         PlayDataManager.Save();
+
+        InventoryManager.Instance.Renewal();
 
         CraftManager.Instance.ShowWeapons(true);
         gameObject.SetActive(false);
