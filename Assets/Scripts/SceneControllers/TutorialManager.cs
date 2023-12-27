@@ -13,10 +13,11 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private Image tutorialImage;
 
+    [SerializeField]
+    private Button touchArea;
+
     private List<int> tutorialSteps = new List<int>();
     private int currentStepIndex = 0;
-
-    
 
     // 생각해봐야 될게 예를 들어 3번째 키값에서는 잠깐 전투가 진행될거라 그동안은 타임스케일이 1이 되어야한다 라던가
     // 5번째 키값에서는 퀘스트가 진행되어 뭔가 진행이 달라진다거나 등등
@@ -26,6 +27,8 @@ public class TutorialManager : MonoBehaviour
 
     void Start()
     {
+        touchArea.interactable = true;
+
         PauseGame();
         InitializeTutorialSteps();
         ShowTutorialStep(tutorialSteps[currentStepIndex]);
@@ -51,6 +54,12 @@ public class TutorialManager : MonoBehaviour
 
         Debug.Log(stepKey);
 
+        if (stepKey == 1001007)
+        {
+
+            StartCoroutine(MoveImage(tutorialImage.transform, 1.0f));
+        }
+
         if (stepKey == 1001007) // 대놓고 지정하는건데 이런 지정 없이 할 수가 있나?
         {
             Debug.Log("123123123123123");
@@ -65,6 +74,14 @@ public class TutorialManager : MonoBehaviour
 
             Debug.Log(dialogueText);
             tutorialText.text = dialogueText;
+
+            if(table[stepKey].dialType == 2)
+            {
+                Debug.Log("다이얼타입 2 진입");
+
+                StartCoroutine(DisableInputForSeconds(3.0f));
+            }
+
         }
         else
         {
@@ -97,6 +114,15 @@ public class TutorialManager : MonoBehaviour
         }
 
         imageTransform.position = endPosition; // 최종 위치로 설정
+    }
+
+    IEnumerator DisableInputForSeconds(float seconds)
+    {
+        touchArea.interactable = false;
+
+        yield return new WaitForSecondsRealtime(seconds);
+
+        touchArea.interactable = true;
     }
 
     public void PauseGame()
