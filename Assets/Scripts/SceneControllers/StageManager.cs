@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour
 {
@@ -10,12 +8,29 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private FadeEffects BLACK;
 
+    private Dictionary<int, StageTable.Data> stageTable = new Dictionary<int, StageTable.Data>();
+    private Dictionary<int, string> stringTable;
+
     private void Awake()
     {
         if (PlayDataManager.data == null)
         {
             PlayDataManager.Init();
         }
+
+        stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
+        stringTable = CsvTableMgr.GetTable<StringTable>().dataTable;
+
+        //foreach(var stage in stageTable)
+        //{
+        //    Debug.Log(stage.Key);
+        //    Debug.Log("---------------------------");
+        //    foreach (var data in stringTable[stage.Value.name])
+        //    {
+        //        Debug.Log(data);
+        //    }
+        //    Debug.Log("---------------------------");
+        //}
     }
 
     public void GoGame(string sceneName)
