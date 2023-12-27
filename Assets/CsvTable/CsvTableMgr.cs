@@ -22,6 +22,10 @@ public static class CsvTableMgr
         tables.Add(typeof(CodeTable), new CodeTable());
 
         tables.Add(typeof(SkillTable), new SkillTable());
+
+        tables.Add(typeof(EnemyTable), new EnemyTable());
+
+        tables.Add(typeof(DialogueTable), new DialogueTable());
     }
 
     public static T GetTable<T>() where T : CsvTable

@@ -5,36 +5,30 @@ using System.IO;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class EnemyTable : CsvTable
+public class DialogueTable : CsvTable
 {
     public class Data
     {
-        public int name { get; set; }
-        public int hp { get; set; }
-        public int defence { get; set; }
-        public int attack { get; set; }
-        public int phase { get; set; }
-        public int phaseAttack { get; set; }
-        public int type { get; set; }
-        public float deley { get; set; }
+        public int id { get; set; }
+        public int sceneN { get; set; }
+        public int dialogueID { get; set; }
+        public int character { get; set; }
+        public int dialType { get; set; }
 
-        public Data(int name, int hp, int defence, int attack, int phase, int phaseAttack, int type, float deley)
+        public Data(int id, int sceneN, int dialogueID, int character, int dialType)
         {
-            this.name = name;
-            this.hp = hp;
-            this.defence = defence;
-            this.attack = attack;
-            this.phase = phase;
-            this.phaseAttack = phaseAttack;
-            this.type = type;
-            this.deley = deley;
+            this.id = id;
+            this.sceneN = sceneN;
+            this.dialogueID = dialogueID;
+            this.character = character;
+            this.dialType = dialType;
         }
     }
     public Dictionary<int, Data> dataTable = new Dictionary<int, Data>();
 
-    public EnemyTable()
+    public DialogueTable()
     {
-        path = "tables/enemy_table";
+        path = "tables/dialogue_table";
         Load();
     }
 
@@ -61,10 +55,7 @@ public class EnemyTable : CsvTable
                     csv.GetField<int>(2),
                     csv.GetField<int>(3),
                     csv.GetField<int>(4),
-                    csv.GetField<int>(5),
-                    csv.GetField<int>(6),
-                    csv.GetField<int>(7),
-                    csv.GetField<float>(7)
+                    csv.GetField<int>(5)
                 )
             );
         }
