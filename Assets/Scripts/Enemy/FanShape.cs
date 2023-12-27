@@ -3,18 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class FanShape : MonoBehaviour
 {
-
-    // 프리펩의 모양만 잡아주는 얘
-
-
-
-
-
-
-
-
-
-
     public float radius = 5f;
     public float angle = 90f;
     public int segments = 50;
@@ -50,9 +38,28 @@ public class FanShape : MonoBehaviour
         CalculateCenterPoint();
     }
 
+    private void OnEnable()
+    {
+        ResetColor();
+        ResetStartTime();
+    }
+    private void ResetStartTime()
+    {
+        startTime = Time.time;
+    }
+
     public Mesh GetSharedMesh()
     {
         return sharedMesh;
+    }
+
+    public void ResetColor()
+    {
+        if (material != null)
+        {
+            //Debug.Log("123");
+            material.color = Color.yellow;
+        }
     }
 
     void Update()
@@ -81,11 +88,6 @@ public class FanShape : MonoBehaviour
             {
                 Debug.DrawRay(transform.position, direction * radius, Color.blue);
 
-                //if (hit.collider.CompareTag("Player"))
-                //{
-                //    Debug.Log("플레이어 감지");
-                //    break;
-                //}
             }
             else
             {

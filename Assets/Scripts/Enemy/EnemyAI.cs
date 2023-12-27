@@ -956,8 +956,8 @@ public class EnemyAI : LivingObject
                     return new Vector3(0f, 0f, -2f); // 세모위치 조정 에일리언 B패턴임
                 case AttackPatternType.C:
                     return Vector3.zero;
-                //case AttackPatternType.D:
-                //    return new Vector3(0f, 0f, -24f);
+                case AttackPatternType.D:
+                    return new Vector3(0f, 0f, -4f);
                 default: return Vector3.zero;
             }
         }
@@ -1169,7 +1169,7 @@ public class EnemyAI : LivingObject
         Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
         int poolIndex = GetPoolIndexForAttackPatternType(AttackPatternType);
 
-        Debug.Log(poolIndex);
+        //Debug.Log(poolIndex);
 
         if (show)
         {
@@ -1197,12 +1197,12 @@ public class EnemyAI : LivingObject
                     FanShape fanShapeInstance = fanShapePools[poolIndex].Get();
                     fanShapeInstance.gameObject.SetActive(true);
 
-                    Debug.Log(fanShapeInstance);
+                    //Debug.Log(fanShapeInstance);
 
                     fanShape = fanShapeInstance.GetComponent<FanShape>();
                     fanShape.enemyAi = this;
 
-                    Debug.Log(fanShape);
+                    //Debug.Log(fanShape);
 
                     Vector3 cellSize = fanShape.Return();
                     Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
@@ -1225,6 +1225,7 @@ public class EnemyAI : LivingObject
             {
                 foreach (var fanShape in activeFanShapes)
                 {
+                    //fanshape.ResetColor();
                     fanShape.gameObject.SetActive(false);
                     fanShapePools[poolIndex].Release(fanShape);
                 }
@@ -1312,8 +1313,8 @@ public class EnemyAI : LivingObject
 
                     if (show)
                     {
-                        int numberOfPrefabs = 10;
-                        float radius = 5f;
+                        int numberOfPrefabs = 7;
+                        float radius = 4.5f;
                         CreatePrefabsAroundPlayer(attackPrefab, numberOfPrefabs, radius);
                         return;
                     }
@@ -1340,6 +1341,14 @@ public class EnemyAI : LivingObject
         }
         else
         {
+            foreach (GameObject cell in cellInstances)
+            {
+                if (cell != null)
+                {
+                    cell.SetActive(false);
+                }
+            }
+
             RangeAttackPatternA();
         }
     }
@@ -1848,13 +1857,12 @@ public class EnemyAI : LivingObject
         {
             if (cell != null)
             {
-                Bounds bounds = cell.GetComponent<Renderer>().bounds;
-                Gizmos.DrawWireCube(bounds.center, bounds.size);
+                //Bounds bounds = cell.GetComponent<Renderer>().bounds;
+                //Gizmos.DrawWireCube(bounds.center, bounds.size);
 
-                //Vector3 cellPosition = cell.transform.position;
-                //// cell의 위치에서 적의 전방 방향으로 레이캐스트 그리기
-                //Vector3 direction = transform.forward * raycastDistance;
-                //Gizmos.DrawRay(cellPosition, direction);
+                Vector3 cellPosition = cell.transform.position;
+                Vector3 direction = transform.forward * raycastDistance;
+                Gizmos.DrawRay(cellPosition, direction);
             }
         }
 
