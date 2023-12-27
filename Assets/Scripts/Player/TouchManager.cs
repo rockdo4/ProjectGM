@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TouchManager : Singleton<TouchManager>
 {
@@ -54,6 +55,11 @@ public class TouchManager : Singleton<TouchManager>
 
     private void Update()
     {
+        if (UICheck())
+        {
+            return;
+        }
+
 #if UNITY_EDITOR || UNITY_STANDALONE
         if (Input.GetMouseButtonDown(0))
         {
@@ -218,5 +224,36 @@ public class TouchManager : Singleton<TouchManager>
             }
         }
         Swiped = true;
+    }
+    public bool UICheck()
+    {
+        if (EventSystem.current == null)
+        {
+            return false;
+        }
+
+        EventSystem eventSystem = EventSystem.current;
+        var result = false;
+#if UNITY_EDITOR
+        if (eventSystem != null && eventSystem.IsPointerOverGameObject())
+        {
+            GameObject ui = eventSystem.currentSelectedGameObject;
+
+            if (ui != null && ui.tag != Tags.ignoreUI)
+            {
+                result = true;
+            }
+        }
+#elif UNITY_ANDROID || UNITY_IOS
+        if (eventSystem != null && eventSystem.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        {
+            GameObject ui = eventSystem.currentSelectedGameObject;
+            if (ui != null && ui.tag != Tags.ignoreUI)
+            {
+                result = true;
+            }
+        }
+#endif
+        return result;
     }
 }

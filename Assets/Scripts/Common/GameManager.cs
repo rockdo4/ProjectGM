@@ -17,9 +17,18 @@ public class GameManager : MonoBehaviour
     private static GameManager m_instance;
 
     public GameObject gameOverUI;
+    public GameObject cancleButton;
+
     public static readonly float pauseTimeScale = 0f;
     private float prevTimeScale = 1f;
     public bool IsGameOver { get; private set; }
+    public bool IsPaused
+    {
+        get
+        {
+            return gameOverUI.activeSelf;
+        }
+    }
 
     private void Awake()
     {
@@ -33,9 +42,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !IsGameOver)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Pause(!gameOverUI.activeSelf);
+            Pause();
         }
     }
 
@@ -57,7 +66,11 @@ public class GameManager : MonoBehaviour
 
     public void GameOver(LivingObject deathObject)
     {
-        IsGameOver = true;
+        if (cancleButton != null)
+        {
+            cancleButton.SetActive(false);
+        }
+
         if (deathObject is Player)
         {
             Lose(deathObject as Player);
@@ -66,12 +79,35 @@ public class GameManager : MonoBehaviour
         {
             Win(deathObject as EnemyAI);
         }
+        IsGameOver = true;
     }
 
     public void Pause(bool active)
     {
+        if (IsGameOver)
+        {
+            return;
+        }
+        TouchManager.Instance.enabled = !active;
         prevTimeScale = (Time.timeScale == pauseTimeScale) ? 1f : Time.timeScale;
         gameOverUI.SetActive(active);
         Time.timeScale = active ? pauseTimeScale : prevTimeScale;
+    }
+    public void Pause()
+    {
+        if (IsGameOver)
+        {
+            return;
+        }
+        bool active = gameOverUI.activeSelf;
+        prevTimeScale = (Time.timeScale == pauseTimeScale) ? 1f : Time.timeScale;
+        TouchManager.Instance.enabled = active;
+        gameOverUI.SetActive(!active);
+        Time.timeScale = !active ? pauseTimeScale : prevTimeScale;
+    }
+
+    private void OnDestroy()
+    {
+        Time.timeScale = 1f;
     }
 }

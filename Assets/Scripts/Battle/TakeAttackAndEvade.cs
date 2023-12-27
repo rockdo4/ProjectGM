@@ -30,15 +30,15 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
         switch (evade)
         {
             case EvadeSuccesss.None:
-                player.effects.PlayEffect(PlayerEffectType.Hit);
+                player.Effects.PlayEffect(PlayerEffectType.Hit);
                 player.IsGroggy = attack.IsGroggy;
                 break;
             case EvadeSuccesss.Normal:
-                player.effects.PlayEffect(PlayerEffectType.Hit);
+                player.Effects.PlayEffect(PlayerEffectType.Hit);
                 damage = (int)(damage * player.Stat.evadeDamageRate);
                 break;
             case EvadeSuccesss.Just:
-                player.effects.PlayEffect(PlayerEffectType.JustEvade);
+                player.Effects.PlayEffect(PlayerEffectType.JustEvade);
                 damage = 0;
                 break;
         }

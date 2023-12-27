@@ -9,6 +9,10 @@ public class EffectTimeScale : EffectBase
 
     protected override void Update()
     {
+        if (GameManager.instance.IsPaused)
+        {
+            return;
+        }
         base.Update();
         Time.timeScale += (1f / duration) * Time.unscaledDeltaTime;
         Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);

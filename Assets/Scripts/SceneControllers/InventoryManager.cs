@@ -51,9 +51,6 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
     [Space(10.0f)]
 
-    [Header("소지금 텍스트")]
-    public TextMeshProUGUI moneyText;
-
     private bool sellMode = false;
     private List<Equip> sellEquipList = new List<Equip>();
     private List<SkillCode> sellSkillCodeList = new List<SkillCode>();
@@ -108,6 +105,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
         ClearItemButton();
         curType = ItemType.Weapon;
+        SellMode(false);
 
         var weapons = PlayDataManager.data.WeaponInventory;
         foreach (var weapon in weapons)
@@ -122,8 +120,14 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
             go.button.onClick.AddListener(() => 
             {
-                if (sellMode && sellEquipList.Count < 10)
+                if (sellMode)
                 {
+                    if (sellEquipList.Count >= 10) // Over Count Exception
+                    {
+                        MyNotice.Instance.Notice("최대 판매 개수를 넘길 수 없습니다.");
+                        return;
+                    }
+
                     if (weapon.isEquip) // Were Equip Exception
                     {
                         // Notice
@@ -181,6 +185,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
         ClearItemButton();
         curType = ItemType.Armor;
+        SellMode(false);
 
         var armors = PlayDataManager.data.ArmorInventory;
         foreach (var armor in armors)
@@ -193,8 +198,14 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
             go.button.onClick.AddListener(() =>
             {
-                if (sellMode && sellEquipList.Count < 10)
+                if (sellMode)
                 {
+                    if (sellEquipList.Count >= 10) // Over Count Exception
+                    {
+                        MyNotice.Instance.Notice("최대 판매 개수를 넘길 수 없습니다.");
+                        return;
+                    }
+
                     if (armor.isEquip) // Were Equip Exception
                     {
                         // Notice
@@ -252,6 +263,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
         ClearItemButton();
         curType = ItemType.SkillCode;
+        SellMode(false);
 
         var skillcodes = PlayDataManager.data.CodeInventory;
         foreach (var skillcode in skillcodes) 
@@ -267,8 +279,14 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
             go.GetComponent<ItemButton>().button.onClick.AddListener(() =>
             {
-                if (sellMode && sellSkillCodeList.Count < 10)
+                if (sellMode)
                 {
+                    if (sellSkillCodeList.Count >= 10)
+                    {
+                        MyNotice.Instance.Notice("최대 판매 개수를 넘길 수 없습니다.");
+                        return;
+                    }
+
                     if (go.iconImage.color == Color.white)
                     {
                         sellSkillCodeList.Add(skillcode);
@@ -317,6 +335,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
         ClearItemButton();
         curType = ItemType.Mat;
+        SellMode(false);
 
         var mats = PlayDataManager.data.MatInventory;
         foreach (var mat in mats)
@@ -330,8 +349,14 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
             go.GetComponent<ItemButton>().button.onClick.AddListener(() =>
             {
-                if (sellMode && sellMatList.Count < 10)
+                if (sellMode)
                 {
+                    if (sellMatList.Count >= 10)
+                    {
+                        MyNotice.Instance.Notice("최대 판매 개수를 넘길 수 없습니다.");
+                        return;
+                    }
+
                     if (go.iconImage.color == Color.white)
                     {
                         sellMatList.Add(mat);
@@ -383,8 +408,6 @@ public class InventoryManager : MonoBehaviour, IRenewal
     public void SellMode(bool mode)
     {
         sellMode = mode;
-        sellArea.SetActive(mode);
-        sellButton.SetActive(!mode);
 
         switch (curType)
         {
@@ -421,6 +444,9 @@ public class InventoryManager : MonoBehaviour, IRenewal
                 }
                 break;
         }
+
+        sellArea.SetActive(mode);
+        sellButton.SetActive(!mode);
     }
 
     public void SellItem()
@@ -433,6 +459,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     {
                         PlayDataManager.SellItem(item as Weapon);
                     }
+                    SellMode(false);
                     ShowWeapons();
                 }
                 break;
@@ -443,6 +470,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     {
                         PlayDataManager.SellItem(item as Armor);
                     }
+                    SellMode(false);
                     ShowArmors();
                 }
                 break;
@@ -453,6 +481,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     {
                         PlayDataManager.SellItem(item);
                     }
+                    SellMode(false);
                     ShowSkillCodes();
                 }
                 break;
@@ -463,12 +492,13 @@ public class InventoryManager : MonoBehaviour, IRenewal
                     {
                         PlayDataManager.SellItem(item);
                     }
+                    SellMode(false);
                     ShowMaterials();
                 }
                 break;
         }
-        SellMode(false);
 
+        TitleManager.Instance.Renewal();
     }
 
     public void Renewal()
@@ -492,7 +522,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                 break;
         }
 
-        moneyText.text = PlayDataManager.data.Gold.ToString();
+        TitleManager.Instance.Renewal();
     }
 
     public void Tester()
@@ -510,5 +540,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         }
 
         PlayDataManager.AddGold(100000);
+
+        TitleManager.Instance.Renewal();
     }
 }
