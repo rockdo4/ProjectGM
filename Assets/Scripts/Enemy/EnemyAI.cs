@@ -1063,22 +1063,108 @@ public class EnemyAI : LivingObject
         {
             case AttackPatternType.A:
 
-                Debug.Log("A패턴 진입");
-                if (enemyType == EnemyType.Alien)
+                switch (enemyType)
                 {
-                    return 0;
-                }
+                    case EnemyType.Bear:
 
-                return 1;
+                        break;
+
+                    case EnemyType.Alien:
+
+                        break;
+
+                    case EnemyType.Boar:
+
+                        break;
+
+                    case EnemyType.Wolf:
+
+                        break;
+
+                    case EnemyType.Spider:
+
+                        break;
+                }
+                break;
 
             case AttackPatternType.B:
-                return 1;
+
+                switch (enemyType)
+                {
+                    case EnemyType.Bear:
+
+                        break;
+
+                    case EnemyType.Alien:
+
+                        break;
+
+                    case EnemyType.Boar:
+
+                        break;
+
+                    case EnemyType.Wolf:
+
+                        break;
+
+                    case EnemyType.Spider:
+
+                        break;
+                }
+                break;
 
             case AttackPatternType.C:
-                return 2;
+
+                switch (enemyType)
+                {
+                    case EnemyType.Bear:
+
+                        break;
+
+                    case EnemyType.Alien:
+
+                        break;
+
+                    case EnemyType.Boar:
+
+                        break;
+
+                    case EnemyType.Wolf:
+
+                        break;
+
+                    case EnemyType.Spider:
+
+                        break;
+                }
+                break;
 
             case AttackPatternType.D:
-                return 3;
+
+                switch (enemyType)
+                {
+                    case EnemyType.Bear:
+
+                        break;
+
+                    case EnemyType.Alien:
+
+                        break;
+
+                    case EnemyType.Boar:
+
+                        break;
+
+                    case EnemyType.Wolf:
+
+                        break;
+
+                    case EnemyType.Spider:
+
+                        break;
+                }
+                break;
+
         }
 
         return (int)attackPatternType;
