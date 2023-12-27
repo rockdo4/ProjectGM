@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Pool;
 
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : LivingObject
 {
-   
+
+    [Header("FanShape 프리펩 유형")]
+    public GameObject[] fanShapePrefabs;
+
+    private ObjectPool<FanShape>[] fanShapePools;
+    private List<FanShape> activeFanShapes = new List<FanShape>();
+
 
     [Header("곰 페이즈1 공격 패턴")]
     public int[] bearAttackPatternPhaseOne = new int[] { 1, 2 }; // ab
@@ -60,8 +68,7 @@ public class EnemyAI : LivingObject
     private int EnemyRangedAttackIndexThree = 8;
     private int EnemyRangedAttackIndexFour = 9;
 
-
-    
+    private FanShape fanshape;
 
     [Header("공격 준비 시간 - 초기값(패턴에 따로 시간 지정해주지 않았을때만 적용)")]
     [SerializeField]
@@ -188,7 +195,7 @@ public class EnemyAI : LivingObject
         RangeE,
         RangeF,
     }
-    
+
 
     #region Interaction Player And Enemy
     public EnemyStat Stat
@@ -200,6 +207,26 @@ public class EnemyAI : LivingObject
     }
 
     #endregion
+
+    public FanShape GetFanShape(int typeIndex)
+    {
+        if (typeIndex < 0 || typeIndex >= fanShapePools.Length)
+        {
+            Debug.LogError("잘못된 FanShape 유형 인덱스: " + typeIndex);
+            return null;
+        }
+        return fanShapePools[typeIndex].Get();
+    }
+
+    public void ReleaseFanShape(int typeIndex, FanShape fanShape)
+    {
+        if (typeIndex < 0 || typeIndex >= fanShapePools.Length)
+        {
+            Debug.LogError("잘못된 FanShape 유형 인덱스: " + typeIndex);
+            return;
+        }
+        fanShapePools[typeIndex].Release(fanShape);
+    }
 
     private void Start()
     {
@@ -214,8 +241,30 @@ public class EnemyAI : LivingObject
         hasRoared = true;
     }
 
+    private ObjectPool<FanShape> InitializeFanShapePool(GameObject prefab)
+    {
+        return new ObjectPool<FanShape>(
+       createFunc: () =>
+       {
+           var obj = Instantiate(prefab);
+           return obj.GetComponent<FanShape>();
+       },
+       actionOnGet: (obj) => { obj.gameObject.SetActive(true); },
+       actionOnRelease: (obj) => { obj.gameObject.SetActive(false); },
+       actionOnDestroy: (obj) => { Destroy(obj.gameObject); },
+       defaultCapacity: 10, // 초기 용량
+       maxSize: 20       // 최대 용량
+   );
+    }
+
     protected override void Awake()
     {
+        fanShapePools = new ObjectPool<FanShape>[fanShapePrefabs.Length];
+        for (int i = 0; i < fanShapePrefabs.Length; i++)
+        {
+            fanShapePools[i] = InitializeFanShapePool(fanShapePrefabs[i]);
+        }
+
         base.Awake();
         phaseTwoHealthThreshold = HP * 0.5f;
         isTwoPhase = false;
@@ -1008,62 +1057,42 @@ public class EnemyAI : LivingObject
 
     #endregion
 
-    private void ShowMeleeAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
+    private int GetPoolIndexForAttackPatternType(AttackPatternType attackPatternType)
     {
-        GameObject attackPrefab = null;
-        Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
-
-        switch (AttackPatternType)
+        switch (attackPatternType)
         {
             case AttackPatternType.A:
-                attackPrefab = AttackPatternTypeAPrefab;
-                break;
+
+                Debug.Log("A패턴 진입");
+                if (enemyType == EnemyType.Alien)
+                {
+                    return 0;
+                }
+
+                return 1;
 
             case AttackPatternType.B:
-                attackPrefab = AttackPatternTypeBPrefab;
-                break;
+                return 1;
 
             case AttackPatternType.C:
-                attackPrefab = AttackPatternTypeCPrefab;
-                break;
+                return 2;
 
             case AttackPatternType.D:
-                attackPrefab = AttackPatternTypeDPrefab;
-                break;
+                return 3;
         }
+
+        return (int)attackPatternType;
+    }
+
+    private void ShowMeleeAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
+    {
+        Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
+        int poolIndex = GetPoolIndexForAttackPatternType(AttackPatternType);
+
+        Debug.Log(poolIndex);
 
         if (show)
         {
-            if (attackRangeInstance != null) // 추후 수정
-            {
-                Destroy(attackRangeInstance);
-            }
-
-            attackRangeInstance = Instantiate(attackPrefab, transform);
-
-            //MeshCollider meshCollider = attackRangeInstance.GetComponent<MeshCollider>();
-            //if (meshCollider == null)
-            //{
-            //    meshCollider = attackRangeInstance.AddComponent<MeshCollider>();
-            //    meshCollider.convex = true;
-            //    meshCollider.isTrigger = true;
-            //}
-
-            //AttackCell triggerHandler = attackRangeInstance.GetComponent<AttackCell>();
-            //if (triggerHandler == null)
-            //{
-            //    triggerHandler = attackRangeInstance.AddComponent<AttackCell>();
-            //}
-
-            foreach (GameObject cell in cellInstances) // 리스트의 모든 셀 인스턴스를 순회
-            {
-                if (cell != null)
-                {
-                    Destroy(cell); // 지금 이게 안좋다
-                    // 파편화가 날 수 있음 2순위로 두고
-                }
-            }
-
             AttackPattern currentPattern = null;
 
             if (attackIndex >= 0 && attackIndex < savedPatterns.Count)
@@ -1072,146 +1101,48 @@ public class EnemyAI : LivingObject
             }
             else
             {
-                // 유효하지 않은 attackIndex에 대한 처리
                 Debug.LogError("attackIndex가 범위를 벗어났습니다: " + attackIndex);
-                return; // 또는 다른 오류 처리 로직
+                return;
             }
 
-            cellInstances.Clear(); // 리스트 초기화
-            fanShape = attackRangeInstance.GetComponent<FanShape>();
-            fanShape.enemyAi = this;
-            Vector3 cellSize = fanShape.Return();
-            Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
-
+            if(activeFanShapes != null)
+            {
+                activeFanShapes.Clear(); // 리스트 초기화
+            }
 
             for (int i = 0; i < currentPattern.pattern.Length; i++)
             {
                 if (currentPattern.pattern[i])
                 {
-                    Vector3 cellPosition = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
-                    GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
-                    cell.SetActive(true);
+                    FanShape fanShapeInstance = fanShapePools[poolIndex].Get();
+                    fanShapeInstance.gameObject.SetActive(true);
 
-                    //MeshCollider meshCollider = cell.GetComponent<MeshCollider>();
-                    //if (meshCollider == null)
-                    //{
-                    //    meshCollider = cell.AddComponent<MeshCollider>();
-                    //    meshCollider.convex = true;
-                    //    meshCollider.isTrigger = true;
-                    //}
+                    Debug.Log(fanShapeInstance);
 
-                    //AttackCell attackCellComponent = cell.GetComponent<AttackCell>();
-                    //if (attackCellComponent == null)
-                    //{
-                    //    attackCellComponent = cell.AddComponent<AttackCell>();
-                    //}
+                    fanShape = fanShapeInstance.GetComponent<FanShape>();
+                    fanShape.enemyAi = this;
 
-                    cellInstances.Add(cell);
+                    Debug.Log(fanShape);
 
-                    
+                    Vector3 cellSize = fanShape.Return();
+                    Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
 
-
-
-                    if (i != 4)
-                    {
-                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
-                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-
-                        Quaternion additionalRotation = Quaternion.Euler(0f, 120f, 0f);
-
-                        cell.transform.rotation = initialRotation * additionalRotation;
-                    }
-                    else if (enemyType == EnemyType.Bear && AttackPatternType == AttackPatternType.A)
-                    {
-                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
-                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-
-                        Quaternion additionalRotation = Quaternion.Euler(0f, 150f, 0f);
-
-                        cell.transform.rotation = initialRotation * additionalRotation;
-                    }
-                    else if (enemyType == EnemyType.Bear && AttackPatternType == AttackPatternType.D)
-                    {
-                        Quaternion additionalRotation = Quaternion.identity;
-
-                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
-                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-
-                        additionalRotation = Quaternion.Euler(0f, 125f, 0f);
-
-                        cell.transform.rotation = initialRotation * additionalRotation;
-                    }
-                    else if (enemyType == EnemyType.Wolf && AttackPatternType == AttackPatternType.A)
-                    {
-                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
-                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-
-                        Quaternion additionalRotation = Quaternion.Euler(0f, 120f, 0f);
-
-                        cell.transform.rotation = initialRotation * additionalRotation;
-                    }
-                    else if (enemyType == EnemyType.Wolf && AttackPatternType == AttackPatternType.B)
-                    {
-                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
-                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-
-                        Quaternion additionalRotation = Quaternion.Euler(0f, 120f, 0f);
-
-                        cell.transform.rotation = initialRotation * additionalRotation;
-                    }
-
-                    // 와일드 보어
-                    else if (enemyType == EnemyType.Boar && AttackPatternType == AttackPatternType.A)
-                    {
-                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
-                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-
-                        Quaternion additionalRotation = Quaternion.Euler(0f, 135f, 0f);
-
-                        cell.transform.rotation = initialRotation * additionalRotation;
-                    }
-                    else if (enemyType == EnemyType.Boar && AttackPatternType == AttackPatternType.B)
-                    {
-                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
-                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-
-                        Quaternion additionalRotation = Quaternion.Euler(0f, 105f, 0f);
-
-                        cell.transform.rotation = initialRotation * additionalRotation;
-                    }
-
-                    // 거미
-                    else if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.B)
-                    {
-                        Vector3 directionToMonster = (transform.position - cellPosition).normalized;
-                        Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-
-                        Quaternion additionalRotation = Quaternion.Euler(0f, 120f, 0f);
-
-                        cell.transform.rotation = initialRotation * additionalRotation;
-                    }
-                    else
-                    {
-                        cell.transform.rotation = transform.rotation;
-                    }
-
-
+                    fanShapeInstance.transform.SetParent(transform, false);
+                    fanShapeInstance.transform.position = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
+                    activeFanShapes.Add(fanShapeInstance);
                 }
             }
-            attackRangeInstance.SetActive(false);
 
+            //attackRangeInstance.SetActive(false);
         }
         else
         {
-            foreach (GameObject cell in cellInstances)
+            if (activeFanShapes != null)
             {
-                if (cell != null)
+                foreach (var fanShape in activeFanShapes)
                 {
-                    MeshRenderer cellMeshRenderer = cell.GetComponent<MeshRenderer>();
-                    if (cellMeshRenderer != null)
-                    {
-                        cellMeshRenderer.enabled = false;
-                    }
+                    fanShape.gameObject.SetActive(false);
+                    fanShapePools[poolIndex].Release(fanShape);
                 }
             }
         }
@@ -1826,8 +1757,8 @@ public class EnemyAI : LivingObject
     {
         if (cellInstances == null) return;
 
-        Gizmos.color = Color.red; // 레이캐스트의 색상 설정
-        float raycastDistance = 100f; // 레이캐스트의 거리
+        Gizmos.color = Color.red;
+        float raycastDistance = rangeAttackRange;
 
         foreach (GameObject cell in cellInstances)
         {
@@ -1895,44 +1826,35 @@ public class EnemyAI : LivingObject
     {
         float actualAttackDamage = isTwoPhase ? Stat.AttackDamage * 2 : Stat.AttackDamage;
 
-        foreach (GameObject cell in cellInstances)
-        {
-            if (cell != null)
-            {
-                RaycastHit hit;
-                float yOffset = 0.5f; // Y축 오프셋 값
-                Vector3 cellPosition = cell.transform.position + new Vector3(0, yOffset, 0);
+        Mesh sharedMesh = fanShape.GetSharedMesh();
+        float radius = fanShape.radius;
 
-                // 레이캐스팅을 사용하여 플레이어와의 충돌 검사
-                if (Physics.Raycast(cellPosition, transform.forward, out hit, rangeAttackRange, playerLayerMask))
+        Debug.Log("팬쉐이프 반경 : " + radius);
+
+        for (int i = 0; i < sharedMesh.vertexCount; i++)
+        {
+            Vector3 vertex = transform.TransformPoint(sharedMesh.vertices[i]);
+            RaycastHit hit;
+
+            Vector3 direction = vertex - transform.position;
+            if (Physics.Raycast(transform.position, direction, out hit, radius))
+            {
+                Debug.DrawRay(transform.position, direction * radius, Color.blue);
+
+                if (hit.collider.CompareTag("Player"))
                 {
-                    if (hit.collider.CompareTag("Player")) // 'Player'는 플레이어의 태그입니다.
-                    {
-                        Debug.Log("123");
-                        ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
-                        break;
-                    }
+                    Debug.Log("플레이어 감지");
+                    ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
+                    break;
                 }
             }
+            else
+            {
+                Debug.DrawRay(transform.position, direction * radius, Color.green);
+            }
         }
-
-        //foreach (GameObject cell in cellInstances)
-        //{
-        //    if (cell != null)
-        //    {
-        //        AttackCell attackCell = cell.GetComponent<AttackCell>();
-
-        //        Debug.Log("AttackCell: " + (attackCell != null) + ", PlayerInside: " + (attackCell != null && attackCell.playerInside));
-                
-        //        if (attackCell != null && attackCell.playerInside)
-        //        {
-        //            //Debug.Log("온어택 호출이 안됐으면 너가 그 몬스터의 애니메이션 이벤트를 안넣었겠지?");
-        //            ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
-        //            break;
-        //        }
-        //    }
-        //}
     }
+
 
     #endregion
 

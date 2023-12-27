@@ -1,9 +1,20 @@
 using UnityEngine;
-using static EnemyAI;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class FanShape : MonoBehaviour
 {
+
+    // 프리펩의 모양만 잡아주는 얘
+
+
+
+
+
+
+
+
+
+
     public float radius = 5f;
     public float angle = 90f;
     public int segments = 50;
@@ -39,6 +50,11 @@ public class FanShape : MonoBehaviour
         CalculateCenterPoint();
     }
 
+    public Mesh GetSharedMesh()
+    {
+        return sharedMesh;
+    }
+
     void Update()
     {
         if (enemyAi == null)
@@ -50,27 +66,36 @@ public class FanShape : MonoBehaviour
         float uvSpeed = Mathf.Lerp(1.0f, 2.0f, t);
         material.SetFloat("UVSpeed", uvSpeed);
 
-        PerformRaycastDamageCheck();
+        // PerformRaycastDamageCheck();
     }
 
-    void PerformRaycastDamageCheck()
+    public void PerformRaycastDamageCheck()
     {
         for (int i = 0; i < sharedMesh.vertexCount; i++)
         {
             Vector3 vertex = transform.TransformPoint(sharedMesh.vertices[i]);
             RaycastHit hit;
 
-            if (Physics.Raycast(vertex, transform.forward, out hit, 1f))
+            Vector3 direction = vertex - transform.position;
+            if (Physics.Raycast(transform.position, direction, out hit, radius))
             {
-                if (hit.collider.CompareTag("Player"))
-                {
-                    
-                }
+                Debug.DrawRay(transform.position, direction * radius, Color.blue);
+
+                //if (hit.collider.CompareTag("Player"))
+                //{
+                //    Debug.Log("플레이어 감지");
+                //    break;
+                //}
+            }
+            else
+            {
+                Debug.DrawRay(transform.position, direction * radius, Color.green);
             }
         }
     }
 
-    Mesh CreateFanMesh()
+
+    public Mesh CreateFanMesh()
     {
         Mesh mesh = new Mesh();
 
@@ -142,7 +167,7 @@ public class FanShape : MonoBehaviour
         if (sharedMesh == null)
             return;
 
-        // 메시의 모든 버텍스를 순회하며 중심점 계산
+        // 메시의 모든 버텍스를 순회
         Vector3 sum = Vector3.zero;
         foreach (Vector3 vertex in sharedMesh.vertices)
         {
