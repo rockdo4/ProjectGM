@@ -32,23 +32,23 @@ public class CameraManager : MonoBehaviour
         playerCameras = GameObject.FindWithTag(Tags.player)?.GetComponentsInChildren<CinemachineVirtualCamera>();
         enemyCameras = GameObject.FindWithTag(Tags.enemy)?.GetComponentsInChildren<CinemachineVirtualCamera>();
 
-        currentVirtualCamera = playerCameras[0];
-    }
-
-    private void Start()
-    {
         playerCameras = GameObject.FindWithTag(Tags.player)?.GetComponentsInChildren<CinemachineVirtualCamera>();
         enemyCameras = GameObject.FindWithTag(Tags.enemy)?.GetComponentsInChildren<CinemachineVirtualCamera>();
         SetCameraWithTag(Tags.player);
     }
 
+    private void Start()
+    {
+
+    }
+
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T))
+        if(Input.GetKeyDown(KeyCode.I))
         {
             SetCameraWithTag(Tags.player);
         }
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(KeyCode.O))
         {
             SetCameraWithTag(Tags.enemy);
         }
@@ -56,7 +56,7 @@ public class CameraManager : MonoBehaviour
 
     public void SetCameraWithTag(string tag, int index = 0)
     {
-        currentVirtualCamera.gameObject.SetActive(false);
+        currentVirtualCamera?.gameObject.SetActive(false);
         if (tag == Tags.player)
         {
             for(int i = 0; i < playerCameras.Length; i++)
@@ -78,7 +78,7 @@ public class CameraManager : MonoBehaviour
                 }
             }
         }
-        currentVirtualCamera.gameObject.SetActive(true);
+        currentVirtualCamera?.gameObject.SetActive(true);
     }
 
     public void Noise(float amplitudeGain, float frequencyGain, Vector3 pivotOffset = default)
@@ -99,6 +99,10 @@ public class CameraManager : MonoBehaviour
 
     public void StopNoise()
     {
+        if (noise == null)
+        {
+            return;
+        }
         noise.enabled = false;
     }
 }
