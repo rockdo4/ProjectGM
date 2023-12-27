@@ -1848,21 +1848,21 @@ public class EnemyAI : LivingObject
 
     private void OnDrawGizmos()
     {
-        if (cellInstances == null) return;
+        if (activeFanShapes == null) return;
 
         Gizmos.color = Color.red;
         float raycastDistance = rangeAttackRange;
 
-        foreach (GameObject cell in cellInstances)
+        foreach (var fanShapes in activeFanShapes)
         {
-            if (cell != null)
+            if (fanShapes != null)
             {
                 //Bounds bounds = cell.GetComponent<Renderer>().bounds;
                 //Gizmos.DrawWireCube(bounds.center, bounds.size);
 
-                Vector3 cellPosition = cell.transform.position;
+                Vector3 shapesPosition = fanShapes.transform.position;
                 Vector3 direction = transform.forward * raycastDistance;
-                Gizmos.DrawRay(cellPosition, direction);
+                Gizmos.DrawRay(shapesPosition, direction);
             }
         }
 
