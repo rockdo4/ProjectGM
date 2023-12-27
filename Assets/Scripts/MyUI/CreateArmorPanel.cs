@@ -13,8 +13,11 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
     [Header("방어력 텍스트")]
     public TextMeshProUGUI defText;
 
-    [Header("스킬 텍스트")]
-    public TextMeshProUGUI skillsText;
+    [Header("스킬1 텍스트")]
+    public TextMeshProUGUI skill1Text;
+
+    [Header("스킬2 텍스트")]
+    public TextMeshProUGUI skill2Text;
 
     [Header("세트 스킬 텍스트")]
     public TextMeshProUGUI setSkillText;
@@ -57,11 +60,11 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
             string.Empty :
             st[skt[armor.set_skill_id].name].ToString();
 
-        skillsText.text = (armor.skill1_id == -1) ? 
+        skill1Text.text = (armor.skill1_id == -1) ? 
             string.Empty : 
             $"{st[skt[armor.skill1_id].name]} Lv.{armor.skill1_lv}\n";
 
-        skillsText.text += (armor.skill2_id == -1) ? 
+        skill2Text.text = (armor.skill2_id == -1) ? 
             string.Empty : 
             $"{st[skt[armor.skill2_id].name]} Lv.{armor.skill2_lv}";
 
