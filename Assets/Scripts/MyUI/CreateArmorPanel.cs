@@ -26,10 +26,14 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
     public RequireMatPanel require;
 
     [Header("요구 재료 패널 영역")]
-    public GameObject content;
+    [SerializeField]
+    private GameObject content;
 
     [Header("요구 금액 텍스트")]
-    public TextMeshProUGUI priceText;
+    [SerializeField]
+    private TextMeshProUGUI priceText;
+
+
 
     private Equip item = null;
 
@@ -68,7 +72,7 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
             string.Empty : 
             $"{st[skt[armor.skill2_id].name]} Lv.{armor.skill2_lv}";
 
-        priceText.text = $"{PlayDataManager.data.Gold} / {ct[item.id].gold}";
+        priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
 
         if (ct[item.id].mf_module != -1) // 요구 재료마다 분기
         {
