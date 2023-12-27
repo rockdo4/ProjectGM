@@ -9,15 +9,13 @@ public class DialogueTable : CsvTable
 {
     public class Data
     {
-        public int id { get; set; }
         public int sceneN { get; set; }
         public int dialogueID { get; set; }
         public int character { get; set; }
         public int dialType { get; set; }
 
-        public Data(int id, int sceneN, int dialogueID, int character, int dialType)
+        public Data(int sceneN, int dialogueID, int character, int dialType)
         {
-            this.id = id;
             this.sceneN = sceneN;
             this.dialogueID = dialogueID;
             this.character = character;
@@ -54,8 +52,7 @@ public class DialogueTable : CsvTable
                     csv.GetField<int>(1),
                     csv.GetField<int>(2),
                     csv.GetField<int>(3),
-                    csv.GetField<int>(4),
-                    csv.GetField<int>(5)
+                    csv.GetField<int>(4)
                 )
             );
         }
