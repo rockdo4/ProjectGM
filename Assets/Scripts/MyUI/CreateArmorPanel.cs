@@ -49,13 +49,23 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
         var st = CsvTableMgr.GetTable<StringTable>().dataTable;
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         var mt = CsvTableMgr.GetTable<MatTable>().dataTable;
+        var skt = CsvTableMgr.GetTable<SkillTable>().dataTable;
 
         nameText.text = st[armor.name];
         defText.text = armor.defence.ToString();
-        setSkillText.text = (armor.set_skill_id == -1) ? string.Empty : armor.set_skill_id.ToString();
-        skillsText.text = (armor.skill1_id == -1) ? string.Empty : $"{armor.skill1_id} Lv.{armor.skill1_lv}\n";
-        skillsText.text += (armor.skill2_id == -1) ? string.Empty : $"{armor.skill2_id} Lv.{armor.skill2_lv}";
-        priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
+        setSkillText.text = (armor.set_skill_id == -1) ? 
+            string.Empty :
+            st[skt[armor.set_skill_id].name].ToString();
+
+        skillsText.text = (armor.skill1_id == -1) ? 
+            string.Empty : 
+            $"{st[skt[armor.skill1_id].name]} Lv.{armor.skill1_lv}\n";
+
+        skillsText.text += (armor.skill2_id == -1) ? 
+            string.Empty : 
+            $"{st[skt[armor.skill2_id].name]} Lv.{armor.skill2_lv}";
+
+        priceText.text = $"{PlayDataManager.data.Gold} / {ct[item.id].gold}";
 
         if (ct[item.id].mf_module != -1) // 요구 재료마다 분기
         {
@@ -68,6 +78,20 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
             }
             go.matText.text = st[mt[ct[item.id].mf_module].name];
             go.SetSlider(count, ct[item.id].mf_module_req);
+            go.Renewal();
+        }
+
+        if (ct[item.id].mon_core != -1) // 요구 재료마다 분기
+        {
+            var go = Instantiate(require, content.transform);
+            var mat = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mon_core);
+            var count = 0;
+            if (mat != null)
+            {
+                count = mat.count;
+            }
+            go.matText.text = st[mt[ct[item.id].mon_core].name];
+            go.SetSlider(count, ct[item.id].mon_core_req);
             go.Renewal();
         }
     }
@@ -88,7 +112,7 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
         PlayDataManager.data.ArmorInventory.Add(armor);
         PlayDataManager.Save();
 
-        UpgradeManager.Instance.ShowArmors(true);
+        CraftManager.Instance.ShowArmors(true);
         gameObject.SetActive(false);
     }
 

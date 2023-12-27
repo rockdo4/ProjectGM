@@ -71,7 +71,7 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
     {
         if (!IsCraftable())
         {
-            // 제작 불가능
+            MyNotice.Instance.Notice("제작할 수 없습니다.");
             return;
         }
 
@@ -83,7 +83,7 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         PlayDataManager.data.WeaponInventory.Add(weapon);
         PlayDataManager.Save();
 
-        UpgradeManager.Instance.ShowWeapons(true);
+        CraftManager.Instance.ShowWeapons(true);
         gameObject.SetActive(false);
     }
 
