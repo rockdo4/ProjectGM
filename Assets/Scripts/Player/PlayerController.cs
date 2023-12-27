@@ -44,13 +44,14 @@ public class PlayerController : MonoBehaviour
         player = GetComponent<Player>();
         touchManager = TouchManager.Instance;
 
-        // equip weapon test
         if (PlayDataManager.data == null)
         {
             PlayDataManager.Init();
         }
         equipWeapon = PlayDataManager.curWeapon;
 
+        // Defence Reset
+        player.Stat.Defence = 0;
         foreach (var armor in PlayDataManager.curArmor)
         {
             if (armor.Value != null)
