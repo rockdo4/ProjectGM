@@ -18,6 +18,16 @@ public class FanShape : MonoBehaviour
 
     public EnemyAI enemyAi;
 
+    //void OnDrawGizmos()
+    //{
+    //    if (sharedMesh == null)
+    //    {
+    //        sharedMesh = CreateFanMesh();
+    //    }
+
+    //    Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, transform.localScale);
+    //}
+
     void Start()
     {
         material = GetComponent<Renderer>().material;
@@ -149,16 +159,6 @@ public class FanShape : MonoBehaviour
         return mesh;
     }
 
-    //void OnDrawGizmos()
-    //{
-    //    if (sharedMesh == null)
-    //    {
-    //        sharedMesh = CreateFanMesh();
-    //    }
-
-    //    Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, transform.localScale);
-    //}
-
     public void ToggleMeshRendering(bool isEnabled)
     {
         GetComponent<MeshRenderer>().enabled = isEnabled;
@@ -177,7 +177,6 @@ public class FanShape : MonoBehaviour
         }
         centerPoint = sum / sharedMesh.vertexCount;
     }
-
     public Vector3 GetCenterPoint()
     {
         return centerPoint;
