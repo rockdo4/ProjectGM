@@ -40,12 +40,20 @@ public class InGameManager : MonoBehaviour
     private Slider enemyHp;
     private Slider evadePoint;
 
+    [SerializeField] private Slider timeSlider;
+
     private void Awake()
     {
         if (Instance != this)
         {
             Destroy(gameObject);
         }
+
+        timeSlider.minValue = 0f;
+        timeSlider.maxValue = 180f; //Temp
+        timeSlider.value = 0f;
+        timeSlider.onValueChanged.AddListener(OnTimerChanged);
+
         playerData.infoUI.SetActive(false);
         enemyData.infoUI.SetActive(false);
         var prefabCheck = playerData.prefab == null || enemyData.prefab == null;
@@ -80,6 +88,11 @@ public class InGameManager : MonoBehaviour
             return;
         }
         UpdateUI();
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            timeSlider.value += 60f;
+        }
     }
 
     private void Init()
@@ -111,8 +124,17 @@ public class InGameManager : MonoBehaviour
 
     public void UpdateUI()
     {
+        timeSlider.value += Time.deltaTime;
         playerHp.value = player.HP;
         enemyHp.value = enemy.HP;
         evadePoint.value = player.evadePoint;
+    }
+
+    private void OnTimerChanged(float value)
+    {
+        if (timeSlider.value >= timeSlider.maxValue)
+        {
+            GameManager.instance.GameOver(player);
+        }
     }
 }
