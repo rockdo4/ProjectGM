@@ -25,7 +25,7 @@ public class StageManager : MonoBehaviour
 
     private Dictionary<int, StageTable.Data> stageTable;
     private Dictionary<int, string> stringTable;
-    //private Dictionary<int, EnemyTable.Data> enemyTable;
+    private Dictionary<int, EnemyTable.Data> enemyTable;
 
     [Header("Defualt Category")]
     [SerializeField]
@@ -58,7 +58,7 @@ public class StageManager : MonoBehaviour
         }
         stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
         stringTable = CsvTableMgr.GetTable<StringTable>().dataTable;
-        //enemyTable = CsvTableMgr.GetTable<EnemyTable>().dataTable;
+        enemyTable = CsvTableMgr.GetTable<EnemyTable>().dataTable;
 
         foreach (var info in stageTable)
         {
@@ -69,10 +69,9 @@ public class StageManager : MonoBehaviour
             stage.id = info.Key;
             stage.type = data.type;
             stage.title.text = stringTable[data.name];
-            Debug.Log(data.name);
+
             stage.mapName.text = ((Maps)data.map_id).ToString();
-            stage.enemyName.text = data.monster_id.ToString();
-            //stage.enemyName.text = stringTable[enemyTable[data.monster_id].name];
+            stage.enemyName.text = stringTable[enemyTable[data.monster_id].name];
             stage.button.onClick.AddListener(() =>
             {
                 //stageInfo....text = asdf;
@@ -101,7 +100,6 @@ public class StageManager : MonoBehaviour
 
     public void CategoryFilter(int type)
     {
-        Debug.Log("Click");
         var length = stageContainer.childCount;
         for (int i = 0; i < length; i++)
         {

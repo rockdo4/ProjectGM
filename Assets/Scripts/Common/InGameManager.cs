@@ -41,6 +41,7 @@ public class InGameManager : MonoBehaviour
     private Slider evadePoint;
 
     [SerializeField] public Slider timeSlider;
+    private EnemyTable.Data enemyInfo;
 
     private void Awake()
     {
@@ -48,6 +49,7 @@ public class InGameManager : MonoBehaviour
         if (stageID != 0)
         {
             var stageInfo = CsvTableMgr.GetTable<StageTable>().dataTable[stageID];
+            enemyInfo = CsvTableMgr.GetTable<EnemyTable>().dataTable[stageInfo.monster_id];
         }
 
         if (Instance != this)
@@ -66,16 +68,15 @@ public class InGameManager : MonoBehaviour
         var transformCheck = playerData.startTransform == null || enemyData.startTransform == null;
         if (prefabCheck)
         {
-            //Debug.LogError($"Not Prefab!!\nPlayer: {playerData.prefab != null}, Enemy: {enemyData.prefab != null}");
             return;
         }
         if (transformCheck)
         {
-            //Debug.LogError($"Not Transfrom!!\nPlayer: {playerData.startTransform != null}, Enemy: {enemyData.startTransform != null}");
             return;
         }
         player = Instantiate(playerData.prefab, playerData.startTransform.position, Quaternion.identity);
         enemy = Instantiate(enemyData.prefab, enemyData.startTransform.position, Quaternion.identity);
+        
     }
 
     private void Start()
@@ -110,9 +111,8 @@ public class InGameManager : MonoBehaviour
             playerHp.maxValue = player.Stat.HP;
         }
         {
-            enemyData.infoUI.GetComponentInChildren<TextMeshProUGUI>().text = enemy.name;
-            //var st = CsvTableMgr.GetTable<StringTable>().dataTable;
-            //enemyData.infoUI.GetComponentInChildren<TextMeshProUGUI>().text = st[enemy.ID];
+            var st = CsvTableMgr.GetTable<StringTable>().dataTable;
+            enemyData.infoUI.GetComponentInChildren<TextMeshProUGUI>().text = st[enemyInfo.name];
             enemyHp = enemyData.infoUI.transform.Find("Hp").GetComponent<Slider>();
             enemyHp.minValue = 0f;
             enemyHp.maxValue = enemy.Stat.HP;
