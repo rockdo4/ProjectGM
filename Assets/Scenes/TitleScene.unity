@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731715, g: 0.13414735, b: 0.121078536, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -607,6 +607,7 @@ GameObject:
   - component: {fileID: 1461614243}
   - component: {fileID: 1461614242}
   - component: {fileID: 1461614241}
+  - component: {fileID: 1461614245}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -697,6 +698,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1461614245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461614240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fa4929d0871e0499785f119d0343c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BLACK: {fileID: 1542084114}
 --- !u!1 &1494939751
 GameObject:
   m_ObjectHideFlags: 0
@@ -783,10 +797,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1542084114}
-        m_TargetAssemblyTypeName: FadeEffects, Assembly-CSharp
-        m_MethodName: FadeOut
-        m_Mode: 5
+      - m_Target: {fileID: 1461614245}
+        m_TargetAssemblyTypeName: FirstStart, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

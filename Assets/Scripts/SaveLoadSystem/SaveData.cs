@@ -180,7 +180,45 @@ public class SaveDataV7 : SaveData
 
     public List<int> SkillCodes = new List<int>();
 
-    public bool Vibration {  get; set; } = false;
+    public bool Vibration { get; set; } = false;
+
+    public override SaveData VersionUp()
+    {
+        var data = new SaveDataV8();
+        data.Gold = Gold;
+        data.WeaponInventory = WeaponInventory;
+        data.ArmorInventory = ArmorInventory;
+        data.MatInventory = MatInventory;
+        data.CodeInventory = CodeInventory;
+        data.SkillCodes = SkillCodes;
+        data.Vibration = Vibration;
+
+        return data;
+    }
+}
+
+public class SaveDataV8 : SaveData
+{
+    public SaveDataV8() 
+    {
+        Version = 8;
+    }
+
+    public int Gold { get; set; } = 0;
+
+    public List<Weapon> WeaponInventory = new List<Weapon>();
+
+    public List<Armor> ArmorInventory = new List<Armor>();
+
+    public List<Materials> MatInventory = new List<Materials>();
+
+    public List<SkillCode> CodeInventory = new List<SkillCode>();
+
+    public List<int> SkillCodes = new List<int>();
+
+    public bool Vibration { get; set; } = false;
+
+    public bool IsPlayed { get; set; } = false;
 
     public override SaveData VersionUp()
     {

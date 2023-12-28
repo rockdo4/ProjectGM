@@ -36,6 +36,14 @@ public class TutorialManager : MonoBehaviour
     
     private int dialogueType2Count = 0;
 
+    private void Awake()
+    {
+        if (PlayDataManager.data == null)
+        {
+            PlayDataManager.Init();
+        }
+    }
+
     void Start()
     {
         touchArea.interactable = true;
@@ -70,6 +78,8 @@ public class TutorialManager : MonoBehaviour
 
             if (dialogueID == 90020001)
             {
+                PlayDataManager.data.IsPlayed = true;
+                PlayDataManager.Save();
                 SceneManager.LoadScene("Title");
                 //SceneManager.LoadScene("Title", LoadSceneMode.Additive);
                 return;
