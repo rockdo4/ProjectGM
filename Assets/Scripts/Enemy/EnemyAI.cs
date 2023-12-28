@@ -866,7 +866,7 @@ public class EnemyAI : LivingObject
             }
         }
 
-        Debug.Log("이번 공격 대기시간 : "  + specificPreparationTime);
+        //Debug.Log("이번 공격 대기시간 : "  + specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
         ShowMeleeAttackRange(false, enemytype, attackPatternType);
