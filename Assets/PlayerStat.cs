@@ -70,19 +70,25 @@ public class PlayerStat : Stat
 
     public override Attack CreateAttack(LivingObject attacker, LivingObject defender, bool groggy)
     {
-        Player player = attacker as Player;
-        float damage = attacker.stat.AttackDamage;
+        var player = attacker as Player;
+        var enemyStat = defender.stat as EnemyStat;
+        float damage = player.Stat.AttackDamage;
         damage += player.CurrentWeapon.attack;
 
-        var critical = Random.value < attacker.stat.Critical;
-        if (critical)
+        if (enemyStat.weaknessType == player.CurrentWeapon.type)
         {
-            damage *= attacker.stat.CriticalDamage;
+            damage += player.CurrentWeapon.attack * (player.CurrentWeapon.weakDamage);
         }
 
-        if (defender != null)
+        var critical = Random.value < player.Stat.Critical;
+        if (critical)
         {
-            damage -= defender.stat.Defence;
+            damage *= player.Stat.CriticalDamage;
+        }
+
+        if (enemyStat != null)
+        {
+            damage -= enemyStat.Defence;
             if (damage < 0)
             {
                 damage = 0;
