@@ -80,6 +80,10 @@ public class InGameManager : MonoBehaviour
         {
             enemyData.enemy = GameObject.FindWithTag(Tags.enemy).GetComponent<EnemyAI>();
         }
+        if (playerData.player == null)
+        {
+            playerData.player = GameObject.FindWithTag(Tags.player).GetComponent<Player>();
+        }
         enemyData.enemy.gameObject.SetActive(true);
     }
 
