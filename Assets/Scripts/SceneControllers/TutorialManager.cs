@@ -5,6 +5,8 @@ using System.Linq;
 using TMPro;
 using System.Collections;
 using CsvHelper.Configuration.Attributes;
+using UnityEngine.SceneManagement;
+using System.Data;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -26,20 +28,19 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private Image dialogueType2ImageOne;
 
+    [SerializeField]
+    private Image dialogueType2ImageTwo;
+
     private List<int> tutorialSteps = new List<int>();
     private int currentStepIndex = 0;
     
     private int dialogueType2Count = 0;
 
-    // 첫번재 다이얼 타입2는 공격 실행이다.
-    // 1. 그러면 처음에는 타임스케일을 정상적으로 돌려야한다
-    // 2. 공격이 실행될때까지는 버튼은 비활성해야한다.
-    // 3. 조건이 수행되면 다시 버튼을 활성화 시킨다.
-    // 4. 이어서 다음이 되는 다이얼로그 타입 1을 재생시킨다
-
     void Start()
     {
         touchArea.interactable = true;
+        dialogueType2ImageOne.enabled = false;
+        dialogueType2ImageTwo.enabled = false;
 
         PauseGame();
         InitializeTutorial();
@@ -57,7 +58,6 @@ public class TutorialManager : MonoBehaviour
         {
             Debug.Log("튜토리얼이 끝났습니다.");
         }
-
     }
 
     private void ShowTutorialStep(int stepKey)
@@ -67,50 +67,47 @@ public class TutorialManager : MonoBehaviour
         if (table.ContainsKey(stepKey))
         {
             var dialogueID = table[stepKey].dialogueID;
-            var dialogueText = CsvTableMgr.GetTable<StringTable>().dataTable[dialogueID];
 
-            //Debug.Log(dialogueText);
+            if (dialogueID == 90020001)
+            {
+                SceneManager.LoadScene("Title");
+                //SceneManager.LoadScene("Title", LoadSceneMode.Additive);
+                return;
+            }
+            
+            var dialogueText = CsvTableMgr.GetTable<StringTable>().dataTable[dialogueID];
             tutorialText.text = dialogueText;
 
             if(table[stepKey].dialType == 2)
             {
-                Debug.Log("다이얼타입 2 진입");
-
-                StartCoroutine(DisableInputForSeconds(3.0f));
-
-                //ResumeGame();
-                //touchArea.interactable = false; // 임시
-
                 switch (dialogueType2Count)
                 {
                     case 0:
 
+                        StartCoroutine(DisableInputForSeconds(3.0f));
                         StartCoroutine(WaitForAttackState());
                         break;
 
                     case 1:
 
-                        StartCoroutine(MoveImage(tutorialImage.transform, 1.0f));
+                        StartCoroutine(MoveImage(dialogueType2ImageTwo.transform, 3.0f));
                         StartCoroutine(WaitForEvadeState());
                         break;
 
                     case 2:
-                    
+
+                        SceneManager.LoadScene("Title", LoadSceneMode.Additive);
+
+
                         // 스테이지 진입
                         // 타이틀씬으로 가면 됨
 
                         break;
-
-                    case 3:
-                        
-                        break;
-
                 }
 
                 dialogueType2Count++;
 
             }
-
         }
         else
         {
@@ -138,7 +135,7 @@ public class TutorialManager : MonoBehaviour
         var controller = player.GetComponent<PlayerController>();
 
         yield return new WaitUntil(() => controller.CurrentState == PlayerController.State.Evade);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
         Debug.Log("회피 실행완료");
 
@@ -154,6 +151,8 @@ public class TutorialManager : MonoBehaviour
         var table = CsvTableMgr.GetTable<DialogueTable>().dataTable;
         tutorialSteps.Clear();
 
+        
+
         foreach (var pair in table)
         {
             if (pair.Value.dialType == 1 || pair.Value.dialType == 2)
@@ -167,6 +166,9 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator MoveImage(Transform imageTransform, float duration)
     {
+        touchArea.interactable = false;
+        dialogueType2ImageTwo.enabled = true;
+
         Vector3 startPosition = imageTransform.position;
         Vector3 endPosition = new Vector3(startPosition.x + 300, startPosition.y, startPosition.z);
 
@@ -177,6 +179,15 @@ public class TutorialManager : MonoBehaviour
         {
             elapsedTime = Time.realtimeSinceStartup - startTime;
             imageTransform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
+
+            if (dialogueType2ImageTwo != null)
+            {
+                dialogueType2ImageTwo.enabled = false;
+                blocker.enabled = false;
+            }
+
+            ResumeGame();
+
             yield return null;
         }
 
@@ -186,6 +197,7 @@ public class TutorialManager : MonoBehaviour
     IEnumerator DisableInputForSeconds(float seconds)
     {
         touchArea.interactable = false;
+        dialogueType2ImageOne.enabled = true;
 
         yield return new WaitForSecondsRealtime(seconds);
 
