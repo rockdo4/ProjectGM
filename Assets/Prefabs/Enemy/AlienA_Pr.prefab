@@ -311,7 +311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &471950779080328446
 Transform:
   m_ObjectHideFlags: 0
@@ -389,6 +389,11 @@ MonoBehaviour:
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
+  fanShapePrefabs:
+  - {fileID: 5106138004218964188, guid: cd81cf52c0f5545479a4949c598a3f92, type: 3}
+  - {fileID: 4478600404576023960, guid: 1c50f528017682241b179aaa96b72930, type: 3}
+  - {fileID: 5164172624734654894, guid: 3d91ae071fbf0f440bccaad24eb9b95d, type: 3}
+  - {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433, type: 3}
   bearAttackPatternPhaseOne: 0400000003000000
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
   alienAttackPatternPhaseOne: 0100000002000000020000000300000004000000
@@ -400,6 +405,8 @@ MonoBehaviour:
   wolfAttackPatternPhaseTwo: 0100000002000000
   spiderAttackPatternPhaseOne: 010000000200000003000000
   spiderAttackPatternPhaseTwo: 010000000200000003000000
+  dragonAttackPatternPhaseOne: 010000000200000003000000
+  dragonAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
   - enemyType: 1
     attackPatternType: 0

@@ -9,31 +9,25 @@ public class EnemyTable : CsvTable
 {
     public class Data
     {
-        public int Mon_ID { get; set; }
-        public string Mon_Name { get; set; }
-        public int Mon_HP { get; set; }
-        public int Mon_Attack { get; set; }
-        public float Mon_AtSpeed { get; set; }
-        public int Mon_PhaseAttack { get; set; }
-        public float Mon_PhaseAtSpeed { get; set; }
-        public int Mon_Range { get; set; }
-        public int Mon_Defence { get; set; }
-        public int Mon_Phase { get; set; }
-        public int Mon_Affinity { get; set; }
+        public int name { get; set; }
+        public int hp { get; set; }
+        public int defence { get; set; }
+        public int attack { get; set; }
+        public int phase { get; set; }
+        public int phaseAttack { get; set; }
+        public int type { get; set; }
+        public float deley { get; set; }
 
-        public Data(int id, string name, int hp, int attack, float atSpeed, int phaseAttack, float phaseAtSpeed, int range, int defence, int phase, int affinity)
+        public Data(int name, int hp, int defence, int attack, int phase, int phaseAttack, int type, float deley)
         {
-            this.Mon_ID = id;
-            this.Mon_Name = name;
-            this.Mon_HP = hp;
-            this.Mon_Attack = attack;
-            this.Mon_AtSpeed = atSpeed;
-            this.Mon_PhaseAttack = phaseAttack;
-            this.Mon_PhaseAtSpeed = phaseAtSpeed;
-            this.Mon_Range = range;
-            this.Mon_Defence = defence;
-            this.Mon_Phase = phase;
-            this.Mon_Affinity = affinity;
+            this.name = name;
+            this.hp = hp;
+            this.defence = defence;
+            this.attack = attack;
+            this.phase = phase;
+            this.phaseAttack = phaseAttack;
+            this.type = type;
+            this.deley = deley;
         }
     }
     public Dictionary<int, Data> dataTable = new Dictionary<int, Data>();
@@ -55,8 +49,8 @@ public class EnemyTable : CsvTable
 
         var csv = new CsvReader(reader, csvConfig);
 
-        csv.Read(); // 타입 제거
-        csv.Read(); // 헤더 제거
+        csv.Read();
+        csv.Read();
 
         while (csv.Read())
         {
@@ -64,16 +58,13 @@ public class EnemyTable : CsvTable
                 new Data
                 (
                     csv.GetField<int>(1),
-                    csv.GetField<string>(2),
+                    csv.GetField<int>(2),
                     csv.GetField<int>(3),
                     csv.GetField<int>(4),
-                    csv.GetField<float>(5),
+                    csv.GetField<int>(5),
                     csv.GetField<int>(6),
-                    csv.GetField<float>(7),
-                    csv.GetField<int>(8), 
-                    csv.GetField<int>(9),
-                    csv.GetField<int>(10),
-                    csv.GetField<int>(11)
+                    csv.GetField<int>(7),
+                    csv.GetField<float>(7)
                 )
             );
         }

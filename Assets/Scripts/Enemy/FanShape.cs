@@ -1,5 +1,4 @@
 using UnityEngine;
-using static EnemyAI;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class FanShape : MonoBehaviour
@@ -18,6 +17,16 @@ public class FanShape : MonoBehaviour
     private float startTime;
 
     public EnemyAI enemyAi;
+
+    //void OnDrawGizmos()
+    //{
+    //    if (sharedMesh == null)
+    //    {
+    //        sharedMesh = CreateFanMesh();
+    //    }
+
+    //    Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, transform.localScale);
+    //}
 
     void Start()
     {
@@ -39,6 +48,30 @@ public class FanShape : MonoBehaviour
         CalculateCenterPoint();
     }
 
+    private void OnEnable()
+    {
+        ResetColor();
+        ResetStartTime();
+    }
+    private void ResetStartTime()
+    {
+        startTime = Time.time;
+    }
+
+    public Mesh GetSharedMesh()
+    {
+        return sharedMesh;
+    }
+
+    public void ResetColor()
+    {
+        if (material != null)
+        {
+            //Debug.Log("123");
+            material.color = Color.yellow;
+        }
+    }
+
     void Update()
     {
         if (enemyAi == null)
@@ -49,9 +82,32 @@ public class FanShape : MonoBehaviour
 
         float uvSpeed = Mathf.Lerp(1.0f, 2.0f, t);
         material.SetFloat("UVSpeed", uvSpeed);
+
+        // PerformRaycastDamageCheck();
     }
 
-    Mesh CreateFanMesh()
+    public void PerformRaycastDamageCheck()
+    {
+        for (int i = 0; i < sharedMesh.vertexCount; i++)
+        {
+            Vector3 vertex = transform.TransformPoint(sharedMesh.vertices[i]);
+            RaycastHit hit;
+
+            Vector3 direction = vertex - transform.position;
+            if (Physics.Raycast(transform.position, direction, out hit, radius))
+            {
+                Debug.DrawRay(transform.position, direction * radius, Color.blue);
+
+            }
+            else
+            {
+                Debug.DrawRay(transform.position, direction * radius, Color.green);
+            }
+        }
+    }
+
+
+    public Mesh CreateFanMesh()
     {
         Mesh mesh = new Mesh();
 
@@ -103,16 +159,6 @@ public class FanShape : MonoBehaviour
         return mesh;
     }
 
-    //void OnDrawGizmos()
-    //{
-    //    if (sharedMesh == null)
-    //    {
-    //        sharedMesh = CreateFanMesh();
-    //    }
-
-    //    Gizmos.DrawMesh(sharedMesh, transform.position, transform.rotation, transform.localScale);
-    //}
-
     public void ToggleMeshRendering(bool isEnabled)
     {
         GetComponent<MeshRenderer>().enabled = isEnabled;
@@ -123,7 +169,7 @@ public class FanShape : MonoBehaviour
         if (sharedMesh == null)
             return;
 
-        // 메시의 모든 버텍스를 순회하며 중심점 계산
+        // 메시의 모든 버텍스를 순회
         Vector3 sum = Vector3.zero;
         foreach (Vector3 vertex in sharedMesh.vertices)
         {
@@ -131,7 +177,6 @@ public class FanShape : MonoBehaviour
         }
         centerPoint = sum / sharedMesh.vertexCount;
     }
-
     public Vector3 GetCenterPoint()
     {
         return centerPoint;
