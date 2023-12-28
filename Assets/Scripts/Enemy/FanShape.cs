@@ -132,7 +132,7 @@ public class FanShape : MonoBehaviour
 
         Vector3 previousPoint = transform.position;
         //Vector3 startPoint = transform.position + Quaternion.Euler(0, -angle / 2, 0) * Vector3.forward * scaledRadius;
-        Debug.Log(transform.rotation);
+        //Debug.Log(transform.rotation);
         Vector3 startPoint = transform.position + transform.rotation * Quaternion.Euler(0, -angle / 2, 0) * Vector3.forward * scaledRadius;
 
 
@@ -196,7 +196,7 @@ public class FanShape : MonoBehaviour
         float rotationOffset = 45f; // 오프셋 각도 설정
         Vector3 rotatedForward = Quaternion.Euler(0, rotationOffset, 0) * transform.forward;
 
-        Debug.Log(rotatedForward);
+        //Debug.Log(rotatedForward);
         float angleToPlayer = Vector3.Angle(rotatedForward, toPlayer);
         return angleToPlayer <= angle / 2f;
 
@@ -299,12 +299,12 @@ public class FanShape : MonoBehaviour
                 if (IsPlayerInCircleArea(detectedPlayer.position))
                 {
                     isplayerInside = true;
-                    Debug.Log("플레이어가 원 안에 있습니다.");
+                    //Debug.Log("플레이어가 원 안에 있습니다.");
                 }
                 else
                 {
                     isplayerInside = false;
-                    Debug.Log("플레이어가 원 밖에 있습니다.");
+                    //Debug.Log("플레이어가 원 밖에 있습니다.");
                 }
                 break;
 
@@ -312,12 +312,12 @@ public class FanShape : MonoBehaviour
                 if(IsPlayerInFanArea(detectedPlayer.position))
                 {
                     isplayerInside = true;
-                    Debug.Log("플레이어가 부채꼴 안에 있습니다.");
+                    //Debug.Log("플레이어가 부채꼴 안에 있습니다.");
                 }
                 else
                 {
                     isplayerInside = false;
-                    Debug.Log("플레이어가 부채꼴 밖에 있습니다.");
+                    //Debug.Log("플레이어가 부채꼴 밖에 있습니다.");
                 }
                 break;
 
@@ -325,12 +325,12 @@ public class FanShape : MonoBehaviour
                 if (IsPlayerInTriangleArea(detectedPlayer.position))
                 {
                     isplayerInside = true;
-                    Debug.Log("플레이어가 삼각형 안에 있습니다.");
+                    //Debug.Log("플레이어가 삼각형 안에 있습니다.");
                 }
                 else
                 {
                     isplayerInside = false;
-                    Debug.Log("플레이어가 삼각형 밖에 있습니다.");
+                    //Debug.Log("플레이어가 삼각형 밖에 있습니다.");
                 }
                 break;
 
@@ -338,12 +338,12 @@ public class FanShape : MonoBehaviour
                 if (IsPlayerInSemiCircleArea(detectedPlayer.position))
                 {
                     isplayerInside = true;
-                    Debug.Log("플레이어가 반원 안에 있습니다.");
+                    //Debug.Log("플레이어가 반원 안에 있습니다.");
                 }
                 else
                 {
                     isplayerInside = false;
-                    Debug.Log("플레이어가 반원 밖에 있습니다.");
+                    //Debug.Log("플레이어가 반원 밖에 있습니다.");
                 }
                 break;
         }
