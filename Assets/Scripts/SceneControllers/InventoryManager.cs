@@ -525,6 +525,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         TitleManager.Instance.Renewal();
     }
 
+    /*
     public void Tester()
     {
         var mt = CsvTableMgr.GetTable<MatTable>().dataTable;
@@ -543,4 +544,5 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
         TitleManager.Instance.Renewal();
     }
+    */
 }
