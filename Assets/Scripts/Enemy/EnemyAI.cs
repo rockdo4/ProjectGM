@@ -123,7 +123,6 @@ public class EnemyAI : LivingObject
     private LayerMask playerLayerMask;
 
     [Header("몬스터의 타입")]
-    [SerializeField]
     public EnemyType enemyType;
 
     [Header("공격 조건중 몬스터가 플레이어를 바라볼때의 최소각도")]
@@ -1920,35 +1919,17 @@ public class EnemyAI : LivingObject
     {
         float actualAttackDamage = isTwoPhase ? Stat.AttackDamage * 2 : Stat.AttackDamage;
 
-        Mesh sharedMesh = fanShape.GetSharedMesh();
-        float radius = fanShape.radius;
-
-        Debug.Log("팬쉐이프 반경 : " + radius);
-
-        for (int i = 0; i < sharedMesh.vertexCount; i++)
+        foreach (var fanShapeInstance in activeFanShapes)
         {
-            Vector3 vertex = transform.TransformPoint(sharedMesh.vertices[i]);
-            RaycastHit hit;
-
-            Vector3 direction = vertex - transform.position;
-            if (Physics.Raycast(transform.position, direction, out hit, radius))
+            if (fanShapeInstance != null && fanShapeInstance.isplayerInside)
             {
-                Debug.DrawRay(transform.position, direction * radius, Color.blue);
-
-                if (hit.collider.CompareTag("Player"))
-                {
-                    Debug.Log("플레이어 감지");
-                    ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
-                    break;
-                }
-            }
-            else
-            {
-                Debug.DrawRay(transform.position, direction * radius, Color.green);
+                //Debug.Log("플레이어가 공격 범위 안에 있습니다.");
+                //Debug.Log(actualAttackDamage);
+                ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
+                break;
             }
         }
     }
-
 
     #endregion
 
