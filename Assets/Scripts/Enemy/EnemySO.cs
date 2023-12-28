@@ -17,6 +17,11 @@ public class EnemySO : ScriptableObject
 
     public GameObject MakeEnemy(int monsterID, Transform tr)
     {
+        if (tr == null)
+        {
+            return null;
+        }
+
         foreach (var enemyData in datas)
         {
             if (enemyData.ID == monsterID)

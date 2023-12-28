@@ -123,7 +123,6 @@ public class EnemyAI : LivingObject
     private LayerMask playerLayerMask;
 
     [Header("몬스터의 타입")]
-    [SerializeField]
     public EnemyType enemyType;
 
     [Header("공격 조건중 몬스터가 플레이어를 바라볼때의 최소각도")]
@@ -159,6 +158,7 @@ public class EnemyAI : LivingObject
 
     FanShape fanShape = null;
     private bool isDie;
+    private int poolIndex;
 
     [Serializable]
     public struct AttackPreparationTime
@@ -253,7 +253,7 @@ public class EnemyAI : LivingObject
        },
        actionOnGet: (obj) => { obj.gameObject.SetActive(true); },
        actionOnRelease: (obj) => { obj.gameObject.SetActive(false); },
-       actionOnDestroy: (obj) => { Destroy(obj.gameObject); },
+       null,
        defaultCapacity: 10, // 초기 용량
        maxSize: 20       // 최대 용량
    );
@@ -837,6 +837,20 @@ public class EnemyAI : LivingObject
 
     IEnumerator PrepareMeleeAttack(EnemyType enemytype, AttackPatternType attackPatternType) // 프리페어
     {
+        if (activeFanShapes != null)
+        {
+            foreach (var fanShape in activeFanShapes)
+            {
+                MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
+                if (meshRenderer != null)
+                {
+                    meshRenderer.enabled = true;
+                }
+
+                fanShapePools[poolIndex].Release(fanShape);
+            }
+        }
+
         isPreparingAttack = true;
         ShowMeleeAttackRange(true, enemytype, attackPatternType);
 
@@ -1169,12 +1183,25 @@ public class EnemyAI : LivingObject
     private void ShowMeleeAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
     {
         Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
-        int poolIndex = GetPoolIndexForAttackPatternType(AttackPatternType);
-
-        //Debug.Log(poolIndex);
+        poolIndex = GetPoolIndexForAttackPatternType(AttackPatternType);
 
         if (show)
         {
+            //if (activeFanShapes != null)
+            //{
+            //    foreach (var fanShape in activeFanShapes)
+            //    {
+            //        MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
+            //        if (meshRenderer != null)
+            //        {
+            //            meshRenderer.enabled = true;
+            //        }
+
+            //        fanShape.gameObject.SetActive(false);
+            //        fanShapePools[GetPoolIndexForAttackPatternType(AttackPatternType)].Release(fanShape);
+            //    }
+            //}
+
             AttackPattern currentPattern = null;
 
             if (attackIndex >= 0 && attackIndex < savedPatterns.Count)
@@ -1199,16 +1226,11 @@ public class EnemyAI : LivingObject
                     FanShape fanShapeInstance = fanShapePools[poolIndex].Get();
                     fanShapeInstance.gameObject.SetActive(true);
 
-                    //Debug.Log(fanShapeInstance);
-
                     fanShape = fanShapeInstance.GetComponent<FanShape>();
                     fanShape.enemyAi = this;
 
-                    //Debug.Log(fanShape);
-
                     Vector3 cellSize = fanShape.Return();
                     Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
-
 
                     fanShapeInstance.transform.SetParent(transform, false);
                     fanShapeInstance.transform.position = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
@@ -1227,9 +1249,13 @@ public class EnemyAI : LivingObject
             {
                 foreach (var fanShape in activeFanShapes)
                 {
-                    //fanshape.ResetColor();
-                    fanShape.gameObject.SetActive(false);
-                    fanShapePools[poolIndex].Release(fanShape);
+                    MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
+                    if (meshRenderer != null)
+                    {
+                        meshRenderer.enabled = false;
+                    }
+
+                    //fanShapePools[poolIndex].Release(fanShape);
                 }
             }
         }
@@ -1850,23 +1876,23 @@ public class EnemyAI : LivingObject
 
     private void OnDrawGizmos()
     {
-        if (activeFanShapes == null) return;
+        //if (activeFanShapes == null) return;
 
-        Gizmos.color = Color.red;
-        float raycastDistance = rangeAttackRange;
+        //Gizmos.color = Color.red;
+        //float raycastDistance = rangeAttackRange;
 
-        foreach (var fanShapes in activeFanShapes)
-        {
-            if (fanShapes != null)
-            {
-                //Bounds bounds = cell.GetComponent<Renderer>().bounds;
-                //Gizmos.DrawWireCube(bounds.center, bounds.size);
+        //foreach (var fanShapes in activeFanShapes)
+        //{
+        //    if (fanShapes != null)
+        //    {
+        //        //Bounds bounds = cell.GetComponent<Renderer>().bounds;
+        //        //Gizmos.DrawWireCube(bounds.center, bounds.size);
 
-                Vector3 shapesPosition = fanShapes.transform.position;
-                Vector3 direction = transform.forward * raycastDistance;
-                Gizmos.DrawRay(shapesPosition, direction);
-            }
-        }
+        //        Vector3 shapesPosition = fanShapes.transform.position;
+        //        Vector3 direction = transform.forward * raycastDistance;
+        //        Gizmos.DrawRay(shapesPosition, direction);
+        //    }
+        //}
 
 #if UNITY_EDITOR
 
@@ -1920,35 +1946,25 @@ public class EnemyAI : LivingObject
     {
         float actualAttackDamage = isTwoPhase ? Stat.AttackDamage * 2 : Stat.AttackDamage;
 
-        Mesh sharedMesh = fanShape.GetSharedMesh();
-        float radius = fanShape.radius;
-
-        Debug.Log("팬쉐이프 반경 : " + radius);
-
-        for (int i = 0; i < sharedMesh.vertexCount; i++)
+        foreach (var fanShapeInstance in activeFanShapes)
         {
-            Vector3 vertex = transform.TransformPoint(sharedMesh.vertices[i]);
-            RaycastHit hit;
-
-            Vector3 direction = vertex - transform.position;
-            if (Physics.Raycast(transform.position, direction, out hit, radius))
+            if (fanShapeInstance != null && fanShapeInstance.isplayerInside)
             {
-                Debug.DrawRay(transform.position, direction * radius, Color.blue);
 
-                if (hit.collider.CompareTag("Player"))
-                {
-                    Debug.Log("플레이어 감지");
-                    ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
-                    break;
-                }
-            }
-            else
-            {
-                Debug.DrawRay(transform.position, direction * radius, Color.green);
+                // 공격이 무조건 맞아
+
+                // 이상적인거는
+                // 공격 맞기 직전까지 판단을해야되잖아
+                // 안에있냐? 밖에있냐?
+
+
+                //Debug.Log("플레이어가 공격 범위 안에 있습니다.");
+                //Debug.Log(actualAttackDamage);
+                ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
+                break;
             }
         }
     }
-
 
     #endregion
 

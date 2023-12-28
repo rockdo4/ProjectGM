@@ -36,7 +36,7 @@ public class TutorialManager : MonoBehaviour
 
     public void NextStep()
     {
-        currentStepIndex++; // 다음 단계 인덱스로 이동
+        currentStepIndex++;
         if (currentStepIndex < tutorialSteps.Count)
         {
             ShowTutorialStep(tutorialSteps[currentStepIndex]);
@@ -52,7 +52,7 @@ public class TutorialManager : MonoBehaviour
     {
         var table = CsvTableMgr.GetTable<DialogueTable>().dataTable;
 
-        Debug.Log(stepKey);
+        //Debug.Log(stepKey);
 
         if (stepKey == 1001007)
         {
@@ -93,16 +93,25 @@ public class TutorialManager : MonoBehaviour
     {
         var table = CsvTableMgr.GetTable<DialogueTable>().dataTable;
 
-        //if (table[])
+        tutorialSteps.Clear();
 
-        tutorialSteps = table.Keys.ToList(); // 테이블의 모든 키를 리스트로 변환
+
+        foreach (var pair in table)
+        {
+            if (pair.Value.dialType == 1)
+            {
+                tutorialSteps.Add(pair.Key);
+            }
+        }
+
+        //tutorialSteps = table.Keys.ToList();
         tutorialSteps.Sort();
     }
 
     IEnumerator MoveImage(Transform imageTransform, float duration)
     {
-        Vector3 startPosition = imageTransform.position; // 시작 위치
-        Vector3 endPosition = new Vector3(startPosition.x, startPosition.y + 300, startPosition.z); // 끝 위치 (위로 100 단위 이동)
+        Vector3 startPosition = imageTransform.position;
+        Vector3 endPosition = new Vector3(startPosition.x, startPosition.y + 300, startPosition.z);
 
         float startTime = Time.realtimeSinceStartup;
         float elapsedTime = 0;
@@ -111,11 +120,10 @@ public class TutorialManager : MonoBehaviour
         {
             elapsedTime = Time.realtimeSinceStartup - startTime;
             imageTransform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
-            //..elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        imageTransform.position = endPosition; // 최종 위치로 설정
+        imageTransform.position = endPosition;
     }
 
     IEnumerator DisableInputForSeconds(float seconds)

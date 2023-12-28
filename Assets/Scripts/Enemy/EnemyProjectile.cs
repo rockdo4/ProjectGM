@@ -14,9 +14,9 @@ public class EnemyProjectile : MonoBehaviour
             {
                 // 널체크, 초기화 확인
                 //Debug.Log(gameObject.GetComponent<EnemyAI>());
-                Debug.Log(player);
-                Debug.Log(damage);
-                Debug.Log(enemyAi);
+                //Debug.Log(player);
+                //Debug.Log(damage);
+                //Debug.Log(enemyAi);
 
 
                 if (enemyAi != null && player != null)
@@ -25,7 +25,7 @@ public class EnemyProjectile : MonoBehaviour
                 }
 
             }
-            Debug.Log(gameObject);
+            //Debug.Log(gameObject);
             //Destroy(gameObject);
         }
     }
