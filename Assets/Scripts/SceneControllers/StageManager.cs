@@ -69,7 +69,8 @@ public class StageManager : MonoBehaviour
             stage.id = info.Key;
             stage.type = data.type;
             stage.title.text = stringTable[data.name];
-
+            var path = $"sprites/Enemy Icon/{stringTable[data.iconName]}";
+            stage.image.sprite = Resources.Load<Sprite>(path);
             stage.mapName.text = ((Maps)data.map_id).ToString();
             stage.enemyName.text = stringTable[enemyTable[data.monster_id].name];
             stage.button.onClick.AddListener(() =>

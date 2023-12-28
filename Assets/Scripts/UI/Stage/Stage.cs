@@ -6,8 +6,6 @@ public class Stage : MonoBehaviour
 {
     public int id;
     public int type;
-    public int map_id;
-    public int enemy_id;
     public Image image { get; private set; }
     public TextMeshProUGUI title { get; private set; }
     public TextMeshProUGUI mapName { get; private set; }
@@ -16,7 +14,7 @@ public class Stage : MonoBehaviour
 
     private void Awake()
     {
-        image = GetComponentInChildren<Image>();
+        image = transform.Find("Icon Image").GetComponent<Image>();
         button = GetComponentInChildren<Button>();
 
         var middle = transform.Find("MIDDLE");
