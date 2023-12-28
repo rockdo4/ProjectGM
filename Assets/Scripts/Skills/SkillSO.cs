@@ -16,7 +16,13 @@ public class SkillSO : ScriptableObject
     public Skill GetSkill(int id, int level)
     {
         var index = ID.FindIndex(x => x == id);
+        if (index == -1)
+        {
+            return null;
+        }
+        var skill = Instantiate(SKILL[index]);
+        skill.SetSkill(id, level);
 
-        return (index == -1) ? null : SKILL[index];
+        return skill;
     }
 }

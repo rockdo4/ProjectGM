@@ -2,22 +2,26 @@ using UnityEngine;
 
 public class Skill : MonoBehaviour
 {
-    private PlayerStat stat;
+    protected Player player;
 
-    public void Init()
+    protected int id { get; private set; } = -1;
+
+    protected int level { get; set; } = 1;
+
+    protected void Init()
     {
-        stat = GetComponent<Player>().Stat;
+        player = GetComponentInParent<Player>();
     }
 
-    public int level { get; set; } = 1;
-}
-
-/*
-public class TestSkill : Skill
-{
-    private void Start()
+    public Skill(int id, int level)
     {
-        Init();
+        this.id = id;
+        this.level = level;
+    }
+
+    public virtual void SetSkill(int id, int level)
+    {
+        this.id = id;
+        this.level = level;
     }
 }
-*/

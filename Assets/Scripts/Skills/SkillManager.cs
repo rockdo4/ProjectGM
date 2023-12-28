@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
-    [Header("플레이어")]
-    [SerializeField]
     private Player player;
-
     
     [Header("스킬 SO")]
     [SerializeField]
     private SkillSO skillSO;
     
-
     private void Awake()
     {
+        player = GetComponent<Player>();
+
         if (PlayDataManager.data == null)
         {
             PlayDataManager.Init();
@@ -23,7 +21,9 @@ public class SkillManager : MonoBehaviour
 
         foreach (var item in PlayDataManager.curSkill)
         {
-            skillSO.GetSkill(item.Key, item.Value);
+            var skill = skillSO.GetSkill(item.Key, item.Value);
+            skill.transform.SetParent(transform);
         }
+
     }
 }
