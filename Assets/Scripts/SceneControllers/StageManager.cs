@@ -1,10 +1,24 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
+    public enum Maps
+    {
+        Zoo = 1,
+        RPG,
+        Horror
+    }
+
+    public enum Type
+    {
+        Global = 1,
+        Local
+    }
+
     [Header("BLACK")]
     [SerializeField]
     private FadeEffects BLACK;
@@ -12,6 +26,10 @@ public class StageManager : MonoBehaviour
     private Dictionary<int, StageTable.Data> stageTable;
     private Dictionary<int, string> stringTable;
     //private Dictionary<int, EnemyTable.Data> enemyTable;
+
+    [Header("Defualt Category")]
+    [SerializeField]
+    private int defaultCategory;
 
     [Header("Stage Container")]
     [SerializeField]
@@ -25,15 +43,14 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private GameObject stageInfo;
 
-    
-    public Button categoryButton;
-
     private void Awake()
     {
         if (PlayDataManager.data == null)
         {
             PlayDataManager.Init();
         }
+
+        PlayerPrefs.DeleteKey("StageID");
 
         if (stagePrefab == null)
         {
@@ -49,17 +66,27 @@ public class StageManager : MonoBehaviour
             var stage = stageGameObject.GetComponent<Stage>();
             var data = info.Value;
 
+            stage.id = info.Key;
+            stage.type = data.type;
             stage.title.text = stringTable[data.name];
-            stage.description.text = stringTable[data.script];
+            Debug.Log(data.name);
+            stage.mapName.text = ((Maps)data.map_id).ToString();
             stage.enemyName.text = data.monster_id.ToString();
             //stage.enemyName.text = stringTable[enemyTable[data.monster_id].name];
             stage.button.onClick.AddListener(() =>
             {
                 //stageInfo....text = asdf;
-                stageInfo.SetActive(true);
+                PlayerPrefs.SetInt("StageID", info.Key);
+                SceneManager.LoadScene(((Maps)data.map_id).ToString());
+                if (stageInfo != null)
+                {
+                    stageInfo.SetActive(true);
+                }
             });
             stage.transform.SetParent(stageContainer, false);
         }
+
+        CategoryFilter(defaultCategory);
     }
 
     public void GoGame(string sceneName)
@@ -70,5 +97,39 @@ public class StageManager : MonoBehaviour
             return;
         }
         BLACK.FadeOut(sceneName);
+    }
+
+    public void CategoryFilter(int type)
+    {
+        Debug.Log("Click");
+        var length = stageContainer.childCount;
+        for (int i = 0; i < length; i++)
+        {
+            var stage = stageContainer.GetChild(i).GetComponent<Stage>();
+            if (stage == null)
+            {
+                continue;
+            }
+
+            if (stage.type == type)
+            {
+                stage.gameObject.SetActive(true);
+            }
+            else
+            {
+                stage.gameObject.SetActive(false);
+            }
+        }
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            CategoryFilter(1);
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            CategoryFilter(2);
+        }
     }
 }

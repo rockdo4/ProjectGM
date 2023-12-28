@@ -40,10 +40,16 @@ public class InGameManager : MonoBehaviour
     private Slider enemyHp;
     private Slider evadePoint;
 
-    [SerializeField] private Slider timeSlider;
+    [SerializeField] public Slider timeSlider;
 
     private void Awake()
     {
+        var stageID = PlayerPrefs.GetInt("StageID");
+        if (stageID != 0)
+        {
+            var stageInfo = CsvTableMgr.GetTable<StageTable>().dataTable[stageID];
+        }
+
         if (Instance != this)
         {
             Destroy(gameObject);
