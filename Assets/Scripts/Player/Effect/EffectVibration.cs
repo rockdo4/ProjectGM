@@ -1,7 +1,13 @@
 using UnityEngine;
-
+using Lofelt.NiceVibrations;
 public class EffectVibration : EffectBase
 {
+    [Header("ÁøÆø")]
+    [SerializeField] private float amplitude;
+
+    [Header("Áøµ¿¼ö")]
+    [SerializeField] private float frequency;
+
     public override void Init(Transform targetTransform = null)
     {
 
@@ -10,8 +16,12 @@ public class EffectVibration : EffectBase
     public override void PlayStart(Vector3 direction = default)
     {
         base.PlayStart(direction);
-#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
-        Handheld.Vibrate();
-#endif
+        HapticPatterns.PlayConstant(amplitude, frequency, duration);
+    }
+
+    public override void PlayEnd()
+    {
+        HapticController.Stop();
+        base.PlayEnd();
     }
 }

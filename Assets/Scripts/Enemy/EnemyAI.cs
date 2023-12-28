@@ -236,8 +236,10 @@ public class EnemyAI : LivingObject
     IEnumerator RoarInit()
     {
         hasRoared = false;
+        CameraManager.Instance.SetCameraWithTag(Tags.enemy);
         animator.SetTrigger("Roar");
         yield return new WaitForSeconds(roarDuration);
+        CameraManager.Instance.SetCameraWithTag(Tags.player);
         hasRoared = true;
     }
 

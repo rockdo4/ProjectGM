@@ -5,31 +5,43 @@ using UnityEngine.UI;
 public class CreateArmorPanel : MonoBehaviour, IRenewal
 {
     [Header("방어구 이름 텍스트")]
-    public TextMeshProUGUI nameText;
+    [SerializeField] 
+    private TextMeshProUGUI nameText;
 
     [Header("아이콘 이미지")]
     public Image iconImage;
 
     [Header("방어력 텍스트")]
-    public TextMeshProUGUI defText;
+    [SerializeField]
+    private TextMeshProUGUI defText;
 
     [Header("스킬1 텍스트")]
-    public TextMeshProUGUI skill1Text;
+    [SerializeField]
+    private TextMeshProUGUI skill1Text;
 
     [Header("스킬2 텍스트")]
-    public TextMeshProUGUI skill2Text;
+    [SerializeField]
+    private TextMeshProUGUI skill2Text;
 
     [Header("세트 스킬 텍스트")]
-    public TextMeshProUGUI setSkillText;
+    [SerializeField]
+    private TextMeshProUGUI setSkillText;
 
     [Header("요구 재료 패널")]
-    public RequireMatPanel require;
+    [SerializeField]
+    private RequireMatPanel require;
 
     [Header("요구 재료 패널 영역")]
-    public GameObject content;
+    [SerializeField]
+    private GameObject content;
 
     [Header("요구 금액 텍스트")]
-    public TextMeshProUGUI priceText;
+    [SerializeField]
+    private TextMeshProUGUI priceText;
+
+    [Header("장착하기 버튼")]
+    [SerializeField]
+    private Button craftButton;
 
     private Equip item = null;
 
@@ -68,7 +80,7 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
             string.Empty : 
             $"{st[skt[armor.skill2_id].name]} Lv.{armor.skill2_lv}";
 
-        priceText.text = $"{PlayDataManager.data.Gold} / {ct[item.id].gold}";
+        priceText.text = $"비용 : {ct[item.id].gold}\n소지금 : {PlayDataManager.data.Gold}";
 
         if (ct[item.id].mf_module != -1) // 요구 재료마다 분기
         {
@@ -84,7 +96,7 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
             go.Renewal();
         }
 
-        if (ct[item.id].mon_core != -1) // 요구 재료마다 분기
+        if (ct[item.id].mon_core != -1)
         {
             var go = Instantiate(require, content.transform);
             var mat = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mon_core);
@@ -97,6 +109,8 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
             go.SetSlider(count, ct[item.id].mon_core_req);
             go.Renewal();
         }
+
+        craftButton.gameObject.SetActive(IsCraftable());
     }
 
     public void CraftEquip()
@@ -115,6 +129,8 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
         PlayDataManager.data.ArmorInventory.Add(armor);
         PlayDataManager.Save();
 
+        InventoryManager.Instance.Renewal();
+
         CraftManager.Instance.ShowArmors(true);
         gameObject.SetActive(false);
     }
@@ -123,14 +139,27 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
     {
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
 
-        var mat = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mf_module);
-        if (mat == null)
+        var mat1 = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mf_module);
+        if (mat1 == null)
         {
             //Debug.Log("Not Exist Materials");
             return false;
         }
 
-        if (mat.count < ct[item.id].mf_module_req)
+        if (mat1.count < ct[item.id].mf_module_req)
+        {
+            //Debug.Log("Lack Of Materials Count");
+            return false;
+        }
+
+        var mat2 = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mon_core);
+        if (mat2 == null)
+        {
+            //Debug.Log("Not Exist Materials");
+            return false;
+        }
+
+        if (mat2.count < ct[item.id].mon_core_req)
         {
             //Debug.Log("Lack Of Materials Count");
             return false;
