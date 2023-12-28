@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 814e3f3f6620c984791a29e1dd77c84f, type: 3}
+  m_Name: Enemy SO
+  m_EditorClassIdentifier: 
+  datas:
+  - ID: 8001001
+    prefab: {fileID: 105006126220715780, guid: e0f5e895cdf5cab4b98b2a6810d54fb7, type: 3}
+  - ID: 8001002
+    prefab: {fileID: 3389897594519030041, guid: 94831c2a2aeba7d4f90b121bd1f396ca,
+      type: 3}
+  - ID: 8001003
+    prefab: {fileID: 2857295111879149241, guid: a8229372b3951054a80a99918e67560e,
+      type: 3}
+  - ID: 8001004
+    prefab: {fileID: 992872293614820932, guid: 27fb17d2455922844aec615844f2755b, type: 3}
+  - ID: 8002001
+    prefab: {fileID: 2545784051288900843, guid: b3d533bd1e3970f41bac7c7776963bba,
+      type: 3}
