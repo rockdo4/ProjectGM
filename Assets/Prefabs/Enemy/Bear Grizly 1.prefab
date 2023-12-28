@@ -150,6 +150,15 @@ MonoBehaviour:
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
+  fanShapePrefabs:
+  - {fileID: 4974148430569709096, guid: da44565a3c47a8f4cad84aa5d2251def, type: 3}
+  - {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f, type: 3}
+  - {fileID: 4974148430569709096, guid: da44565a3c47a8f4cad84aa5d2251def, type: 3}
+  - {fileID: 4974148430569709096, guid: da44565a3c47a8f4cad84aa5d2251def, type: 3}
+  - {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3, type: 3}
+  - {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3, type: 3}
+  - {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3, type: 3}
+  - {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3, type: 3}
   bearAttackPatternPhaseOne: 01000000020000000300000004000000050000000300000004000000
   bearAttackPatternPhaseTwo: 03000000040000000500000003000000040000000300000001000000020000000500000004000000
   alienAttackPatternPhaseOne: 0100000002000000
@@ -161,6 +170,8 @@ MonoBehaviour:
   wolfAttackPatternPhaseTwo: 0100000002000000
   spiderAttackPatternPhaseOne: 010000000200000003000000
   spiderAttackPatternPhaseTwo: 010000000200000003000000
+  dragonAttackPatternPhaseOne: 01000000020000000300000003000000
+  dragonAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
   - enemyType: 0
     attackPatternType: 0

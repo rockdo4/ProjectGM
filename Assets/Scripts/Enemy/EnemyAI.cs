@@ -1174,6 +1174,21 @@ public class EnemyAI : LivingObject
 
         if (show)
         {
+            if (activeFanShapes != null)
+            {
+                foreach (var fanShape in activeFanShapes)
+                {
+                    MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
+                    if (meshRenderer != null)
+                    {
+                        meshRenderer.enabled = true;
+                    }
+
+                    fanShape.gameObject.SetActive(false);
+                    fanShapePools[poolIndex].Release(fanShape);
+                }
+            }
+
             AttackPattern currentPattern = null;
 
             if (attackIndex >= 0 && attackIndex < savedPatterns.Count)
@@ -1226,9 +1241,14 @@ public class EnemyAI : LivingObject
             {
                 foreach (var fanShape in activeFanShapes)
                 {
-                    //fanshape.ResetColor();
-                    fanShape.gameObject.SetActive(false);
-                    fanShapePools[poolIndex].Release(fanShape);
+                    MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
+                    if (meshRenderer != null)
+                    {
+                        meshRenderer.enabled = false;
+                    }
+
+                    //fanShape.gameObject.SetActive(false);
+                    //fanShapePools[poolIndex].Release(fanShape);
                 }
             }
         }
@@ -1849,23 +1869,23 @@ public class EnemyAI : LivingObject
 
     private void OnDrawGizmos()
     {
-        if (activeFanShapes == null) return;
+        //if (activeFanShapes == null) return;
 
-        Gizmos.color = Color.red;
-        float raycastDistance = rangeAttackRange;
+        //Gizmos.color = Color.red;
+        //float raycastDistance = rangeAttackRange;
 
-        foreach (var fanShapes in activeFanShapes)
-        {
-            if (fanShapes != null)
-            {
-                //Bounds bounds = cell.GetComponent<Renderer>().bounds;
-                //Gizmos.DrawWireCube(bounds.center, bounds.size);
+        //foreach (var fanShapes in activeFanShapes)
+        //{
+        //    if (fanShapes != null)
+        //    {
+        //        //Bounds bounds = cell.GetComponent<Renderer>().bounds;
+        //        //Gizmos.DrawWireCube(bounds.center, bounds.size);
 
-                Vector3 shapesPosition = fanShapes.transform.position;
-                Vector3 direction = transform.forward * raycastDistance;
-                Gizmos.DrawRay(shapesPosition, direction);
-            }
-        }
+        //        Vector3 shapesPosition = fanShapes.transform.position;
+        //        Vector3 direction = transform.forward * raycastDistance;
+        //        Gizmos.DrawRay(shapesPosition, direction);
+        //    }
+        //}
 
 #if UNITY_EDITOR
 
