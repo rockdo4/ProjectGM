@@ -15,6 +15,10 @@ public class EffectVibration : EffectBase
 
     public override void PlayStart(Vector3 direction = default)
     {
+        if (!PlayDataManager.data.Vibration)
+        {
+            return;
+        }
         base.PlayStart(direction);
         HapticPatterns.PlayConstant(amplitude, frequency, duration);
     }

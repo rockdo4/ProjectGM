@@ -27,8 +27,12 @@ public class FadeEffects : MonoBehaviour
         }
     }
 
-    public void FadeOut(string sceneName)
+    public void FadeOut(string sceneName = null)
     {
+        if (sceneName == null || sceneName == string.Empty)
+        {
+            sceneName = SceneManager.GetActiveScene().name;
+        }
         if (coRun == null)
         {
             coRun = StartCoroutine(CoFadeOut(sceneName));

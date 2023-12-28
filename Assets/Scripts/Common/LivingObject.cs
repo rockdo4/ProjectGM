@@ -10,8 +10,8 @@ public abstract class LivingObject : MonoBehaviour
 
     public int HP { get; set; }
     public bool IsGroggy { get; set; }
-    [Header("사망 시 이벤트")]
-    public UnityEvent OnDeathEvent;
+    //[Header("사망 시 이벤트")]
+    public UnityEvent OnDeathEvent { get; private set; } = new UnityEvent();
 
     protected virtual void Awake()
     {
@@ -19,9 +19,12 @@ public abstract class LivingObject : MonoBehaviour
         HP = stat.HP;
         IsGroggy = false;
 
-        if (OnDeathEvent.GetPersistentEventCount() == 0)
-        {
-            OnDeathEvent.AddListener(() => { GameManager.instance.GameOver(this); });
-        }
+        OnDeathEvent.RemoveAllListeners();
+        OnDeathEvent.AddListener(DefaultDeathEvent);
+    }
+
+    private void DefaultDeathEvent()
+    {
+        GameManager.instance.GameOver(this);
     }
 }

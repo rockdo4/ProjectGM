@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -55,12 +56,25 @@ public class GameManager : MonoBehaviour
     }
 
     public void Win(EnemyAI enemy)
-    {
+    {    
         Pause(true);
+
+        var stageID = PlayerPrefs.GetInt("StageID");
+        var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
+        //var skillTable = CsvTableMgr.GetTable<SkillTable>().dataTable;
+        if (stageTable.ContainsKey(stageID))
+        {
+            var stageInfo = stageTable[stageID];
+            PlayDataManager.IncreaseMat(stageInfo.clear1, stageInfo.clear1_count);
+            PlayDataManager.IncreaseMat(stageInfo.clear2, stageInfo.clear2_count);
+            PlayDataManager.IncreaseMat(stageInfo.clear3, stageInfo.clear3_count);
+            PlayDataManager.IncreaseMat(stageInfo.clear4, stageInfo.clear4_count);
+        }
     }
 
     public void Lose(Player player)
     {
+
         Pause(true);
     }
 
