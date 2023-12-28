@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using System.Collections;
+using CsvHelper.Configuration.Attributes;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -16,14 +17,25 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private Button touchArea;
 
+    [SerializeField]
+    private Image blocker;
+
+    [SerializeField]
+    private GameObject player;
+
+    [SerializeField]
+    private Image dialogueType2ImageOne;
+
     private List<int> tutorialSteps = new List<int>();
     private int currentStepIndex = 0;
+    
+    private int dialogueType2Count = 0;
 
-    // 생각해봐야 될게 예를 들어 3번째 키값에서는 잠깐 전투가 진행될거라 그동안은 타임스케일이 1이 되어야한다 라던가
-    // 5번째 키값에서는 퀘스트가 진행되어 뭔가 진행이 달라진다거나 등등
-
-    // 몇초 재는거는 타임으로 할수 없음
-    // 그래서 몇초 재는거는 코루틴으로 할 수 밖에 없음
+    // 첫번재 다이얼 타입2는 공격 실행이다.
+    // 1. 그러면 처음에는 타임스케일을 정상적으로 돌려야한다
+    // 2. 공격이 실행될때까지는 버튼은 비활성해야한다.
+    // 3. 조건이 수행되면 다시 버튼을 활성화 시킨다.
+    // 4. 이어서 다음이 되는 다이얼로그 타입 1을 재생시킨다
 
     void Start()
     {
@@ -52,27 +64,12 @@ public class TutorialManager : MonoBehaviour
     {
         var table = CsvTableMgr.GetTable<DialogueTable>().dataTable;
 
-        //Debug.Log(stepKey);
-
-        if (stepKey == 1001007)
-        {
-
-            StartCoroutine(MoveImage(tutorialImage.transform, 1.0f));
-        }
-
-        if (stepKey == 1001007) // 대놓고 지정하는건데 이런 지정 없이 할 수가 있나?
-        {
-            Debug.Log("123123123123123");
-
-            StartCoroutine(MoveImage(tutorialImage.transform, 1.0f));
-        }
-
         if (table.ContainsKey(stepKey))
         {
             var dialogueID = table[stepKey].dialogueID;
             var dialogueText = CsvTableMgr.GetTable<StringTable>().dataTable[dialogueID];
 
-            Debug.Log(dialogueText);
+            //Debug.Log(dialogueText);
             tutorialText.text = dialogueText;
 
             if(table[stepKey].dialType == 2)
@@ -80,6 +77,38 @@ public class TutorialManager : MonoBehaviour
                 Debug.Log("다이얼타입 2 진입");
 
                 StartCoroutine(DisableInputForSeconds(3.0f));
+
+                //ResumeGame();
+                //touchArea.interactable = false; // 임시
+
+                switch (dialogueType2Count)
+                {
+                    case 0:
+
+                        StartCoroutine(WaitForAttackState());
+                        break;
+
+                    case 1:
+
+                        StartCoroutine(MoveImage(tutorialImage.transform, 1.0f));
+                        StartCoroutine(WaitForEvadeState());
+                        break;
+
+                    case 2:
+                    
+                        // 스테이지 진입
+                        // 타이틀씬으로 가면 됨
+
+                        break;
+
+                    case 3:
+                        
+                        break;
+
+                }
+
+                dialogueType2Count++;
+
             }
 
         }
@@ -89,29 +118,57 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    private IEnumerator WaitForAttackState()
+    {
+        var controller = player.GetComponent<PlayerController>();
+
+        yield return new WaitUntil(() => controller.CurrentState == PlayerController.State.Attack);
+        yield return new WaitForSeconds(1f);
+        Debug.Log("공격 실행완료");
+
+        touchArea.interactable = true;
+        blocker.enabled = true;
+
+        PauseGame();
+        NextStep();
+    }
+
+    private IEnumerator WaitForEvadeState()
+    {
+        var controller = player.GetComponent<PlayerController>();
+
+        yield return new WaitUntil(() => controller.CurrentState == PlayerController.State.Evade);
+        yield return new WaitForSeconds(1f);
+
+        Debug.Log("회피 실행완료");
+
+        touchArea.interactable = true;
+        blocker.enabled = true;
+
+        PauseGame();
+        NextStep();
+    }
+
     private void InitializeTutorial()
     {
         var table = CsvTableMgr.GetTable<DialogueTable>().dataTable;
-
         tutorialSteps.Clear();
-
 
         foreach (var pair in table)
         {
-            if (pair.Value.dialType == 1)
+            if (pair.Value.dialType == 1 || pair.Value.dialType == 2)
             {
                 tutorialSteps.Add(pair.Key);
             }
         }
 
-        //tutorialSteps = table.Keys.ToList();
         tutorialSteps.Sort();
     }
 
     IEnumerator MoveImage(Transform imageTransform, float duration)
     {
         Vector3 startPosition = imageTransform.position;
-        Vector3 endPosition = new Vector3(startPosition.x, startPosition.y + 300, startPosition.z);
+        Vector3 endPosition = new Vector3(startPosition.x + 300, startPosition.y, startPosition.z);
 
         float startTime = Time.realtimeSinceStartup;
         float elapsedTime = 0;
@@ -132,7 +189,13 @@ public class TutorialManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(seconds);
 
-        touchArea.interactable = true;
+        if(dialogueType2ImageOne != null)
+        {
+            dialogueType2ImageOne.enabled = false;
+            blocker.enabled = false;
+        }
+
+        ResumeGame();
     }
 
     public void PauseGame()
