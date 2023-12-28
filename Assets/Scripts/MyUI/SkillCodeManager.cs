@@ -185,6 +185,7 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
     public void ShowAll()
     {
         ClearItemButton();
+        ShowEquip();
 
         var table = CsvTableMgr.GetTable<CodeTable>().dataTable;
         foreach (var code in PlayDataManager.data.CodeInventory)
@@ -319,8 +320,7 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
         Clear();
 
         ShowInfo();
-        ShowAll(); // test code
-        ShowEquip();
+        SortSkillCode(dropdown.value);
     }
     
     private void OnEnable()

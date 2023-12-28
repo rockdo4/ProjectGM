@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 5824792726949600810}
   - component: {fileID: 5470497589774427787}
   - component: {fileID: 9082110688406815447}
+  - component: {fileID: 5166416543088414515}
   m_Layer: 3
   m_Name: New Player
   m_TagString: Player
@@ -126,9 +127,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statLink: {fileID: 11400000, guid: 1476a0f1e8a5a484ebd7763a74a8c651, type: 2}
   stat: {fileID: 11400000, guid: 1476a0f1e8a5a484ebd7763a74a8c651, type: 2}
-  OnDeathEvent:
-    m_PersistentCalls:
-      m_Calls: []
   evadeTimer: 0
 --- !u!95 &536709237328956140
 Animator:
@@ -217,7 +215,7 @@ MonoBehaviour:
   drawingMode: 1
   outlineLayer: 0
   outlineTargets:
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -233,7 +231,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -249,7 +247,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -265,7 +263,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -281,7 +279,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -322,6 +320,19 @@ MonoBehaviour:
     fillPass:
       shader: {fileID: 0}
       serializedProperties: []
+--- !u!114 &5166416543088414515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239229579990284695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e180c782a2bd7419e89b96d9b6b775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillSO: {fileID: 11400000, guid: c3b508798c601514e88606b39b46d0d9, type: 2}
 --- !u!1 &3020718649514983114
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,9 +459,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17b6b3c66b1e8174db93e72c8d05e446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.4
-  amplitude: 5
-  frequency: 5
+  duration: 0.2
+  amplitude: 0.5
+  frequency: 0.5
 --- !u!1 &6120406501853401992
 GameObject:
   m_ObjectHideFlags: 0

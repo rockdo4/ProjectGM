@@ -28,18 +28,13 @@ public class CameraManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        playerCameras = GameObject.FindWithTag(Tags.player)?.GetComponentsInChildren<CinemachineVirtualCamera>();
-        enemyCameras = GameObject.FindWithTag(Tags.enemy)?.GetComponentsInChildren<CinemachineVirtualCamera>();
-
-        playerCameras = GameObject.FindWithTag(Tags.player)?.GetComponentsInChildren<CinemachineVirtualCamera>();
-        enemyCameras = GameObject.FindWithTag(Tags.enemy)?.GetComponentsInChildren<CinemachineVirtualCamera>();
-        SetCameraWithTag(Tags.player);
     }
 
     private void Start()
     {
-
+        playerCameras = GameObject.FindWithTag(Tags.player)?.GetComponentsInChildren<CinemachineVirtualCamera>();
+        enemyCameras = GameObject.FindWithTag(Tags.enemy)?.GetComponentsInChildren<CinemachineVirtualCamera>();
+        SetCameraWithTag(Tags.player);
     }
 
     private void Update()
@@ -56,6 +51,14 @@ public class CameraManager : MonoBehaviour
 
     public void SetCameraWithTag(string tag, int index = 0)
     {
+        if (playerCameras == null)
+        {
+            playerCameras = GameObject.FindWithTag(Tags.player)?.GetComponentsInChildren<CinemachineVirtualCamera>();
+        }
+        if (enemyCameras == null)
+        {
+            enemyCameras = GameObject.FindWithTag(Tags.enemy)?.GetComponentsInChildren<CinemachineVirtualCamera>();
+        }
         currentVirtualCamera?.gameObject.SetActive(false);
         if (tag == Tags.player)
         {

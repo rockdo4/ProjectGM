@@ -4,24 +4,22 @@ using System.Collections;
 
 public class ImageBlink : MonoBehaviour
 {
-    private Image imageComponent;
+    private Image image;
     public float blinkInterval = 0.5f;
 
-    private bool isBlinking = false;
-
-    void Start()
+    private void Start()
     {
-        imageComponent = GetComponent<Image>();
+        image = GetComponent<Image>();
         StartCoroutine(BlinkImage());
     }
 
-    IEnumerator BlinkImage()
+    private IEnumerator BlinkImage()
     {
         while (true)
         {
-            imageComponent.color = Color.clear;
+            image.color = Color.clear;
             yield return new WaitForSeconds(blinkInterval);
-            imageComponent.color = Color.white;
+            image.color = Color.white;
             yield return new WaitForSeconds(blinkInterval);
         }
     }

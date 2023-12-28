@@ -23,6 +23,8 @@ public static class CsvTableMgr
 
         tables.Add(typeof(SkillTable), new SkillTable());
 
+        tables.Add(typeof(StageTable), new StageTable());
+
         tables.Add(typeof(EnemyTable), new EnemyTable());
 
         tables.Add(typeof(DialogueTable), new DialogueTable());
