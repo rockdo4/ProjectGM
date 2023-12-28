@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
@@ -8,8 +9,24 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private FadeEffects BLACK;
 
-    private Dictionary<int, StageTable.Data> stageTable = new Dictionary<int, StageTable.Data>();
+    private Dictionary<int, StageTable.Data> stageTable;
     private Dictionary<int, string> stringTable;
+    //private Dictionary<int, EnemyTable.Data> enemyTable;
+
+    [Header("Stage Container")]
+    [SerializeField]
+    private Transform stageContainer;
+
+    [Header("Stage Prefab")]
+    [SerializeField]
+    private GameObject stagePrefab;
+
+    [Header("Stage Info")]
+    [SerializeField]
+    private GameObject stageInfo;
+
+    
+    public Button categoryButton;
 
     private void Awake()
     {
@@ -18,19 +35,31 @@ public class StageManager : MonoBehaviour
             PlayDataManager.Init();
         }
 
+        if (stagePrefab == null)
+        {
+            return;
+        }
         stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
         stringTable = CsvTableMgr.GetTable<StringTable>().dataTable;
+        //enemyTable = CsvTableMgr.GetTable<EnemyTable>().dataTable;
 
-        //foreach(var stage in stageTable)
-        //{
-        //    Debug.Log(stage.Key);
-        //    Debug.Log("---------------------------");
-        //    foreach (var data in stringTable[stage.Value.name])
-        //    {
-        //        Debug.Log(data);
-        //    }
-        //    Debug.Log("---------------------------");
-        //}
+        foreach (var info in stageTable)
+        {
+            var stageGameObject = Instantiate(stagePrefab);
+            var stage = stageGameObject.GetComponent<Stage>();
+            var data = info.Value;
+
+            stage.title.text = stringTable[data.name];
+            stage.description.text = stringTable[data.script];
+            stage.enemyName.text = data.monster_id.ToString();
+            //stage.enemyName.text = stringTable[enemyTable[data.monster_id].name];
+            stage.button.onClick.AddListener(() =>
+            {
+                //stageInfo....text = asdf;
+                stageInfo.SetActive(true);
+            });
+            stage.transform.SetParent(stageContainer, false);
+        }
     }
 
     public void GoGame(string sceneName)
