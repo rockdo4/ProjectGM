@@ -30,7 +30,7 @@ public class TutorialManager : MonoBehaviour
         touchArea.interactable = true;
 
         PauseGame();
-        InitializeTutorialSteps();
+        InitializeTutorial();
         ShowTutorialStep(tutorialSteps[currentStepIndex]);
     }
 
@@ -89,9 +89,11 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    private void InitializeTutorialSteps()
+    private void InitializeTutorial()
     {
         var table = CsvTableMgr.GetTable<DialogueTable>().dataTable;
+
+        //if (table[])
 
         tutorialSteps = table.Keys.ToList(); // 테이블의 모든 키를 리스트로 변환
         tutorialSteps.Sort();
