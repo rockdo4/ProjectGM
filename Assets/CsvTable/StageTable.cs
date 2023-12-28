@@ -12,6 +12,7 @@ public class StageTable : CsvTable
         public int type { get; set; }
         public int name { get; set; }
         public int script { get; set; }
+        public int iconName { get; set; }
         public int map_id { get; set; }
         public int monster_id { get; set; }
         public int time_limit { get; set; }
@@ -26,7 +27,7 @@ public class StageTable : CsvTable
         public int clear4 { get; set; }
         public int clear4_count { get; set; }
 
-        public Data(int type, int name, int script, int map_id, int monster_id, 
+        public Data(int type, int name, int script, int iconName, int map_id, int monster_id, 
             int time_limit, int unlock, int gold, 
             int clear1, int clear1_count, 
             int clear2, int clear2_count, 
@@ -36,6 +37,7 @@ public class StageTable : CsvTable
             this.type = type;
             this.name = name;
             this.script = script;
+            this.iconName = iconName;
             this.map_id = map_id;
             this.monster_id = monster_id;
             this.time_limit = time_limit;
@@ -93,7 +95,8 @@ public class StageTable : CsvTable
                     csv.GetField<int>(13),
                     csv.GetField<int>(14),
                     csv.GetField<int>(15),
-                    csv.GetField<int>(16)
+                    csv.GetField<int>(16),
+                    csv.GetField<int>(17)
                 )
             );
         }
