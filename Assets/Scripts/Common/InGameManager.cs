@@ -74,9 +74,13 @@ public class InGameManager : MonoBehaviour
         playerData.infoUI.SetActive(false);
         enemyData.infoUI.SetActive(false);
 
-        enemyData.enemy = enemySO.MakeEnemy(stageInfo.monster_id, enemyData.startTransform).GetComponent<EnemyAI>();
-        enemyData.enemy.gameObject.SetActive(true);
         enemyInfo = CsvTableMgr.GetTable<EnemyTable>().dataTable[stageInfo.monster_id];
+        enemyData.enemy = enemySO.MakeEnemy(stageInfo.monster_id, enemyData.startTransform)?.GetComponent<EnemyAI>();
+        if (enemyData.enemy == null)
+        {
+            enemyData.enemy = GameObject.FindWithTag(Tags.enemy).GetComponent<EnemyAI>();
+        }
+        enemyData.enemy.gameObject.SetActive(true);
     }
 
     private void Start()
