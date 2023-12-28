@@ -152,17 +152,20 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
             return false;
         }
 
-        var mat2 = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mon_core);
-        if (mat2 == null)
+        if (ct[item.id].mon_core != -1)
         {
-            //Debug.Log("Not Exist Materials");
-            return false;
-        }
+            var mat2 = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mon_core);
+            if (mat2 == null)
+            {
+                //Debug.Log("Not Exist Materials");
+                return false;
+            }
 
-        if (mat2.count < ct[item.id].mon_core_req)
-        {
-            //Debug.Log("Lack Of Materials Count");
-            return false;
+            if (mat2.count < ct[item.id].mon_core_req)
+            {
+                //Debug.Log("Lack Of Materials Count");
+                return false;
+            }
         }
 
         if (PlayDataManager.data.Gold < ct[item.id].gold)
