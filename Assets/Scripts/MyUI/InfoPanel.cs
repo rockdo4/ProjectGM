@@ -13,6 +13,10 @@ public class InfoPanel : MonoBehaviour, IRenewal
     [SerializeField]
     private Image[] setSkillImages;
 
+    [Header("세트스킬 텍스트")]
+    [SerializeField]
+    private TextMeshProUGUI setSkillText;
+
     [Header("무기")]
     [SerializeField]
     private TextMeshProUGUI currentWeaponText;
@@ -55,6 +59,7 @@ public class InfoPanel : MonoBehaviour, IRenewal
     {
         var skt = CsvTableMgr.GetTable<SkillTable>().dataTable;
         var at = CsvTableMgr.GetTable<ArmorTable>().dataTable;
+        var st = CsvTableMgr.GetTable<StringTable>().dataTable;
 
         // Color Reset
         foreach (var image in setSkillImages)
@@ -62,7 +67,20 @@ public class InfoPanel : MonoBehaviour, IRenewal
             image.color = Color.white;
         }
 
-        // PlayDataManager에 현재 적용중인 세트 스킬 추가
+        setSkillText.text = (PlayDataManager.curSetSkill.id == -1) ? 
+            string.Empty : 
+            st[skt[PlayDataManager.curSetSkill.id].name];
+
+        if (PlayDataManager.curSetSkill.id == -1)
+        {
+            return;
+        }
+
+        var count = Mathf.Clamp(PlayDataManager.curSetSkill.level, 0, 3);
+        for (int i = 0; i < count; i++)
+        {
+            setSkillImages[i].color = Color.cyan;
+        }
     }
 
     private void WeaponRenewal()
