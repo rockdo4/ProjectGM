@@ -77,12 +77,10 @@ public class PlayerStat : Stat
 
         if (enemyStat.weaknessType == player.CurrentWeapon.type)
         {
-            Debug.Log($"약점 보정 전: {(int)damage}");
-            damage += player.CurrentWeapon.attack * (player.CurrentWeapon.weakDamage / 10);
-            Debug.Log($"약점 보정 후: {(int)damage}");
+            damage += player.CurrentWeapon.attack * (player.CurrentWeapon.weakDamage);
         }
 
-        var critical = Random.value < attacker.stat.Critical;
+        var critical = Random.value < player.Stat.Critical;
         if (critical)
         {
             damage *= player.Stat.CriticalDamage;
