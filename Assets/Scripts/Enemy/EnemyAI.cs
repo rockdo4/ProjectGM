@@ -158,6 +158,7 @@ public class EnemyAI : LivingObject
 
     FanShape fanShape = null;
     private bool isDie;
+    private int poolIndex;
 
     [Serializable]
     public struct AttackPreparationTime
@@ -252,7 +253,7 @@ public class EnemyAI : LivingObject
        },
        actionOnGet: (obj) => { obj.gameObject.SetActive(true); },
        actionOnRelease: (obj) => { obj.gameObject.SetActive(false); },
-       actionOnDestroy: (obj) => { Destroy(obj.gameObject); },
+       null,
        defaultCapacity: 10, // 초기 용량
        maxSize: 20       // 최대 용량
    );
@@ -836,6 +837,20 @@ public class EnemyAI : LivingObject
 
     IEnumerator PrepareMeleeAttack(EnemyType enemytype, AttackPatternType attackPatternType) // 프리페어
     {
+        if (activeFanShapes != null)
+        {
+            foreach (var fanShape in activeFanShapes)
+            {
+                MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
+                if (meshRenderer != null)
+                {
+                    meshRenderer.enabled = true;
+                }
+
+                fanShapePools[poolIndex].Release(fanShape);
+            }
+        }
+
         isPreparingAttack = true;
         ShowMeleeAttackRange(true, enemytype, attackPatternType);
 
@@ -1168,26 +1183,24 @@ public class EnemyAI : LivingObject
     private void ShowMeleeAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
     {
         Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
-        int poolIndex = GetPoolIndexForAttackPatternType(AttackPatternType);
-
-        //Debug.Log(poolIndex);
+        poolIndex = GetPoolIndexForAttackPatternType(AttackPatternType);
 
         if (show)
         {
-            if (activeFanShapes != null)
-            {
-                foreach (var fanShape in activeFanShapes)
-                {
-                    MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
-                    if (meshRenderer != null)
-                    {
-                        meshRenderer.enabled = true;
-                    }
+            //if (activeFanShapes != null)
+            //{
+            //    foreach (var fanShape in activeFanShapes)
+            //    {
+            //        MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
+            //        if (meshRenderer != null)
+            //        {
+            //            meshRenderer.enabled = true;
+            //        }
 
-                    fanShape.gameObject.SetActive(false);
-                    fanShapePools[poolIndex].Release(fanShape);
-                }
-            }
+            //        fanShape.gameObject.SetActive(false);
+            //        fanShapePools[GetPoolIndexForAttackPatternType(AttackPatternType)].Release(fanShape);
+            //    }
+            //}
 
             AttackPattern currentPattern = null;
 
@@ -1213,16 +1226,11 @@ public class EnemyAI : LivingObject
                     FanShape fanShapeInstance = fanShapePools[poolIndex].Get();
                     fanShapeInstance.gameObject.SetActive(true);
 
-                    //Debug.Log(fanShapeInstance);
-
                     fanShape = fanShapeInstance.GetComponent<FanShape>();
                     fanShape.enemyAi = this;
 
-                    //Debug.Log(fanShape);
-
                     Vector3 cellSize = fanShape.Return();
                     Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
-
 
                     fanShapeInstance.transform.SetParent(transform, false);
                     fanShapeInstance.transform.position = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
@@ -1247,7 +1255,6 @@ public class EnemyAI : LivingObject
                         meshRenderer.enabled = false;
                     }
 
-                    //fanShape.gameObject.SetActive(false);
                     //fanShapePools[poolIndex].Release(fanShape);
                 }
             }
@@ -1943,6 +1950,14 @@ public class EnemyAI : LivingObject
         {
             if (fanShapeInstance != null && fanShapeInstance.isplayerInside)
             {
+
+                // 공격이 무조건 맞아
+
+                // 이상적인거는
+                // 공격 맞기 직전까지 판단을해야되잖아
+                // 안에있냐? 밖에있냐?
+
+
                 //Debug.Log("플레이어가 공격 범위 안에 있습니다.");
                 //Debug.Log(actualAttackDamage);
                 ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
