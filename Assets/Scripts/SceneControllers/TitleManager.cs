@@ -47,7 +47,6 @@ public class TitleManager : MonoBehaviour, IRenewal
 
     private void Start()
     {
-        /*
         mixer.SetFloat("masterVol", Mathf.Log10(PlayDataManager.data.masterVol) * 20);
         mixer.SetFloat("musicVol", Mathf.Log10(PlayDataManager.data.musicVol) * 20);
         mixer.SetFloat("sfxVol", Mathf.Log10(PlayDataManager.data.sfxVol) * 20);
@@ -57,13 +56,11 @@ public class TitleManager : MonoBehaviour, IRenewal
         musicSlider.value = PlayDataManager.data.musicVol;
         sfxSlider.value = PlayDataManager.data.sfxVol;
         uiSlider.value = PlayDataManager.data.uiVol;
-        */
-
+        
         ChangeMasterVol();
         ChangeMusicVol();
         ChangeSfxVol();
         ChangeUiVol();
-        
     }
 
     public void ClearData()
@@ -105,13 +102,11 @@ public class TitleManager : MonoBehaviour, IRenewal
 
     public void Save()
     {
-        /*
         PlayDataManager.data.masterVol = masterSlider.value;
         PlayDataManager.data.musicVol = musicSlider.value;
         PlayDataManager.data.sfxVol = sfxSlider.value;
         PlayDataManager.data.uiVol = uiSlider.value;
         PlayDataManager.data.Vibration = vibeToggle.isOn;
-        */
 
         PlayDataManager.Save();
     }
