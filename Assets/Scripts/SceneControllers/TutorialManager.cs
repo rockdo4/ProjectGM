@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using System.Collections;
+using CsvHelper.Configuration.Attributes;
+using UnityEngine.SceneManagement;
+using System.Data;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -16,18 +19,36 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private Button touchArea;
 
+    [SerializeField]
+    private Image blocker;
+
+    [SerializeField]
+    private GameObject player;
+
+    [SerializeField]
+    private Image dialogueType2ImageOne;
+
+    [SerializeField]
+    private Image dialogueType2ImageTwo;
+
     private List<int> tutorialSteps = new List<int>();
     private int currentStepIndex = 0;
+    
+    private int dialogueType2Count = 0;
 
-    // 생각해봐야 될게 예를 들어 3번째 키값에서는 잠깐 전투가 진행될거라 그동안은 타임스케일이 1이 되어야한다 라던가
-    // 5번째 키값에서는 퀘스트가 진행되어 뭔가 진행이 달라진다거나 등등
-
-    // 몇초 재는거는 타임으로 할수 없음
-    // 그래서 몇초 재는거는 코루틴으로 할 수 밖에 없음
+    private void Awake()
+    {
+        if (PlayDataManager.data == null)
+        {
+            PlayDataManager.Init();
+        }
+    }
 
     void Start()
     {
         touchArea.interactable = true;
+        dialogueType2ImageOne.enabled = false;
+        dialogueType2ImageTwo.enabled = false;
 
         PauseGame();
         InitializeTutorial();
@@ -45,43 +66,58 @@ public class TutorialManager : MonoBehaviour
         {
             Debug.Log("튜토리얼이 끝났습니다.");
         }
-
     }
 
     private void ShowTutorialStep(int stepKey)
     {
         var table = CsvTableMgr.GetTable<DialogueTable>().dataTable;
 
-        //Debug.Log(stepKey);
-
-        if (stepKey == 1001007)
-        {
-
-            StartCoroutine(MoveImage(tutorialImage.transform, 1.0f));
-        }
-
-        if (stepKey == 1001007) // 대놓고 지정하는건데 이런 지정 없이 할 수가 있나?
-        {
-            Debug.Log("123123123123123");
-
-            StartCoroutine(MoveImage(tutorialImage.transform, 1.0f));
-        }
-
         if (table.ContainsKey(stepKey))
         {
             var dialogueID = table[stepKey].dialogueID;
-            var dialogueText = CsvTableMgr.GetTable<StringTable>().dataTable[dialogueID];
 
-            Debug.Log(dialogueText);
+            if (dialogueID == 90020001)
+            {
+                PlayDataManager.data.IsPlayed = true;
+                PlayDataManager.Save();
+                SceneManager.LoadScene("Title");
+                //SceneManager.LoadScene("Title", LoadSceneMode.Additive);
+                return;
+            }
+            
+            var dialogueText = CsvTableMgr.GetTable<StringTable>().dataTable[dialogueID];
             tutorialText.text = dialogueText;
 
             if(table[stepKey].dialType == 2)
             {
-                Debug.Log("다이얼타입 2 진입");
+                switch (dialogueType2Count)
+                {
+                    case 0:
 
-                StartCoroutine(DisableInputForSeconds(3.0f));
+                        StartCoroutine(DisableInputForSeconds(3.0f));
+                        StartCoroutine(WaitForAttackState());
+                        break;
+
+                    case 1:
+
+                        StartCoroutine(MoveImage(dialogueType2ImageTwo.transform, 3.0f));
+                        StartCoroutine(WaitForEvadeState());
+                        break;
+
+                    case 2:
+
+                        SceneManager.LoadScene("Title", LoadSceneMode.Additive);
+
+
+                        // 스테이지 진입
+                        // 타이틀씬으로 가면 됨
+
+                        break;
+                }
+
+                dialogueType2Count++;
+
             }
-
         }
         else
         {
@@ -89,29 +125,62 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    private IEnumerator WaitForAttackState()
+    {
+        var controller = player.GetComponent<PlayerController>();
+
+        yield return new WaitUntil(() => controller.CurrentState == PlayerController.State.Attack);
+        yield return new WaitForSeconds(1f);
+        Debug.Log("공격 실행완료");
+
+        touchArea.interactable = true;
+        blocker.enabled = true;
+
+        PauseGame();
+        NextStep();
+    }
+
+    private IEnumerator WaitForEvadeState()
+    {
+        var controller = player.GetComponent<PlayerController>();
+
+        yield return new WaitUntil(() => controller.CurrentState == PlayerController.State.Evade);
+        yield return new WaitForSeconds(1.5f);
+
+        Debug.Log("회피 실행완료");
+
+        touchArea.interactable = true;
+        blocker.enabled = true;
+
+        PauseGame();
+        NextStep();
+    }
+
     private void InitializeTutorial()
     {
         var table = CsvTableMgr.GetTable<DialogueTable>().dataTable;
-
         tutorialSteps.Clear();
 
+        
 
         foreach (var pair in table)
         {
-            if (pair.Value.dialType == 1)
+            if (pair.Value.dialType == 1 || pair.Value.dialType == 2)
             {
                 tutorialSteps.Add(pair.Key);
             }
         }
 
-        //tutorialSteps = table.Keys.ToList();
         tutorialSteps.Sort();
     }
 
     IEnumerator MoveImage(Transform imageTransform, float duration)
     {
+        touchArea.interactable = false;
+        dialogueType2ImageTwo.enabled = true;
+
         Vector3 startPosition = imageTransform.position;
-        Vector3 endPosition = new Vector3(startPosition.x, startPosition.y + 300, startPosition.z);
+        Vector3 endPosition = new Vector3(startPosition.x + 300, startPosition.y, startPosition.z);
 
         float startTime = Time.realtimeSinceStartup;
         float elapsedTime = 0;
@@ -120,6 +189,15 @@ public class TutorialManager : MonoBehaviour
         {
             elapsedTime = Time.realtimeSinceStartup - startTime;
             imageTransform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
+
+            if (dialogueType2ImageTwo != null)
+            {
+                dialogueType2ImageTwo.enabled = false;
+                blocker.enabled = false;
+            }
+
+            ResumeGame();
+
             yield return null;
         }
 
@@ -129,10 +207,17 @@ public class TutorialManager : MonoBehaviour
     IEnumerator DisableInputForSeconds(float seconds)
     {
         touchArea.interactable = false;
+        dialogueType2ImageOne.enabled = true;
 
         yield return new WaitForSecondsRealtime(seconds);
 
-        touchArea.interactable = true;
+        if(dialogueType2ImageOne != null)
+        {
+            dialogueType2ImageOne.enabled = false;
+            blocker.enabled = false;
+        }
+
+        ResumeGame();
     }
 
     public void PauseGame()

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using SaveDataVC = SaveDataV8; // Version Change?
 
@@ -14,6 +16,20 @@ public static class PlayDataManager
 
     public static Dictionary<int, int> curSkill 
         = new Dictionary<int, int>();
+
+    public struct SetSkillInfo
+    {
+        public int id;
+        public int level;
+
+        public SetSkillInfo(int id = -1, int level = 0)
+        {
+            this.id = id;
+            this.level = level;
+        }
+    }
+
+    public static SetSkillInfo curSetSkill = new SetSkillInfo();
 
     #region Inventory Capacity
     // 무기 최대 소지 개수
@@ -86,6 +102,8 @@ public static class PlayDataManager
         }
 
         OrganizeSkill();
+
+        OrganizeSetSkill();
     }
 
     public static void Save()
@@ -184,6 +202,9 @@ public static class PlayDataManager
                 return;
         }
         Save();
+
+        OrganizeSkill();
+        OrganizeSetSkill();
     }
 
     public static void UnWearItem(Equip.EquipType type, Armor.ArmorType armorType = Armor.ArmorType.None)
@@ -212,6 +233,11 @@ public static class PlayDataManager
                 return;
         }
         Save();
+
+        OrganizeSkill();
+        OrganizeSetSkill();
+
+        // 스킬코드 소켓에 대한 예외처리 추가 필요
     }
 
     public static void AddGold(int value)
@@ -549,7 +575,49 @@ public static class PlayDataManager
         curSkill = curSkill.OrderByDescending((x) => x.Value).ThenBy(x => x.Key).ToDictionary(x => x.Key, y => y.Value);
     }
 
-    public static bool StageUnlockCheck(int id)
+    public static void OrganizeSetSkill()
+    {
+        int[] arr = new int[curArmor.Count];
+
+        int index = 0;
+        foreach (var armor in curArmor.Values)
+        {
+            arr[index] = (armor == null) ? -1 : armor.setSkill;
+            index++;
+        }
+
+        curSetSkill.id = -1;
+        curSetSkill.level = 0;
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            if (arr[i] == -1)
+            {
+                continue;
+            }
+
+            int count = 1;
+
+            for (int j = i + 1; j < arr.Length; j++)
+            {
+                if (arr[i] == arr[j])
+                {
+                    count++;
+                    arr[j] = -1;
+                }
+            }
+
+            // 현재까지 최다 중복 횟수를 가진 값보다 많이 중복되었다면 갱신
+            if (count > curSetSkill.level)
+            {
+                curSetSkill.level = count;
+                curSetSkill.id = arr[i];
+            }
+        }
+
+    }
+
+        public static bool StageUnlockCheck(int id)
     {
         var unlockList = data.UnlockInfo;
         foreach (var unlock in unlockList)
@@ -584,6 +652,7 @@ public static class PlayDataManager
 
                 if (unlock.id == stage.Key)
                 {
+                    Debug.Log(unlock.id);
                     unlock.unlocked = true;
                 }
             }
@@ -608,11 +677,11 @@ public static class PlayDataManager
 
             var unlocked = (stage.Value.unlock < 0) ? true : false;
             var newUnlock = new Unlock(stage.Key, unlocked);
-            //unlock = unlockList.Find(x => x.id == stage.Value.unlock && x.unlocked);
-            //if (unlock != null)
-            //{
-            //    newUnlock.unlocked = true;
-            //}
+            // unlock = unlockList.Find(x => x.id == stage.Value.unlock && x.unlocked);
+            // if (unlock != null)
+            // {
+            //     newUnlock.unlocked = true;
+            // }
             unlockList.Add(newUnlock);
         }
 

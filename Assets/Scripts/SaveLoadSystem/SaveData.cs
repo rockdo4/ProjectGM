@@ -178,7 +178,7 @@ public class SaveDataV7 : SaveData
 
     public List<int> SkillCodes = new List<int>();
 
-    public bool Vibration {  get; set; } = false;
+    public bool Vibration { get; set; } = false;
 
     public override SaveData VersionUp()
     {
@@ -189,6 +189,7 @@ public class SaveDataV7 : SaveData
         data.MatInventory = MatInventory;
         data.CodeInventory = CodeInventory;
         data.SkillCodes = SkillCodes;
+        data.Vibration = Vibration;
 
         return data;
     }
@@ -196,7 +197,7 @@ public class SaveDataV7 : SaveData
 
 public class SaveDataV8 : SaveData
 {
-    public SaveDataV8()
+    public SaveDataV8() 
     {
         Version = 8;
     }
@@ -215,6 +216,8 @@ public class SaveDataV8 : SaveData
 
     public bool Vibration { get; set; } = false;
 
+    public bool IsPlayed { get; set; } = false;
+
     public List<Unlock> UnlockInfo = new List<Unlock>();
 
     public float masterVol { get; set; } = 1.0f;
@@ -224,9 +227,16 @@ public class SaveDataV8 : SaveData
     public float sfxVol { get; set; } = 1.0f;
 
     public float uiVol { get; set; } = 1.0f;
-
     public override SaveData VersionUp()
     {
-        return null;
+        var data = new SaveDataV8();
+        data.Gold = Gold;
+        data.WeaponInventory = WeaponInventory;
+        data.ArmorInventory = ArmorInventory;
+        data.MatInventory = MatInventory;
+        data.CodeInventory = CodeInventory;
+        data.SkillCodes = SkillCodes;
+
+        return data;
     }
 }
