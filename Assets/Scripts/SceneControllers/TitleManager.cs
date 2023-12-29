@@ -1,9 +1,14 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class TitleManager : MonoBehaviour, IRenewal
 {
+    [Header("마스터 믹서")]
+    [SerializeField]
+    private AudioMixer mixer;
+
     [Header("소지금 텍스트")]
     [SerializeField]
     private TextMeshProUGUI moneyText;
@@ -11,6 +16,19 @@ public class TitleManager : MonoBehaviour, IRenewal
     [Header("진동기능")]
     [SerializeField]
     private Toggle vibeToggle;
+
+    [Header("오디오 슬라이더")]
+    [SerializeField]
+    private Slider masterSlider;
+
+    [SerializeField]
+    private Slider musicSlider;
+
+    [SerializeField]
+    private Slider sfxSlider;
+
+    [SerializeField]
+    private Slider uiSlider;
 
     public static TitleManager Instance;
 
@@ -25,6 +43,27 @@ public class TitleManager : MonoBehaviour, IRenewal
         vibeToggle.isOn = PlayDataManager.data.Vibration;
 
         Renewal();
+    }
+
+    private void Start()
+    {
+        /*
+        mixer.SetFloat("masterVol", Mathf.Log10(PlayDataManager.data.masterVol) * 20);
+        mixer.SetFloat("musicVol", Mathf.Log10(PlayDataManager.data.musicVol) * 20);
+        mixer.SetFloat("sfxVol", Mathf.Log10(PlayDataManager.data.sfxVol) * 20);
+        mixer.SetFloat("uiVol", Mathf.Log10(PlayDataManager.data.uiVol) * 20);
+
+        masterSlider.value = PlayDataManager.data.masterVol;
+        musicSlider.value = PlayDataManager.data.musicVol;
+        sfxSlider.value = PlayDataManager.data.sfxVol;
+        uiSlider.value = PlayDataManager.data.uiVol;
+        */
+
+        ChangeMasterVol();
+        ChangeMusicVol();
+        ChangeSfxVol();
+        ChangeUiVol();
+        
     }
 
     public void ClearData()
@@ -44,9 +83,36 @@ public class TitleManager : MonoBehaviour, IRenewal
         moneyText.text = PlayDataManager.data.Gold.ToString();
     }
 
-    public void OnVibe(bool value)
+    public void ChangeMasterVol()
     {
-        PlayDataManager.data.Vibration = value;
+        mixer.SetFloat("masterVol", Mathf.Log10(masterSlider.value) * 20);
+    }
+
+    public void ChangeMusicVol()
+    {
+        mixer.SetFloat("musicVol", Mathf.Log10(musicSlider.value) * 20);
+    }
+
+    public void ChangeSfxVol()
+    {
+        mixer.SetFloat("sfxVol", Mathf.Log10(sfxSlider.value) * 20);
+    }
+
+    public void ChangeUiVol()
+    {
+        mixer.SetFloat("uiVol", Mathf.Log10(uiSlider.value) * 20);
+    }
+
+    public void Save()
+    {
+        /*
+        PlayDataManager.data.masterVol = masterSlider.value;
+        PlayDataManager.data.musicVol = musicSlider.value;
+        PlayDataManager.data.sfxVol = sfxSlider.value;
+        PlayDataManager.data.uiVol = uiSlider.value;
+        PlayDataManager.data.Vibration = vibeToggle.isOn;
+        */
+
         PlayDataManager.Save();
     }
 }
