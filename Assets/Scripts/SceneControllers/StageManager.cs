@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -13,19 +12,9 @@ public class StageManager : MonoBehaviour
         Horror
     }
 
-    public enum Type
-    {
-        Global = 1,
-        Local
-    }
-
     [Header("BLACK")]
     [SerializeField]
     private FadeEffects BLACK;
-
-    private Dictionary<int, StageTable.Data> stageTable;
-    private Dictionary<int, string> stringTable;
-    private Dictionary<int, EnemyTable.Data> enemyTable;
 
     [Header("Defualt Category")]
     [SerializeField]
@@ -35,11 +24,11 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private Transform stageContainer;
 
-    [Header("Stage Prefab")]
+    [Header("Stage Content Prefab")]
     [SerializeField]
     private GameObject stagePrefab;
 
-    [Header("Stage Info")]
+    [Header("StageInfo UI")]
     [SerializeField]
     private GameObject stageInfo;
 
@@ -50,15 +39,19 @@ public class StageManager : MonoBehaviour
             PlayDataManager.Init();
         }
 
+        PlayDataManager.StageInfoRefresh();
+
+        //next Scene Data
         PlayerPrefs.DeleteKey("StageID");
 
         if (stagePrefab == null)
         {
             return;
         }
-        stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
-        stringTable = CsvTableMgr.GetTable<StringTable>().dataTable;
-        enemyTable = CsvTableMgr.GetTable<EnemyTable>().dataTable;
+
+        var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
+        var stringTable = CsvTableMgr.GetTable<StringTable>().dataTable;
+        var enemyTable = CsvTableMgr.GetTable<EnemyTable>().dataTable;
 
         foreach (var info in stageTable)
         {
@@ -84,6 +77,10 @@ public class StageManager : MonoBehaviour
                 }
             });
             stage.transform.SetParent(stageContainer, false);
+            if (!PlayDataManager.StageUnlockCheck(info.Key))
+            {
+                stage.button.interactable = false;
+            }
         }
 
         CategoryFilter(defaultCategory);
@@ -118,17 +115,6 @@ public class StageManager : MonoBehaviour
             {
                 stage.gameObject.SetActive(false);
             }
-        }
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            CategoryFilter(1);
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            CategoryFilter(2);
         }
     }
 }

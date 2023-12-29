@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Data;
 
 public abstract class SaveData
 {
@@ -220,8 +218,25 @@ public class SaveDataV8 : SaveData
 
     public bool IsPlayed { get; set; } = false;
 
+    public List<Unlock> UnlockInfo = new List<Unlock>();
+
+    public float masterVol { get; set; } = 1.0f;
+
+    public float musicVol { get; set; } = 1.0f;
+
+    public float sfxVol { get; set; } = 1.0f;
+
+    public float uiVol { get; set; } = 1.0f;
     public override SaveData VersionUp()
     {
-        return null;
+        var data = new SaveDataV8();
+        data.Gold = Gold;
+        data.WeaponInventory = WeaponInventory;
+        data.ArmorInventory = ArmorInventory;
+        data.MatInventory = MatInventory;
+        data.CodeInventory = CodeInventory;
+        data.SkillCodes = SkillCodes;
+
+        return data;
     }
 }

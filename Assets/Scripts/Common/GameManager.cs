@@ -74,6 +74,8 @@ public class GameManager : MonoBehaviour
             var codeID = keys[Random.Range(0, keys.Count)];
             PlayDataManager.IncreaseCode(codeID, 1);
         }
+        
+        PlayDataManager.StageUnlock(stageID);
     }
 
     public void Lose(Player player)
