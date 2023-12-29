@@ -81,7 +81,6 @@ public class TutorialManager : MonoBehaviour
                 PlayDataManager.data.IsPlayed = true;
                 PlayDataManager.Save();
                 SceneManager.LoadScene("Title");
-                //SceneManager.LoadScene("Title", LoadSceneMode.Additive);
                 return;
             }
             
@@ -107,11 +106,6 @@ public class TutorialManager : MonoBehaviour
                     case 2:
 
                         SceneManager.LoadScene("Title", LoadSceneMode.Additive);
-
-
-                        // 스테이지 진입
-                        // 타이틀씬으로 가면 됨
-
                         break;
                 }
 

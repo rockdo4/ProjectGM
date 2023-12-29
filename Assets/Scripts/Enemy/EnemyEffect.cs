@@ -43,23 +43,23 @@ public class EnemyEffect : MonoBehaviour
 
                 switch (enemyAi.enemyType)
                 {
-                    case EnemyType.Bear:
+                    case 8001001:
                         offset += transform.forward * 1f + transform.up * 1f;
                     break;
 
-                    case EnemyType.Alien:
+                    case 8001004:
                         offset = Vector3.zero;
                         break;
 
-                    case EnemyType.Boar:
+                    case 8001003:
                         offset += transform.forward * 2f + transform.up * 1f;
                         break;
 
-                    case EnemyType.Wolf:
+                    case 8001002:
                         offset += transform.forward * 4.5f + transform.up * 0.1f;
                         break;
 
-                    case EnemyType.Spider:
+                    case 8002001:
                         offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
                 }
@@ -69,23 +69,23 @@ public class EnemyEffect : MonoBehaviour
 
                 switch (enemyAi.enemyType)
                 {
-                    case EnemyType.Bear:
+                    case 8001001:
                         offset += transform.forward * 5.0f + transform.up * 0.1f;
                         break;
 
-                    case EnemyType.Alien:
+                    case 8001004:
                         offset += transform.forward * 2f + transform.up * 1f;
                         break;
 
-                    case EnemyType.Boar:
+                    case 8001003:
                         offset += transform.forward * 3f + transform.up * 1f;
                         break;
 
-                    case EnemyType.Wolf:
+                    case 8001002:
                         offset += transform.forward * 2f + transform.up * 1f;
                         break;
 
-                    case EnemyType.Spider:
+                    case 8002001:
                         offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
                 }
@@ -95,15 +95,15 @@ public class EnemyEffect : MonoBehaviour
 
                 switch (enemyAi.enemyType)
                 {
-                    case EnemyType.Bear:
+                    case 8001001:
                         offset += transform.forward * 2.5f + transform.up * 3f;
                         break;
 
-                    case EnemyType.Alien:
+                    case 8001004:
                         offset = Vector3.zero;
                         break;
 
-                    case EnemyType.Boar:
+                    case 8001003:
                         offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
                 }
@@ -113,7 +113,7 @@ public class EnemyEffect : MonoBehaviour
 
                 switch (enemyAi.enemyType)
                 {
-                    case EnemyType.Bear:
+                    case 8001001:
                         offset += transform.forward * 1.5f + transform.up * 2.5f;
                         break;
                 }
@@ -176,7 +176,7 @@ public class EnemyEffect : MonoBehaviour
     {
         EffectEnemyType("RA");
 
-        if (EffectTypeRA != null && enemyAi.enemyType == EnemyType.Bear)
+        if (EffectTypeRA != null && enemyAi.enemyType == 8001001)
         {
             GameObject effectInstance = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation);
             Rigidbody rb = effectInstance.GetComponent<Rigidbody>();
