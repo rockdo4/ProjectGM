@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
             var keys = new List<int>(codeTable.Keys);
             var codeID = keys[Random.Range(0, keys.Count)];
             PlayDataManager.IncreaseCode(codeID, 1);
+            PlayDataManager.AddGold(stageInfo.gold);
         }
         
         PlayDataManager.StageUnlock(stageID);
