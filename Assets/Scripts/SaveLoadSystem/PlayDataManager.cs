@@ -652,7 +652,6 @@ public static class PlayDataManager
 
                 if (unlock.id == stage.Key)
                 {
-                    Debug.Log(unlock.id);
                     unlock.unlocked = true;
                 }
             }
