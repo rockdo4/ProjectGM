@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using SaveDataVC = SaveDataV7; // Version Change?
+using SaveDataVC = SaveDataV8; // Version Change?
 
 public static class PlayDataManager
 {
@@ -547,5 +547,75 @@ public static class PlayDataManager
         }
 
         curSkill = curSkill.OrderByDescending((x) => x.Value).ThenBy(x => x.Key).ToDictionary(x => x.Key, y => y.Value);
+    }
+
+    public static bool StageUnlockCheck(int id)
+    {
+        var unlockList = data.UnlockInfo;
+        foreach (var unlock in unlockList)
+        {
+            if (unlock.id == id && unlock.unlocked)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void StageUnlock(int id)
+    {
+        var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
+        var unlockList = data.UnlockInfo;
+
+        foreach (var stage in stageTable)
+        {
+            if (stage.Value.unlock != id)
+            {
+                continue;
+            }
+
+            foreach(var unlock in unlockList)
+            {
+                if (unlock.unlocked)
+                {
+                    continue;
+                }
+
+                if (unlock.id == stage.Key)
+                {
+                    unlock.unlocked = true;
+                }
+            }
+        }
+
+        Save();
+    }
+
+    public static void StageInfoRefresh()
+    {
+        var unlockList = data.UnlockInfo;
+
+        var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
+
+        foreach (var stage in stageTable)
+        {
+            var unlock = unlockList.Find((x) => x.id == stage.Key);
+            if (unlock != null)
+            {
+                continue;
+            }
+
+            var unlocked = (stage.Value.unlock < 0) ? true : false;
+            var newUnlock = new Unlock(stage.Key, unlocked);
+            //unlock = unlockList.Find(x => x.id == stage.Value.unlock && x.unlocked);
+            //if (unlock != null)
+            //{
+            //    newUnlock.unlocked = true;
+            //}
+            unlockList.Add(newUnlock);
+        }
+
+        Save();
     }
 }
