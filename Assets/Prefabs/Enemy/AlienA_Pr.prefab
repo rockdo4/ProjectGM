@@ -2349,7 +2349,7 @@ PrefabInstance:
     - target: {fileID: 177156173738690166, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 4.5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 177156173738690166, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
@@ -2379,12 +2379,12 @@ PrefabInstance:
     - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6666667
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.6666667
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
@@ -2399,27 +2399,42 @@ PrefabInstance:
     - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.57357645
+      value: 0.9659258
       objectReference: {fileID: 0}
     - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.8191521
+      value: -0.2588191
       objectReference: {fileID: 0}
     - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 20
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -180
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8181590888008609784, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: mNoiseOffsets.x
+      value: 284.0645
+      objectReference: {fileID: 0}
+    - target: {fileID: 8181590888008609784, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: mNoiseOffsets.y
+      value: 257.714
+      objectReference: {fileID: 0}
+    - target: {fileID: 8181590888008609784, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: mNoiseOffsets.z
+      value: 501.3568
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

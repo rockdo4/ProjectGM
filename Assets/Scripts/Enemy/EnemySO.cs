@@ -26,7 +26,7 @@ public class EnemySO : ScriptableObject
         {
             if (enemyData.ID == monsterID)
             {
-                return Instantiate(enemyData.prefab, tr.position, Quaternion.identity);
+                return Instantiate(enemyData.prefab, tr.position, tr.rotation);
             }
         }
 

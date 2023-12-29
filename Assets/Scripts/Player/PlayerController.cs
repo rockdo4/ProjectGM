@@ -16,11 +16,15 @@ public class PlayerController : MonoBehaviour
         Hit,
         Death
     }
+    public enum EvadeState
+    {
+        None, Normal, Just
+    }
     private StateManager stateManager = new StateManager();
     private List<StateBase> states = new List<StateBase>();
     public State CurrentState { get; private set; }
     public State NextState { get; set; }
-
+    public EvadeState CurrentEvadeState;
     #region Weapon
     public enum WeaponPosition
     {

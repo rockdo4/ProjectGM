@@ -237,9 +237,11 @@ public class EnemyAI : LivingObject
     {
         hasRoared = false;
         CameraManager.Instance.SetCameraWithTag(Tags.enemy);
+        TouchManager.Instance.enabled = false;
         animator.SetTrigger("Roar");
         yield return new WaitForSeconds(roarDuration);
         CameraManager.Instance.SetCameraWithTag(Tags.player);
+        TouchManager.Instance.enabled = true;
         hasRoared = true;
     }
 

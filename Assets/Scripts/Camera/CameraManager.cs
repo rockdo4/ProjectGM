@@ -28,25 +28,9 @@ public class CameraManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
         playerCameras = GameObject.FindWithTag(Tags.player)?.GetComponentsInChildren<CinemachineVirtualCamera>();
         enemyCameras = GameObject.FindWithTag(Tags.enemy)?.GetComponentsInChildren<CinemachineVirtualCamera>();
         SetCameraWithTag(Tags.player);
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.I))
-        {
-            SetCameraWithTag(Tags.player);
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            SetCameraWithTag(Tags.enemy);
-        }
     }
 
     public void SetCameraWithTag(string tag, int index = 0)
