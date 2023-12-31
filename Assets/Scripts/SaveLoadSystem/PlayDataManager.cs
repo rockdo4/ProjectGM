@@ -210,7 +210,7 @@ public static class PlayDataManager
         }
         Save();
 
-        OrganizeSkill();
+        //OrganizeSkill();
         OrganizeSetSkill();
     }
 
@@ -241,7 +241,7 @@ public static class PlayDataManager
         }
         Save();
 
-        OrganizeSkill();
+        //OrganizeSkill();
         OrganizeSetSkill();
 
         // 스킬코드 소켓에 대한 예외처리 추가 필요
@@ -624,7 +624,7 @@ public static class PlayDataManager
 
     }
 
-        public static bool StageUnlockCheck(int id)
+    public static bool StageUnlockCheck(int id)
     {
         var unlockList = data.UnlockInfo;
         foreach (var unlock in unlockList)
