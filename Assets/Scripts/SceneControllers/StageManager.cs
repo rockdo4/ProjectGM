@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
@@ -16,9 +14,7 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private FadeEffects BLACK;
 
-    [Header("Defualt Category")]
-    [SerializeField]
-    private int defaultCategory;
+    private const int defaultCategory = 1;
 
     [Header("Stage Container")]
     [SerializeField]
@@ -83,7 +79,7 @@ public class StageManager : MonoBehaviour
             }
         }
 
-        CategoryFilter(defaultCategory);
+        CategoryFilter(1);
     }
 
     public void GoGame(string sceneName)
