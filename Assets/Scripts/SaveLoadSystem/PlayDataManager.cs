@@ -641,6 +641,13 @@ public static class PlayDataManager
         var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
         var unlockList = data.UnlockInfo;
 
+        //이미 클리어 했으면 스킵
+        var unlock = unlockList.Find(x => x.id == id);
+        if (unlock.cleared)
+        {
+            return;
+        }
+
         foreach (var stage in stageTable)
         {
             if (stage.Value.unlock != id)
@@ -648,44 +655,36 @@ public static class PlayDataManager
                 continue;
             }
 
-            foreach(var unlock in unlockList)
-            {
-                if (unlock.unlocked)
-                {
-                    continue;
-                }
-
-                if (unlock.id == stage.Key)
-                {
-                    unlock.unlocked = true;
-                }
-            }
+            unlockList.Find(x => x.id == stage.Key).unlocked = true;
         }
+        unlock.cleared = true;
 
         Save();
     }
 
     public static void StageInfoRefresh()
     {
-        var unlockList = data.UnlockInfo;
-
+        //스테이지가 추가/제거 됐는지 확인
         var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
+        var unlockList = data.UnlockInfo;
 
         foreach (var stage in stageTable)
         {
+            //데이터가 있는지 체크
             var unlock = unlockList.Find((x) => x.id == stage.Key);
             if (unlock != null)
             {
                 continue;
             }
 
-            var unlocked = (stage.Value.unlock < 0) ? true : false;
-            var newUnlock = new Unlock(stage.Key, unlocked);
-            // unlock = unlockList.Find(x => x.id == stage.Value.unlock && x.unlocked);
-            // if (unlock != null)
-            // {
-            //     newUnlock.unlocked = true;
-            // }
+            //0보다 작으면 자동 해금
+            var newUnlock = new Unlock(stage.Key, stage.Value.unlock < 0);
+            if (!newUnlock.unlocked)
+            {
+                //해금 조건이 이미 클리어가 되어있는가
+                var cleared = unlockList.Find(x => x.id == stage.Value.unlock && x.cleared);
+                newUnlock.unlocked = cleared != null;
+            }
             unlockList.Add(newUnlock);
         }
 
