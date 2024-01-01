@@ -14,8 +14,6 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private FadeEffects BLACK;
 
-    private const int defaultCategory = 1;
-
     [Header("Stage Container")]
     [SerializeField]
     private Transform stageContainer;
@@ -78,8 +76,6 @@ public class StageManager : MonoBehaviour
                 stage.button.interactable = false;
             }
         }
-
-        CategoryFilter(1);
     }
 
     public void GoGame(string sceneName)
