@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using SaveDataVC = SaveDataV8; // Version Change?
 
@@ -260,7 +258,7 @@ public static class PlayDataManager
 
     public static void IncreaseMat(int id, int count)
     {
-        if (count <= 0)
+        if (id <= 0 || count <= 0)
         {
             return;
         }
