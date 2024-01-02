@@ -12,6 +12,7 @@ public enum PlayerEffectType
     Super_TwoHandSword,
     Super_OneHandSword,
     Super_Spear,
+    SlowMotion,
     Death
 }
 

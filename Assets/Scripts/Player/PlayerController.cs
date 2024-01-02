@@ -204,6 +204,7 @@ public class PlayerController : MonoBehaviour
                 case WeaponType.One_Hand_Sword:
                     break;
                 case WeaponType.Spear:
+                    player.Effects.PlayEffect(PlayerEffectType.Super_Spear);
                     break;
             }
         }
@@ -231,9 +232,9 @@ public class PlayerController : MonoBehaviour
                     player.Effects.PlayEffect(PlayerEffectType.Super_OneHandSword);
                     break;
                 case WeaponType.Spear:
-                    player.Effects.PlayEffect(PlayerEffectType.Super_Spear);
                     break;
             }
+            player.Effects.PlayEffect(PlayerEffectType.SlowMotion);
         }
         ExecuteAttack(player, player.Enemy);
         player.attackState = Player.AttackState.AfterStart;
