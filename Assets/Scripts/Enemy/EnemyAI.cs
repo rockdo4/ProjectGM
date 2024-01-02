@@ -1861,6 +1861,7 @@ public class EnemyAI : LivingObject
             isTwoPhase = true;
 
             Transform magicObject = transform.Find("Magic"); // 일단 곰만
+
             if (magicObject != null)
             {
                 magicObject.gameObject.SetActive(true);
