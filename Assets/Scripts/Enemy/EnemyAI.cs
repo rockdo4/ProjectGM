@@ -176,6 +176,8 @@ public class EnemyAI : LivingObject
 
     public float CurrentPreparationTime { get; private set; }
 
+    public Vector3 SavedPlayerPosition { get; private set; }
+
     public enum AttackPatternType
     {
         A,
@@ -821,7 +823,7 @@ public class EnemyAI : LivingObject
             }
         }
 
-        //Debug.Log("이번 공격 대기시간 : "  + specificPreparationTime);
+        Debug.Log("이번 공격 대기시간 : "  + specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
         ShowMeleeAttackRange(false, enemytype, attackPatternType);
@@ -843,6 +845,9 @@ public class EnemyAI : LivingObject
     IEnumerator PrepareRangedAttack(int enemytype, AttackPatternType attackPatternType) // 원거리
     {
         isPreparingAttack = true;
+
+        SavedPlayerPosition = detectedPlayer.position; // 명도잔월파를 위한 위치저장
+
         ShowProjectileAttackRange(true, enemytype, attackPatternType);
 
         float specificPreparationTime = attackPreparationTime;
@@ -857,6 +862,7 @@ public class EnemyAI : LivingObject
             }
         }
 
+        Debug.Log("이번 공격 대기시간 : " + specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
         switch (attackPatternType)
@@ -965,10 +971,12 @@ public class EnemyAI : LivingObject
         {
             switch (AttackPatternType)
             {
-                //case AttackPatternType.A:
-                //    return new Vector3(0f, 0f, -7f);
-                case AttackPatternType.B:
+                case AttackPatternType.A:
                     return new Vector3(0f, 0f, -2f);
+                case AttackPatternType.B:
+                    return new Vector3(0f, 0f, -4.5f);
+                case AttackPatternType.C:
+                    return new Vector3(0f, 0f, -4.5f);
                 default: return Vector3.zero;
             }
         }
@@ -1112,11 +1120,11 @@ public class EnemyAI : LivingObject
 
             case 8002001:
                 if (attackPatternType == AttackPatternType.A)
-                    additionalRotation = Quaternion.Euler(0f, 180f, 0f);
-                else if (attackPatternType == AttackPatternType.B)
                     additionalRotation = Quaternion.Euler(0f, 120f, 0f);
-                else if (attackPatternType == AttackPatternType.C)
-                    additionalRotation = Quaternion.Euler(0f, 140f, 0f);
+                //else if (attackPatternType == AttackPatternType.B)
+                //    additionalRotation = Quaternion.Euler(0f, 120f, 0f);
+                //else if (attackPatternType == AttackPatternType.C)
+                //    additionalRotation = Quaternion.Euler(0f, 140f, 0f);
                 break;
 
             case 8001002:
@@ -1216,7 +1224,7 @@ public class EnemyAI : LivingObject
         }
     }
 
-    private void ShowProjectileAttackRange(bool show, int enemyType, AttackPatternType AttackPatternType) // 쇼
+    private void ShowProjectileAttackRange(bool show, int enemyType, AttackPatternType AttackPatternType) // 프로젝타일
     {
         //Debug.Log("레인지 어택 호출 하는지?");
         GameObject attackPrefab = null;

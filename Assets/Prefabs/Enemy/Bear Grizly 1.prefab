@@ -54,7 +54,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4691967391105962301
 Transform:
   m_ObjectHideFlags: 0
@@ -157,7 +157,7 @@ MonoBehaviour:
   - {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3, type: 3}
   - {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3, type: 3}
   - {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3, type: 3}
-  bearAttackPatternPhaseOne: 01000000020000000300000004000000050000000300000004000000
+  bearAttackPatternPhaseOne: 05000000020000000300000004000000050000000300000004000000
   bearAttackPatternPhaseTwo: 03000000040000000500000003000000040000000300000001000000020000000500000004000000
   alienAttackPatternPhaseOne: 0100000002000000
   alienAttackPatternPhaseTwo: 010000000200000003000000
@@ -171,28 +171,28 @@ MonoBehaviour:
   dragonAttackPatternPhaseOne: 01000000020000000300000003000000
   dragonAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
-  - enemyType: 0
+  - enemyType: 8001001
     attackPatternType: 0
     preparationTime: 1.6
-  - enemyType: 0
+  - enemyType: 8001001
     attackPatternType: 1
     preparationTime: 1.6
-  - enemyType: 0
+  - enemyType: 8001001
     attackPatternType: 2
     preparationTime: 0.7
-  - enemyType: 0
+  - enemyType: 8001001
     attackPatternType: 3
     preparationTime: 0.7
-  - enemyType: 0
+  - enemyType: 8001001
     attackPatternType: 5
     preparationTime: 2.5
-  - enemyType: 0
+  - enemyType: 8001001
     attackPatternType: 4
     preparationTime: 2
-  - enemyType: 0
+  - enemyType: 8001001
     attackPatternType: 6
     preparationTime: 3
-  - enemyType: 0
+  - enemyType: 8001001
     attackPatternType: 7
     preparationTime: 2
   - enemyType: 0
@@ -242,7 +242,7 @@ MonoBehaviour:
   - patternName: MelleAttack_F
     pattern: 000000000000000100
   - patternName: RangeAttack_A
-    pattern: 000000000000000100
+    pattern: 000000000100000000
   - patternName: RangeAttack_B
     pattern: 000000000000000100
   - patternName: RangeAttack_C

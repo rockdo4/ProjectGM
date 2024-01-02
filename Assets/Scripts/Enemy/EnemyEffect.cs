@@ -106,6 +106,10 @@ public class EnemyEffect : MonoBehaviour
                     case 8001003:
                         offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
+
+                    case 8002001:
+                        offset += transform.forward * 5f + transform.up * 0.1f;
+                        break;
                 }
                 break;
 
@@ -180,7 +184,10 @@ public class EnemyEffect : MonoBehaviour
         {
             GameObject effectInstance = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation);
             Rigidbody rb = effectInstance.GetComponent<Rigidbody>();
-            Vector3 forceDirection = (enemyAi.detectedPlayer.position - transform.position).normalized; // 플레이어 방향으로 힘을 가합니다.
+
+            Vector3 forceDirection = (enemyAi.SavedPlayerPosition - transform.position).normalized;
+
+            //Vector3 forceDirection = (enemyAi.detectedPlayer.position - transform.position).normalized;
             float forceMagnitude = 10f;
             rb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
 

@@ -84,7 +84,7 @@ MonoBehaviour:
   - effectType: 2
     effect: {fileID: 5364822764364398288}
   - effectType: 2
-    effect: {fileID: 9055660796557798146}
+    effect: {fileID: 188646420298540675}
   - effectType: 1
     effect: {fileID: 5399777417289508099}
   - effectType: 4
@@ -215,7 +215,7 @@ MonoBehaviour:
   drawingMode: 1
   outlineLayer: 0
   outlineTargets:
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -231,7 +231,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -247,7 +247,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -263,7 +263,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -279,7 +279,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -622,7 +622,7 @@ Transform:
   m_GameObject: {fileID: 9146068143562920428}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2164396, y: 0, z: 0, w: 0.97629607}
-  m_LocalPosition: {x: 0.0000004768374, y: 8, z: -12}
+  m_LocalPosition: {x: 0, y: 8, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1097,7 +1097,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7730581629501221528, guid: ed0da22508f7f5c449639019342ed67e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 188646420298540675}
   m_SourcePrefab: {fileID: 100100000, guid: ed0da22508f7f5c449639019342ed67e, type: 3}
 --- !u!4 &4663639782111911252 stripped
 Transform:
@@ -1105,18 +1109,27 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3166057633391949761}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9055660796557798146 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6222905029225848003, guid: ed0da22508f7f5c449639019342ed67e,
+--- !u!1 &4663639782111911257 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7730581629501221528, guid: ed0da22508f7f5c449639019342ed67e,
     type: 3}
   m_PrefabInstance: {fileID: 3166057633391949761}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &188646420298540675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4663639782111911257}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe5ea191272161f4fa2ff6f53d2df318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  duration: 0
+  directionOffset: {x: 0, y: 0, z: 0}
+  positionOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &3240068382676075751
 PrefabInstance:
   m_ObjectHideFlags: 0
