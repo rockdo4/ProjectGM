@@ -13,7 +13,7 @@ public class TouchManager : Singleton<TouchManager>
     public bool Swiped { get; private set; }
 
     [Header("홀드 판단 시간")]
-    [SerializeField] private float holdTime = 0.02f;
+    [SerializeField] private float holdTime = 0.05f;
     private float holdTimer = 0f;
 
     [Header("스와이프 판단 시간")]
