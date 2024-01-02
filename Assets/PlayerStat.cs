@@ -68,16 +68,23 @@ public class PlayerStat : Stat
     [Range(0.1f, 5f)]
     public float attackSpeed = 1f;
 
+    [Header("특수 공격 배율")]
+    public float superAttackRate = 3f;
+
     public override Attack CreateAttack(LivingObject attacker, LivingObject defender, bool groggy)
     {
         var player = attacker as Player;
         var enemyStat = defender.stat as EnemyStat;
-        float damage = player.Stat.AttackDamage;
-        damage += player.CurrentWeapon.attack;
+        float damage = player.Stat.AttackDamage + player.CurrentWeapon.attack;
 
         if (enemyStat.weaknessType == player.CurrentWeapon.type)
         {
-            damage += player.CurrentWeapon.attack * (player.CurrentWeapon.weakDamage);
+            damage += (damage * (player.CurrentWeapon.weakDamage));
+        }
+
+        if (player.GetComponent<PlayerController>().CurrentState == PlayerController.State.SuperAttack)
+        {
+            damage *= superAttackRate;
         }
 
         var critical = Random.value < player.Stat.Critical;

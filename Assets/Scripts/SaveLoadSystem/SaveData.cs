@@ -227,16 +227,9 @@ public class SaveDataV8 : SaveData
     public float sfxVol { get; set; } = 1.0f;
 
     public float uiVol { get; set; } = 1.0f;
+
     public override SaveData VersionUp()
     {
-        var data = new SaveDataV8();
-        data.Gold = Gold;
-        data.WeaponInventory = WeaponInventory;
-        data.ArmorInventory = ArmorInventory;
-        data.MatInventory = MatInventory;
-        data.CodeInventory = CodeInventory;
-        data.SkillCodes = SkillCodes;
-
-        return data;
+        return null;
     }
 }

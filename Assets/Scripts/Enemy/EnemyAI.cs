@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
+using static EnemyAI;
 
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : LivingObject
@@ -123,7 +125,7 @@ public class EnemyAI : LivingObject
     private LayerMask playerLayerMask;
 
     [Header("몬스터의 타입")]
-    public EnemyType enemyType;
+    public int enemyType;
 
     [Header("공격 조건중 몬스터가 플레이어를 바라볼때의 최소각도")]
     public float minAngle = 10f;
@@ -160,25 +162,19 @@ public class EnemyAI : LivingObject
     private bool isDie;
     private int poolIndex;
 
+    //public EnemyTable enemyTable;
+
+    private int phaseAttack = 1;
+
     [Serializable]
     public struct AttackPreparationTime
     {
-        public EnemyType enemyType;
+        public int enemyType;
         public AttackPatternType attackPatternType;
         public float preparationTime;
     }
 
     public float CurrentPreparationTime { get; private set; }
-
-    public enum EnemyType
-    {
-        Bear,
-        Alien,
-        Boar,
-        Wolf,
-        Spider,
-        Dragon
-    }
 
     public enum AttackPatternType
     {
@@ -230,6 +226,17 @@ public class EnemyAI : LivingObject
 
     private void Start()
     {
+        // this.name = name;
+        // this.hp = hp;
+        // this.defence = defence;
+        // this.attack = attack;
+        // this.phase = phase;
+        // this.phaseAttack = phaseAttack;
+        // this.type = type;
+        // this.deley = deley;
+
+        HP = Stat.HP;
+
         StartCoroutine(RoarInit());
     }
 
@@ -237,9 +244,11 @@ public class EnemyAI : LivingObject
     {
         hasRoared = false;
         CameraManager.Instance.SetCameraWithTag(Tags.enemy);
+        TouchManager.Instance.enabled = false;
         animator.SetTrigger("Roar");
         yield return new WaitForSeconds(roarDuration);
         CameraManager.Instance.SetCameraWithTag(Tags.player);
+        TouchManager.Instance.enabled = true;
         hasRoared = true;
     }
 
@@ -268,28 +277,35 @@ public class EnemyAI : LivingObject
         }
 
         base.Awake();
+
+        var et = CsvTableMgr.GetTable<EnemyTable>().dataTable[enemyType];
+        Stat.HP = et.hp;
+        Stat.Defence = et.defence;
+        Stat.AttackDamage = et.attack;
+        Stat.weaknessType = (AttackType)et.type;
+
         phaseTwoHealthThreshold = HP * 0.5f;
         isTwoPhase = false;
 
         switch (enemyType)
         {
-            case EnemyType.Bear:
+            case 8001001:
                 BTRunner = new BehaviorTreeRunner(BearBT());
                 break;
-            case EnemyType.Alien:
-                BTRunner = new BehaviorTreeRunner(AlienBT());
-                break;
-            case EnemyType.Boar:
-                BTRunner = new BehaviorTreeRunner(BoarBT());
-                break;
-            case EnemyType.Wolf:
+            case 8001002:
                 BTRunner = new BehaviorTreeRunner(WolfBT());
                 break;
-            case EnemyType.Spider:
+            case 8001003:
+                BTRunner = new BehaviorTreeRunner(BoarBT());
+                break;
+            case 8001004:
+                BTRunner = new BehaviorTreeRunner(AlienBT());
+                break;
+            case 8002001:
                 BTRunner = new BehaviorTreeRunner(SpiderBT());
                 break;
-            case EnemyType.Dragon:
-                BTRunner = new BehaviorTreeRunner(DragonBT());
+            default:
+                Debug.Log("Not Exist Enemy Type!");
                 break;
 
         }
@@ -424,7 +440,7 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new ConditionNode(IsPhaseOne),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseOne))
+                                            new ActionNode(() => ExecuteAttackPattern(8001001, bearAttackPatternPhaseOne))
                                         }
                                     ),
 
@@ -433,7 +449,7 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new InverterNode(new ConditionNode(IsPhaseOne)),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Bear, bearAttackPatternPhaseTwo)),
+                                            new ActionNode(() => ExecuteAttackPattern(8001001, bearAttackPatternPhaseTwo)),
                                         }
                                     ),
 
@@ -490,7 +506,7 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new ConditionNode(IsPhaseOne),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Alien, alienAttackPatternPhaseOne))
+                                            new ActionNode(() => ExecuteAttackPattern(8001004, alienAttackPatternPhaseOne))
                                         }
                                     ),
 
@@ -499,7 +515,7 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new InverterNode(new ConditionNode(IsPhaseOne)),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Alien, alienAttackPatternPhaseTwo)),
+                                            new ActionNode(() => ExecuteAttackPattern(8001004, alienAttackPatternPhaseTwo)),
                                         }
                                     ),
 
@@ -554,7 +570,7 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new ConditionNode(IsPhaseOne),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Boar, boarAttackPatternPhaseOne))
+                                            new ActionNode(() => ExecuteAttackPattern(8001003, boarAttackPatternPhaseOne))
                                         }
                                     ),
 
@@ -563,7 +579,7 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new InverterNode(new ConditionNode(IsPhaseOne)),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Boar, boarAttackPatternPhaseTwo)),
+                                            new ActionNode(() => ExecuteAttackPattern(8001003, boarAttackPatternPhaseTwo)),
                                         }
                                     ),
 
@@ -618,7 +634,7 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new ConditionNode(IsPhaseOne),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Wolf, wolfAttackPatternPhaseOne))
+                                            new ActionNode(() => ExecuteAttackPattern(8001002, wolfAttackPatternPhaseOne))
                                         }
                                     ),
 
@@ -627,7 +643,7 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new InverterNode(new ConditionNode(IsPhaseOne)),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Wolf, wolfAttackPatternPhaseTwo)),
+                                            new ActionNode(() => ExecuteAttackPattern(8001002, wolfAttackPatternPhaseTwo)),
                                         }
                                     ),
 
@@ -681,7 +697,7 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new ConditionNode(IsPhaseOne),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Spider, spiderAttackPatternPhaseOne))
+                                            new ActionNode(() => ExecuteAttackPattern(8002001, spiderAttackPatternPhaseOne))
                                         }
                                     ),
 
@@ -690,7 +706,7 @@ public class EnemyAI : LivingObject
                                         new List<INode>()
                                         {
                                             new InverterNode(new ConditionNode(IsPhaseOne)),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Spider, spiderAttackPatternPhaseTwo)),
+                                            new ActionNode(() => ExecuteAttackPattern(8002001, spiderAttackPatternPhaseTwo)),
                                         }
                                     ),
 
@@ -712,73 +728,12 @@ public class EnemyAI : LivingObject
     }
     #endregion
 
-    #region 드래곤 행동트리
-    INode DragonBT()
-    {
-        return new SelectorNode
-        (
-            new List<INode>()
-            {
-                new DecoratorNode
-                (
-                    () => IsGroggy,
-                    new ActionNode(GroggyTrueState)
-                ),
 
-                new DecoratorNode
-                (
-                    () => !IsGroggy,
-
-                    new SequenceNode
-                    (
-                        new List<INode>()
-                        {
-                            new ActionNode(GroggyFalseState),
-
-                            new SelectorNode
-                            (
-                                new List<INode>()
-                                {
-                                    new SequenceNode
-                                    (
-                                        new List<INode>()
-                                        {
-                                            new ConditionNode(IsPhaseOne),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Dragon, dragonAttackPatternPhaseOne))
-                                        }
-                                    ),
-
-                                    new SequenceNode
-                                    (
-                                        new List<INode>()
-                                        {
-                                            new InverterNode(new ConditionNode(IsPhaseOne)),
-                                            new ActionNode(() => ExecuteAttackPattern(EnemyType.Dragon, dragonAttackPatternPhaseTwo)),
-                                        }
-                                    ),
-
-                                    new SequenceNode
-                                    (
-                                        new List<INode>()
-                                        {
-                                            new ActionNode(DetectPlayer),
-                                            new ActionNode(TracePlayer),
-                                        }
-                                    ),
-                                }
-                            )
-                        }
-                    )
-                )
-            }
-        );
-    }
-    #endregion
 
 
     #region 행동트리 -> 어택 패턴 -> 애니메이션 업데이트
 
-    private INode.EnemyState ExecuteAttackPattern(EnemyType enemytype, int[] pattern)
+    private INode.EnemyState ExecuteAttackPattern(int enemytype, int[] pattern)
     {
         // 공격 준비부터 달리는 모션 나오는거 제거
         animator.SetFloat("MoveSpeed", 0f);
@@ -835,7 +790,7 @@ public class EnemyAI : LivingObject
         return result;
     }
 
-    IEnumerator PrepareMeleeAttack(EnemyType enemytype, AttackPatternType attackPatternType) // 프리페어
+    IEnumerator PrepareMeleeAttack(int enemytype, AttackPatternType attackPatternType) // 프리페어
     {
         if (activeFanShapes != null)
         {
@@ -885,7 +840,7 @@ public class EnemyAI : LivingObject
         }
     }
 
-    IEnumerator PrepareRangedAttack(EnemyType enemytype, AttackPatternType attackPatternType) // 원거리
+    IEnumerator PrepareRangedAttack(int enemytype, AttackPatternType attackPatternType) // 원거리
     {
         isPreparingAttack = true;
         ShowProjectileAttackRange(true, enemytype, attackPatternType);
@@ -946,9 +901,9 @@ public class EnemyAI : LivingObject
         isAttacking = false; // 
     }
 
-    private Vector3 GetAttackOffset(EnemyType enemyType, AttackPatternType AttackPatternType)
+    private Vector3 GetAttackOffset(int enemyType, AttackPatternType AttackPatternType)
     {
-        if (enemyType == EnemyType.Bear)
+        if (enemyType == 8001001)
         {
             switch (AttackPatternType)
             {
@@ -964,7 +919,7 @@ public class EnemyAI : LivingObject
             }
         }
 
-        if (enemyType == EnemyType.Alien)
+        if (enemyType == 8001004)
         {
             switch (AttackPatternType)
             {
@@ -978,7 +933,7 @@ public class EnemyAI : LivingObject
             }
         }
 
-        if (enemyType == EnemyType.Boar)
+        if (enemyType == 8001003)
         {
             switch (AttackPatternType)
             {
@@ -994,7 +949,7 @@ public class EnemyAI : LivingObject
             }
         }
 
-        if (enemyType == EnemyType.Wolf)
+        if (enemyType == 8001002)
         {
             switch (AttackPatternType)
             {
@@ -1006,7 +961,7 @@ public class EnemyAI : LivingObject
             }
         }
 
-        if (enemyType == EnemyType.Spider)
+        if (enemyType == 8002001)
         {
             switch (AttackPatternType)
             {
@@ -1023,7 +978,7 @@ public class EnemyAI : LivingObject
 
     #region 공격 타일 계산
 
-    Vector3 CalculateCellPosition(int index, Vector3 offset, Vector3 realoffset, EnemyType enemyType, AttackPatternType AttackPatternType) // 칼큘
+    Vector3 CalculateCellPosition(int index, Vector3 offset, Vector3 realoffset, int enemyType, AttackPatternType AttackPatternType) // 칼큘
     {
         int x = index % 3;
         int z = index / 3;
@@ -1035,7 +990,7 @@ public class EnemyAI : LivingObject
             actualPosition -= realoffset;
         }
 
-        if (enemyType == EnemyType.Alien && AttackPatternType == AttackPatternType.C)
+        if (enemyType == 8001004 && AttackPatternType == AttackPatternType.C)
         {
             switch (index)
             {
@@ -1045,7 +1000,7 @@ public class EnemyAI : LivingObject
                 case 7: actualPosition += new Vector3(0, 0, -4f); break; // 앞
             }
         }
-        if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.C)
+        if (enemyType == 8002001 && AttackPatternType == AttackPatternType.C)
         {
             switch (index)
             {
@@ -1056,7 +1011,7 @@ public class EnemyAI : LivingObject
             }
         }
 
-        if (enemyType == EnemyType.Spider && AttackPatternType == AttackPatternType.A)
+        if (enemyType == 8002001 && AttackPatternType == AttackPatternType.A)
         {
             switch (index)
             {
@@ -1111,7 +1066,7 @@ public class EnemyAI : LivingObject
         return 0;
     }
 
-    Quaternion CalculateRotation(EnemyType enemyType, AttackPatternType attackPatternType, Vector3 monsterPosition, Vector3 fanShapePosition)
+    Quaternion CalculateRotation(int enemyType, AttackPatternType attackPatternType, Vector3 monsterPosition, Vector3 fanShapePosition)
     {
         Vector3 directionToMonster = (monsterPosition - fanShapePosition).normalized;
         Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
@@ -1121,7 +1076,7 @@ public class EnemyAI : LivingObject
 
         switch (enemyType)
         {
-            case EnemyType.Bear:
+            case 8001001:
                 if (attackPatternType == AttackPatternType.A)
                     additionalRotation = Quaternion.Euler(0f, 150f, 0f);
                 else if (attackPatternType == AttackPatternType.B)
@@ -1132,7 +1087,7 @@ public class EnemyAI : LivingObject
                     additionalRotation = Quaternion.Euler(0f, 125f, 0f);
                 break;
 
-            case EnemyType.Boar:
+            case 8001003:
                 if (attackPatternType == AttackPatternType.A)
                     additionalRotation = Quaternion.Euler(0f, 135f, 0f);
 
@@ -1144,7 +1099,7 @@ public class EnemyAI : LivingObject
 
                 break;
 
-            case EnemyType.Alien:
+            case 8001004:
                 if (attackPatternType == AttackPatternType.A)
                     additionalRotation = Quaternion.Euler(-90f, 0f, 0f);
                 else if (attackPatternType == AttackPatternType.B)
@@ -1155,7 +1110,7 @@ public class EnemyAI : LivingObject
                     additionalRotation = Quaternion.Euler(0f, 180f, 0f);
                 break;
 
-            case EnemyType.Spider:
+            case 8002001:
                 if (attackPatternType == AttackPatternType.A)
                     additionalRotation = Quaternion.Euler(0f, 180f, 0f);
                 else if (attackPatternType == AttackPatternType.B)
@@ -1164,7 +1119,7 @@ public class EnemyAI : LivingObject
                     additionalRotation = Quaternion.Euler(0f, 140f, 0f);
                 break;
 
-            case EnemyType.Wolf:
+            case 8001002:
                 if (attackPatternType == AttackPatternType.A)
                     additionalRotation = Quaternion.Euler(0.172f, 180f, 0f);
 
@@ -1180,7 +1135,7 @@ public class EnemyAI : LivingObject
     }
 
 
-    private void ShowMeleeAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
+    private void ShowMeleeAttackRange(bool show, int enemyType, AttackPatternType AttackPatternType) // 쇼
     {
         Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
         poolIndex = GetPoolIndexForAttackPatternType(AttackPatternType);
@@ -1261,7 +1216,7 @@ public class EnemyAI : LivingObject
         }
     }
 
-    private void ShowProjectileAttackRange(bool show, EnemyType enemyType, AttackPatternType AttackPatternType) // 쇼
+    private void ShowProjectileAttackRange(bool show, int enemyType, AttackPatternType AttackPatternType) // 쇼
     {
         //Debug.Log("레인지 어택 호출 하는지?");
         GameObject attackPrefab = null;
@@ -1604,7 +1559,7 @@ public class EnemyAI : LivingObject
 
     #region 근접 공격타입 1, 2, 3
 
-    INode.EnemyState MelleAttackOne(EnemyType enemyType, int attackPatternIndex)
+    INode.EnemyState MelleAttackOne(int enemyType, int attackPatternIndex)
     {
         if (isAttacking)
             return INode.EnemyState.Failure;
@@ -1630,7 +1585,7 @@ public class EnemyAI : LivingObject
 
         //Debug.Log(isAttacking);
 
-        //if (enemyType == EnemyType.Boar && 0 == attackPatternIndex)
+        //if (enemyType == 8001003 && 0 == attackPatternIndex)
         //{
         //    Debug.Log("밀리어택 원 멧돼지");
 
@@ -1642,8 +1597,8 @@ public class EnemyAI : LivingObject
         return INode.EnemyState.Success;
     }
 
-    INode.EnemyState MelleAttackTwo(EnemyType enemyType, int attackPatternIndex)
-    {
+    INode.EnemyState MelleAttackTwo(int enemyType, int attackPatternIndex)
+    {   
         if (isAttacking)
             return INode.EnemyState.Failure;
 
@@ -1671,7 +1626,7 @@ public class EnemyAI : LivingObject
         return INode.EnemyState.Success;
     }
 
-    INode.EnemyState MelleAttackThree(EnemyType enemyType, int attackPatternIndex)
+    INode.EnemyState MelleAttackThree(int enemyType, int attackPatternIndex)
     {
         if (isAttacking)
             return INode.EnemyState.Failure;
@@ -1700,7 +1655,7 @@ public class EnemyAI : LivingObject
         return INode.EnemyState.Success;
     }
 
-    INode.EnemyState MelleAttackFour(EnemyType enemyType, int attackPatternIndex)
+    INode.EnemyState MelleAttackFour(int enemyType, int attackPatternIndex)
     {
         if (isAttacking)
             return INode.EnemyState.Failure;
@@ -1731,7 +1686,7 @@ public class EnemyAI : LivingObject
         return INode.EnemyState.Success;
     }
 
-    INode.EnemyState RangeAttackOne(EnemyType enemyType, int attackPatternIndex)
+    INode.EnemyState RangeAttackOne(int enemyType, int attackPatternIndex)
     {
         if (isAttacking)
             return INode.EnemyState.Failure;
@@ -1761,7 +1716,7 @@ public class EnemyAI : LivingObject
         return INode.EnemyState.Success;
     }
 
-    INode.EnemyState RangeAttackTwo(EnemyType enemyType, int attackPatternIndex)
+    INode.EnemyState RangeAttackTwo(int enemyType, int attackPatternIndex)
     {
         if (isAttacking)
             return INode.EnemyState.Failure;
@@ -1791,7 +1746,7 @@ public class EnemyAI : LivingObject
         return INode.EnemyState.Success;
     }
 
-    INode.EnemyState RangeAttackThree(EnemyType enemyType, int attackPatternIndex)
+    INode.EnemyState RangeAttackThree(int enemyType, int attackPatternIndex)
     {
         if (isAttacking)
             return INode.EnemyState.Failure;
@@ -1820,7 +1775,7 @@ public class EnemyAI : LivingObject
         return INode.EnemyState.Success;
     }
 
-    INode.EnemyState RangeAttackFour(EnemyType enemyType, int attackPatternIndex)
+    INode.EnemyState RangeAttackFour(int enemyType, int attackPatternIndex)
     {
         if (isAttacking)
             return INode.EnemyState.Failure;
@@ -1945,7 +1900,7 @@ public class EnemyAI : LivingObject
 
     private void Attack()
     {
-        float actualAttackDamage = isTwoPhase ? Stat.AttackDamage * 2 : Stat.AttackDamage;
+        float actualAttackDamage = isTwoPhase ? Stat.AttackDamage + phaseAttack : Stat.AttackDamage;
 
         foreach (var fanShapeInstance in activeFanShapes)
         {

@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using SaveDataVC = SaveDataV8; // Version Change?
 
@@ -72,6 +70,13 @@ public static class PlayDataManager
                 var weapon = new Weapon(104001);
                 weapon.instanceID = weapon.instanceID.AddSeconds(4);
                 data.WeaponInventory.Add(weapon);
+            }
+
+            // 재료 아이템 임시 지급 test code
+            if (data.MatInventory.Count == 0)
+            {
+                IncreaseMat(610001, 50);
+                IncreaseMat(611001, 50);
             }
 
             SaveLoadSystem.Save(data, "savefile.json");
@@ -203,7 +208,7 @@ public static class PlayDataManager
         }
         Save();
 
-        OrganizeSkill();
+        //OrganizeSkill();
         OrganizeSetSkill();
     }
 
@@ -234,7 +239,7 @@ public static class PlayDataManager
         }
         Save();
 
-        OrganizeSkill();
+        //OrganizeSkill();
         OrganizeSetSkill();
 
         // 스킬코드 소켓에 대한 예외처리 추가 필요
@@ -253,7 +258,7 @@ public static class PlayDataManager
 
     public static void IncreaseMat(int id, int count)
     {
-        if (count <= 0)
+        if (id <= 0 || count <= 0)
         {
             return;
         }
@@ -617,7 +622,8 @@ public static class PlayDataManager
 
     }
 
-        public static bool StageUnlockCheck(int id)
+    #region Stage
+    public static bool StageUnlockCheck(int id)
     {
         var unlockList = data.UnlockInfo;
         foreach (var unlock in unlockList)
@@ -636,6 +642,13 @@ public static class PlayDataManager
         var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
         var unlockList = data.UnlockInfo;
 
+        //이미 클리어 했으면 스킵
+        var unlock = unlockList.Find(x => x.id == id);
+        if (unlock.cleared)
+        {
+            return;
+        }
+
         foreach (var stage in stageTable)
         {
             if (stage.Value.unlock != id)
@@ -643,47 +656,74 @@ public static class PlayDataManager
                 continue;
             }
 
-            foreach(var unlock in unlockList)
-            {
-                if (unlock.unlocked)
-                {
-                    continue;
-                }
-
-                if (unlock.id == stage.Key)
-                {
-                    unlock.unlocked = true;
-                }
-            }
+            unlockList.Find(x => x.id == stage.Key).unlocked = true;
         }
+        unlock.cleared = true;
 
         Save();
     }
 
     public static void StageInfoRefresh()
     {
-        var unlockList = data.UnlockInfo;
-
+        //스테이지가 추가/제거 됐는지 확인
         var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
+        var unlockList = data.UnlockInfo;
 
         foreach (var stage in stageTable)
         {
+            //데이터가 있는지 체크
             var unlock = unlockList.Find((x) => x.id == stage.Key);
             if (unlock != null)
             {
                 continue;
             }
 
-            var unlocked = (stage.Value.unlock < 0) ? true : false;
-            var newUnlock = new Unlock(stage.Key, unlocked);
-            // unlock = unlockList.Find(x => x.id == stage.Value.unlock && x.unlocked);
-            // if (unlock != null)
-            // {
-            //     newUnlock.unlocked = true;
-            // }
+            //0보다 작으면 자동 해금
+            var newUnlock = new Unlock(stage.Key, stage.Value.unlock < 0);
+            if (!newUnlock.unlocked)
+            {
+                //해금 조건이 이미 클리어가 되어있는가
+                var cleared = unlockList.Find(x => x.id == stage.Value.unlock && x.cleared);
+                newUnlock.unlocked = cleared != null;
+            }
             unlockList.Add(newUnlock);
         }
 
         Save();
     }
+
+    public static bool AllClearedCheck(int category)
+    {
+        var unlockList = data.UnlockInfo;
+
+        var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
+        var stageCount = 0;
+        var clearedCount = 0;
+        foreach(var stage in stageTable)
+        {
+            //카테고리로 걸러낸다
+            if (stage.Value.type != category)
+            {
+                continue;
+            }
+
+            //카테고리에 맞는 스테이지 수
+            stageCount++;
+
+            //클리어 여부 카운트
+            var find = unlockList.Find(x => x.id == stage.Key && x.cleared);
+            if (find != null)
+            {
+                clearedCount++;
+            }
+        }
+
+        if (stageCount == clearedCount)
+        {
+            return true;
+        }
+
+        return false;
+    }
+    #endregion
 }

@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
@@ -12,13 +10,21 @@ public class StageManager : MonoBehaviour
         Horror
     }
 
+    [Header("Enemy Icon 폴더경로")]
+    [SerializeField]
+    private readonly string enemyIconPath = "sprites/Enemy Icon";
+
     [Header("BLACK")]
     [SerializeField]
     private FadeEffects BLACK;
 
-    [Header("Defualt Category")]
+    [Header("Global Panel")]
     [SerializeField]
-    private int defaultCategory;
+    private GameObject globalPanel;
+
+    [Header("Local Panel")]
+    [SerializeField]
+    private GameObject localPanel;
 
     [Header("Stage Container")]
     [SerializeField]
@@ -62,8 +68,7 @@ public class StageManager : MonoBehaviour
             stage.id = info.Key;
             stage.type = data.type;
             stage.title.text = stringTable[data.name];
-            var path = $"sprites/Enemy Icon/{stringTable[data.iconName]}";
-            stage.image.sprite = Resources.Load<Sprite>(path);
+            stage.image.sprite = Resources.Load<Sprite>($"{enemyIconPath}/{stringTable[data.iconName]}");
             stage.mapName.text = ((Maps)data.map_id).ToString();
             stage.enemyName.text = stringTable[enemyTable[data.monster_id].name];
             stage.button.onClick.AddListener(() =>
@@ -83,7 +88,14 @@ public class StageManager : MonoBehaviour
             }
         }
 
-        CategoryFilter(defaultCategory);
+        if (PlayDataManager.AllClearedCheck(1))
+        {
+            globalPanel.transform.Find("Clear Panel").gameObject.SetActive(true);
+        }
+        if (PlayDataManager.AllClearedCheck(2))
+        {
+            localPanel.transform.Find("Clear Panel").gameObject.SetActive(true);
+        }
     }
 
     public void GoGame(string sceneName)
