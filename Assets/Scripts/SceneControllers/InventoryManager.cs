@@ -219,7 +219,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                         go.iconImage.color = Color.red;
 
                         var newGo = buttonPool.Get();
-                        newGo.iconImage.sprite = weaponIconSO.GetSprite(armor.id / 100 * 100 + 1);
+                        newGo.iconImage.sprite = armorIconSO.GetSprite(armor.id / 100 * 100 + 1);
                         // armor icon level reset
 
                         newGo.OnEquip(armor.isEquip);
