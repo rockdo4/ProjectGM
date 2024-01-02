@@ -192,6 +192,21 @@ public class PlayerController : MonoBehaviour
     private void BeforeAttack()
     {
         player.attackState = Player.AttackState.Before;
+        if (CurrentState == State.SuperAttack)
+        {
+            switch (player.CurrentWeapon.weaponType)
+            {
+                case WeaponType.Tonpa:
+                    break;
+                case WeaponType.Two_Hand_Sword:
+                    player.Effects.PlayEffect(PlayerEffectType.Super_TwoHandSword_Charge);
+                    break;
+                case WeaponType.One_Hand_Sword:
+                    break;
+                case WeaponType.Spear:
+                    break;
+            }
+        }
     }
     private void Attack()
     {
@@ -200,21 +215,23 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        
         if (CurrentState == State.SuperAttack)
         {
             switch (player.CurrentWeapon.weaponType)
             {
                 case WeaponType.Tonpa:
-                    player.Effects.PlayEffect(PlayerEffectType.SuperAttack_Tonpa);
+                    player.Effects.PlayEffect(PlayerEffectType.Super_Tonpa);
                     break;
                 case WeaponType.Two_Hand_Sword:
-                    player.Effects.PlayEffect(PlayerEffectType.SuperAttack_Two_Hand_Sword);
+                    player.Effects.StopEffect(PlayerEffectType.Super_TwoHandSword_Charge);
+                    player.Effects.PlayEffect(PlayerEffectType.Super_TwoHandSword);
                     break;
                 case WeaponType.One_Hand_Sword:
-                    player.Effects.PlayEffect(PlayerEffectType.SuperAttack_One_Hand_Sword);
+                    player.Effects.PlayEffect(PlayerEffectType.Super_OneHandSword);
                     break;
                 case WeaponType.Spear:
-                    player.Effects.PlayEffect(PlayerEffectType.SuperAttack_Spear);
+                    player.Effects.PlayEffect(PlayerEffectType.Super_Spear);
                     break;
             }
         }

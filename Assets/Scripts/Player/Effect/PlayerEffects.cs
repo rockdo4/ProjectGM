@@ -7,10 +7,11 @@ public enum PlayerEffectType
     JustEvade,
     Hit,
     Attack,
-    SuperAttack_Tonpa,
-    SuperAttack_Two_Hand_Sword,
-    SuperAttack_One_Hand_Sword,
-    SuperAttack_Spear,
+    Super_Tonpa,
+    Super_TwoHandSword_Charge,
+    Super_TwoHandSword,
+    Super_OneHandSword,
+    Super_Spear,
     Death
 }
 
