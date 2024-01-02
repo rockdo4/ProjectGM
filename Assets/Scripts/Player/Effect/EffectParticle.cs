@@ -9,6 +9,11 @@ public class EffectParticleSystem : EffectBase
     public Vector3 positionOffset;
     private Transform targetTransform;
 
+    [Header("È¿°úÀ½")]
+    [SerializeField]
+    private AudioClip[] audipClips;
+    private AudioSource audioSource;
+
     protected override void Update()
     {
         
@@ -17,6 +22,10 @@ public class EffectParticleSystem : EffectBase
     {
         targetTransform = playerTransform;
         particle = GetComponent<ParticleSystem>();
+        var main = particle.main;
+        main.stopAction = ParticleSystemStopAction.Disable;
+
+        audioSource = GetComponent<AudioSource>();
         //particle.transform.SetParent(targetTransform);
         //particle.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
