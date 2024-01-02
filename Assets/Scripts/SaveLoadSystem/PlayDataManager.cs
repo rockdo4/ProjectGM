@@ -622,7 +622,8 @@ public static class PlayDataManager
 
     }
 
-        public static bool StageUnlockCheck(int id)
+    #region Stage
+    public static bool StageUnlockCheck(int id)
     {
         var unlockList = data.UnlockInfo;
         foreach (var unlock in unlockList)
@@ -690,4 +691,39 @@ public static class PlayDataManager
 
         Save();
     }
+
+    public static bool AllClearedCheck(int category)
+    {
+        var unlockList = data.UnlockInfo;
+
+        var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
+        var stageCount = 0;
+        var clearedCount = 0;
+        foreach(var stage in stageTable)
+        {
+            //카테고리로 걸러낸다
+            if (stage.Value.type != category)
+            {
+                continue;
+            }
+
+            //카테고리에 맞는 스테이지 수
+            stageCount++;
+
+            //클리어 여부 카운트
+            var find = unlockList.Find(x => x.id == stage.Key && x.cleared);
+            if (find != null)
+            {
+                clearedCount++;
+            }
+        }
+
+        if (stageCount == clearedCount)
+        {
+            return true;
+        }
+
+        return false;
+    }
+    #endregion
 }

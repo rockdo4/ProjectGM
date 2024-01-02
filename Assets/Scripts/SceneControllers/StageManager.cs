@@ -10,9 +10,21 @@ public class StageManager : MonoBehaviour
         Horror
     }
 
+    [Header("Enemy Icon 폴더경로")]
+    [SerializeField]
+    private readonly string enemyIconPath = "sprites/Enemy Icon";
+
     [Header("BLACK")]
     [SerializeField]
     private FadeEffects BLACK;
+
+    [Header("Global Panel")]
+    [SerializeField]
+    private GameObject globalPanel;
+
+    [Header("Local Panel")]
+    [SerializeField]
+    private GameObject localPanel;
 
     [Header("Stage Container")]
     [SerializeField]
@@ -56,8 +68,7 @@ public class StageManager : MonoBehaviour
             stage.id = info.Key;
             stage.type = data.type;
             stage.title.text = stringTable[data.name];
-            var path = $"sprites/Enemy Icon/{stringTable[data.iconName]}";
-            stage.image.sprite = Resources.Load<Sprite>(path);
+            stage.image.sprite = Resources.Load<Sprite>($"{enemyIconPath}/{stringTable[data.iconName]}");
             stage.mapName.text = ((Maps)data.map_id).ToString();
             stage.enemyName.text = stringTable[enemyTable[data.monster_id].name];
             stage.button.onClick.AddListener(() =>
@@ -75,6 +86,15 @@ public class StageManager : MonoBehaviour
             {
                 stage.button.interactable = false;
             }
+        }
+
+        if (PlayDataManager.AllClearedCheck(1))
+        {
+            globalPanel.transform.Find("Clear Panel").gameObject.SetActive(true);
+        }
+        if (PlayDataManager.AllClearedCheck(2))
+        {
+            localPanel.transform.Find("Clear Panel").gameObject.SetActive(true);
         }
     }
 
