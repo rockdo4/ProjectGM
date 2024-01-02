@@ -150,7 +150,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2298585846953404112
 Transform:
   m_ObjectHideFlags: 0
@@ -203,9 +203,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectTypeA: {fileID: 6600448273309778603, guid: 852c1a3aa6175e444b99529d5788f02b,
     type: 3}
-  EffectTypeB: {fileID: 6600448273309778603, guid: 852c1a3aa6175e444b99529d5788f02b,
+  EffectTypeB: {fileID: 4205008974018917331, guid: 9eb3e22b047b7f343bc28a3ef337ce64,
     type: 3}
-  EffectTypeC: {fileID: 1104498236554800385, guid: 438f5038aece8574bb9c23c67ba8855b,
+  EffectTypeC: {fileID: 4205008974018917331, guid: 9eb3e22b047b7f343bc28a3ef337ce64,
     type: 3}
   EffectTypeD: {fileID: 0}
   EffectTypeRA: {fileID: 0}
@@ -227,11 +227,11 @@ MonoBehaviour:
   stat: {fileID: 11400000, guid: f850de4678448954d8fe71b892de6df5, type: 2}
   fanShapePrefabs:
   - {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a, type: 3}
-  - {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a, type: 3}
-  - {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a, type: 3}
-  - {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a, type: 3}
-  - {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a, type: 3}
-  - {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a, type: 3}
+  - {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe, type: 3}
+  - {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe, type: 3}
+  - {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe, type: 3}
+  - {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe, type: 3}
+  - {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe, type: 3}
   - {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe, type: 3}
   bearAttackPatternPhaseOne: 0100000002000000
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
@@ -242,20 +242,20 @@ MonoBehaviour:
   IntervalTime: 0.3
   wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
   wolfAttackPatternPhaseTwo: 07000000080000000100000002000000
-  spiderAttackPatternPhaseOne: 0200000002000000030000000200000003000000
-  spiderAttackPatternPhaseTwo: 030000000200000002000000020000000200000003000000020000000200000003000000
+  spiderAttackPatternPhaseOne: 0200000003000000010000000200000001000000
+  spiderAttackPatternPhaseTwo: 0200000003000000020000000100000003000000020000000300000001000000
   dragonAttackPatternPhaseOne: 010000000200000003000000
   dragonAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
-  - enemyType: 4
+  - enemyType: 8002001
     attackPatternType: 0
-    preparationTime: 1
-  - enemyType: 4
+    preparationTime: 1.7
+  - enemyType: 8002001
     attackPatternType: 1
-    preparationTime: 0.5
-  - enemyType: 4
+    preparationTime: 1
+  - enemyType: 8002001
     attackPatternType: 2
-    preparationTime: 2.2
+    preparationTime: 1
   - enemyType: 4
     attackPatternType: 6
     preparationTime: 1
@@ -270,9 +270,9 @@ MonoBehaviour:
     preparationTime: 1
   AttackPatternTypeAPrefab: {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a,
     type: 3}
-  AttackPatternTypeBPrefab: {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a,
+  AttackPatternTypeBPrefab: {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe,
     type: 3}
-  AttackPatternTypeCPrefab: {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a,
+  AttackPatternTypeCPrefab: {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe,
     type: 3}
   AttackPatternTypeDPrefab: {fileID: 3694188551370226324, guid: 688248f3810a55444b5f5ee20a39e8dc,
     type: 3}
@@ -292,18 +292,18 @@ MonoBehaviour:
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  enemyType: 4
+  enemyType: 8002001
   minAngle: 3
   rotationSpeed: 8.5
   detectedPlayer: {fileID: 0}
   attackGrid: 000000000100000000
   savedPatterns:
   - patternName: MelleAttack_A
-    pattern: 000000000000010101
+    pattern: 000000000100000000
   - patternName: MelleAttack_B
     pattern: 000000000100000000
   - patternName: MelleAttack_C
-    pattern: 000100010001000100
+    pattern: 000000000100000000
   - patternName: MelleAttack_D
     pattern: 000000000100000000
   - patternName: RangeAttack_A

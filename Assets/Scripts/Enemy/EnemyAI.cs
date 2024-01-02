@@ -1319,8 +1319,7 @@ public class EnemyAI : LivingObject
                 if (currentPattern.pattern[i])
                 {
                     Vector3 cellPosition = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
-                    GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
-                    //cell.AddComponent<EnemyProjectile>();
+                    GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform);
                     cell.SetActive(true);
                     cellInstances.Add(cell);
 
