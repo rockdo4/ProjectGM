@@ -25,5 +25,11 @@ public class SkillManager : MonoBehaviour
             skill.transform.SetParent(transform);
         }
 
+        var setinfo = PlayDataManager.curSetSkill;
+        {
+            var skill = skillSO.GetSkill(setinfo.id, setinfo.level);
+            skill.transform.SetParent(transform);
+        }
+
     }
 }
