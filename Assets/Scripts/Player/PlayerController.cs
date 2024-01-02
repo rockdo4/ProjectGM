@@ -200,9 +200,25 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
+        if (CurrentState == State.SuperAttack)
+        {
+            switch (player.CurrentWeapon.weaponType)
+            {
+                case WeaponType.Tonpa:
+                    player.Effects.PlayEffect(PlayerEffectType.SuperAttack_Tonpa);
+                    break;
+                case WeaponType.Two_Hand_Sword:
+                    player.Effects.PlayEffect(PlayerEffectType.SuperAttack_Two_Hand_Sword);
+                    break;
+                case WeaponType.One_Hand_Sword:
+                    player.Effects.PlayEffect(PlayerEffectType.SuperAttack_One_Hand_Sword);
+                    break;
+                case WeaponType.Spear:
+                    player.Effects.PlayEffect(PlayerEffectType.SuperAttack_Spear);
+                    break;
+            }
+        }
         ExecuteAttack(player, player.Enemy);
-
         player.attackState = Player.AttackState.AfterStart;
     }
     private void AfterAttack()
