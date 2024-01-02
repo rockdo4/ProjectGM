@@ -245,7 +245,7 @@ public static class PlayDataManager
         {
             for (int i = 0; i < diff; i++)
             {
-                data.SkillCodes.Remove(data.SkillCodes.Last());
+                UnEquipSkillCode(data.SkillCodes.Last());
             }
         }
 
