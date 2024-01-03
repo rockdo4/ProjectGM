@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class ExpertHunter : Skill
+public class VeryStrong : Skill
 {
-    public ExpertHunter(int id, int level)
+    public VeryStrong(int id, int level) 
         : base(id, level)
     {
-        
+
     }
 
     private void Start()
@@ -19,8 +19,5 @@ public class ExpertHunter : Skill
             return;
         }
 
-        var enemy = GameObject.FindWithTag("Enemy");
-        var weak = enemy.GetComponent<EnemyAI>().Stat.weaknessType;
-        player.CurrentWeapon.type = weak;
     }
 }

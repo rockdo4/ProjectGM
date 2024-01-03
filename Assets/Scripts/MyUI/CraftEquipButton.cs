@@ -29,7 +29,9 @@ public class CraftEquipButton : MonoBehaviour, IRenewal
         iconImage.sprite = item.type switch
         {
             Equip.EquipType.Weapon => weaponIconSO.GetSprite(item.id / 100 * 100 + 1),
-            Equip.EquipType.Armor => armorIconSO.GetSprite(item.id / 100 * 100 + 1)
+            Equip.EquipType.Armor => armorIconSO.GetSprite(item.id / 100 * 100 + 1),
+
+            _ => null
         };
 
         upImage.color = (IsUpgradable()) ? Color.blue : Color.gray;
