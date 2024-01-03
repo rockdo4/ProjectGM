@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using static EnemyAI;
 
@@ -27,8 +28,13 @@ public class EnemyEffect : MonoBehaviour
 
     private EnemyAI enemyAi;
 
+    private GameObject effectInstanceRA;
+
     private void Start()
     {
+        effectInstanceRA = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation, this.transform);
+        effectInstanceRA.SetActive(false);
+
         enemyAi = GetComponent<EnemyAI>();
     }
 
@@ -150,8 +156,6 @@ public class EnemyEffect : MonoBehaviour
         }
     }
 
-    // ¿Ã∞… ø÷ πŸ≤„æﬂµ≈?
-
     public void AttackEffectC()
     {
         EffectEnemyType("C");
@@ -180,26 +184,47 @@ public class EnemyEffect : MonoBehaviour
     {
         EffectEnemyType("RA");
 
-        if (EffectTypeRA != null && enemyAi.enemyType == 8001001)
+        if (enemyAi.enemyType == 8001001)
         {
-            GameObject effectInstance = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation);
-            Rigidbody rb = effectInstance.GetComponent<Rigidbody>();
-
-            Vector3 forceDirection = (enemyAi.SavedPlayerPosition - transform.position).normalized;
-
-            float forceMagnitude = 10f;
-            rb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
-
-            effectInstance.GetComponent<EnemyProjectile>().enemyAi = enemyAi;
-
-            DestroyEffect(effectInstance);
+            ResetAndActivateEffectRA();
         }
         else
         {
-            GameObject effectInstance = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation);
-
-            DestroyEffect(effectInstance);
+            DestroyEffect(effectInstanceRA);
         }
+    }
+
+    private void ResetAndActivateEffectRA()
+    {
+        effectInstanceRA.SetActive(true);
+        effectInstanceRA.transform.position = transform.position + offset;
+        effectInstanceRA.transform.rotation = transform.rotation;
+
+        Rigidbody rb = effectInstanceRA.GetComponent<Rigidbody>();
+        rb.velocity = Vector3.zero; // »˚¿ª √ ±‚»≠
+
+        Vector3 forceDirection = (enemyAi.SavedPlayerPosition - transform.position).normalized;
+        float forceMagnitude = 10f;
+        rb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
+
+        effectInstanceRA.GetComponent<EnemyProjectile>().enemyAi = enemyAi;
+
+        StartCoroutine(DeactivateEffectAfterDuration(effectInstanceRA));
+    }
+
+    IEnumerator DeactivateEffectAfterDuration(GameObject effect)
+    {
+        ParticleSystem particleSystem = effect.GetComponent<ParticleSystem>();
+        if (particleSystem != null)
+        {
+            yield return new WaitForSeconds(particleSystem.main.duration);
+        }
+        else
+        {
+            yield return new WaitForSeconds(1.5f);
+        }
+
+        effect.SetActive(false);
     }
 
 
@@ -215,4 +240,5 @@ public class EnemyEffect : MonoBehaviour
             Destroy(instance, 1.5f);
         }
     }
+
 }

@@ -280,11 +280,11 @@ public class EnemyAI : LivingObject
         Stat.AttackDamage = et.attack;
         Stat.weaknessType = (AttackType)et.type;
 
-        Debug.Log(et.phase);
-        Debug.Log(Stat.HP);
+        //Debug.Log(et.phase);
+        ///Debug.Log(Stat.HP);
 
         phaseTwoHealthThreshold = Stat.HP * ((float)et.phase / 100);
-        Debug.Log(phaseTwoHealthThreshold);
+        //Debug.Log(phaseTwoHealthThreshold);
 
         //phaseTwoHealthThreshold = HP * 0.5f;
         isTwoPhase = false;
@@ -848,7 +848,7 @@ public class EnemyAI : LivingObject
 
         SavedPlayerPosition = detectedPlayer.position; // 명도잔월파를 위한 위치저장
 
-        ShowProjectileAttackRange(true, enemytype, attackPatternType);
+        ShowProjectileAttackRange(true);
 
         float specificPreparationTime = attackPreparationTime;
 
@@ -868,7 +868,7 @@ public class EnemyAI : LivingObject
         switch (attackPatternType)
         {
             case AttackPatternType.RangeA:
-                ShowProjectileAttackRange(false, enemytype, attackPatternType); // 기존 공격 패턴 A
+                ShowProjectileAttackRange(false); // 기존 공격 패턴 A
                 break;
             case AttackPatternType.RangeB:
                 yield return StartCoroutine(RangeAttackPatternB());
@@ -1207,7 +1207,7 @@ public class EnemyAI : LivingObject
         }
     }
 
-    private void ShowProjectileAttackRange(bool show, int enemyType, AttackPatternType AttackPatternType) // 프로젝타일
+    private void ShowProjectileAttackRange(bool show) // 프로젝타일
     {
         if (show)
         {
@@ -1215,10 +1215,17 @@ public class EnemyAI : LivingObject
 
             // 범위표시 Plane의 시작점은 몬스터의 위치부터 시작해야한다.
 
-            Vector3 localStartPoint = transform.InverseTransformPoint(transform.position);
+            Vector3 localStartPoint = Vector3.zero;
 
             rangeIndicator.transform.localPosition = new Vector3(localStartPoint.x, 0.015f, localStartPoint.z + effectDistance / 2);
-            rangeIndicator.transform.localScale = new Vector3(0.23f, 0.3f, rangeAttackRange / 3f);
+
+            Vector3 parentScale = transform.localScale;
+            rangeIndicator.transform.localScale = new Vector3(0.24f / parentScale.x, 0.3f / parentScale.y, rangeAttackRange / (3f * parentScale.z));
+
+            //Vector3 localStartPoint = transform.InverseTransformPoint(transform.position);
+            //rangeIndicator.transform.localPosition 
+            //    = new Vector3(localStartPoint.x, 0.015f, localStartPoint.z + effectDistance / 2);
+            //rangeIndicator.transform.localScale = new Vector3(0.23f, 0.3f, rangeAttackRange / 3f);
 
             rangeIndicator.SetActive(true);
         }
