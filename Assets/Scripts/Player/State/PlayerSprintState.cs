@@ -24,13 +24,13 @@ public class PlayerSprintState : PlayerStateBase
         animator ??= controller.player.Animator;
         animator.speed = controller.player.Stat.globalSpeed.sprintSpeed;
 
-        if (controller.player.CanAttack)
-        {
-            AttackCheck();
-            return;
-        }
+        //if (controller.player.CanAttack)
+        //{
+        //    AttackCheck();
+        //    return;
+        //}
 
-        controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
+        //controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
     }
 
     public override void Update()

@@ -13,7 +13,7 @@ public class TouchManager : Singleton<TouchManager>
     public bool Swiped { get; private set; }
 
     [Header("홀드 판단 시간")]
-    [SerializeField] private float holdTime = 0.05f;
+    [SerializeField] private float holdTime = 0.02f;
     private float holdTimer = 0f;
 
     [Header("스와이프 판단 시간")]
@@ -44,6 +44,8 @@ public class TouchManager : Singleton<TouchManager>
     private float screenDPI;
     private const float defaultDPI = 96;
 
+    private bool isWork = true;
+
     private void Awake()
     {
         screenDPI = Screen.dpi;
@@ -55,6 +57,11 @@ public class TouchManager : Singleton<TouchManager>
 
     private void Update()
     {
+        if (!isWork)
+        {
+            return;
+        }
+
         if (UICheck())
         {
             return;
@@ -66,17 +73,16 @@ public class TouchManager : Singleton<TouchManager>
             startPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             endPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             startTime = Time.time;
+            if (HoldListeners != null)
+            {
+                HoldListeners();
+            }
         }
         else if (Input.GetMouseButton(0))
         {
             if (Swiped)
             {
                 return;
-            }
-
-            if (Holded && HoldListeners != null)
-            {
-                HoldListeners();
             }
 
             if (!Holded)
@@ -86,6 +92,10 @@ public class TouchManager : Singleton<TouchManager>
                 {
                     Holded = true;
                 }
+            }
+            if (Holded && HoldListeners != null)
+            {
+                HoldListeners();
             }
 
             if (!Swiped)
@@ -245,7 +255,7 @@ public class TouchManager : Singleton<TouchManager>
             }
         }
 #elif UNITY_ANDROID || UNITY_IOS
-        if (eventSystem != null && eventSystem.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        if (Input.touchCount > 0 && eventSystem != null && eventSystem.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
         {
             GameObject ui = eventSystem.currentSelectedGameObject;
             if (ui != null && ui.tag != Tags.ignoreUI)
@@ -255,5 +265,14 @@ public class TouchManager : Singleton<TouchManager>
         }
 #endif
         return result;
+    }
+
+    private void OnDisable()
+    {
+        isWork = false;
+    }
+    private void OnEnable()
+    {
+        isWork = true;
     }
 }
