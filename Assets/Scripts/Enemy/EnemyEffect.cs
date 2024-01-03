@@ -27,18 +27,13 @@ public class EnemyEffect : MonoBehaviour
     Vector3 offset;
 
     private EnemyAI enemyAi;
-
     private GameObject effectInstanceRA;
 
     private void Start()
     {
-        //effectInstanceRA = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation, this.transform);
-
         EffectTypeRA.SetActive(false);
-
         enemyAi = GetComponent<EnemyAI>();
     }
-
 
     void EffectEnemyType(string pattern)
     {
@@ -197,12 +192,12 @@ public class EnemyEffect : MonoBehaviour
 
     private void ResetAndActivateEffectRA()
     {
-        EffectTypeRA.SetActive(true); // 이걸못하네
+        EffectTypeRA.SetActive(true);
         EffectTypeRA.transform.position = transform.position + offset;
         EffectTypeRA.transform.rotation = transform.rotation;
 
         Rigidbody rb = EffectTypeRA.GetComponent<Rigidbody>();
-        rb.velocity = Vector3.zero; // 힘을 초기화
+        rb.velocity = Vector3.zero; // 힘 초기화 해주고
 
         Vector3 forceDirection = (enemyAi.SavedPlayerPosition - transform.position).normalized;
         float forceMagnitude = 10f;
@@ -216,6 +211,7 @@ public class EnemyEffect : MonoBehaviour
     IEnumerator DeactivateEffectAfterDuration(GameObject effect)
     {
         ParticleSystem particleSystem = effect.GetComponent<ParticleSystem>();
+
         if (particleSystem != null)
         {
             yield return new WaitForSeconds(particleSystem.main.duration);
