@@ -11,6 +11,12 @@ using static EnemyAI;
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : LivingObject
 {
+    [Header("2페이즈 이펙트")]
+    public GameObject TwoPhaseEffect;
+
+    [SerializeField]
+    [Header("원거리 공격 범위표시")]
+    private GameObject rangeIndicator;
 
     [Header("FanShape 프리펩 유형")]
     public GameObject[] fanShapePrefabs;
@@ -1226,120 +1232,22 @@ public class EnemyAI : LivingObject
 
     private void ShowProjectileAttackRange(bool show, int enemyType, AttackPatternType AttackPatternType) // 프로젝타일
     {
-        //Debug.Log("레인지 어택 호출 하는지?");
-        GameObject attackPrefab = null;
-        Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
-
-        switch (AttackPatternType)
-        {
-            case AttackPatternType.RangeA:
-                attackPrefab = RangeAttackPatternTypeAPrefab;
-                break;
-
-            case AttackPatternType.RangeB:
-                attackPrefab = RangeAttackPatternTypeBPrefab;
-                break;
-
-            case AttackPatternType.RangeC:
-                attackPrefab = RangeAttackPatternTypeCPrefab;
-                break;
-
-            case AttackPatternType.RangeD:
-                attackPrefab = RangeAttackPatternTypeDPrefab;
-                break;
-        }
-
         if (show)
         {
-            if (attackRangeInstance != null)
-            {
-                Destroy(attackRangeInstance);
-            }
-            attackRangeInstance = Instantiate(attackPrefab, transform);
+            float effectDistance = Vector3.Distance(transform.position, SavedPlayerPosition);
 
-            foreach (GameObject cell in cellInstances)
-            {
-                if (cell != null)
-                {
-                    Destroy(cell);
-                }
-            }
-            cellInstances.Clear();
+            // 범위표시 Plane의 시작점은 몬스터의 위치부터 시작해야한다.
 
+            Vector3 localStartPoint = transform.InverseTransformPoint(transform.position);
 
-            AttackPattern currentPattern = savedPatterns[attackIndex];
-            Renderer renderer = attackRangeInstance.GetComponent<Renderer>();
+            rangeIndicator.transform.localPosition = new Vector3(localStartPoint.x, 0.015f, localStartPoint.z + effectDistance / 2);
+            rangeIndicator.transform.localScale = new Vector3(0.23f, 0.3f, rangeAttackRange / 3f);
 
-            Vector3 cellSize = Vector3.zero;
-
-            switch (AttackPatternType)
-            {
-                case AttackPatternType.RangeA:
-                    cellSize = renderer.bounds.size;
-                    break;
-
-                case AttackPatternType.RangeB:
-                    cellSize = renderer.bounds.size;
-                    break;
-
-                case AttackPatternType.RangeC:
-                    if (show)
-                    {
-                        fanShape = attackPrefab.GetComponent<FanShape>();
-                        fanShape.enemyAi = this;
-                        CreatePrefabAtPlayer(attackPrefab); // C패턴 하나생성
-
-                        attackRangeInstance.SetActive(false);
-
-                        return;
-                    }
-                    break;
-
-                case AttackPatternType.RangeD:
-                    fanShape = attackPrefab.GetComponent<FanShape>();
-                    fanShape.enemyAi = this;
-                    cellSize = fanShape.Return();
-
-                    attackRangeInstance.SetActive(false);
-
-                    if (show)
-                    {
-                        int numberOfPrefabs = 7;
-                        float radius = 4.5f;
-                        CreatePrefabsAroundPlayer(attackPrefab, numberOfPrefabs, radius);
-                        return;
-                    }
-                    break;
-            }
-
-            Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
-
-            for (int i = 0; i < currentPattern.pattern.Length; i++)
-            {
-                if (currentPattern.pattern[i])
-                {
-                    Vector3 cellPosition = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
-                    GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform);
-                    cell.SetActive(true);
-                    cellInstances.Add(cell);
-
-                    cell.transform.rotation = transform.rotation;
-                }
-            }
-
-            attackRangeInstance.SetActive(false);
+            rangeIndicator.SetActive(true);
         }
         else
         {
-            foreach (GameObject cell in cellInstances)
-            {
-                if (cell != null)
-                {
-                    cell.SetActive(false);
-                }
-            }
-
-            RangeAttackPatternA();
+            rangeIndicator.SetActive(false);
         }
     }
 
@@ -1823,12 +1731,21 @@ public class EnemyAI : LivingObject
             isTwoPhase = true;
 
             Transform magicObject = transform.Find("Magic"); // 일단 곰만
-
             if (magicObject != null)
             {
                 magicObject.gameObject.SetActive(true);
             }
-          
+
+            GameObject effectInstance = Instantiate(TwoPhaseEffect, transform.position, transform.rotation);
+            ParticleSystem particleSystem = effectInstance.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                Destroy(effectInstance, particleSystem.main.duration);
+            }
+            else
+            {
+                Destroy(effectInstance, 1f);
+            }
         }
         return !isTwoPhase;
     }
@@ -1931,7 +1848,7 @@ public class EnemyAI : LivingObject
 
     #endregion
 
-    #region 애니메이션 이벤트후에 실제 데미지 주는 부분 - 영재가 추가
+    #region 애니메이션 이벤트후에 실제 데미지 주는 부분
     public void ExecuteAttack(LivingObject attacker, LivingObject defender, float actualAttackDamage)
     {
         Attack attack = Stat.CreateAttack(attacker, defender, true);

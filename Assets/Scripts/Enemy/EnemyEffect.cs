@@ -187,7 +187,6 @@ public class EnemyEffect : MonoBehaviour
 
             Vector3 forceDirection = (enemyAi.SavedPlayerPosition - transform.position).normalized;
 
-            //Vector3 forceDirection = (enemyAi.detectedPlayer.position - transform.position).normalized;
             float forceMagnitude = 10f;
             rb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
 
@@ -195,7 +194,7 @@ public class EnemyEffect : MonoBehaviour
 
             DestroyEffect(effectInstance);
         }
-        else // (EffectTypeRA != null)
+        else
         {
             GameObject effectInstance = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation);
 
