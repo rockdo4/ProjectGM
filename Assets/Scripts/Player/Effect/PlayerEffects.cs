@@ -16,6 +16,11 @@ public enum PlayerEffectType
     Death
 }
 
+public enum PlayerEffectAudioMode
+{
+    Sequential, All, Random
+}
+
 public class PlayerEffects : MonoBehaviour
 {
     [System.Serializable]

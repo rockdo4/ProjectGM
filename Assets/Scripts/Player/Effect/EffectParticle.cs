@@ -9,29 +9,20 @@ public class EffectParticleSystem : EffectBase
     public Vector3 positionOffset;
     private Transform targetTransform;
 
-    [Header("È¿°úÀ½")]
-    [SerializeField]
-    private AudioClip[] audipClips;
-    private AudioSource audioSource;
-
     protected override void Update()
     {
-        
+        //Not Use base.Update
+        return;
     }
     public override void Init(Transform playerTransform = null)
     {
         targetTransform = playerTransform;
         particle = GetComponent<ParticleSystem>();
-        var main = particle.main;
-        main.stopAction = ParticleSystemStopAction.Disable;
-
-        audioSource = GetComponent<AudioSource>();
-        //particle.transform.SetParent(targetTransform);
-        //particle.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
 
     public override void PlayStart(Vector3 direction = default)
     {
+        base.PlayStart();
         particle.transform.position = targetTransform.position;
 
         var rotation = targetTransform.rotation;
@@ -53,13 +44,12 @@ public class EffectParticleSystem : EffectBase
             particle.transform.localPosition += positionOffset;
             particle.transform.rotation = correctedRotation;
         }
-        particle.gameObject.SetActive(true);
         particle.Play();
     }
 
     public override void PlayEnd()
     {
         particle.Stop();
-        particle.gameObject.SetActive(false);
+        base.PlayEnd();
     }
 }
