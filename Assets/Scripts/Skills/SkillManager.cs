@@ -30,5 +30,10 @@ public class SkillManager : MonoBehaviour
             }
         }
 
+        var player = GetComponent<Player>();
+        if (player != null) 
+        {
+            InGameManager.Instance.SetHP(player.HP, player.Stat.HP);
+        }
     }
 }

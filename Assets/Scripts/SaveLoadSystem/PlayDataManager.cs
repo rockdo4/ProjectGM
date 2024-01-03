@@ -209,7 +209,6 @@ public static class PlayDataManager
         Save();
 
         OrganizeSetSkill();
-        OrganizeSkill();
     }
 
     public static void UnWearItem(Equip.EquipType type, Armor.ArmorType armorType = Armor.ArmorType.None)
@@ -249,8 +248,8 @@ public static class PlayDataManager
             }
         }
 
-        OrganizeSetSkill();
         OrganizeSkill();
+        OrganizeSetSkill();
     }
 
     public static void AddGold(int value)
@@ -586,9 +585,14 @@ public static class PlayDataManager
 
         var at = CsvTableMgr.GetTable<ArmorTable>().dataTable;
 
-        foreach (var armor in data.ArmorInventory)
+        foreach (var armor in curArmor)
         {
-            var id = at[armor.id];
+            if (armor.Value == null)
+            {
+                continue;
+            }
+
+            var id = at[armor.Value.id];
             var id1 = id.skill1_id;
             var lv1 = id.skill1_lv;
             if (id1 != -1)
@@ -599,7 +603,7 @@ public static class PlayDataManager
                 }
                 else
                 {
-                    curSkill[id1] = Mathf.Clamp(curSkill[id1] + lv1, 1, skt[id1].max_lv);
+                    curSkill[id1] = Mathf.Clamp(curSkill[id1] + lv1, 0, skt[id1].max_lv);
                 }
             }
 
@@ -613,7 +617,7 @@ public static class PlayDataManager
                 }
                 else
                 {
-                    curSkill[id2] = Mathf.Clamp(curSkill[id2] + lv2, 1, skt[id2].max_lv);
+                    curSkill[id2] = Mathf.Clamp(curSkill[id2] + lv2, 0, skt[id2].max_lv);
                 }
             }
         }

@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class Vampire : Skill
 {
+    [Header("체력 감소 간격")]
+    [SerializeField]
     private float duration = 1.0f;
+
     private float timer = 0.0f;
 
     public Vampire(int id, int level)
@@ -22,8 +25,6 @@ public class Vampire : Skill
             return;
         }
         // Player Drain On
-
-
     }
 
     private void Update()
@@ -33,9 +34,8 @@ public class Vampire : Skill
         if (timer >= duration)
         {
             timer = 0.0f;
-            player.HP -= Mathf.RoundToInt(player.stat.HP / 100);
+            player.HP -= Mathf.RoundToInt(player.Stat.HP / 100);
         }
-        // Player Die => Death
-        // Player Alive => player.HP = Mathf.Clamp(player.HP -= Mathf.RoundToInt(player.stat.HP / 100), 1, player.HP);
+        
     }
 }
