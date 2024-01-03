@@ -1,5 +1,3 @@
-using Newtonsoft.Json.Serialization;
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public class TakeAttackAndEvade : MonoBehaviour, IAttackable
@@ -18,6 +16,7 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
 
     public void OnAttack(GameObject attacker, Attack attack)
     {
+        player.GetComponent<PlayerController>().LastEvadeState = PlayerController.EvadeState.None;
         if (player == null)
         {
             return;
@@ -34,10 +33,12 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
                 player.IsGroggy = attack.IsGroggy;
                 break;
             case EvadeSuccesss.Normal:
+                player.GetComponent<PlayerController>().LastEvadeState = PlayerController.EvadeState.Normal;
                 player.Effects.PlayEffect(PlayerEffectType.Hit);
                 damage = (int)(damage * player.Stat.evadeDamageRate);
                 break;
             case EvadeSuccesss.Just:
+                player.GetComponent<PlayerController>().LastEvadeState = PlayerController.EvadeState.Just;
                 player.Effects.PlayEffect(PlayerEffectType.JustEvade);
                 damage = 0;
                 break;
@@ -59,7 +60,7 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
             }
         }
     }
-    
+
     private void EvadeCheck()
     {
         if (player.GetComponent<PlayerController>().CurrentState != PlayerController.State.Evade)

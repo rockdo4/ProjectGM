@@ -7,8 +7,18 @@ public enum PlayerEffectType
     JustEvade,
     Hit,
     Attack,
-    SuperAttack,
+    Super_Tonpa,
+    Super_TwoHandSword_Charge,
+    Super_TwoHandSword,
+    Super_OneHandSword,
+    Super_Spear,
+    SlowMotion,
     Death
+}
+
+public enum PlayerEffectAudioMode
+{
+    Sequential, All, Random
 }
 
 public class PlayerEffects : MonoBehaviour
@@ -18,7 +28,7 @@ public class PlayerEffects : MonoBehaviour
     private class EffectInfo
     {
         public PlayerEffectType effectType;
-        public EffectBase effect;
+        public EffectBase[] effects;
     }
 
     [Header("ÀÌÆåÆ® µî·Ï")]
@@ -29,32 +39,45 @@ public class PlayerEffects : MonoBehaviour
     {
         foreach(var info in effectInfos)
         {
-            info.effect.Init(transform);
-            info.effect.gameObject.SetActive(false);
+            foreach(var effect in info.effects)
+            {
+                effect.Init(transform);
+                effect.gameObject.SetActive(false);
+            }
         }
     }
 
     public void PlayEffect(PlayerEffectType type, Vector3 direction = default)
     {
-        var infos = effectInfos.FindAll((x) =>
+        var effectInfo = effectInfos.Find((x) =>
         {
             return x.effectType == type;
         });
-        foreach(var info in infos)
+
+        if (effectInfo == null)
         {
-            info.effect.PlayStart(direction);
+            return;
+        }
+        foreach(var effect in effectInfo.effects)
+        {
+            effect.PlayStart(direction);
         }
     }
 
     public void StopEffect(PlayerEffectType type)
     {
-        var infos = effectInfos.FindAll((x) =>
+        var effectInfo = effectInfos.Find((x) =>
         {
             return x.effectType == type;
         });
-        foreach (var info in infos)
+
+        if (effectInfo == null)
         {
-            info.effect.PlayEnd();
+            return;
+        }
+        foreach (var effect in effectInfo.effects)
+        {
+            effect.PlayEnd();
         }
     }
 }

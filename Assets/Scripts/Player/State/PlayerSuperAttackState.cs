@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class PlayerSuperAttackState : PlayerStateBase
@@ -38,6 +37,8 @@ public class PlayerSuperAttackState : PlayerStateBase
             case Player.AttackState.Before:
                 break;
             case Player.AttackState.Attack:
+                break;
+            case Player.AttackState.AfterStart:
                 break;
             case Player.AttackState.AfterEnd:
                 break;

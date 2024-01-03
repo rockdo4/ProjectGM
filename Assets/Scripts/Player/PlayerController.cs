@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     private List<StateBase> states = new List<StateBase>();
     public State CurrentState { get; private set; }
     public State NextState { get; set; }
-    public EvadeState CurrentEvadeState;
+    public EvadeState LastEvadeState { get; set; }
     #region Weapon
     public enum WeaponPosition
     {
@@ -101,7 +101,10 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
+        if (player.HP <= 0)
+        {
+            SetState(State.Death);
+        }
         stateManager?.Update();
         Vector3 relativePos = player.Enemy.transform.position - transform.position;
         Quaternion rotation = Quaternion.LookRotation(relativePos);
@@ -143,12 +146,6 @@ public class PlayerController : MonoBehaviour
             player.Stat.Defence = (player.Stat.Defence == 0) ? -100 : 0;
             Debug.Log(player.Stat.Defence);
         }
-#if UNITY_EDITOR
-        if (Input.GetKey(KeyCode.Alpha4))
-        {
-            Debug.Log($"--------- CurrentState: {CurrentState} ---------");
-        }
-#endif
         #endregion
     }
 
@@ -192,6 +189,22 @@ public class PlayerController : MonoBehaviour
     private void BeforeAttack()
     {
         player.attackState = Player.AttackState.Before;
+        if (CurrentState == State.SuperAttack)
+        {
+            switch (player.CurrentWeapon.weaponType)
+            {
+                case WeaponType.Tonpa:
+                    break;
+                case WeaponType.Two_Hand_Sword:
+                    player.Effects.PlayEffect(PlayerEffectType.Super_TwoHandSword_Charge);
+                    break;
+                case WeaponType.One_Hand_Sword:
+                    break;
+                case WeaponType.Spear:
+                    player.Effects.PlayEffect(PlayerEffectType.Super_Spear);
+                    break;
+            }
+        }
     }
     private void Attack()
     {
@@ -200,9 +213,27 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
+        
+        if (CurrentState == State.SuperAttack)
+        {
+            switch (player.CurrentWeapon.weaponType)
+            {
+                case WeaponType.Tonpa:
+                    player.Effects.PlayEffect(PlayerEffectType.Super_Tonpa);
+                    break;
+                case WeaponType.Two_Hand_Sword:
+                    player.Effects.StopEffect(PlayerEffectType.Super_TwoHandSword_Charge);
+                    player.Effects.PlayEffect(PlayerEffectType.Super_TwoHandSword);
+                    break;
+                case WeaponType.One_Hand_Sword:
+                    player.Effects.PlayEffect(PlayerEffectType.Super_OneHandSword);
+                    break;
+                case WeaponType.Spear:
+                    break;
+            }
+            player.Effects.PlayEffect(PlayerEffectType.SlowMotion);
+        }
         ExecuteAttack(player, player.Enemy);
-
         player.attackState = Player.AttackState.AfterStart;
     }
     private void AfterAttack()
@@ -227,7 +258,6 @@ public class PlayerController : MonoBehaviour
         }
         CurrentState = newState;
         NextState = State.Idle;
-        //Debug.Log($"--------- CurrentState: {CurrentState} \t{player.attackState} ---------");
         stateManager?.ChangeState(states[(int)newState]);
     }
 
