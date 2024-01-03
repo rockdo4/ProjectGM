@@ -19,7 +19,7 @@ public class ExpertHunter : Skill
             return;
         }
 
-        var enemy = GameObject.FindWithTag("Enemy");
+        var enemy = GameObject.FindWithTag(Tags.enemy);
         var weak = enemy.GetComponent<EnemyAI>().Stat.weaknessType;
         player.CurrentWeapon.type = weak;
     }
