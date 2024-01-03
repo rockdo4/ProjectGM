@@ -237,7 +237,7 @@ public class PlayerController : MonoBehaviour
         {
             player.Effects.PlayEffect(PlayerEffectType.Attack);
         }
-
+        player.evadePoint += player.Stat.maxEvadePoint * player.Stat.attackEvadePointRate;
         ExecuteAttack(player, player.Enemy);
         player.attackState = Player.AttackState.AfterStart;
     }

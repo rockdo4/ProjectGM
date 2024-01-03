@@ -75,6 +75,14 @@ public class PlayerStat : Stat
     [Range(0f, 1f)]
     public float blockRate = 0f;
 
+    [Header("최종 대미지 배율")]
+    [Range(1f, 10f)]
+    public float attackFinishRate = 1f;
+
+    [Header("공격 시 회피 포인트 증가 배율")]
+    [Range(0f, 1f)]
+    public float attackEvadePointRate = 0f;
+
     public override Attack CreateAttack(LivingObject attacker, LivingObject defender, bool groggy)
     {
         var player = attacker as Player;
@@ -96,6 +104,8 @@ public class PlayerStat : Stat
         {
             damage *= player.Stat.CriticalDamage;
         }
+
+        damage *= attackFinishRate;
 
         if (enemyStat != null)
         {

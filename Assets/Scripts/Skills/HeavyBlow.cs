@@ -18,6 +18,7 @@ public class HeavyBlow : Skill
             Debug.Log(gameObject.name + " OFF");
             return;
         }
-        
+
+        player.Stat.attackEvadePointRate = 0.02f;
     }
 }

@@ -19,5 +19,6 @@ public class VeryStrong : Skill
             return;
         }
 
+        player.Stat.attackFinishRate = 1.3f;
     }
 }
