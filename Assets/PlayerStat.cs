@@ -61,9 +61,6 @@ public class PlayerStat : Stat
     [Header("그로기 유발 시간(sec)")]
     public float groggyTime;
 
-    [Header("피격 시 무적 시간(sec)")]
-    public float hitInvincibleTime;
-
     [Header("공격 속도")]
     [Range(0.1f, 5f)]
     public float attackSpeed = 1f;
@@ -76,8 +73,8 @@ public class PlayerStat : Stat
     public float blockRate = 0f;
 
     [Header("최종 대미지 배율")]
-    [Range(1f, 10f)]
-    public float attackFinishRate = 1f;
+    [Range(0f, 5f)]
+    public float attackFinalRate = 0f;
 
     [Header("공격 시 회피 포인트 증가 배율")]
     [Range(0f, 1f)]
@@ -105,7 +102,7 @@ public class PlayerStat : Stat
             damage *= player.Stat.CriticalDamage;
         }
 
-        damage *= attackFinishRate;
+        damage += damage * attackFinalRate;
 
         if (enemyStat != null)
         {
@@ -116,10 +113,5 @@ public class PlayerStat : Stat
             }
         }
         return new Attack((int)damage, critical, groggy);
-    }
-
-    public override string ToString()
-    {
-        return base.ToString() + $"\nevadeTime: {evadeTime}\tmaxEvadePoint: {maxEvadePoint}\tevadePoint: {evadePoint}\t\nevadeDamageRate: {evadeDamageRate}\tjustEvadeTime: {justEvadeTime}\tjustEvadePoint: {justEvadePoint}\t\nhitEvadePoint: {hitEvadePoint}\tgroggyTime: {groggyTime}\thitInvincibleTime: {hitInvincibleTime}t";
     }
 }
