@@ -26,13 +26,16 @@ public class StageTable : CsvTable
         public int clear3_count { get; set; }
         public int clear4 { get; set; }
         public int clear4_count { get; set; }
+        public int clear5 { get; set; }
+        public int clear5_count { get; set; }
 
         public Data(int type, int name, int script, int iconName, int map_id, int monster_id, 
             int time_limit, int unlock, int gold, 
             int clear1, int clear1_count, 
             int clear2, int clear2_count, 
             int clear3, int clear3_count, 
-            int clear4, int clear4_count)
+            int clear4, int clear4_count,
+            int clear5, int clear5_count)
         {
             this.type = type;
             this.name = name;
@@ -51,6 +54,8 @@ public class StageTable : CsvTable
             this.clear3_count = clear3_count;
             this.clear4 = clear4;
             this.clear4_count = clear4_count;
+            this.clear5 = clear5;
+            this.clear5_count = clear5_count;
         }
     }
     public Dictionary<int, Data> dataTable = new Dictionary<int, Data>();
@@ -96,7 +101,9 @@ public class StageTable : CsvTable
                     csv.GetField<int>(14),
                     csv.GetField<int>(15),
                     csv.GetField<int>(16),
-                    csv.GetField<int>(17)
+                    csv.GetField<int>(17),
+                    csv.GetField<int>(18),
+                    csv.GetField<int>(19)
                 )
             );
         }

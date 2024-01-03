@@ -233,6 +233,11 @@ public class PlayerController : MonoBehaviour
             }
             player.Effects.PlayEffect(PlayerEffectType.SlowMotion);
         }
+        else
+        {
+            player.Effects.PlayEffect(PlayerEffectType.Attack);
+        }
+
         ExecuteAttack(player, player.Enemy);
         player.attackState = Player.AttackState.AfterStart;
     }
