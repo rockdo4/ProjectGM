@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EffectParticleSystem : EffectBase
@@ -51,5 +52,21 @@ public class EffectParticleSystem : EffectBase
     {
         particle.Stop();
         base.PlayEnd();
+    }
+
+    protected override IEnumerator CoEffectAudio()
+    {
+        int index = 0;
+        yield return new WaitForSeconds(particle.main.startDelay.constant);
+
+        while (index < audioClips.Length)
+        {
+            audioSource.clip = audioClips[index];
+            audioSource.Play();
+
+            yield return new WaitForSeconds(audioSource.clip.length);
+
+            index++;
+        }
     }
 }

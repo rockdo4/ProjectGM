@@ -6,6 +6,7 @@ public class EffectTimeScale : EffectBase
     [Range(0.1f, 3f)]
     public float timeScaleValue;
     private const float originalFixedDeltaTime = 0.02f;
+    private float prevTimeScale;
 
     protected override void Update()
     {
@@ -25,8 +26,14 @@ public class EffectTimeScale : EffectBase
 
     public override void PlayStart(Vector3 direction = default)
     {
+        prevTimeScale = Time.timeScale;
         Time.timeScale = timeScaleValue;
         Time.fixedDeltaTime = Time.timeScale * originalFixedDeltaTime;
         base.PlayStart(direction);
+    }
+    public override void PlayEnd()
+    {
+        Time.timeScale = prevTimeScale;
+        base.PlayEnd();
     }
 }
