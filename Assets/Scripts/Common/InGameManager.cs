@@ -159,6 +159,11 @@ public class InGameManager : MonoBehaviour
         itemButton.OnCountAct(true, count);
         itemButton.iconImage.sprite = sprite;
     }
+    public void SetHP(int hp, int maxHp)
+    {
+        playerInfo.hp.value = hp;
+        playerInfo.hp.maxValue = maxHp;
+    }
 
     #region Player & Enemy
     private void InitPlayer()
