@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     private List<StateBase> states = new List<StateBase>();
     public State CurrentState { get; private set; }
     public State NextState { get; set; }
-    public EvadeState CurrentEvadeState;
+    public EvadeState LastEvadeState { get; set; }
     #region Weapon
     public enum WeaponPosition
     {
@@ -101,7 +101,10 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
+        if (player.HP <= 0)
+        {
+            SetState(State.Death);
+        }
         stateManager?.Update();
         Vector3 relativePos = player.Enemy.transform.position - transform.position;
         Quaternion rotation = Quaternion.LookRotation(relativePos);
@@ -143,12 +146,6 @@ public class PlayerController : MonoBehaviour
             player.Stat.Defence = (player.Stat.Defence == 0) ? -100 : 0;
             Debug.Log(player.Stat.Defence);
         }
-#if UNITY_EDITOR
-        if (Input.GetKey(KeyCode.Alpha4))
-        {
-            Debug.Log($"--------- CurrentState: {CurrentState} ---------");
-        }
-#endif
         #endregion
     }
 
@@ -261,7 +258,6 @@ public class PlayerController : MonoBehaviour
         }
         CurrentState = newState;
         NextState = State.Idle;
-        //Debug.Log($"--------- CurrentState: {CurrentState} \t{player.attackState} ---------");
         stateManager?.ChangeState(states[(int)newState]);
     }
 
