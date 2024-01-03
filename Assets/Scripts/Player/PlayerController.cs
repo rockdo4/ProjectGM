@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         Hand, Wing
     }
     public WeaponPosition currentWeaponPosition { get; private set; }
-    private Weapon equipWeapon = null;
+    public Weapon EquipWeapon { get; private set; } = null;
     public Transform leftHand;
     public Transform rightHand;
     public Transform leftWing;
@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         {
             PlayDataManager.Init();
         }
-        equipWeapon = PlayDataManager.curWeapon;
+        EquipWeapon = PlayDataManager.curWeapon;
 
         // Defence Reset
         player.Stat.Defence = 0;
@@ -70,15 +70,15 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        player.CurrentWeapon = weaponSO.MakeWeapon(equipWeapon, rightHand, player.Animator);
-        if (equipWeapon.weaponType == WeaponType.Tonpa)
+        player.CurrentWeapon = weaponSO.MakeWeapon(EquipWeapon, rightHand, player.Animator);
+        if (EquipWeapon.weaponType == WeaponType.Tonpa)
         {
             player.FakeWeapon = Instantiate(player.CurrentWeapon, leftHand);
         }
         subHandle = player.CurrentWeapon.transform.Find("LeftHandle");
 
         //MoveWeaponPosition(WeaponPosition.Wing);
-        
+
         touchManager.SwipeListeners += OnSwipe;
         touchManager.HoldListeners += OnHold;
         touchManager.HoldEndListeners += HoldEnd;
