@@ -71,6 +71,10 @@ public class PlayerStat : Stat
     [Header("특수 공격 배율")]
     public float superAttackRate = 3f;
 
+    [Header("피격시 대미지 상쇄 확률")]
+    [Range(0f, 1f)]
+    public float blockRate = 0f;
+
     public override Attack CreateAttack(LivingObject attacker, LivingObject defender, bool groggy)
     {
         var player = attacker as Player;

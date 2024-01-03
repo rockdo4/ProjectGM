@@ -43,7 +43,10 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
                 damage = 0;
                 break;
         }
-        if (damage <= 0)
+
+        var blocked = Random.value < player.Stat.blockRate;
+
+        if (blocked || damage <= 0)
         {
             damage = 0;
         }
