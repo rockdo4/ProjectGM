@@ -190,7 +190,7 @@ public class TutorialManager : MonoBehaviour
         dialogueType2ImageTwo.enabled = true;
 
         Vector3 startPosition = imageTransform.position;
-        Vector3 endPosition = new Vector3(startPosition.x + 350, startPosition.y, startPosition.z);
+        Vector3 endPosition = new Vector3(startPosition.x + 550, startPosition.y, startPosition.z);
 
         float startTime = Time.realtimeSinceStartup;
         float elapsedTime = 0;
