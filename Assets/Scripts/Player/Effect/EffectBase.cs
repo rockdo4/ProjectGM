@@ -1,9 +1,12 @@
 using System.Collections;
 using UnityEngine;
-
+using UnityEngine.Audio;
 
 public abstract class EffectBase : MonoBehaviour
 {
+    [Header("오디오 믹서")]
+    public AudioMixerGroup audioMixer;
+
     [Header("이펙트 유지 시간"), Tooltip("파티클 시스템은 무시")]
     [SerializeField]
     public float duration;
@@ -30,11 +33,9 @@ public abstract class EffectBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        if (HasAudio)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.playOnAwake = false;
-        }
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.outputAudioMixerGroup = audioMixer;
     }
 
     protected virtual void Update()
@@ -109,7 +110,7 @@ public abstract class EffectBase : MonoBehaviour
     }
 
     protected virtual void RandomEffectAudio()
-    { 
+    {
         int index = Random.Range(0, audioClips.Length);
         audioSource.clip = audioClips[index];
         audioSource.Play();

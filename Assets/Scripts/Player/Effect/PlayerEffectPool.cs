@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-
+//Not Use
 public class PlayerEffectPool : MonoBehaviour
 {
     [System.Serializable]
@@ -46,10 +46,10 @@ public class PlayerEffectPool : MonoBehaviour
         effect.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         //effect.transform.localPosition = Vector3.zero;
         //effect.transform.localRotation = Quaternion.identity;
-        effect.GetComponent<EffectScript>().PlayEndListeners += () =>
-        {
-            poolDictionary[effectType].Release(effect);
-        };
+        //effect.GetComponent<EffectScript>().PlayEndListeners += () =>
+        //{
+        //    poolDictionary[effectType].Release(effect);
+        //};
         return effect;
     }
 
