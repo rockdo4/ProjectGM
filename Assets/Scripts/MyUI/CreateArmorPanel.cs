@@ -129,7 +129,10 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
         PlayDataManager.data.ArmorInventory.Add(armor);
         PlayDataManager.Save();
 
-        InventoryManager.Instance.Renewal();
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.Renewal();
+        }
 
         CraftManager.Instance.ShowArmors(true);
         gameObject.SetActive(false);

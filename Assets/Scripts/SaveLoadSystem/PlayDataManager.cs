@@ -208,8 +208,8 @@ public static class PlayDataManager
         }
         Save();
 
-        //OrganizeSkill();
         OrganizeSetSkill();
+        OrganizeSkill();
     }
 
     public static void UnWearItem(Equip.EquipType type, Armor.ArmorType armorType = Armor.ArmorType.None)
@@ -239,10 +239,18 @@ public static class PlayDataManager
         }
         Save();
 
-        //OrganizeSkill();
-        OrganizeSetSkill();
+        // Exceed SkillCode Exception
+        var diff = data.SkillCodes.Count - GetSocket();
+        if (diff > 0)
+        {
+            for (int i = 0; i < diff; i++)
+            {
+                UnEquipSkillCode(data.SkillCodes.Last());
+            }
+        }
 
-        // 스킬코드 소켓에 대한 예외처리 추가 필요
+        OrganizeSetSkill();
+        OrganizeSkill();
     }
 
     public static void AddGold(int value)
@@ -574,7 +582,40 @@ public static class PlayDataManager
                     curSkill[id2] = Mathf.Clamp(curSkill[id2] + lv2, 1, skt[id2].max_lv);
                 }
             }
+        }
 
+        var at = CsvTableMgr.GetTable<ArmorTable>().dataTable;
+
+        foreach (var armor in data.ArmorInventory)
+        {
+            var id = at[armor.id];
+            var id1 = id.skill1_id;
+            var lv1 = id.skill1_lv;
+            if (id1 != -1)
+            {
+                if (!curSkill.ContainsKey(id1))
+                {
+                    curSkill.Add(id1, lv1);
+                }
+                else
+                {
+                    curSkill[id1] = Mathf.Clamp(curSkill[id1] + lv1, 1, skt[id1].max_lv);
+                }
+            }
+
+            var id2 = id.skill2_id;
+            var lv2 = id.skill2_lv;
+            if (id2 != -1)
+            {
+                if (!curSkill.ContainsKey(id2))
+                {
+                    curSkill.Add(id2, lv2);
+                }
+                else
+                {
+                    curSkill[id2] = Mathf.Clamp(curSkill[id2] + lv2, 1, skt[id2].max_lv);
+                }
+            }
         }
 
         curSkill = curSkill.OrderByDescending((x) => x.Value).ThenBy(x => x.Key).ToDictionary(x => x.Key, y => y.Value);
