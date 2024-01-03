@@ -32,8 +32,9 @@ public class EnemyEffect : MonoBehaviour
 
     private void Start()
     {
-        effectInstanceRA = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation, this.transform);
-        effectInstanceRA.SetActive(false);
+        //effectInstanceRA = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation, this.transform);
+
+        EffectTypeRA.SetActive(false);
 
         enemyAi = GetComponent<EnemyAI>();
     }
@@ -124,7 +125,7 @@ public class EnemyEffect : MonoBehaviour
                 switch (enemyAi.enemyType)
                 {
                     case 8001001:
-                        offset += transform.forward * 1.5f + transform.up * 2.5f;
+                        offset += transform.forward * 2.5f + transform.up * 2.5f;
                         break;
                 }
                 break;
@@ -196,20 +197,20 @@ public class EnemyEffect : MonoBehaviour
 
     private void ResetAndActivateEffectRA()
     {
-        effectInstanceRA.SetActive(true);
-        effectInstanceRA.transform.position = transform.position + offset;
-        effectInstanceRA.transform.rotation = transform.rotation;
+        EffectTypeRA.SetActive(true); // 이걸못하네
+        EffectTypeRA.transform.position = transform.position + offset;
+        EffectTypeRA.transform.rotation = transform.rotation;
 
-        Rigidbody rb = effectInstanceRA.GetComponent<Rigidbody>();
+        Rigidbody rb = EffectTypeRA.GetComponent<Rigidbody>();
         rb.velocity = Vector3.zero; // 힘을 초기화
 
         Vector3 forceDirection = (enemyAi.SavedPlayerPosition - transform.position).normalized;
         float forceMagnitude = 10f;
         rb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
 
-        effectInstanceRA.GetComponent<EnemyProjectile>().enemyAi = enemyAi;
+        EffectTypeRA.GetComponent<EnemyProjectile>().enemyAi = enemyAi;
 
-        StartCoroutine(DeactivateEffectAfterDuration(effectInstanceRA));
+        StartCoroutine(DeactivateEffectAfterDuration(EffectTypeRA));
     }
 
     IEnumerator DeactivateEffectAfterDuration(GameObject effect)

@@ -258,7 +258,6 @@ public class FanShape : MonoBehaviour
     {
         if (material != null)
         {
-            //Debug.Log("123");
             material.color = Color.yellow;
         }
     }

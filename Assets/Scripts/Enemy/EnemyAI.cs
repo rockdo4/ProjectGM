@@ -16,6 +16,8 @@ public class EnemyAI : LivingObject
     [Header("원거리 공격 범위표시")]
     private GameObject rangeIndicator;
 
+    private Renderer rangeIndicatorRenderer;
+
     [Header("FanShape 프리펩 유형")]
     public GameObject[] fanShapePrefabs;
 
@@ -170,6 +172,9 @@ public class EnemyAI : LivingObject
 
     private int phaseAttack = 1;
 
+    private Material material;
+    private float startTime;
+
     [Serializable]
     public struct AttackPreparationTime
     {
@@ -233,6 +238,7 @@ public class EnemyAI : LivingObject
     private void Start()
     {
         HP = Stat.HP;
+        startTime = Time.time;
         StartCoroutine(RoarInit());
     }
 
@@ -266,6 +272,8 @@ public class EnemyAI : LivingObject
 
     protected override void Awake()
     {
+        rangeIndicatorRenderer = rangeIndicator.GetComponent<LineRenderer>();
+
         fanShapePools = new ObjectPool<FanShape>[fanShapePrefabs.Length];
         for (int i = 0; i < fanShapePrefabs.Length; i++)
         {
@@ -315,8 +323,22 @@ public class EnemyAI : LivingObject
         isDie = false;
     }
 
+    private void OnEnable()
+    {
+        if (material != null)
+        {
+            material.color = Color.yellow;
+        }
+
+        startTime = Time.time;
+    }
+
+
+
     private void Update()
     {
+        //float elapsedTime = Time.time - startTime;
+
         if (Input.GetKeyDown(KeyCode.H))
         {
             HP -= 100;
@@ -845,10 +867,7 @@ public class EnemyAI : LivingObject
     IEnumerator PrepareRangedAttack(int enemytype, AttackPatternType attackPatternType) // 원거리
     {
         isPreparingAttack = true;
-
         SavedPlayerPosition = detectedPlayer.position; // 명도잔월파를 위한 위치저장
-
-        ShowProjectileAttackRange(true);
 
         float specificPreparationTime = attackPreparationTime;
 
@@ -861,6 +880,10 @@ public class EnemyAI : LivingObject
                 break;
             }
         }
+
+        startTime = Time.time; // 추가
+
+        ShowProjectileAttackRange(true);
 
         Debug.Log("이번 공격 대기시간 : " + specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
@@ -1211,21 +1234,22 @@ public class EnemyAI : LivingObject
     {
         if (show)
         {
-            float effectDistance = Vector3.Distance(transform.position, SavedPlayerPosition);
-
-            // 범위표시 Plane의 시작점은 몬스터의 위치부터 시작해야한다.
-
             Vector3 localStartPoint = Vector3.zero;
+            Vector3 offset = new Vector3(0f, 0f, 9f);
 
-            rangeIndicator.transform.localPosition = new Vector3(localStartPoint.x, 0.015f, localStartPoint.z + effectDistance / 2);
+            rangeIndicator.transform.localPosition = new Vector3(localStartPoint.x, 0.015f, localStartPoint.z + offset.z);
 
             Vector3 parentScale = transform.localScale;
             rangeIndicator.transform.localScale = new Vector3(0.24f / parentScale.x, 0.3f / parentScale.y, rangeAttackRange / (3f * parentScale.z));
 
-            //Vector3 localStartPoint = transform.InverseTransformPoint(transform.position);
-            //rangeIndicator.transform.localPosition 
-            //    = new Vector3(localStartPoint.x, 0.015f, localStartPoint.z + effectDistance / 2);
-            //rangeIndicator.transform.localScale = new Vector3(0.23f, 0.3f, rangeAttackRange / 3f);
+            AttackRangeIndicator attackRangeIndicator = rangeIndicator.GetComponent<AttackRangeIndicator>();
+            attackRangeIndicator.enemyAi = this;
+
+            if (rangeIndicatorRenderer != null)
+            {
+                float t = Mathf.Clamp01((Time.time - startTime) / CurrentPreparationTime);
+                rangeIndicatorRenderer.material.color = Color.Lerp(Color.yellow, Color.red, t);
+            }
 
             rangeIndicator.SetActive(true);
         }
