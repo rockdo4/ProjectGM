@@ -63,6 +63,9 @@ public class InGameManager : MonoBehaviour
 
     private StageTable.Data stageData;
 
+    [Header("°ñµå ÀÌ¹ÌÁö")]
+    public Sprite goldIcon;
+
     private void Awake()
     {
         if (Instance != this)
@@ -125,6 +128,10 @@ public class InGameManager : MonoBehaviour
         {
             itemDic.Add(stageData.clear4, stageData.clear4_count);
         }
+        if (stageData.clear5 > 0 && !itemDic.ContainsKey(stageData.clear5))
+        {
+            itemDic.Add(stageData.clear5, stageData.clear5_count);
+        }
 
         foreach (var mat in itemDic)
         {
@@ -137,11 +144,11 @@ public class InGameManager : MonoBehaviour
         var codeKeys = new List<int>(codeTable.Keys);
         var codeID = codeKeys[Random.Range(0, codeKeys.Count)];
         PlayDataManager.IncreaseCode(codeID, 1);
-        MakeItem(skillCodeIconSo.GetSprite(codeID), 1);
+        MakeItem(skillCodeIconSo.GetSprite(codeTable[codeID].type), 1);
 
         //Gold
         PlayDataManager.AddGold(stageData.gold);
-        MakeItem(null, stageData.gold);
+        MakeItem(goldIcon, stageData.gold);
 
         rewardUI.SetActive(true);
         PlayDataManager.StageUnlock(stageID);
