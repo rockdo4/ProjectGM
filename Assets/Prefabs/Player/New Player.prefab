@@ -132,7 +132,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7e69d905b99ec4088b79ebb3e985bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentEvadeState: 0
   leftHand: {fileID: 3446526013813627044}
   rightHand: {fileID: 2647309340549258145}
   leftWing: {fileID: 427092248617595725}
@@ -789,7 +788,7 @@ Transform:
   m_GameObject: {fileID: 9146068143562920428}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2164396, y: 0, z: 0, w: 0.97629607}
-  m_LocalPosition: {x: 2.2737368e-13, y: 8, z: -12.000002}
+  m_LocalPosition: {x: 0, y: 8, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1779,13 +1778,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 3007154594115381676}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &188646420298540675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4663639782111911257}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe5ea191272161f4fa2ff6f53d2df318, type: 3}

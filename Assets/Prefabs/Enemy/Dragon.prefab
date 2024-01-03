@@ -894,9 +894,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statLink: {fileID: 11400000, guid: 697404cc30b60994887a91085823f190, type: 2}
   stat: {fileID: 11400000, guid: c2e3b2e1a4e5aa94398e9d3e79ccaa7c, type: 2}
-  OnDeathEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  TwoPhaseEffect: {fileID: 0}
+  rangeIndicator: {fileID: 0}
+  fanShapePrefabs: []
   bearAttackPatternPhaseOne: 01000000020000000300000004000000050000000300000004000000
   bearAttackPatternPhaseTwo: 03000000040000000500000003000000040000000300000001000000020000000500000004000000
   alienAttackPatternPhaseOne: 0100000002000000
@@ -908,7 +908,7 @@ MonoBehaviour:
   wolfAttackPatternPhaseTwo: 0100000002000000
   spiderAttackPatternPhaseOne: 010000000200000003000000
   spiderAttackPatternPhaseTwo: 010000000200000003000000
-  dragonAttackPatternPhaseOne: 010000000200000003000000
+  dragonAttackPatternPhaseOne: 0100000002000000
   dragonAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
   - enemyType: 5
@@ -941,7 +941,7 @@ MonoBehaviour:
   - enemyType: 0
     attackPatternType: 4
     preparationTime: 2
-  AttackPatternTypeAPrefab: {fileID: 4974148430569709096, guid: da44565a3c47a8f4cad84aa5d2251def,
+  AttackPatternTypeAPrefab: {fileID: 4936685993914949568, guid: c350116d727defb45af8dc5f1dd58eee,
     type: 3}
   AttackPatternTypeBPrefab: {fileID: 76544947898001228, guid: 20d83ab089a7d864fb18fb543feb8e7f,
     type: 3}

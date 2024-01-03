@@ -840,6 +840,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statLink: {fileID: 11400000, guid: f850de4678448954d8fe71b892de6df5, type: 2}
   stat: {fileID: 11400000, guid: f850de4678448954d8fe71b892de6df5, type: 2}
+  TwoPhaseEffect: {fileID: 0}
+  rangeIndicator: {fileID: 0}
   fanShapePrefabs:
   - {fileID: 1831290539580255820, guid: 9873b76cc3e585648914ba6347b8302e, type: 3}
   - {fileID: 9133502431824390224, guid: 4b36ed13b9b6d45498a509f6ac30cce0, type: 3}
@@ -858,28 +860,28 @@ MonoBehaviour:
   dragonAttackPatternPhaseOne: 010000000200000003000000
   dragonAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
-  - enemyType: 2
+  - enemyType: 8001003
     attackPatternType: 0
     preparationTime: 1.7
-  - enemyType: 2
+  - enemyType: 8001003
     attackPatternType: 1
     preparationTime: 1.7
-  - enemyType: 2
+  - enemyType: 8001003
     attackPatternType: 2
     preparationTime: 0.8
-  - enemyType: 2
+  - enemyType: 8001003
     attackPatternType: 3
     preparationTime: 4
-  - enemyType: 2
+  - enemyType: 8001003
     attackPatternType: 4
     preparationTime: 1
-  - enemyType: 2
+  - enemyType: 8001003
     attackPatternType: 5
     preparationTime: 2
-  - enemyType: 2
+  - enemyType: 8001003
     attackPatternType: 6
     preparationTime: 3
-  - enemyType: 2
+  - enemyType: 8001003
     attackPatternType: 7
     preparationTime: 4
   AttackPatternTypeAPrefab: {fileID: 1831290539580255820, guid: 9873b76cc3e585648914ba6347b8302e,

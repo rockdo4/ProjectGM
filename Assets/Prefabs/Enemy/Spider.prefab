@@ -225,6 +225,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statLink: {fileID: 11400000, guid: e9373622d3f82c64d9d801c9bc15e5be, type: 2}
   stat: {fileID: 11400000, guid: f850de4678448954d8fe71b892de6df5, type: 2}
+  TwoPhaseEffect: {fileID: 1456267007884653750, guid: 60fbc13724e1e1a4ea9f8d33c36b6343,
+    type: 3}
+  rangeIndicator: {fileID: 0}
   fanShapePrefabs:
   - {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a, type: 3}
   - {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe, type: 3}
@@ -256,16 +259,16 @@ MonoBehaviour:
   - enemyType: 8002001
     attackPatternType: 2
     preparationTime: 1
-  - enemyType: 4
+  - enemyType: 8002001
     attackPatternType: 6
     preparationTime: 1
-  - enemyType: 4
+  - enemyType: 8002001
     attackPatternType: 7
     preparationTime: 1
-  - enemyType: 4
+  - enemyType: 8002001
     attackPatternType: 8
     preparationTime: 1
-  - enemyType: 4
+  - enemyType: 8002001
     attackPatternType: 9
     preparationTime: 1
   AttackPatternTypeAPrefab: {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a,

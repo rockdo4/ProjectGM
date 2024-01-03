@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -234,17 +232,7 @@ public class EnemyAI : LivingObject
 
     private void Start()
     {
-        // this.name = name;
-        // this.hp = hp;
-        // this.defence = defence;
-        // this.attack = attack;
-        // this.phase = phase;
-        // this.phaseAttack = phaseAttack;
-        // this.type = type;
-        // this.deley = deley;
-
         HP = Stat.HP;
-
         StartCoroutine(RoarInit());
     }
 
@@ -271,8 +259,8 @@ public class EnemyAI : LivingObject
        actionOnGet: (obj) => { obj.gameObject.SetActive(true); },
        actionOnRelease: (obj) => { obj.gameObject.SetActive(false); },
        null,
-       defaultCapacity: 10, // 초기 용량
-       maxSize: 20       // 최대 용량
+       defaultCapacity: 10,
+       maxSize: 20
    );
     }
 
@@ -1156,21 +1144,6 @@ public class EnemyAI : LivingObject
 
         if (show)
         {
-            //if (activeFanShapes != null)
-            //{
-            //    foreach (var fanShape in activeFanShapes)
-            //    {
-            //        MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
-            //        if (meshRenderer != null)
-            //        {
-            //            meshRenderer.enabled = true;
-            //        }
-
-            //        fanShape.gameObject.SetActive(false);
-            //        fanShapePools[GetPoolIndexForAttackPatternType(AttackPatternType)].Release(fanShape);
-            //    }
-            //}
-
             AttackPattern currentPattern = null;
 
             if (attackIndex >= 0 && attackIndex < savedPatterns.Count)
@@ -1223,8 +1196,6 @@ public class EnemyAI : LivingObject
                     {
                         meshRenderer.enabled = false;
                     }
-
-                    //fanShapePools[poolIndex].Release(fanShape);
                 }
             }
         }

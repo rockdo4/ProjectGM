@@ -387,10 +387,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statLink: {fileID: 11400000, guid: 05059618f4ae8a74e9d787a1ec4c686e, type: 2}
   stat: {fileID: 11400000, guid: 05059618f4ae8a74e9d787a1ec4c686e, type: 2}
+  TwoPhaseEffect: {fileID: 1456267007884653750, guid: 60fbc13724e1e1a4ea9f8d33c36b6343,
+    type: 3}
+  rangeIndicator: {fileID: 0}
   fanShapePrefabs:
   - {fileID: 5106138004218964188, guid: cd81cf52c0f5545479a4949c598a3f92, type: 3}
   - {fileID: 4478600404576023960, guid: 1c50f528017682241b179aaa96b72930, type: 3}
   - {fileID: 5164172624734654894, guid: 3d91ae071fbf0f440bccaad24eb9b95d, type: 3}
+  - {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433, type: 3}
+  - {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433, type: 3}
+  - {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433, type: 3}
+  - {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433, type: 3}
+  - {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433, type: 3}
+  - {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433, type: 3}
   - {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433, type: 3}
   bearAttackPatternPhaseOne: 0400000003000000
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
@@ -406,16 +415,16 @@ MonoBehaviour:
   dragonAttackPatternPhaseOne: 010000000200000003000000
   dragonAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
-  - enemyType: 1
+  - enemyType: 8001004
     attackPatternType: 0
     preparationTime: 1.5
-  - enemyType: 1
+  - enemyType: 8001004
     attackPatternType: 1
     preparationTime: 0.8
-  - enemyType: 1
+  - enemyType: 8001004
     attackPatternType: 2
     preparationTime: 2.5
-  - enemyType: 1
+  - enemyType: 8001004
     attackPatternType: 3
     preparationTime: 2
   AttackPatternTypeAPrefab: {fileID: 5106138004218964188, guid: cd81cf52c0f5545479a4949c598a3f92,
@@ -429,11 +438,12 @@ MonoBehaviour:
   RangeAttackPatternTypeAPrefab: {fileID: 0}
   RangeAttackPatternTypeBPrefab: {fileID: 0}
   RangeAttackPatternTypeCPrefab: {fileID: 0}
-  RangeAttackPatternTypeDPrefab: {fileID: 0}
+  RangeAttackPatternTypeDPrefab: {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433,
+    type: 3}
   attackPreparationTime: 0.7
   detectRange: 100
   meleeAttackRange: 4
-  rangeAttackRange: 6
+  rangeAttackRange: 15
   roarDuration: 3
   playerLayerMask:
     serializedVersion: 2
@@ -451,7 +461,7 @@ MonoBehaviour:
   - patternName: MelleAttack_C
     pattern: 000100010001000100
   - patternName: MelleAttack_D
-    pattern: 000000000000010101
+    pattern: 000000010101000000
   - patternName: MelleAttack_D
     pattern: 000000000000010101
   - patternName: MelleAttack_D
@@ -2379,7 +2389,7 @@ PrefabInstance:
     - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
         type: 3}
