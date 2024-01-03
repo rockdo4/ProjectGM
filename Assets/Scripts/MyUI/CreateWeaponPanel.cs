@@ -95,7 +95,10 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         PlayDataManager.data.WeaponInventory.Add(weapon);
         PlayDataManager.Save();
 
-        InventoryManager.Instance.Renewal();
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.Renewal();
+        }
 
         CraftManager.Instance.ShowWeapons(true);
         gameObject.SetActive(false);
