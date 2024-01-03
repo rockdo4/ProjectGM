@@ -280,7 +280,10 @@ public class EnemyAI : LivingObject
         Stat.AttackDamage = et.attack;
         Stat.weaknessType = (AttackType)et.type;
 
-        phaseTwoHealthThreshold = HP * (et.phase / 100);
+        Debug.Log(et.phase);
+        Debug.Log(Stat.HP);
+
+        phaseTwoHealthThreshold = Stat.HP * ((float)et.phase / 100);
         Debug.Log(phaseTwoHealthThreshold);
 
         //phaseTwoHealthThreshold = HP * 0.5f;
