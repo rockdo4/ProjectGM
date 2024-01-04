@@ -51,6 +51,10 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
     [Space(10.0f)]
 
+    [Header("일괄 판매 파티클")]
+    [SerializeField]
+    private ParticleSystem SellParticle;
+
     private bool sellMode = false;
     private List<Equip> sellEquipList = new List<Equip>();
     private List<SkillCode> sellSkillCodeList = new List<SkillCode>();
@@ -70,7 +74,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
             () => // createFunc
         {
             var button = Instantiate(buttonPrefab);
-            button.transform.SetParent(inventoryPanel.transform, true);
+            button.transform.SetParent(inventoryPanel.transform, false);
             button.OnCountAct();
             button.gameObject.SetActive(false);
 
@@ -79,12 +83,12 @@ public class InventoryManager : MonoBehaviour, IRenewal
         delegate (ItemButton button) // actionOnGet
         {
             button.gameObject.SetActive(true);
-            button.transform.SetParent(inventoryPanel.transform, true);
+            button.transform.SetParent(inventoryPanel.transform, false);
         },
         delegate (ItemButton button) // actionOnRelease
         {
             button.Clear();
-            button.transform.SetParent(gameObject.transform, true); // ItemButton Transform Reset
+            button.transform.SetParent(gameObject.transform, false); // ItemButton Transform Reset
             button.gameObject.SetActive(false);
         });
 
@@ -92,9 +96,9 @@ public class InventoryManager : MonoBehaviour, IRenewal
         {
             PlayDataManager.Init();
         }
-
-        //TestAddItem();
         Renewal();
+
+        //Tester();
     }
 
     public void ShowWeapons(bool isOn = true)
@@ -145,7 +149,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                         // weapon icon level reset
 
                         newGo.OnEquip(weapon.isEquip);
-                        newGo.transform.SetParent(sellPanel.transform, true);
+                        newGo.transform.SetParent(sellPanel.transform, false);
                         newGo.button.onClick.AddListener(() => 
                         {
                             buttonPool.Release(go.sell);
@@ -223,7 +227,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
                         // armor icon level reset
 
                         newGo.OnEquip(armor.isEquip);
-                        newGo.transform.SetParent(sellPanel.transform, true);
+                        newGo.transform.SetParent(sellPanel.transform, false);
                         newGo.button.onClick.AddListener(() =>
                         {
                             buttonPool.Release(go.sell);
@@ -271,7 +275,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
             var go = buttonPool.Get();
             var table = CsvTableMgr.GetTable<CodeTable>().dataTable;
 
-            go.transform.SetParent(inventoryPanel.transform, true);
+            go.transform.SetParent(inventoryPanel.transform, false);
 
             go.OnCountAct(true, skillcode.count);
             go.iconImage.sprite = skillIconSO.GetSprite(table[skillcode.id].type);
@@ -296,7 +300,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
                         var newGo = buttonPool.Get();
                         newGo.iconImage.sprite = skillIconSO.GetSprite(table[skillcode.id].type);
-                        newGo.transform.SetParent(sellPanel.transform, true);
+                        newGo.transform.SetParent(sellPanel.transform, false);
                         newGo.button.onClick.AddListener(() =>
                         {
                             buttonPool.Release(go.sell);
@@ -341,7 +345,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
         foreach (var mat in mats)
         {
             var go = buttonPool.Get();
-            go.transform.SetParent(inventoryPanel.transform);
+            go.transform.SetParent(inventoryPanel.transform, false);
 
             go.OnCountAct(true, mat.count);
             go.iconImage.sprite = matIconSo.GetSprite(mat.id);
@@ -364,7 +368,7 @@ public class InventoryManager : MonoBehaviour, IRenewal
 
                         var newGo = buttonPool.Get();
                         newGo.iconImage.sprite = matIconSo.GetSprite(mat.id);
-                        newGo.transform.SetParent(sellPanel.transform);
+                        newGo.transform.SetParent(sellPanel.transform, false);
                         newGo.button.onClick.AddListener(() =>
                         {
                             buttonPool.Release(go.sell);
@@ -455,45 +459,69 @@ public class InventoryManager : MonoBehaviour, IRenewal
         {
             case ItemType.Weapon:
                 {
+                    if (sellEquipList.Count > 0)
+                    {
+                        SellParticle.Play();
+                    }
+
                     foreach (var item in sellEquipList)
                     {
                         PlayDataManager.SellItem(item as Weapon);
                     }
                     SellMode(false);
                     ShowWeapons();
+
                 }
                 break;
 
             case ItemType.Armor:
                 {
+                    if (sellEquipList.Count > 0)
+                    {
+                        SellParticle.Play();
+                    }
+
                     foreach (var item in sellEquipList)
                     {
                         PlayDataManager.SellItem(item as Armor);
                     }
                     SellMode(false);
                     ShowArmors();
+
                 }
                 break;
 
             case ItemType.SkillCode:
                 {
+                    if (sellSkillCodeList.Count > 0)
+                    {
+                        SellParticle.Play();
+                    }
+
                     foreach (var item in sellSkillCodeList)
                     {
                         PlayDataManager.SellItem(item);
                     }
                     SellMode(false);
                     ShowSkillCodes();
+
                 }
                 break;
 
             case ItemType.Mat:
                 {
+                    if (sellMatList.Count > 0)
+                    {
+                        SellParticle.Play();
+                    }
+
                     foreach (var item in sellMatList)
                     {
                         PlayDataManager.SellItem(item);
                     }
                     SellMode(false);
                     ShowMaterials();
+
                 }
                 break;
         }
