@@ -267,7 +267,10 @@ public class EnemyAI : LivingObject
 
     protected override void Awake()
     {
-        rangeIndicatorRenderer = rangeIndicator.GetComponent<LineRenderer>();
+        if(rangeIndicatorRenderer != null)
+        {
+            rangeIndicatorRenderer = rangeIndicator.GetComponent<LineRenderer>();
+        }
 
         fanShapePools = new ObjectPool<FanShape>[fanShapePrefabs.Length];
         for (int i = 0; i < fanShapePrefabs.Length; i++)
@@ -302,6 +305,9 @@ public class EnemyAI : LivingObject
                 break;
             case 8002001:
                 BTRunner = new BehaviorTreeRunner(SpiderBT());
+                break;
+            case 8002002:
+                BTRunner = new BehaviorTreeRunner(WolfBT()); // 듀토리얼
                 break;
             default:
                 Debug.Log("Not Exist Enemy Type!");

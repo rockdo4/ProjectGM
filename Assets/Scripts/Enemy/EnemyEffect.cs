@@ -31,7 +31,10 @@ public class EnemyEffect : MonoBehaviour
 
     private void Start()
     {
-        EffectTypeRA.SetActive(false);
+        if(EffectTypeRA != null)
+        {
+            EffectTypeRA.SetActive(false);
+        }
         enemyAi = GetComponent<EnemyAI>();
     }
 
@@ -58,10 +61,14 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case 8001002:
-                        offset += transform.forward * 4.5f + transform.up * 0.1f;
+                        offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
 
                     case 8002001:
+                        offset += transform.forward * 5f + transform.up * 0.1f;
+                        break;
+
+                    case 8002002:
                         offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
                 }
@@ -89,6 +96,10 @@ public class EnemyEffect : MonoBehaviour
 
                     case 8002001:
                         offset += transform.forward * 5f + transform.up * 0.1f;
+                        break;
+
+                    case 8002002:
+                        offset += transform.forward * 2f + transform.up * 1f;
                         break;
                 }
                 break;
