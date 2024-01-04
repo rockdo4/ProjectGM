@@ -1,13 +1,19 @@
-﻿using System;
+﻿using EPOOutline;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : LivingObject
 {
+    //[Header("몬스터 그로기 아웃라인")]
+    private Outlinable outlineComponent;
+    private bool isSpecialState;
+
     [Header("2페이즈 이펙트")]
     public GameObject TwoPhaseEffect;
 
@@ -172,6 +178,8 @@ public class EnemyAI : LivingObject
     private Material material;
     private float startTime;
 
+    private bool isWaitingGrogy;
+
     [Serializable]
     public struct AttackPreparationTime
     {
@@ -238,9 +246,13 @@ public class EnemyAI : LivingObject
             grogyEffect.SetActive(false);
         }
 
+        outlineComponent = GetComponent<Outlinable>();
+
         HP = Stat.HP;
         startTime = Time.time;
         StartCoroutine(RoarInit());
+
+        outlineComponent.enabled = false;
     }
 
     IEnumerator RoarInit()
@@ -375,8 +387,8 @@ public class EnemyAI : LivingObject
 
         if (grogyEffect != null)
         {
-            Debug.Log(particleSystem.main.duration);
-            yield return new WaitForSeconds(particleSystem.main.duration);
+            //Debug.Log(particleSystem.main.duration);
+            yield return new WaitForSeconds(particleSystem.main.duration / 2);
         }
         else
         {
@@ -393,6 +405,11 @@ public class EnemyAI : LivingObject
             grogyTimer -= Time.deltaTime;
 
             IsGroggy = true;
+
+            if (outlineComponent != null)
+            {
+                outlineComponent.enabled = true;
+            }
 
             grogyEffect.SetActive(true);
             StartCoroutine(GrogyTurnOffEffect(grogyEffect));
@@ -415,23 +432,31 @@ public class EnemyAI : LivingObject
     INode.EnemyState GroggyFalseState()
     {
         grogyTimer = 5f;
-
-        StartCoroutine(GrogyWaitForSecond());
-
         animator.SetBool("Grogy", false);
+
+        if (outlineComponent != null)
+        {
+            outlineComponent.enabled = false;
+        }
 
         IsGroggy = false;
         isAttacking = false;
         isPreparingAttack = false;
 
+        //Debug.Log("인보크 후 공격상태 확인" + isAttacking);
+
         return INode.EnemyState.Success;
     }
 
-    IEnumerator GrogyWaitForSecond()
-    {
-        Debug.Log("그로기 유예");
-        yield return new WaitForSeconds(1.7f);
-    }
+    //private void GrogyWaitForSecond()
+    //{
+    //    Debug.Log("그로기 유예 끝");
+
+    //    IsGroggy = false;
+    //    isAttacking = false;
+    //    isPreparingAttack = false;
+    //    isWaitingGrogy = true;
+    //}
 
     #endregion
 
