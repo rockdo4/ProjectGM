@@ -135,6 +135,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7439550026239271650}
   - component: {fileID: 6584042074406118285}
+  - component: {fileID: 6446073039572973304}
   m_Layer: 0
   m_Name: Spider_Mesh
   m_TagString: Untagged
@@ -258,6 +259,18 @@ SkinnedMeshRenderer:
     m_Center: {x: 0, y: -0.40131187, z: 0.021143317}
     m_Extent: {x: 1.7493858, y: 1.7163377, z: 0.6286783}
   m_DirtyAABB: 0
+--- !u!114 &6446073039572973304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624362549838067563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1685367654866015914
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,6 +497,7 @@ MonoBehaviour:
   statLink: {fileID: 11400000, guid: e9373622d3f82c64d9d801c9bc15e5be, type: 2}
   stat: {fileID: 11400000, guid: f850de4678448954d8fe71b892de6df5, type: 2}
   TwoPhaseEffect: {fileID: 0}
+  grogyEffect: {fileID: 0}
   rangeIndicator: {fileID: 0}
   fanShapePrefabs:
   - {fileID: 1835696886489494526, guid: 9ffad4cff9ece3546bb1cbe0285a567a, type: 3}
