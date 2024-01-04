@@ -98,7 +98,7 @@ public class TutorialManager : MonoBehaviour
                         break;
 
                     case 1:
-
+                        Debug.Log("123");
                         StartCoroutine(MoveImage(dialogueType2ImageTwo.transform, 3.0f));
                         StartCoroutine(WaitForEvadeState());
                         break;
@@ -125,6 +125,7 @@ public class TutorialManager : MonoBehaviour
 
         yield return new WaitUntil(() => controller.CurrentState == PlayerController.State.Attack);
         yield return new WaitForSeconds(1f);
+
         Debug.Log("공격 실행완료");
 
         touchArea.interactable = true;
@@ -137,9 +138,24 @@ public class TutorialManager : MonoBehaviour
     private IEnumerator WaitForEvadeState()
     {
         var controller = player.GetComponent<PlayerController>();
+        int count = 0;
 
-        yield return new WaitUntil(() => controller.CurrentState == PlayerController.State.Evade);
-        yield return new WaitForSeconds(1.5f);
+        while(count < 3)
+        {
+            if (controller.LastEvadeState == PlayerController.EvadeState.Just)
+            {
+                count++;
+                Debug.Log(count);
+
+                controller.LastEvadeState = PlayerController.EvadeState.None;
+
+                Debug.Log(controller.LastEvadeState);
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.7f); 
 
         Debug.Log("회피 실행완료");
 
@@ -174,7 +190,7 @@ public class TutorialManager : MonoBehaviour
         dialogueType2ImageTwo.enabled = true;
 
         Vector3 startPosition = imageTransform.position;
-        Vector3 endPosition = new Vector3(startPosition.x + 300, startPosition.y, startPosition.z);
+        Vector3 endPosition = new Vector3(startPosition.x + 650, startPosition.y, startPosition.z);
 
         float startTime = Time.realtimeSinceStartup;
         float elapsedTime = 0;
@@ -184,17 +200,16 @@ public class TutorialManager : MonoBehaviour
             elapsedTime = Time.realtimeSinceStartup - startTime;
             imageTransform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
 
-            if (dialogueType2ImageTwo != null)
-            {
-                dialogueType2ImageTwo.enabled = false;
-                blocker.enabled = false;
-            }
-
-            ResumeGame();
-
             yield return null;
         }
 
+        if (dialogueType2ImageTwo != null)
+        {
+            dialogueType2ImageTwo.enabled = false;
+            blocker.enabled = false;
+        }
+
+        ResumeGame();
         imageTransform.position = endPosition;
     }
 

@@ -26,28 +26,6 @@ public class FanShape : MonoBehaviour
     [Header("프리펩의 타입")]
     public AttackShape attackShape;
 
-    // 원, 반원, 삼각형, 부채꼴
-
-    // 그런데 생성은 몬스터가 하고
-
-    // 그 위치는 오프셋으로 조절까지 되어있어서 문제고
-
-    // 사이즈도 받아와야하고
-
-    // 몬스터 스케일도 다 달라서 프리펩 사이즈까지 달라져버린게 문제인데
-
-    // 그렇게 프리펩 사이즈와 모양에 맞게 계산까지 해도 애니메이션 이벤트때 안에 있는지 밖에 있는지
-    // 판단할 수 있나?
-
-    // 판단까지는 계산하면 될 거 같은데 그게 계산이 되나
-
-    // 쇼밀리어택에서 공격 시각화 프리펩을 셋액티브 펄스를 해버리니까
-    // 공격판정이 어긋나고있음
-    // 애니메이션 이벤트는 조금 후에 재생되는데
-    // 전조범위가 삭제되기 전에 조금이라도 판정범위에 걸쳐있었으면 애니메이션 동안 어디로 움직이든
-    // 공격이 플레이어에게 필중하는 현상 발생
-
-
     public enum AttackShape
     {
         Circle,
@@ -280,7 +258,6 @@ public class FanShape : MonoBehaviour
     {
         if (material != null)
         {
-            //Debug.Log("123");
             material.color = Color.yellow;
         }
     }

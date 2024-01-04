@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using static EnemyAI;
 
@@ -26,12 +27,16 @@ public class EnemyEffect : MonoBehaviour
     Vector3 offset;
 
     private EnemyAI enemyAi;
+    private GameObject effectInstanceRA;
 
     private void Start()
     {
+        if(EffectTypeRA != null)
+        {
+            EffectTypeRA.SetActive(false);
+        }
         enemyAi = GetComponent<EnemyAI>();
     }
-
 
     void EffectEnemyType(string pattern)
     {
@@ -56,10 +61,14 @@ public class EnemyEffect : MonoBehaviour
                         break;
 
                     case 8001002:
-                        offset += transform.forward * 4.5f + transform.up * 0.1f;
+                        offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
 
                     case 8002001:
+                        offset += transform.forward * 5f + transform.up * 0.1f;
+                        break;
+
+                    case 8002002:
                         offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
                 }
@@ -88,6 +97,10 @@ public class EnemyEffect : MonoBehaviour
                     case 8002001:
                         offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
+
+                    case 8002002:
+                        offset += transform.forward * 2f + transform.up * 1f;
+                        break;
                 }
                 break;
 
@@ -106,6 +119,10 @@ public class EnemyEffect : MonoBehaviour
                     case 8001003:
                         offset += transform.forward * 5f + transform.up * 0.1f;
                         break;
+
+                    case 8002001:
+                        offset += transform.forward * 5f + transform.up * 0.1f;
+                        break;
                 }
                 break;
 
@@ -114,7 +131,7 @@ public class EnemyEffect : MonoBehaviour
                 switch (enemyAi.enemyType)
                 {
                     case 8001001:
-                        offset += transform.forward * 1.5f + transform.up * 2.5f;
+                        offset += transform.forward * 2.5f + transform.up * 2.5f;
                         break;
                 }
                 break;
@@ -146,8 +163,6 @@ public class EnemyEffect : MonoBehaviour
         }
     }
 
-    // 이걸 왜 바꿔야돼?
-
     public void AttackEffectC()
     {
         EffectEnemyType("C");
@@ -176,24 +191,48 @@ public class EnemyEffect : MonoBehaviour
     {
         EffectEnemyType("RA");
 
-        if (EffectTypeRA != null && enemyAi.enemyType == 8001001)
+        if (enemyAi.enemyType == 8001001)
         {
-            GameObject effectInstance = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation);
-            Rigidbody rb = effectInstance.GetComponent<Rigidbody>();
-            Vector3 forceDirection = (enemyAi.detectedPlayer.position - transform.position).normalized; // 플레이어 방향으로 힘을 가합니다.
-            float forceMagnitude = 10f;
-            rb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
-
-            effectInstance.GetComponent<EnemyProjectile>().enemyAi = enemyAi;
-
-            DestroyEffect(effectInstance);
+            ResetAndActivateEffectRA();
         }
-        else // (EffectTypeRA != null)
+        else
         {
-            GameObject effectInstance = Instantiate(EffectTypeRA, transform.position + offset, transform.rotation);
-
-            DestroyEffect(effectInstance);
+            DestroyEffect(effectInstanceRA);
         }
+    }
+
+    private void ResetAndActivateEffectRA()
+    {
+        EffectTypeRA.SetActive(true);
+        EffectTypeRA.transform.position = transform.position + offset;
+        EffectTypeRA.transform.rotation = transform.rotation;
+
+        Rigidbody rb = EffectTypeRA.GetComponent<Rigidbody>();
+        rb.velocity = Vector3.zero; // 힘 초기화 해주고
+
+        Vector3 forceDirection = (enemyAi.SavedPlayerPosition - transform.position).normalized;
+        float forceMagnitude = 10f;
+        rb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
+
+        EffectTypeRA.GetComponent<EnemyProjectile>().enemyAi = enemyAi;
+
+        StartCoroutine(DeactivateEffectAfterDuration(EffectTypeRA));
+    }
+
+    IEnumerator DeactivateEffectAfterDuration(GameObject effect)
+    {
+        ParticleSystem particleSystem = effect.GetComponent<ParticleSystem>();
+
+        if (particleSystem != null)
+        {
+            yield return new WaitForSeconds(particleSystem.main.duration);
+        }
+        else
+        {
+            yield return new WaitForSeconds(1.5f);
+        }
+
+        effect.SetActive(false);
     }
 
 
@@ -209,4 +248,5 @@ public class EnemyEffect : MonoBehaviour
             Destroy(instance, 1.5f);
         }
     }
+
 }

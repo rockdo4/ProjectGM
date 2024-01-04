@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
-using static EnemyAI;
 
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : LivingObject
 {
+    [Header("2페이즈 이펙트")]
+    public GameObject TwoPhaseEffect;
+
+    [SerializeField]
+    [Header("원거리 공격 범위표시")]
+    private GameObject rangeIndicator;
+
+    private Renderer rangeIndicatorRenderer;
 
     [Header("FanShape 프리펩 유형")]
     public GameObject[] fanShapePrefabs;
@@ -69,8 +74,6 @@ public class EnemyAI : LivingObject
     private int EnemyRangedAttackIndexTwo = 7;
     private int EnemyRangedAttackIndexThree = 8;
     private int EnemyRangedAttackIndexFour = 9;
-
-    private FanShape fanshape;
 
     [Header("공격 준비 시간 - 초기값(패턴에 따로 시간 지정해주지 않았을때만 적용)")]
     [SerializeField]
@@ -156,15 +159,15 @@ public class EnemyAI : LivingObject
     public bool[] attackGrid = new bool[9];
     public List<AttackPattern> savedPatterns = new List<AttackPattern>();
     private List<GameObject> cellInstances = new List<GameObject>(); // 셀 인스턴스들을 저장할 리스트
-    private List<GameObject> colliderObjects = new List<GameObject>();
+    //private List<GameObject> colliderObjects = new List<GameObject>();
 
     FanShape fanShape = null;
     private bool isDie;
     private int poolIndex;
 
-    //public EnemyTable enemyTable;
-
     private int phaseAttack = 1;
+    private Material material;
+    private float startTime;
 
     [Serializable]
     public struct AttackPreparationTime
@@ -175,6 +178,7 @@ public class EnemyAI : LivingObject
     }
 
     public float CurrentPreparationTime { get; private set; }
+    public Vector3 SavedPlayerPosition { get; private set; }
 
     public enum AttackPatternType
     {
@@ -226,17 +230,8 @@ public class EnemyAI : LivingObject
 
     private void Start()
     {
-        // this.name = name;
-        // this.hp = hp;
-        // this.defence = defence;
-        // this.attack = attack;
-        // this.phase = phase;
-        // this.phaseAttack = phaseAttack;
-        // this.type = type;
-        // this.deley = deley;
-
         HP = Stat.HP;
-
+        startTime = Time.time;
         StartCoroutine(RoarInit());
     }
 
@@ -246,7 +241,9 @@ public class EnemyAI : LivingObject
         CameraManager.Instance.SetCameraWithTag(Tags.enemy);
         TouchManager.Instance.enabled = false;
         animator.SetTrigger("Roar");
+
         yield return new WaitForSeconds(roarDuration);
+
         CameraManager.Instance.SetCameraWithTag(Tags.player);
         TouchManager.Instance.enabled = true;
         hasRoared = true;
@@ -263,13 +260,18 @@ public class EnemyAI : LivingObject
        actionOnGet: (obj) => { obj.gameObject.SetActive(true); },
        actionOnRelease: (obj) => { obj.gameObject.SetActive(false); },
        null,
-       defaultCapacity: 10, // 초기 용량
-       maxSize: 20       // 최대 용량
-   );
+       defaultCapacity: 10,
+       maxSize: 20
+       );
     }
 
     protected override void Awake()
     {
+        if(rangeIndicatorRenderer != null)
+        {
+            rangeIndicatorRenderer = rangeIndicator.GetComponent<LineRenderer>();
+        }
+
         fanShapePools = new ObjectPool<FanShape>[fanShapePrefabs.Length];
         for (int i = 0; i < fanShapePrefabs.Length; i++)
         {
@@ -284,7 +286,7 @@ public class EnemyAI : LivingObject
         Stat.AttackDamage = et.attack;
         Stat.weaknessType = (AttackType)et.type;
 
-        phaseTwoHealthThreshold = HP * 0.5f;
+        phaseTwoHealthThreshold = Stat.HP * ((float)et.phase / 100);
         isTwoPhase = false;
 
         switch (enemyType)
@@ -304,6 +306,9 @@ public class EnemyAI : LivingObject
             case 8002001:
                 BTRunner = new BehaviorTreeRunner(SpiderBT());
                 break;
+            case 8002002:
+                BTRunner = new BehaviorTreeRunner(WolfBT()); // 듀토리얼
+                break;
             default:
                 Debug.Log("Not Exist Enemy Type!");
                 break;
@@ -311,6 +316,16 @@ public class EnemyAI : LivingObject
         }
         animator = GetComponent<Animator>();
         isDie = false;
+    }
+
+    private void OnEnable()
+    {
+        if (material != null)
+        {
+            material.color = Color.yellow;
+        }
+
+        startTime = Time.time;
     }
 
     private void Update()
@@ -340,20 +355,15 @@ public class EnemyAI : LivingObject
         {
             return;
         }
-
         BTRunner.Operate(); // 위치변경
-        
     }
 
     #region 그로기
-
-
 
     INode.EnemyState GroggyTrueState()
     {
         if (IsGroggy)
         {
-            //Debug.Log("그로기 상태입니다.");
             grogyTimer -= Time.deltaTime;
 
             IsGroggy = true;
@@ -361,40 +371,27 @@ public class EnemyAI : LivingObject
             animator.ResetTrigger("Attack_A");
             animator.ResetTrigger("Attack_B");
             animator.ResetTrigger("Attack_C");
-
-            //animator.speed = grogySpeed;
-
             animator.SetBool("Grogy", true);
-
-            //Debug.Log(grogyTimer);
 
             if (grogyTimer <= 0)
             {
-                grogyTimer = 5f; // 그로기 상태 지속 시간 초기화
+                grogyTimer = 5f;
                 IsGroggy = false;
-                //GroggyFalseState();
             }
-
-            return INode.EnemyState.Success; // 계속 그로기 상태 유지 // 러닝 or 석세스
+            return INode.EnemyState.Success;
         }
-
         return INode.EnemyState.Failure;
     }
 
     INode.EnemyState GroggyFalseState()
     {
-        //Debug.Log("그로기 상태가 해제되었습니다.");
-
         grogyTimer = 5f;
-        //animator.speed = 1f; // 기본 속도로 복귀
-        //Debug.Log("셋불 그로기 펄스 호출 - Set그로기 스테이트");
         animator.SetBool("Grogy", false);
 
         IsGroggy = false;
         isAttacking = false;
         isPreparingAttack = false;
 
-        // SetGroggyState(false); // 안전을 위해 상태 해제를 한번 더 호출
         return INode.EnemyState.Success;
     }
 
@@ -821,7 +818,7 @@ public class EnemyAI : LivingObject
             }
         }
 
-        //Debug.Log("이번 공격 대기시간 : "  + specificPreparationTime);
+        Debug.Log("이번 공격 대기시간 : "  + specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
         ShowMeleeAttackRange(false, enemytype, attackPatternType);
@@ -831,19 +828,15 @@ public class EnemyAI : LivingObject
 
         if (player != null)
         {
-            //Debug.Log(attackIndex);
-            //Debug.Log(attackPatternType);
-
-            string animationTrigger = $"{"Attack_"}{attackPatternType}"; //attackPatternType 이게 코드없이 되냐?
+            string animationTrigger = $"{"Attack_"}{attackPatternType}";
             IsAnimationRunning(animationTrigger);
-            //StartCoroutine(IsAnimationRunning(animationTrigger));
         }
     }
 
-    IEnumerator PrepareRangedAttack(int enemytype, AttackPatternType attackPatternType) // 원거리
+    IEnumerator PrepareRangedAttack(int enemytype, AttackPatternType attackPatternType)
     {
         isPreparingAttack = true;
-        ShowProjectileAttackRange(true, enemytype, attackPatternType);
+        SavedPlayerPosition = detectedPlayer.position; // 명도잔월파를 위한 위치저장
 
         float specificPreparationTime = attackPreparationTime;
 
@@ -857,12 +850,17 @@ public class EnemyAI : LivingObject
             }
         }
 
+        startTime = Time.time; // 추가
+
+        ShowProjectileAttackRange(true);
+
+        Debug.Log("이번 공격 대기시간 : " + specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
         switch (attackPatternType)
         {
             case AttackPatternType.RangeA:
-                ShowProjectileAttackRange(false, enemytype, attackPatternType); // 기존 공격 패턴 A
+                ShowProjectileAttackRange(false); // 기존 공격 패턴 A
                 break;
             case AttackPatternType.RangeB:
                 yield return StartCoroutine(RangeAttackPatternB());
@@ -880,8 +878,6 @@ public class EnemyAI : LivingObject
 
         if (player != null)
         {
-            // 임시 애니메이션 임시 원거리 공격 애니메이션 임시임시
-            //string animationTrigger = $"{"Attack_"}{"A"}";
             string animationTrigger = $"{"Attack_"}{attackPatternType}";
             IsAnimationRunning(animationTrigger);
 
@@ -896,9 +892,9 @@ public class EnemyAI : LivingObject
         }
     }
 
-    private void AnimationIsOver() // 애니메이션 이벤트 공격 애니메이션 끝나고 나서.
+    private void AnimationIsOver() // 공격 상태 종료가 되는 애니메이션 이벤트
     {
-        isAttacking = false; // 
+        isAttacking = false;
     }
 
     private Vector3 GetAttackOffset(int enemyType, AttackPatternType AttackPatternType)
@@ -924,7 +920,7 @@ public class EnemyAI : LivingObject
             switch (AttackPatternType)
             {
                 case AttackPatternType.B:
-                    return new Vector3(0f, 0f, -2f); // 세모위치 조정 에일리언 B패턴임
+                    return new Vector3(0f, 0f, -2f);
                 case AttackPatternType.C:
                     return Vector3.zero;
                 case AttackPatternType.D:
@@ -965,10 +961,12 @@ public class EnemyAI : LivingObject
         {
             switch (AttackPatternType)
             {
-                //case AttackPatternType.A:
-                //    return new Vector3(0f, 0f, -7f);
-                case AttackPatternType.B:
+                case AttackPatternType.A:
                     return new Vector3(0f, 0f, -2f);
+                case AttackPatternType.B:
+                    return new Vector3(0f, 0f, -4.5f);
+                case AttackPatternType.C:
+                    return new Vector3(0f, 0f, -4.5f);
                 default: return Vector3.zero;
             }
         }
@@ -1112,11 +1110,11 @@ public class EnemyAI : LivingObject
 
             case 8002001:
                 if (attackPatternType == AttackPatternType.A)
-                    additionalRotation = Quaternion.Euler(0f, 180f, 0f);
-                else if (attackPatternType == AttackPatternType.B)
                     additionalRotation = Quaternion.Euler(0f, 120f, 0f);
-                else if (attackPatternType == AttackPatternType.C)
-                    additionalRotation = Quaternion.Euler(0f, 140f, 0f);
+                //else if (attackPatternType == AttackPatternType.B)
+                //    additionalRotation = Quaternion.Euler(0f, 120f, 0f);
+                //else if (attackPatternType == AttackPatternType.C)
+                //    additionalRotation = Quaternion.Euler(0f, 140f, 0f);
                 break;
 
             case 8001002:
@@ -1142,21 +1140,6 @@ public class EnemyAI : LivingObject
 
         if (show)
         {
-            //if (activeFanShapes != null)
-            //{
-            //    foreach (var fanShape in activeFanShapes)
-            //    {
-            //        MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
-            //        if (meshRenderer != null)
-            //        {
-            //            meshRenderer.enabled = true;
-            //        }
-
-            //        fanShape.gameObject.SetActive(false);
-            //        fanShapePools[GetPoolIndexForAttackPatternType(AttackPatternType)].Release(fanShape);
-            //    }
-            //}
-
             AttackPattern currentPattern = null;
 
             if (attackIndex >= 0 && attackIndex < savedPatterns.Count)
@@ -1209,130 +1192,37 @@ public class EnemyAI : LivingObject
                     {
                         meshRenderer.enabled = false;
                     }
-
-                    //fanShapePools[poolIndex].Release(fanShape);
                 }
             }
         }
     }
 
-    private void ShowProjectileAttackRange(bool show, int enemyType, AttackPatternType AttackPatternType) // 쇼
+    private void ShowProjectileAttackRange(bool show) // 프로젝타일
     {
-        //Debug.Log("레인지 어택 호출 하는지?");
-        GameObject attackPrefab = null;
-        Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
-
-        switch (AttackPatternType)
-        {
-            case AttackPatternType.RangeA:
-                attackPrefab = RangeAttackPatternTypeAPrefab;
-                break;
-
-            case AttackPatternType.RangeB:
-                attackPrefab = RangeAttackPatternTypeBPrefab;
-                break;
-
-            case AttackPatternType.RangeC:
-                attackPrefab = RangeAttackPatternTypeCPrefab;
-                break;
-
-            case AttackPatternType.RangeD:
-                attackPrefab = RangeAttackPatternTypeDPrefab;
-                break;
-        }
-
         if (show)
         {
-            if (attackRangeInstance != null)
+            Vector3 localStartPoint = Vector3.zero;
+            Vector3 offset = new Vector3(0f, 0f, 9f);
+
+            rangeIndicator.transform.localPosition = new Vector3(localStartPoint.x, 0.015f, localStartPoint.z + offset.z);
+
+            Vector3 parentScale = transform.localScale;
+            rangeIndicator.transform.localScale = new Vector3(0.24f / parentScale.x, 0.3f / parentScale.y, rangeAttackRange / (3f * parentScale.z));
+
+            AttackRangeIndicator attackRangeIndicator = rangeIndicator.GetComponent<AttackRangeIndicator>();
+            attackRangeIndicator.enemyAi = this;
+
+            if (rangeIndicatorRenderer != null)
             {
-                Destroy(attackRangeInstance);
-            }
-            attackRangeInstance = Instantiate(attackPrefab, transform);
-
-            foreach (GameObject cell in cellInstances)
-            {
-                if (cell != null)
-                {
-                    Destroy(cell);
-                }
-            }
-            cellInstances.Clear();
-
-
-            AttackPattern currentPattern = savedPatterns[attackIndex];
-            Renderer renderer = attackRangeInstance.GetComponent<Renderer>();
-
-            Vector3 cellSize = Vector3.zero;
-
-            switch (AttackPatternType)
-            {
-                case AttackPatternType.RangeA:
-                    cellSize = renderer.bounds.size;
-                    break;
-
-                case AttackPatternType.RangeB:
-                    cellSize = renderer.bounds.size;
-                    break;
-
-                case AttackPatternType.RangeC:
-                    if (show)
-                    {
-                        fanShape = attackPrefab.GetComponent<FanShape>();
-                        fanShape.enemyAi = this;
-                        CreatePrefabAtPlayer(attackPrefab); // C패턴 하나생성
-
-                        attackRangeInstance.SetActive(false);
-
-                        return;
-                    }
-                    break;
-
-                case AttackPatternType.RangeD:
-                    fanShape = attackPrefab.GetComponent<FanShape>();
-                    fanShape.enemyAi = this;
-                    cellSize = fanShape.Return();
-
-                    attackRangeInstance.SetActive(false);
-
-                    if (show)
-                    {
-                        int numberOfPrefabs = 7;
-                        float radius = 4.5f;
-                        CreatePrefabsAroundPlayer(attackPrefab, numberOfPrefabs, radius);
-                        return;
-                    }
-                    break;
+                float t = Mathf.Clamp01((Time.time - startTime) / CurrentPreparationTime);
+                rangeIndicatorRenderer.material.color = Color.Lerp(Color.yellow, Color.red, t);
             }
 
-            Vector3 offset = new Vector3(cellSize.x + 0.01f, cellSize.y + 0.015f, cellSize.z + 0.01f);
-
-            for (int i = 0; i < currentPattern.pattern.Length; i++)
-            {
-                if (currentPattern.pattern[i])
-                {
-                    Vector3 cellPosition = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
-                    GameObject cell = Instantiate(attackRangeInstance, cellPosition, transform.rotation, this.transform); // 몬스터 부모로 설정 추가
-                    //cell.AddComponent<EnemyProjectile>();
-                    cell.SetActive(true);
-                    cellInstances.Add(cell);
-
-                    cell.transform.rotation = transform.rotation;
-                }
-            }
-
-            attackRangeInstance.SetActive(false);
+            rangeIndicator.SetActive(true);
         }
         else
         {
-            foreach (GameObject cell in cellInstances)
-            {
-                if (cell != null)
-                {
-                    cell.SetActive(false);
-                }
-            }
-
-            RangeAttackPatternA();
+            rangeIndicator.SetActive(false);
         }
     }
 
@@ -1472,16 +1362,6 @@ public class EnemyAI : LivingObject
             createdPrefab.transform.position = updatedPosition;
 
             cellInstances.Add(createdPrefab); // 리스트에 Add 추가 이거 중요함
-
-            //if (i == 0)
-            //{
-            //    Instantiate(prefab, detectedPlayer.transform.position, Quaternion.identity);
-            //}
-            //else
-            //{
-            //    Vector3 randomPosition = RandomCircle(detectedPlayer.transform.position, radius);
-            //    Instantiate(prefab, randomPosition, Quaternion.identity);
-            //}
         }
     }
 
@@ -1582,16 +1462,7 @@ public class EnemyAI : LivingObject
             return INode.EnemyState.Failure;
 
         isAttacking = true;
-
-        //Debug.Log(isAttacking);
-
-        //if (enemyType == 8001003 && 0 == attackPatternIndex)
-        //{
-        //    Debug.Log("밀리어택 원 멧돼지");
-
-        //}
-
-        attackIndex = attackPatternIndex; // 인덱스 바꾸고
+        attackIndex = attackPatternIndex;
 
         StartCoroutine(PrepareMeleeAttack(enemyType, AttackPatternType.A));
         return INode.EnemyState.Success;
@@ -1677,9 +1548,7 @@ public class EnemyAI : LivingObject
         if (angleToPlayer > minAngle)
             return INode.EnemyState.Failure;
 
-        //Debug.Log(isTwoPhase ? "페이즈2 공격C 준비" : "페이즈1 공격C 준비");
         isAttacking = true;
-
         attackIndex = attackPatternIndex;
 
         StartCoroutine(PrepareMeleeAttack(enemyType, AttackPatternType.D));
@@ -1741,7 +1610,6 @@ public class EnemyAI : LivingObject
         isAttacking = true;
         attackIndex = attackPatternIndex;
 
-        //Debug.Log(attackPatternIndex);
         StartCoroutine(PrepareRangedAttack(enemyType, AttackPatternType.RangeB));
         return INode.EnemyState.Success;
     }
@@ -1820,7 +1688,17 @@ public class EnemyAI : LivingObject
             {
                 magicObject.gameObject.SetActive(true);
             }
-          
+
+            GameObject effectInstance = Instantiate(TwoPhaseEffect, transform.position, transform.rotation);
+            ParticleSystem particleSystem = effectInstance.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                Destroy(effectInstance, particleSystem.main.duration);
+            }
+            else
+            {
+                Destroy(effectInstance, 1f);
+            }
         }
         return !isTwoPhase;
     }
@@ -1905,16 +1783,6 @@ public class EnemyAI : LivingObject
         {
             if (fanShapeInstance != null && fanShapeInstance.isplayerInside)
             {
-
-                // 공격이 무조건 맞아
-
-                // 이상적인거는
-                // 공격 맞기 직전까지 판단을해야되잖아
-                // 안에있냐? 밖에있냐?
-
-
-                //Debug.Log("플레이어가 공격 범위 안에 있습니다.");
-                //Debug.Log(actualAttackDamage);
                 ExecuteAttack(gameObject.GetComponent<EnemyAI>(), player, actualAttackDamage);
                 break;
             }
@@ -1923,7 +1791,7 @@ public class EnemyAI : LivingObject
 
     #endregion
 
-    #region 애니메이션 이벤트후에 실제 데미지 주는 부분 - 영재가 추가
+    #region 애니메이션 이벤트후에 실제 데미지 주는 부분
     public void ExecuteAttack(LivingObject attacker, LivingObject defender, float actualAttackDamage)
     {
         Attack attack = Stat.CreateAttack(attacker, defender, true);

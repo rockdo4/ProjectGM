@@ -36,17 +36,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.94
+      value: 12.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.010001183
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.33
+      value: 19.9
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
@@ -207,6 +207,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -2365749227567730835, guid: ebf50a980a75076449f6c88bc720cf48,
+        type: 3}
+      propertyPath: m_Name
+      value: Magic
       objectReference: {fileID: 0}
     - target: {fileID: -2365749227567730835, guid: ebf50a980a75076449f6c88bc720cf48,
         type: 3}
@@ -508,8 +513,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statLink: {fileID: 11400000, guid: 1382054961b16ee418354dc963d99063, type: 2}
+  statLink: {fileID: 11400000, guid: 573d345ab5213b34b97b34edfb9c886a, type: 2}
   stat: {fileID: 11400000, guid: f850de4678448954d8fe71b892de6df5, type: 2}
+  TwoPhaseEffect: {fileID: 1456267007884653750, guid: 60fbc13724e1e1a4ea9f8d33c36b6343,
+    type: 3}
+  rangeIndicator: {fileID: 0}
   fanShapePrefabs:
   - {fileID: 62629442425054540, guid: 09faef9d342e3a84dbe680ff6289292b, type: 3}
   - {fileID: 107145547354362451, guid: 4fb1d3457f7f0d9469aaa4c1e56a8667, type: 3}
@@ -527,10 +535,10 @@ MonoBehaviour:
   dragonAttackPatternPhaseOne: 010000000200000003000000
   dragonAttackPatternPhaseTwo: 010000000200000003000000
   attackPreparationTimes:
-  - enemyType: 3
+  - enemyType: 8001002
     attackPatternType: 0
     preparationTime: 0.7
-  - enemyType: 3
+  - enemyType: 8001002
     attackPatternType: 1
     preparationTime: 2.2
   AttackPatternTypeAPrefab: {fileID: 62629442425054540, guid: 09faef9d342e3a84dbe680ff6289292b,
@@ -624,7 +632,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.77
+  m_Radius: 0.62
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0.58, z: -0.00000008940697}
