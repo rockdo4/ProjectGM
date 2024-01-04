@@ -39,6 +39,7 @@ public class CraftEquipButton : MonoBehaviour, IRenewal
 
     private bool IsUpgradable()
     {
+        /*
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
         if (!ct.ContainsKey(item.id + 1))
         {
@@ -60,6 +61,47 @@ public class CraftEquipButton : MonoBehaviour, IRenewal
         }
 
         if (PlayDataManager.data.Gold < ct[item.id + 1].gold)
+        {
+            //Debug.Log("Lack Of Gold");
+            return false;
+        }
+        // 인벤토리 공간 부족 (추후 추가 필요)
+
+
+        return true;
+        */
+        var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
+
+        var mat1 = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mf_module);
+        if (mat1 == null)
+        {
+            //Debug.Log("Not Exist Materials");
+            return false;
+        }
+
+        if (mat1.count < ct[item.id].mf_module_req)
+        {
+            //Debug.Log("Lack Of Materials Count");
+            return false;
+        }
+
+        if (ct[item.id].mon_core != -1)
+        {
+            var mat2 = PlayDataManager.data.MatInventory.Find(x => x.id == ct[item.id].mon_core);
+            if (mat2 == null)
+            {
+                //Debug.Log("Not Exist Materials");
+                return false;
+            }
+
+            if (mat2.count < ct[item.id].mon_core_req)
+            {
+                //Debug.Log("Lack Of Materials Count");
+                return false;
+            }
+        }
+
+        if (PlayDataManager.data.Gold < ct[item.id].gold)
         {
             //Debug.Log("Lack Of Gold");
             return false;
