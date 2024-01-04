@@ -86,7 +86,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8186599165580984582
 Transform:
   m_ObjectHideFlags: 0
@@ -101,7 +101,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9111638889028983666}
-  - {fileID: 3588323541417455128}
   m_Father: {fileID: 7379042720375739373}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1148703238054539550
@@ -777,6 +776,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8186599165580984582}
+  - {fileID: 3588323541417455128}
   - {fileID: 3416548506638848936}
   - {fileID: 6043408362861905990}
   - {fileID: 4573381993016270859}
@@ -2007,7 +2007,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8186599165580984582}
+  m_Father: {fileID: 7379042720375739373}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &3205542390946168376
 SkinnedMeshRenderer:
