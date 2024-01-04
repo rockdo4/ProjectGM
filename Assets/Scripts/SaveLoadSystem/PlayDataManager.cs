@@ -515,7 +515,7 @@ public static class PlayDataManager
         if (code == null || 
             data.SkillCodes.Count + 1 > GetSocket() || 
             !IsExistItem(code) || 
-            code.count - 1 <= 0)
+            code.count - 1 < 0)
         {
             return false;
         }
