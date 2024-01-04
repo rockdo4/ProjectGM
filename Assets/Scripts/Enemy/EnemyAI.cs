@@ -11,6 +11,9 @@ public class EnemyAI : LivingObject
     [Header("2페이즈 이펙트")]
     public GameObject TwoPhaseEffect;
 
+    [Header("그로기 이펙트")]
+    public GameObject grogyEffect;
+
     [SerializeField]
     [Header("원거리 공격 범위표시")]
     private GameObject rangeIndicator;
@@ -230,6 +233,11 @@ public class EnemyAI : LivingObject
 
     private void Start()
     {
+        if (grogyEffect != null)
+        {
+            grogyEffect.SetActive(false);
+        }
+
         HP = Stat.HP;
         startTime = Time.time;
         StartCoroutine(RoarInit());
@@ -360,6 +368,24 @@ public class EnemyAI : LivingObject
 
     #region 그로기
 
+
+    IEnumerator GrogyTurnOffEffect(GameObject effect)
+    {
+        ParticleSystem particleSystem = grogyEffect.GetComponent<ParticleSystem>();
+
+        if (grogyEffect != null)
+        {
+            Debug.Log(particleSystem.main.duration);
+            yield return new WaitForSeconds(particleSystem.main.duration);
+        }
+        else
+        {
+            yield return new WaitForSeconds(1.2f);
+        }
+        effect.SetActive(false);
+    }
+
+
     INode.EnemyState GroggyTrueState()
     {
         if (IsGroggy)
@@ -367,6 +393,9 @@ public class EnemyAI : LivingObject
             grogyTimer -= Time.deltaTime;
 
             IsGroggy = true;
+
+            grogyEffect.SetActive(true);
+            StartCoroutine(GrogyTurnOffEffect(grogyEffect));
 
             animator.ResetTrigger("Attack_A");
             animator.ResetTrigger("Attack_B");
@@ -386,6 +415,9 @@ public class EnemyAI : LivingObject
     INode.EnemyState GroggyFalseState()
     {
         grogyTimer = 5f;
+
+        StartCoroutine(GrogyWaitForSecond());
+
         animator.SetBool("Grogy", false);
 
         IsGroggy = false;
@@ -393,6 +425,12 @@ public class EnemyAI : LivingObject
         isPreparingAttack = false;
 
         return INode.EnemyState.Success;
+    }
+
+    IEnumerator GrogyWaitForSecond()
+    {
+        Debug.Log("그로기 유예");
+        yield return new WaitForSeconds(1.7f);
     }
 
     #endregion
