@@ -39,6 +39,11 @@ public class StageInfo : MonoBehaviour
 
     private void OnEnable()
     {
+        if (!PlayerPrefs.HasKey(PrefsKey.stageID))
+        {
+            return;
+        }
+
         stageTable ??= CsvTableMgr.GetTable<StageTable>().dataTable;
         stringTable ??= CsvTableMgr.GetTable<StringTable>().dataTable;
 
