@@ -61,15 +61,24 @@ public class PlayerStat : Stat
     [Header("그로기 유발 시간(sec)")]
     public float groggyTime;
 
-    [Header("피격 시 무적 시간(sec)")]
-    public float hitInvincibleTime;
-
     [Header("공격 속도")]
     [Range(0.1f, 5f)]
     public float attackSpeed = 1f;
 
     [Header("특수 공격 배율")]
     public float superAttackRate = 3f;
+
+    [Header("피격시 대미지 상쇄 확률")]
+    [Range(0f, 1f)]
+    public float blockRate = 0f;
+
+    [Header("최종 대미지 배율")]
+    [Range(0f, 5f)]
+    public float attackFinalRate = 0f;
+
+    [Header("공격 시 회피 포인트 증가 배율")]
+    [Range(0f, 1f)]
+    public float attackEvadePointRate = 0f;
 
     public override Attack CreateAttack(LivingObject attacker, LivingObject defender, bool groggy)
     {
@@ -93,6 +102,8 @@ public class PlayerStat : Stat
             damage *= player.Stat.CriticalDamage;
         }
 
+        damage += damage * attackFinalRate;
+
         if (enemyStat != null)
         {
             damage -= enemyStat.Defence;
@@ -102,10 +113,5 @@ public class PlayerStat : Stat
             }
         }
         return new Attack((int)damage, critical, groggy);
-    }
-
-    public override string ToString()
-    {
-        return base.ToString() + $"\nevadeTime: {evadeTime}\tmaxEvadePoint: {maxEvadePoint}\tevadePoint: {evadePoint}\t\nevadeDamageRate: {evadeDamageRate}\tjustEvadeTime: {justEvadeTime}\tjustEvadePoint: {justEvadePoint}\t\nhitEvadePoint: {hitEvadePoint}\tgroggyTime: {groggyTime}\thitInvincibleTime: {hitInvincibleTime}t";
     }
 }

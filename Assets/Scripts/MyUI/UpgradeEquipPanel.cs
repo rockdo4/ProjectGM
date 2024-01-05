@@ -31,6 +31,10 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
     [Header("체크 이미지")]
     public Image checkImage;
 
+    [Header("업그레이드 파티클")]
+    [SerializeField]
+    private ParticleSystem upgradeParticle;
+
     private Equip item = null;
     private ItemPanel itemPanel = null;
 
@@ -81,8 +85,8 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
                     beforeNameText.text = st[wt[item.id].name];
                     afterNameText.text = st[wt[item.id + 1].name];
 
-                    beforeInfoText.text = $"현재 공격력 : {wt[item.id].atk}\n현재 속성 : {wt[item.id].weakpoint}";
-                    afterInfoText.text = $"강화 시 공격력 : {wt[item.id + 1].atk}\n강화 시 속성 : {wt[item.id + 1].weakpoint}";
+                    beforeInfoText.text = $"공격력 : {wt[item.id].atk}\n속성 : {wt[item.id].weakpoint}";
+                    afterInfoText.text = $"공격력 : {wt[item.id + 1].atk}\n속성 : {wt[item.id + 1].weakpoint}";
 
                     if (ct[item.id + 1].lvup_module != -1) // 요구 재료마다 분기
                     {
@@ -117,8 +121,8 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
                     beforeNameText.text = st[at[item.id].name];
                     afterNameText.text = st[at[item.id + 1].name];
 
-                    beforeInfoText.text = $"현재 방어력 : {at[item.id].defence}";
-                    afterInfoText.text = $"강화 시 방어력 : {at[item.id + 1].defence}";
+                    beforeInfoText.text = $"방어력 : {at[item.id].defence}";
+                    afterInfoText.text = $"방어력 : {at[item.id + 1].defence}";
 
                     if (ct[item.id + 1].lvup_module != -1) // 요구 재료마다 분기
                     {
@@ -195,6 +199,8 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
                 }
                 break;
         }
+
+        upgradeParticle.Play();
 
         itemPanel.SetItem(item);
         itemPanel.Renewal();

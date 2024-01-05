@@ -35,6 +35,10 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
     [SerializeField]
     private Button craftButton;
 
+    [Header("제작 파티클")]
+    [SerializeField]
+    private ParticleSystem craftParticle;
+
     private Equip item = null;
 
     public void SetEquip(Equip item)
@@ -99,6 +103,8 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
         {
             InventoryManager.Instance.Renewal();
         }
+
+        craftParticle.Play();
 
         CraftManager.Instance.ShowWeapons(true);
         gameObject.SetActive(false);

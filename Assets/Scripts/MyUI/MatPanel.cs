@@ -23,6 +23,10 @@ public class MatPanel : MonoBehaviour, IRenewal
     [SerializeField]
     private TextMeshProUGUI countText;
 
+    [Header("판매 파티클")]
+    [SerializeField]
+    private ParticleSystem SellParticle;
+
     private Materials mat;
 
     public void SetMaterials(Materials mat)
@@ -46,6 +50,8 @@ public class MatPanel : MonoBehaviour, IRenewal
     public void SellItem()
     {
         PlayDataManager.SellItem(mat, 1);
+
+        SellParticle.Play();
 
         Renewal();
         InventoryManager.Instance.Renewal();

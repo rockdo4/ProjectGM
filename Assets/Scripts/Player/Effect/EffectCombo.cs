@@ -22,7 +22,7 @@ public class EffectCombo : EffectBase
 
     public override void Init(Transform targetTransform = null)
     {
-        var weapon = targetTransform.GetComponent<Player>().CurrentWeapon;
+        var weapon = targetTransform.GetComponent<PlayerController>().EquipWeapon;
         foreach (var attackAudio in attackAudios)
         {
             if (attackAudio.weaponType != weapon.weaponType)

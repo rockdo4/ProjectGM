@@ -52,7 +52,7 @@ public class CraftManager : MonoBehaviour
             () => // createFunc
             {
                 var button = Instantiate(buttonPrefab);
-                button.transform.SetParent(content.transform);
+                button.transform.SetParent(content.transform, false);
                 button.gameObject.SetActive(false);
 
                 return button;
@@ -60,12 +60,12 @@ public class CraftManager : MonoBehaviour
         delegate (CraftEquipButton button) // actionOnGet
         {
             button.gameObject.SetActive(true);
-            button.transform.SetParent(content.transform);
+            button.transform.SetParent(content.transform, false);
         },
         delegate (CraftEquipButton button) // actionOnRelease
         {
             button.iconImage.sprite = null;
-            button.transform.SetParent(transform);
+            button.transform.SetParent(transform, false);
             button.gameObject.SetActive(false);
         });
 

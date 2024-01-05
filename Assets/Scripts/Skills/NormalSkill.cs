@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class NormalSkill : Skill
 {
     public NormalSkill(int id, int level)
@@ -15,15 +17,15 @@ public class NormalSkill : Skill
         switch (st[skill.name])
         {
             case "공격력":
-                player.Stat.AttackDamage += skill.value * level;
+                player.Stat.AttackDamage += Mathf.RoundToInt(skill.value * level);
                 break;
 
             case "방어력":
-                player.Stat.Defence += skill.value * level;
+                player.Stat.Defence += Mathf.RoundToInt(skill.value * level);
                 break;
 
             case "체력":
-                player.Stat.HP += skill.value * level;
+                player.Stat.HP += Mathf.RoundToInt(skill.value * level);
                 player.HP = player.Stat.HP;
                 break;
 

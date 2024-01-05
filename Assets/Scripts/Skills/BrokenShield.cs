@@ -19,5 +19,6 @@ public class BrokenShield : Skill
             return;
         }
 
+        player.Stat.blockRate = 0.3f;
     }
 }

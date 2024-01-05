@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         IsGameOver = false;
-        Pause(false);
     }
 
     private void Update()
