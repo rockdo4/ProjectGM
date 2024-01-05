@@ -25,6 +25,10 @@ public class SkillCodePanel : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI countText;
 
+    [Header("판매 파티클")]
+    [SerializeField]
+    private ParticleSystem SellParticle;
+
     private SkillCode skillcode = null;
 
     public void SetSkillCode(SkillCode skillcode)
@@ -48,6 +52,8 @@ public class SkillCodePanel : MonoBehaviour
     public void SellItem()
     {
         PlayDataManager.SellItem(skillcode, 1);
+
+        SellParticle.Play();
 
         Renewal();
         InventoryManager.Instance.Renewal();

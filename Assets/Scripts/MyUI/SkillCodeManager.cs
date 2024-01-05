@@ -72,48 +72,48 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
             delegate (ItemButton button) // actionOnGet
             {
                 button.gameObject.SetActive(true);
-                button.transform.SetParent(invContent.transform, true);
+                button.transform.SetParent(invContent.transform, false);
             },
             delegate (ItemButton button) // actionOnRelease
             {
                 button.Clear();
-                button.transform.SetParent(gameObject.transform, true); // ItemButton Transform Reset
+                button.transform.SetParent(gameObject.transform, false); // ItemButton Transform Reset
                 button.gameObject.SetActive(false);
             });
 
         lockPool = new ObjectPool<LockerButton>
             (() => // createFunc
             {
-                var go = Instantiate(lockPrefab, equipContent.transform, true);
+                var go = Instantiate(lockPrefab, equipContent.transform, false);
                 go.gameObject.SetActive(false);
                 return go;
             },
             delegate (LockerButton go) // actionOnGet
             {
                 go.gameObject.SetActive(true);
-                go.transform.SetParent(equipContent.transform, true);
+                go.transform.SetParent(equipContent.transform, false);
             },
             delegate (LockerButton go) // actionOnRelease
             {
-                go.transform.SetParent(gameObject.transform, true);
+                go.transform.SetParent(gameObject.transform, false);
                 go.gameObject.SetActive(false);
             });
 
         infoPool = new ObjectPool<SkillCodeInfoPanel>
             (() => // createFunc
             {
-                var go = Instantiate(infoPrefab, infoContent.transform, true);
+                var go = Instantiate(infoPrefab, infoContent.transform, false);
                 go.gameObject.SetActive(false);
                 return go;
             },
             delegate (SkillCodeInfoPanel go)
             {
                 go.gameObject.SetActive(true);
-                go.transform.SetParent(infoContent.transform, true);
+                go.transform.SetParent(infoContent.transform, false);
             },
             delegate (SkillCodeInfoPanel go)
             {
-                go.transform.SetParent(gameObject.transform, true);
+                go.transform.SetParent(gameObject.transform, false);
                 go.gameObject.SetActive(false);
             });
 
@@ -178,7 +178,7 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
             var go = infoPool.Get();
             go.nameText.text = info.nameText.text;
             go.levelText.text = info.levelText.text;
-            go.transform.SetParent(exContent.transform, true);
+            go.transform.SetParent(exContent.transform, false);
         }
     }
 
@@ -217,7 +217,7 @@ public class SkillCodeManager : MonoBehaviour, IRenewal
             var go = buttonPool.Get();
 
             go.iconImage.sprite = skillcodeIconSO.GetSprite(table[id].type);
-            go.transform.SetParent(equipContent.transform, true);
+            go.transform.SetParent(equipContent.transform, false);
             go.OnCountAct();
 
             go.button.onClick.AddListener(() =>
