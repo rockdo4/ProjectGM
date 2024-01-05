@@ -18,7 +18,7 @@ public class InGameManager : MonoBehaviour
         }
     }
     private static InGameManager m_instance;
-
+    
     #region Player & Enemy
     [Header("Player And Enemy")]
     public EnemySO enemySO;
@@ -58,7 +58,6 @@ public class InGameManager : MonoBehaviour
     public GameObject itemPrefab;
     public IconSO matIconSo;
     public IconSO skillCodeIconSo;
-    public GameObject itemInfo;
     #endregion
 
     private StageTable.Data stageData;
@@ -73,7 +72,7 @@ public class InGameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        var stageID = PlayerPrefs.GetInt("StageID");
+        var stageID = PlayerPrefs.GetInt(PrefsKey.stageID);
         var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
 
         if (!stageTable.ContainsKey(stageID))
@@ -107,7 +106,7 @@ public class InGameManager : MonoBehaviour
 
     public void Reward()
     {
-        var stageID = PlayerPrefs.GetInt("StageID");
+        var stageID = PlayerPrefs.GetInt(PrefsKey.stageID);
         var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
 
         //Material

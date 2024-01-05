@@ -12,7 +12,7 @@ public class StageManager : MonoBehaviour
 
     [Header("Enemy Icon 폴더경로")]
     [SerializeField]
-    private readonly string enemyIconPath = "sprites/Enemy Icon";
+    private const string enemyIconPath = "sprites/Enemy Icon";
 
     [Header("BLACK")]
     [SerializeField]
@@ -48,7 +48,7 @@ public class StageManager : MonoBehaviour
         PlayDataManager.StageInfoRefresh();
 
         //next Scene Data
-        PlayerPrefs.DeleteKey("StageID");
+        PlayerPrefs.DeleteKey(PrefsKey.stageID);
 
         if (stagePrefab == null)
         {
@@ -73,12 +73,14 @@ public class StageManager : MonoBehaviour
             stage.enemyName.text = stringTable[enemyTable[data.monster_id].name];
             stage.button.onClick.AddListener(() =>
             {
-                //stageInfo....text = asdf;
-                PlayerPrefs.SetInt("StageID", info.Key);
-                SceneManager.LoadScene(((Maps)data.map_id).ToString());
+                PlayerPrefs.SetInt(PrefsKey.stageID, info.Key);
                 if (stageInfo != null)
                 {
                     stageInfo.SetActive(true);
+                }
+                else
+                {
+                    SceneManager.LoadScene(((Maps)data.map_id).ToString());
                 }
             });
             stage.transform.SetParent(stageContainer, false);
