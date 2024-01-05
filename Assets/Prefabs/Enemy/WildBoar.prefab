@@ -86,7 +86,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8186599165580984582
 Transform:
   m_ObjectHideFlags: 0
@@ -926,6 +926,8 @@ MonoBehaviour:
   IntervalTime: 0.3
   wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
   wolfAttackPatternPhaseTwo: 0100000002000000
+  tutorialWolfAttackPatternPhaseOne: 0100000001000000020000000100000002000000
+  tutorialWolfAttackPatternPhaseTwo: 02000000010000000100000001000000
   spiderAttackPatternPhaseOne: 010000000200000003000000
   spiderAttackPatternPhaseTwo: 010000000200000003000000
   dragonAttackPatternPhaseOne: 010000000200000003000000
@@ -1078,7 +1080,7 @@ MonoBehaviour:
   drawingMode: 1
   outlineLayer: 0
   outlineTargets:
-  - IsVisible: 1
+  - IsVisible: 0
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
