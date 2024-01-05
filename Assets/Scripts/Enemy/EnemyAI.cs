@@ -60,6 +60,13 @@ public class EnemyAI : LivingObject
     [Header("늑대 페이즈2 공격 패턴")]
     public int[] wolfAttackPatternPhaseTwo = new int[] { 1, 2 };
 
+    [Header("듀토리얼 늑대 페이즈1 공격 패턴")]
+    public int[] tutorialWolfAttackPatternPhaseOne = new int[] { 1, 1, 2, 1, 2 }; // 테스트로 레인지A 인덱스 넣기
+
+    [Header("듀토리얼 늑대 페이즈2 공격 패턴")]
+    public int[] tutorialWolfAttackPatternPhaseTwo = new int[] { 2, 1, 1, 1 };
+
+
     [Header("거미 페이즈1 공격 패턴")]
     public int[] spiderAttackPatternPhaseOne = new int[] { 1, 2, 3 };
 
@@ -327,7 +334,7 @@ public class EnemyAI : LivingObject
                 BTRunner = new BehaviorTreeRunner(SpiderBT());
                 break;
             case 8002002:
-                BTRunner = new BehaviorTreeRunner(WolfBT()); // 듀토리얼
+                BTRunner = new BehaviorTreeRunner(WolfBT2()); // 듀토리얼
                 break;
             default:
                 Debug.Log("Not Exist Enemy Type!");
@@ -725,6 +732,69 @@ public class EnemyAI : LivingObject
     }
     #endregion
 
+    #region 듀토리얼 늑대 행동트리
+    INode WolfBT2()
+    {
+        return new SelectorNode
+        (
+            new List<INode>()
+            {
+                new DecoratorNode
+                (
+                    () => IsGroggy,
+                    new ActionNode(GroggyTrueState)
+                ),
+
+                new DecoratorNode
+                (
+                    () => !IsGroggy,
+
+                    new SequenceNode
+                    (
+                        new List<INode>()
+                        {
+                            new ActionNode(GroggyFalseState),
+
+                            new SelectorNode
+                            (
+                                new List<INode>()
+                                {
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ConditionNode(IsPhaseOne),
+                                            new ActionNode(() => ExecuteAttackPattern(8002002, tutorialWolfAttackPatternPhaseOne))
+                                        }
+                                    ),
+
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new InverterNode(new ConditionNode(IsPhaseOne)),
+                                            new ActionNode(() => ExecuteAttackPattern(8002002, tutorialWolfAttackPatternPhaseTwo)),
+                                        }
+                                    ),
+
+                                    new SequenceNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new ActionNode(DetectPlayer),
+                                            new ActionNode(TracePlayer),
+                                        }
+                                    ),
+                                }
+                            )
+                        }
+                    )
+                )
+            }
+        );
+    }
+    #endregion
+
     #region 거미 행동트리
     INode SpiderBT()
     {
@@ -1034,6 +1104,18 @@ public class EnemyAI : LivingObject
             }
         }
 
+        if (enemyType == 8002002)
+        {
+            switch (AttackPatternType)
+            {
+                case AttackPatternType.A:
+                    return new Vector3(0f, 0f, -5f);
+                case AttackPatternType.B:
+                    return new Vector3(0f, 0f, -2f);
+                default: return Vector3.zero;
+            }
+        }
+
         return Vector3.zero;
     }
 
@@ -1181,6 +1263,14 @@ public class EnemyAI : LivingObject
                 break;
 
             case 8001002:
+                if (attackPatternType == AttackPatternType.A)
+                    additionalRotation = Quaternion.Euler(0.172f, 180f, 0f);
+
+                else if (attackPatternType == AttackPatternType.B)
+                    additionalRotation = Quaternion.Euler(0f, 120f, 0f);
+                break;
+
+            case 8002002:
                 if (attackPatternType == AttackPatternType.A)
                     additionalRotation = Quaternion.Euler(0.172f, 180f, 0f);
 

@@ -72,13 +72,6 @@ public static class PlayDataManager
                 data.WeaponInventory.Add(weapon);
             }
 
-            // 재료 아이템 임시 지급 test code
-            if (data.MatInventory.Count == 0)
-            {
-                IncreaseMat(610001, 50);
-                IncreaseMat(611001, 50);
-            }
-
             SaveLoadSystem.Save(data, "savefile.json");
         }
 

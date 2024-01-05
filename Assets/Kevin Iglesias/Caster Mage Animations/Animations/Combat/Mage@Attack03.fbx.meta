@@ -528,10 +528,10 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0
-        functionName: AttackEffectB
+      - time: 0.28292683
+        functionName: PlayAttackSound
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
+        objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
           type: 3}
         floatParameter: 0
         intParameter: 0
@@ -540,6 +540,14 @@ ModelImporter:
         functionName: Attack
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.2894309
+        functionName: AttackEffectB
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
           type: 3}
         floatParameter: 0
         intParameter: 0

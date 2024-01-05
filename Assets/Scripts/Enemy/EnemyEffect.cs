@@ -38,7 +38,7 @@ public class EnemyEffect : MonoBehaviour
         enemyAi = GetComponent<EnemyAI>();
     }
 
-    void EffectEnemyType(string pattern)
+    private void EffectEnemyType(string pattern)
     {
         offset = Vector3.zero;
 
