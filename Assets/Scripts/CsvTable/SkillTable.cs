@@ -12,10 +12,10 @@ public class SkillTable : CsvTable
         public int name { get; set; }
         public int type { get; set; }
         public int info { get; set; }
-        public int value { get; set; }
+        public float value { get; set; }
         public int max_lv { get; set; }
 
-        public Data(int name, int type, int info, int value, int max_lv)
+        public Data(int name, int type, int info, float value, int max_lv)
         {
             this.name = name;
             this.type = type;
@@ -54,7 +54,7 @@ public class SkillTable : CsvTable
                     csv.GetField<int>(1),
                     csv.GetField<int>(2),
                     csv.GetField<int>(3),
-                    csv.GetField<int>(4),
+                    csv.GetField<float>(4),
                     csv.GetField<int>(5)
                 )
             );
