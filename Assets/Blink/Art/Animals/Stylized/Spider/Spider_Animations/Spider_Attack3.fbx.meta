@@ -100,6 +100,14 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.33333334
+        functionName: PlayAttackSound
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.34651163
         functionName: Attack
         data: 
@@ -108,7 +116,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.3744186
+      - time: 0.3646625
         functionName: AttackEffectC
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
@@ -116,7 +124,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.97360384
+      - time: 0.9801079
         functionName: AnimationIsOver
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,

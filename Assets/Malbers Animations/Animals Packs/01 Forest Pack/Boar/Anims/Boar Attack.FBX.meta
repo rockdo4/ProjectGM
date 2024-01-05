@@ -342,6 +342,14 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.27804878
+        functionName: PlayAttackSound
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.28531855
         functionName: Attack
         data: 
@@ -358,7 +366,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 1
+      - time: 0.99512196
         functionName: AnimationIsOver
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
@@ -576,7 +584,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.28808865
+      - time: 0.30081302
+        functionName: PlayAttackSound
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.30922687
         functionName: AttackEffectC
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
@@ -592,7 +608,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 1
+      - time: 0.9886179
         functionName: AnimationIsOver
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
@@ -705,6 +721,14 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.28617886
+        functionName: PlayAttackSound
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.29639888
         functionName: AttackEffectA
         data: 
@@ -721,7 +745,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 1
+      - time: 0.9772358
         functionName: AnimationIsOver
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
