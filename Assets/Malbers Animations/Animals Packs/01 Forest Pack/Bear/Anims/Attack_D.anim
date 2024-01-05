@@ -54302,10 +54302,10 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.43333334
-    functionName: AttackEffectA
-    data: 
-    objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
+  - time: 0.4
+    functionName: PlayAttackSound
+    data: Bear
+    objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
       type: 3}
     floatParameter: 0
     intParameter: 0
@@ -54314,6 +54314,14 @@ AnimationClip:
     functionName: Attack
     data: 
     objectReferenceParameter: {fileID: 11500000, guid: 624fac657e969e44f8395ff829f0e937,
+      type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.43333334
+    functionName: AttackEffectA
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: c00081c52db24854abda497f6b76c30f,
       type: 3}
     floatParameter: 0
     intParameter: 0

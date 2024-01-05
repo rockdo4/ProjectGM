@@ -34,8 +34,18 @@ public class EnemySound : MonoBehaviour
     {
         List<AudioClip> attackClips = new List<AudioClip> { attackClip1, attackClip2, attackClip3, attackClip4 };
 
-        audioSource.clip = attackClips[Random.Range(0, attackClips.Count)];
+        int randomIndex = Random.Range(0, attackClips.Count);
+        audioSource.clip = attackClips[randomIndex];
         audioSource.Play();
+
+        if (audioSource.clip != null)
+        {
+            Debug.Log("Enemy Attack Sound: " + audioSource.clip.name);
+        }
+        else
+        {
+            Debug.Log("Enemy Attack Sound Null!!!!!!");
+        }
     }
 
     public void PlayGrogyAndDieSound(string enemyType)
