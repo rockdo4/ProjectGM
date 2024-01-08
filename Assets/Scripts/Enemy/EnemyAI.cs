@@ -83,8 +83,6 @@ public class EnemyAI : LivingObject
     private int EnemyMeleeAttackIndexTwo = 1;
     private int EnemyMeleeAttackIndexThree = 2;
     private int EnemyMeleeAttackIndexFour = 3;
-    private int EnemyMeleeAttackIndexFive = 4;
-    private int EnemyMeleeAttackIndexSix = 5;
 
     private int EnemyRangedAttackIndexOne = 6;
     private int EnemyRangedAttackIndexTwo = 7;
@@ -357,20 +355,31 @@ public class EnemyAI : LivingObject
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
+        if (isDie)
         {
-            HP -= 100;
-            Debug.Log("현재 체력 : " + HP);
+            return;
+        }
+
+        if (HP <= 0 && !isDie)
+        {
+            CancelAttack();
+            animator.SetTrigger("Die");
+            isDie = true;
+            return;
         }
 
         if (!hasRoared)
             return;
-        
-        if (HP <= 0 && !isDie)
+
+        if (IsGroggy)
         {
-            animator.SetTrigger("Die");
-            isDie = true;
-            return;
+            CancelAttack();
+        }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            HP -= 100;
+            Debug.Log("현재 체력 : " + HP);
         }
 
         if (isPreparingAttack)
@@ -951,7 +960,7 @@ public class EnemyAI : LivingObject
             }
         }
 
-        Debug.Log("이번 공격 대기시간 : "  + specificPreparationTime);
+        //Debug.Log("이번 공격 대기시간 : "  + specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
         ShowMeleeAttackRange(false, enemytype, attackPatternType);
@@ -987,7 +996,7 @@ public class EnemyAI : LivingObject
 
         ShowProjectileAttackRange(true);
 
-        Debug.Log("이번 공격 대기시간 : " + specificPreparationTime);
+        //Debug.Log("이번 공격 대기시간 : " + specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
         switch (attackPatternType)
@@ -1958,4 +1967,23 @@ public class EnemyAI : LivingObject
     }
 
     #endregion
+
+    private void CancelAttack()
+    {
+        if (activeFanShapes != null)
+        {
+            foreach (var fanShape in activeFanShapes)
+            {
+                MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
+                if (meshRenderer != null)
+                {
+                    meshRenderer.enabled = false;
+                }
+            }
+        }
+        ShowProjectileAttackRange(false);
+        isPreparingAttack = false;
+        isAttacking = false;
+        StopAllCoroutines();
+    }
 }
