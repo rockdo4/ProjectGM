@@ -1,3 +1,4 @@
+using GooglePlayGames;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
@@ -18,7 +19,8 @@ public class InGameManager : MonoBehaviour
         }
     }
     private static InGameManager m_instance;
-    
+    private const string defaultPlayerName = "YOU";
+
     #region Player & Enemy
     [Header("Player And Enemy")]
     public EnemySO enemySO;
@@ -171,7 +173,9 @@ public class InGameManager : MonoBehaviour
         {
             playerInfo.player = GameObject.FindWithTag(Tags.player).GetComponent<Player>();
         }
-        playerInfo.nameText.text = playerInfo.player.name;
+
+        var userName = PlayGamesPlatform.Instance.GetUserDisplayName();
+        playerInfo.nameText.text = (userName == string.Empty) ? defaultPlayerName : userName;
 
         playerInfo.hp.minValue = 0f;
         playerInfo.hp.maxValue = playerInfo.player.Stat.HP;

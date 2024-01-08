@@ -131,6 +131,7 @@ public class PlayerController : MonoBehaviour
         }
         #endregion
 
+#if UNITY_EDITOR
         #region Test Input
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -147,6 +148,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log(player.Stat.Defence);
         }
         #endregion
+#endif
     }
 
     private void FixedUpdate()
