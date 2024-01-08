@@ -83,8 +83,6 @@ public class EnemyAI : LivingObject
     private int EnemyMeleeAttackIndexTwo = 1;
     private int EnemyMeleeAttackIndexThree = 2;
     private int EnemyMeleeAttackIndexFour = 3;
-    private int EnemyMeleeAttackIndexFive = 4;
-    private int EnemyMeleeAttackIndexSix = 5;
 
     private int EnemyRangedAttackIndexOne = 6;
     private int EnemyRangedAttackIndexTwo = 7;
