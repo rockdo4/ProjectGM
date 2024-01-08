@@ -985,7 +985,7 @@ public class EnemyAI : LivingObject
 
         ShowProjectileAttackRange(true);
 
-        Debug.Log("이번 공격 대기시간 : " + specificPreparationTime);
+        //Debug.Log("이번 공격 대기시간 : " + specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
         switch (attackPatternType)
