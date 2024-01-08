@@ -371,6 +371,11 @@ public class EnemyAI : LivingObject
             return;
         }
 
+        if (IsGroggy)
+        {
+            CancelAttack();
+        }
+
         if (isPreparingAttack)
         {
             return;
@@ -949,7 +954,7 @@ public class EnemyAI : LivingObject
             }
         }
 
-        Debug.Log("이번 공격 대기시간 : "  + specificPreparationTime);
+        //Debug.Log("이번 공격 대기시간 : "  + specificPreparationTime);
         yield return new WaitForSeconds(specificPreparationTime);
 
         ShowMeleeAttackRange(false, enemytype, attackPatternType);
@@ -1956,4 +1961,23 @@ public class EnemyAI : LivingObject
     }
 
     #endregion
+
+    private void CancelAttack()
+    {
+        if (activeFanShapes != null)
+        {
+            foreach (var fanShape in activeFanShapes)
+            {
+                MeshRenderer meshRenderer = fanShape.GetComponent<MeshRenderer>();
+                if (meshRenderer != null)
+                {
+                    meshRenderer.enabled = false;
+                }
+            }
+        }
+        ShowProjectileAttackRange(false);
+        isPreparingAttack = false;
+        isAttacking = false;
+        StopAllCoroutines();
+    }
 }
