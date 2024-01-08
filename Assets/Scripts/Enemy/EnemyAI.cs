@@ -1981,7 +1981,10 @@ public class EnemyAI : LivingObject
                 }
             }
         }
-        ShowProjectileAttackRange(false);
+        if (rangeIndicator != null)
+        {
+            ShowProjectileAttackRange(false);
+        }
         isPreparingAttack = false;
         isAttacking = false;
         StopAllCoroutines();
