@@ -355,25 +355,31 @@ public class EnemyAI : LivingObject
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
+        if (isDie)
         {
-            HP -= 100;
-            Debug.Log("현재 체력 : " + HP);
+            return;
         }
 
-        if (!hasRoared)
-            return;
-        
         if (HP <= 0 && !isDie)
         {
+            CancelAttack();
             animator.SetTrigger("Die");
             isDie = true;
             return;
         }
 
+        if (!hasRoared)
+            return;
+
         if (IsGroggy)
         {
             CancelAttack();
+        }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            HP -= 100;
+            Debug.Log("현재 체력 : " + HP);
         }
 
         if (isPreparingAttack)
