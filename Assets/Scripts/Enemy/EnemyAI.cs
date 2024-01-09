@@ -1298,10 +1298,13 @@ public class EnemyAI : LivingObject
     }
 
 
+    
+
     private void ShowMeleeAttackRange(bool show, int enemyType, AttackPatternType AttackPatternType) // 쇼
     {
         Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
         poolIndex = GetPoolIndexForAttackPatternType(AttackPatternType);
+
 
         if (show)
         {
@@ -1322,6 +1325,11 @@ public class EnemyAI : LivingObject
                 activeFanShapes.Clear(); // 리스트 초기화
             }
 
+            if (fanShapePositions != null)
+            {
+                fanShapePositions.Clear(); // D패턴 리스트 초기화2
+            }
+
             for (int i = 0; i < currentPattern.pattern.Length; i++)
             {
                 if (currentPattern.pattern[i])
@@ -1338,7 +1346,6 @@ public class EnemyAI : LivingObject
                     fanShapeInstance.transform.SetParent(transform, false);
                     fanShapeInstance.transform.position = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
 
-                    // 에일리언 D패턴을 위한 리스트에 포지션 추가
                     fanShapePositions.Add(fanShapeInstance.transform.position);
 
                     fanShapeInstance.transform.rotation = CalculateRotation(enemyType, AttackPatternType, transform.position, fanShapeInstance.transform.position);

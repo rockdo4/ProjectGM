@@ -36,6 +36,8 @@ public class EnemyEffect : MonoBehaviour
             EffectTypeRA.SetActive(false);
         }
         enemyAi = GetComponent<EnemyAI>();
+
+        
     }
 
     private void EffectEnemyType(string pattern)
@@ -181,8 +183,6 @@ public class EnemyEffect : MonoBehaviour
 
         if (enemyAi.enemyType == 8001004 && EffectTypeD != null)
         {
-            Debug.Log(enemyAi.fanShapePositions);
-
             foreach (Vector3 position in enemyAi.fanShapePositions)
             {
                 if (EffectTypeD != null)
@@ -191,8 +191,6 @@ public class EnemyEffect : MonoBehaviour
                     DestroyEffect(effectInstance);
                 }
             }
-
-            enemyAi.fanShapePositions.Clear();
 
             return;
         }
@@ -243,11 +241,13 @@ public class EnemyEffect : MonoBehaviour
 
         if (particleSystem != null)
         {
+            Debug.Log(particleSystem.main.duration);
+
             yield return new WaitForSeconds(particleSystem.main.duration);
         }
         else
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(2.5f);
         }
 
         effect.SetActive(false);
