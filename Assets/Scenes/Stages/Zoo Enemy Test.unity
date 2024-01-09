@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3322725, g: 0.53358763, b: 0.40487114, a: 1}
+  m_IndirectSpecularColor: {r: 0.3322315, g: 0.53349996, b: 0.4048831, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -869,6 +869,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WildBoar
       objectReference: {fileID: 0}
+    - target: {fileID: 2857295111879149241, guid: a8229372b3951054a80a99918e67560e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -887,7 +892,7 @@ PrefabInstance:
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
@@ -897,7 +902,7 @@ PrefabInstance:
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
@@ -912,7 +917,7 @@ PrefabInstance:
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
@@ -1129,7 +1134,7 @@ PrefabInstance:
     - target: {fileID: 2986283220750914057, guid: d754abcbb875ca04493862bafef08470,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.4
+      value: -0.06
       objectReference: {fileID: 0}
     - target: {fileID: 2986283220750914057, guid: d754abcbb875ca04493862bafef08470,
         type: 3}
@@ -1139,7 +1144,7 @@ PrefabInstance:
     - target: {fileID: 2986283220750914057, guid: d754abcbb875ca04493862bafef08470,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.6999998
+      value: 16.52
       objectReference: {fileID: 0}
     - target: {fileID: 2986283220750914057, guid: d754abcbb875ca04493862bafef08470,
         type: 3}
@@ -2281,6 +2286,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5818047596961783332, guid: 27fb17d2455922844aec615844f2755b,
+        type: 3}
+      propertyPath: outlineTargets.Array.data[0].IsVisible
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 471950779080328446, guid: 27fb17d2455922844aec615844f2755b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2354,6 +2364,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 154015850529795303, guid: 04f59cd8451f38341ad12c2f29980c08,
+        type: 3}
+      propertyPath: outlineTargets.Array.data[1].IsVisible
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6304914700616860230, guid: 04f59cd8451f38341ad12c2f29980c08,
         type: 3}
       propertyPath: m_Name
@@ -2635,7 +2650,7 @@ PrefabInstance:
     - target: {fileID: 2635884456797727361, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.4
+      value: -0.06
       objectReference: {fileID: 0}
     - target: {fileID: 2635884456797727361, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
@@ -2645,7 +2660,7 @@ PrefabInstance:
     - target: {fileID: 2635884456797727361, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.7
+      value: 28.52
       objectReference: {fileID: 0}
     - target: {fileID: 2635884456797727361, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
@@ -4004,6 +4019,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8421173735785800047, guid: 94831c2a2aeba7d4f90b121bd1f396ca,
+        type: 3}
+      propertyPath: outlineTargets.Array.data[1].IsVisible
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4026,11 +4046,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Spider
-      objectReference: {fileID: 0}
-    - target: {fileID: 389871393893194672, guid: 68be620420ca7834f8acdbbf9231264a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2298585846953404112, guid: 68be620420ca7834f8acdbbf9231264a,
         type: 3}

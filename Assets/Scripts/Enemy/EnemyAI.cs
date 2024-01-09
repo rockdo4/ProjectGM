@@ -30,7 +30,9 @@ public class EnemyAI : LivingObject
     public GameObject[] fanShapePrefabs;
 
     private ObjectPool<FanShape>[] fanShapePools;
+
     private List<FanShape> activeFanShapes = new List<FanShape>();
+    public List<Vector3> fanShapePositions = new List<Vector3>();
 
 
     [Header("곰 페이즈1 공격 패턴")]
@@ -176,6 +178,9 @@ public class EnemyAI : LivingObject
     //private List<GameObject> colliderObjects = new List<GameObject>();
 
     FanShape fanShape = null;
+    public Quaternion additionalRotation;
+    public Quaternion additionalRotationOffset;
+
     private bool isDie;
     private int poolIndex;
 
@@ -391,6 +396,7 @@ public class EnemyAI : LivingObject
         {
             return;
         }
+
         BTRunner.Operate(); // 위치변경
     }
 
@@ -1222,7 +1228,10 @@ public class EnemyAI : LivingObject
     {
         Vector3 directionToMonster = (monsterPosition - fanShapePosition).normalized;
         Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-        Quaternion additionalRotation = Quaternion.identity;
+
+        // 초기화
+        additionalRotation = Quaternion.identity;
+        additionalRotationOffset = Quaternion.identity;
 
         // 식 변경으로 기본값은 180f
 
@@ -1241,7 +1250,12 @@ public class EnemyAI : LivingObject
 
             case 8001003:
                 if (attackPatternType == AttackPatternType.A)
+                {
                     additionalRotation = Quaternion.Euler(0f, 135f, 0f);
+
+                    //Debug.Log(additionalRotation);
+                }
+                    
 
                 else if (attackPatternType == AttackPatternType.B)
                     additionalRotation = Quaternion.Euler(0f, 105f, 0f);
@@ -1291,14 +1305,23 @@ public class EnemyAI : LivingObject
                 break;
         }
 
+        //Debug.Log(additionalRotationOffset);
+
+        //additionalRotationOffset = additionalRotation;
+
+        //Debug.Log(additionalRotationOffset);
+
         return initialRotation * additionalRotation;
     }
 
+
+    
 
     private void ShowMeleeAttackRange(bool show, int enemyType, AttackPatternType AttackPatternType) // 쇼
     {
         Vector3 attackOffset = GetAttackOffset(enemyType, AttackPatternType);
         poolIndex = GetPoolIndexForAttackPatternType(AttackPatternType);
+
 
         if (show)
         {
@@ -1319,6 +1342,13 @@ public class EnemyAI : LivingObject
                 activeFanShapes.Clear(); // 리스트 초기화
             }
 
+            if (fanShapePositions != null)
+            {
+                fanShapePositions.Clear(); // D패턴 리스트 초기화2
+            }
+
+            // additionalRotation = Quaternion.identity; // 에디셔널 로테이션도 초기화
+
             for (int i = 0; i < currentPattern.pattern.Length; i++)
             {
                 if (currentPattern.pattern[i])
@@ -1335,13 +1365,16 @@ public class EnemyAI : LivingObject
                     fanShapeInstance.transform.SetParent(transform, false);
                     fanShapeInstance.transform.position = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
 
+                    fanShapePositions.Add(fanShapeInstance.transform.position);
+
                     fanShapeInstance.transform.rotation = CalculateRotation(enemyType, AttackPatternType, transform.position, fanShapeInstance.transform.position);
 
+                    // 팬쉐이프 참조를 위해 저장 // 수정
+                    additionalRotationOffset = fanShapeInstance.transform.rotation;
 
                     activeFanShapes.Add(fanShapeInstance);
                 }
             }
-
         }
         else
         {
@@ -1970,6 +2003,13 @@ public class EnemyAI : LivingObject
 
     private void CancelAttack()
     {
+        if (!isPreparingAttack && !isAttacking)
+        {
+            return;
+        }
+
+        StopAllCoroutines();
+
         if (activeFanShapes != null)
         {
             foreach (var fanShape in activeFanShapes)
@@ -1981,12 +2021,13 @@ public class EnemyAI : LivingObject
                 }
             }
         }
+
         if (rangeIndicator != null)
         {
             ShowProjectileAttackRange(false);
         }
+
         isPreparingAttack = false;
         isAttacking = false;
-        StopAllCoroutines();
     }
 }

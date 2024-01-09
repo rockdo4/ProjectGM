@@ -31,11 +31,13 @@ public class EnemyEffect : MonoBehaviour
 
     private void Start()
     {
-        if(EffectTypeRA != null)
+        if (EffectTypeRA != null)
         {
             EffectTypeRA.SetActive(false);
         }
         enemyAi = GetComponent<EnemyAI>();
+
+        
     }
 
     private void EffectEnemyType(string pattern)
@@ -50,7 +52,7 @@ public class EnemyEffect : MonoBehaviour
                 {
                     case 8001001:
                         offset += transform.forward * 1f + transform.up * 1f;
-                    break;
+                        break;
 
                     case 8001004:
                         offset = Vector3.zero;
@@ -179,6 +181,20 @@ public class EnemyEffect : MonoBehaviour
     {
         EffectEnemyType("D");
 
+        if (enemyAi.enemyType == 8001004 && EffectTypeD != null)
+        {
+            foreach (Vector3 position in enemyAi.fanShapePositions)
+            {
+                if (EffectTypeD != null)
+                {
+                    GameObject effectInstance = Instantiate(EffectTypeD, position, transform.rotation);
+                    DestroyEffect(effectInstance);
+                }
+            }
+
+            return;
+        }
+
         if (EffectTypeD != null)
         {
             GameObject effectInstance = Instantiate(EffectTypeD, transform.position + offset, transform.rotation);
@@ -225,11 +241,13 @@ public class EnemyEffect : MonoBehaviour
 
         if (particleSystem != null)
         {
+            Debug.Log(particleSystem.main.duration);
+
             yield return new WaitForSeconds(particleSystem.main.duration);
         }
         else
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(2.5f);
         }
 
         effect.SetActive(false);
@@ -249,4 +267,5 @@ public class EnemyEffect : MonoBehaviour
         }
     }
 
+    //
 }

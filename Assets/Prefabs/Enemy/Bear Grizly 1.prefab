@@ -289,6 +289,7 @@ MonoBehaviour:
   - {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3, type: 3}
   - {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3, type: 3}
   - {fileID: 176126186406004836, guid: 9b1a3cf5477b82640ace8331be3555d3, type: 3}
+  fanShapePositions: []
   bearAttackPatternPhaseOne: 0500000001000000020000000300000004000000050000000300000004000000
   bearAttackPatternPhaseTwo: 050000000300000004000000050000000500000003000000040000000300000001000000020000000500000004000000
   alienAttackPatternPhaseOne: 0100000002000000
@@ -298,6 +299,8 @@ MonoBehaviour:
   IntervalTime: 0.15
   wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
   wolfAttackPatternPhaseTwo: 0100000002000000
+  tutorialWolfAttackPatternPhaseOne: 0100000001000000020000000100000002000000
+  tutorialWolfAttackPatternPhaseTwo: 02000000010000000100000001000000
   spiderAttackPatternPhaseOne: 010000000200000003000000
   spiderAttackPatternPhaseTwo: 010000000200000003000000
   dragonAttackPatternPhaseOne: 01000000020000000300000003000000
@@ -381,6 +384,8 @@ MonoBehaviour:
     pattern: 000000000000000100
   - patternName: RangeAttack_D
     pattern: 000000000000000100
+  additionalRotation: {x: 0, y: 0, z: 0, w: 0}
+  additionalRotationOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &5956209694159090163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,7 +481,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 1
+  - IsVisible: 0
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5

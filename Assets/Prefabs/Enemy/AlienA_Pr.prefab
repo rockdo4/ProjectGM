@@ -373,7 +373,7 @@ MonoBehaviour:
     type: 3}
   EffectTypeC: {fileID: 3983184956064993578, guid: a8523a7147a54cd4abebec5c69337c5f,
     type: 3}
-  EffectTypeD: {fileID: 3983184956064993578, guid: a8523a7147a54cd4abebec5c69337c5f,
+  EffectTypeD: {fileID: 5893777448786782354, guid: 8b8fef324d7e5b44db522a035c5f9ada,
     type: 3}
   EffectTypeRA: {fileID: 0}
   EffectTypeRB: {fileID: 0}
@@ -407,15 +407,18 @@ MonoBehaviour:
   - {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433, type: 3}
   - {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433, type: 3}
   - {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433, type: 3}
+  fanShapePositions: []
   bearAttackPatternPhaseOne: 0400000003000000
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
-  alienAttackPatternPhaseOne: 0100000002000000020000000300000004000000
-  alienAttackPatternPhaseTwo: 020000000100000002000000020000000300000004000000
+  alienAttackPatternPhaseOne: 0300000002000000030000000400000004000000
+  alienAttackPatternPhaseTwo: 040000000100000002000000010000000300000004000000
   boarAttackPatternPhaseOne: 08000000
   boarAttackPatternPhaseTwo: 010000000200000003000000
   IntervalTime: 0.15
   wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
   wolfAttackPatternPhaseTwo: 0100000002000000
+  tutorialWolfAttackPatternPhaseOne: 0100000001000000020000000100000002000000
+  tutorialWolfAttackPatternPhaseTwo: 02000000010000000100000001000000
   spiderAttackPatternPhaseOne: 010000000200000003000000
   spiderAttackPatternPhaseTwo: 010000000200000003000000
   dragonAttackPatternPhaseOne: 010000000200000003000000
@@ -437,7 +440,7 @@ MonoBehaviour:
     type: 3}
   AttackPatternTypeBPrefab: {fileID: 4478600404576023960, guid: 1c50f528017682241b179aaa96b72930,
     type: 3}
-  AttackPatternTypeCPrefab: {fileID: 1564119753327051011, guid: 33d91e2babc446e48b15814cbc6e6cee,
+  AttackPatternTypeCPrefab: {fileID: 5164172624734654894, guid: 3d91ae071fbf0f440bccaad24eb9b95d,
     type: 3}
   AttackPatternTypeDPrefab: {fileID: 1652158627671380069, guid: b4c3fa75aeb1aab42a4e480ec30bb433,
     type: 3}
@@ -480,6 +483,8 @@ MonoBehaviour:
     pattern: 000000000000010101
   - patternName: MelleAttack_D
     pattern: 000000000000010101
+  additionalRotation: {x: 0, y: 0, z: 0, w: 0}
+  additionalRotationOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &7664864199940454479
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -917,6 +917,7 @@ MonoBehaviour:
   - {fileID: 1831290539580255820, guid: 9873b76cc3e585648914ba6347b8302e, type: 3}
   - {fileID: 9133502431824390224, guid: 4b36ed13b9b6d45498a509f6ac30cce0, type: 3}
   - {fileID: 1813953856839064042, guid: 7040f4ce47b7c8d44a938a4b413ba979, type: 3}
+  fanShapePositions: []
   bearAttackPatternPhaseOne: 0100000002000000
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
   alienAttackPatternPhaseOne: 0100000002000000
@@ -1003,6 +1004,8 @@ MonoBehaviour:
     pattern: 000000000100000000
   - patternName: RangedAttack_D
     pattern: 000000000100000000
+  additionalRotation: {x: 0, y: 0, z: 0, w: 0}
+  additionalRotationOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &2719082457135078936
 MonoBehaviour:
   m_ObjectHideFlags: 0

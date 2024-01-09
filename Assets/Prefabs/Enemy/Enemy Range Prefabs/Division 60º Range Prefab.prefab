@@ -103,7 +103,10 @@ MonoBehaviour:
   wifiSegments: 1
   centerPoint: {x: 0, y: 0, z: 0}
   sharedMesh: {fileID: 0}
+  detectedPlayer: {fileID: 0}
   enemyAi: {fileID: 0}
+  isplayerInside: 0
+  attackShape: 0
 --- !u!64 &5269414562526136422
 MeshCollider:
   m_ObjectHideFlags: 0

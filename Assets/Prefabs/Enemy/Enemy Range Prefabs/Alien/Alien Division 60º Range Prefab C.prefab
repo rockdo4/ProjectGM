@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8435335056686233173}
   - component: {fileID: 6092326870215987849}
   m_Layer: 0
-  m_Name: "Alien Triangle 60\xBA Range Prefab C"
+  m_Name: "Alien Division 60\xBA Range Prefab C"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99,11 +99,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 5
   angle: 60
-  segments: 1
+  segments: 20
   wifiSegments: 1
   centerPoint: {x: 0, y: 0, z: 0}
   sharedMesh: {fileID: 0}
+  detectedPlayer: {fileID: 0}
   enemyAi: {fileID: 0}
+  isplayerInside: 0
+  attackShape: 3
 --- !u!64 &6092326870215987849
 MeshCollider:
   m_ObjectHideFlags: 0
