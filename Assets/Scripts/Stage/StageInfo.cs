@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StageInfo : MonoBehaviour
 {
+    [Header("BLACK")]
+    [SerializeField]
+    private FadeEffects BLACK;
+
     private Dictionary<int, StageTable.Data> stageTable;
     private Dictionary<int, string> stringTable;
     
@@ -77,7 +80,7 @@ public class StageInfo : MonoBehaviour
         //Button
         startButton.onClick.AddListener(() =>
         {
-            SceneManager.LoadScene(((StageManager.Maps)stageInfo.map_id).ToString());
+            BLACK.FadeOut(((StageManager.Maps)stageInfo.map_id).ToString());
         });
     }
     private void OnDisable()

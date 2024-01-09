@@ -34,9 +34,10 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private GameObject stagePrefab;
 
-    [Header("StageInfo UI")]
-    [SerializeField]
-    private GameObject stageInfo;
+    [Header("Area")]
+    [SerializeField] private GameObject categoryArea;
+    [SerializeField] private GameObject stageArea;
+    [SerializeField] private GameObject stageInfoArea;
 
     private void Awake()
     {
@@ -74,9 +75,10 @@ public class StageManager : MonoBehaviour
             stage.button.onClick.AddListener(() =>
             {
                 PlayerPrefs.SetInt(PrefsKey.stageID, info.Key);
-                if (stageInfo != null)
+                if (stageInfoArea != null)
                 {
-                    stageInfo.SetActive(true);
+                    stageArea.SetActive(false);
+                    stageInfoArea.SetActive(true);
                 }
                 else
                 {
@@ -128,6 +130,27 @@ public class StageManager : MonoBehaviour
             else
             {
                 stage.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (stageInfoArea.activeSelf)
+            {
+                stageInfoArea.SetActive(false);
+                stageArea.SetActive(true);
+            }
+            else if (stageArea.activeSelf)
+            {
+                stageArea.SetActive(false);
+                categoryArea.SetActive(true);
+            }
+            else
+            {
+                BLACK.FadeOut("Title");
             }
         }
     }

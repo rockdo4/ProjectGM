@@ -460,6 +460,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6124175574918561067, guid: ffed74b37fea8e148bd1c6f3890d40ec,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1514042938}
+    - target: {fileID: 7098072260275637425, guid: ffed74b37fea8e148bd1c6f3890d40ec,
+        type: 3}
+      propertyPath: BLACK
+      value: 
+      objectReference: {fileID: 1512372949}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -764,7 +774,9 @@ MonoBehaviour:
   stageContainer: {fileID: 957658380}
   stagePrefab: {fileID: 5839304516577556888, guid: 102159c77489dda4fa993ca35f36016d,
     type: 3}
-  stageInfo: {fileID: 719590017}
+  categoryArea: {fileID: 1862307536}
+  stageArea: {fileID: 1514042938}
+  stageInfoArea: {fileID: 719590017}
 --- !u!82 &646314044
 AudioSource:
   m_ObjectHideFlags: 0
