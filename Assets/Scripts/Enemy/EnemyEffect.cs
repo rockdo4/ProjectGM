@@ -31,7 +31,7 @@ public class EnemyEffect : MonoBehaviour
 
     private void Start()
     {
-        if(EffectTypeRA != null)
+        if (EffectTypeRA != null)
         {
             EffectTypeRA.SetActive(false);
         }
@@ -50,7 +50,7 @@ public class EnemyEffect : MonoBehaviour
                 {
                     case 8001001:
                         offset += transform.forward * 1f + transform.up * 1f;
-                    break;
+                        break;
 
                     case 8001004:
                         offset = Vector3.zero;
@@ -178,6 +178,24 @@ public class EnemyEffect : MonoBehaviour
     public void AttackEffectD()
     {
         EffectEnemyType("D");
+
+        if (enemyAi.enemyType == 8001004 && EffectTypeD != null)
+        {
+            Debug.Log(enemyAi.fanShapePositions);
+
+            foreach (Vector3 position in enemyAi.fanShapePositions)
+            {
+                if (EffectTypeD != null)
+                {
+                    GameObject effectInstance = Instantiate(EffectTypeD, position, transform.rotation);
+                    DestroyEffect(effectInstance);
+                }
+            }
+
+            enemyAi.fanShapePositions.Clear();
+
+            return;
+        }
 
         if (EffectTypeD != null)
         {

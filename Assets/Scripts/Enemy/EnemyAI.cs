@@ -30,7 +30,9 @@ public class EnemyAI : LivingObject
     public GameObject[] fanShapePrefabs;
 
     private ObjectPool<FanShape>[] fanShapePools;
+
     private List<FanShape> activeFanShapes = new List<FanShape>();
+    public List<Vector3> fanShapePositions = new List<Vector3>();
 
 
     [Header("곰 페이즈1 공격 패턴")]
@@ -391,6 +393,7 @@ public class EnemyAI : LivingObject
         {
             return;
         }
+
         BTRunner.Operate(); // 위치변경
     }
 
@@ -1335,13 +1338,14 @@ public class EnemyAI : LivingObject
                     fanShapeInstance.transform.SetParent(transform, false);
                     fanShapeInstance.transform.position = CalculateCellPosition(i, offset, attackOffset, enemyType, AttackPatternType);
 
-                    fanShapeInstance.transform.rotation = CalculateRotation(enemyType, AttackPatternType, transform.position, fanShapeInstance.transform.position);
+                    // 에일리언 D패턴을 위한 리스트에 포지션 추가
+                    fanShapePositions.Add(fanShapeInstance.transform.position);
 
+                    fanShapeInstance.transform.rotation = CalculateRotation(enemyType, AttackPatternType, transform.position, fanShapeInstance.transform.position);
 
                     activeFanShapes.Add(fanShapeInstance);
                 }
             }
-
         }
         else
         {
@@ -1970,6 +1974,13 @@ public class EnemyAI : LivingObject
 
     private void CancelAttack()
     {
+        if (!isPreparingAttack && !isAttacking)
+        {
+            return;
+        }
+
+        StopAllCoroutines();
+
         if (activeFanShapes != null)
         {
             foreach (var fanShape in activeFanShapes)
@@ -1981,12 +1992,13 @@ public class EnemyAI : LivingObject
                 }
             }
         }
+
         if (rangeIndicator != null)
         {
             ShowProjectileAttackRange(false);
         }
+
         isPreparingAttack = false;
         isAttacking = false;
-        StopAllCoroutines();
     }
 }
