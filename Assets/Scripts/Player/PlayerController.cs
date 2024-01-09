@@ -139,7 +139,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            player.Stat.AttackDamage = (player.Stat.AttackDamage == 0) ? 70 : 0;
+            player.Stat.AttackDamage += 50;
             Debug.Log(player.Stat.AttackDamage);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
