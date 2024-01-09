@@ -748,6 +748,7 @@ MonoBehaviour:
   fanShapePrefabs:
   - {fileID: 62629442425054540, guid: 09faef9d342e3a84dbe680ff6289292b, type: 3}
   - {fileID: 107145547354362451, guid: 4fb1d3457f7f0d9469aaa4c1e56a8667, type: 3}
+  fanShapePositions: []
   bearAttackPatternPhaseOne: 0100000002000000
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
   alienAttackPatternPhaseOne: 0100000002000000
@@ -757,6 +758,8 @@ MonoBehaviour:
   IntervalTime: 0.3
   wolfAttackPatternPhaseOne: 010000000100000002000000
   wolfAttackPatternPhaseTwo: 0200000001000000010000000200000001000000
+  tutorialWolfAttackPatternPhaseOne: 0100000001000000020000000100000002000000
+  tutorialWolfAttackPatternPhaseTwo: 02000000010000000100000001000000
   spiderAttackPatternPhaseOne: 010000000200000003000000
   spiderAttackPatternPhaseTwo: 010000000200000003000000
   dragonAttackPatternPhaseOne: 010000000200000003000000
@@ -802,6 +805,8 @@ MonoBehaviour:
     pattern: 000000000100000000
   - patternName: MelleAttack_B
     pattern: 000000000100000000
+  additionalRotation: {x: 0, y: 0, z: 0, w: 0}
+  additionalRotationOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &181647778440717310
 MonoBehaviour:
   m_ObjectHideFlags: 0

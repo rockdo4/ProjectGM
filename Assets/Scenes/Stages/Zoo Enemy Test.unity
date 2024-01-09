@@ -786,9 +786,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bear Grizly 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1505049963761018489, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
+    - target: {fileID: 105006126220715780, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
         type: 3}
-      propertyPath: outlineTargets.Array.data[2].IsVisible
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4691967391105962301, guid: e0f5e895cdf5cab4b98b2a6810d54fb7,
@@ -892,7 +892,7 @@ PrefabInstance:
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
@@ -902,7 +902,7 @@ PrefabInstance:
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
@@ -917,7 +917,7 @@ PrefabInstance:
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7379042720375739373, guid: a8229372b3951054a80a99918e67560e,
         type: 3}
@@ -1134,7 +1134,7 @@ PrefabInstance:
     - target: {fileID: 2986283220750914057, guid: d754abcbb875ca04493862bafef08470,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.73
+      value: -0.06
       objectReference: {fileID: 0}
     - target: {fileID: 2986283220750914057, guid: d754abcbb875ca04493862bafef08470,
         type: 3}
@@ -1144,7 +1144,7 @@ PrefabInstance:
     - target: {fileID: 2986283220750914057, guid: d754abcbb875ca04493862bafef08470,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.3900003
+      value: 16.52
       objectReference: {fileID: 0}
     - target: {fileID: 2986283220750914057, guid: d754abcbb875ca04493862bafef08470,
         type: 3}
@@ -2291,21 +2291,6 @@ PrefabInstance:
       propertyPath: outlineTargets.Array.data[0].IsVisible
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 316072021794067186, guid: 27fb17d2455922844aec615844f2755b,
-        type: 3}
-      propertyPath: alienAttackPatternPhaseOne.Array.data[3]
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 316072021794067186, guid: 27fb17d2455922844aec615844f2755b,
-        type: 3}
-      propertyPath: alienAttackPatternPhaseTwo.Array.data[0]
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 316072021794067186, guid: 27fb17d2455922844aec615844f2755b,
-        type: 3}
-      propertyPath: alienAttackPatternPhaseTwo.Array.data[3]
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 471950779080328446, guid: 27fb17d2455922844aec615844f2755b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2379,6 +2364,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 154015850529795303, guid: 04f59cd8451f38341ad12c2f29980c08,
+        type: 3}
+      propertyPath: outlineTargets.Array.data[1].IsVisible
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6304914700616860230, guid: 04f59cd8451f38341ad12c2f29980c08,
         type: 3}
       propertyPath: m_Name
@@ -2660,7 +2650,7 @@ PrefabInstance:
     - target: {fileID: 2635884456797727361, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.73
+      value: -0.06
       objectReference: {fileID: 0}
     - target: {fileID: 2635884456797727361, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
@@ -2670,7 +2660,7 @@ PrefabInstance:
     - target: {fileID: 2635884456797727361, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15.39
+      value: 28.52
       objectReference: {fileID: 0}
     - target: {fileID: 2635884456797727361, guid: 171fe1e25acf4a149ba01b146b19fc35,
         type: 3}
@@ -4029,6 +4019,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8421173735785800047, guid: 94831c2a2aeba7d4f90b121bd1f396ca,
+        type: 3}
+      propertyPath: outlineTargets.Array.data[1].IsVisible
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4051,11 +4046,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Spider
-      objectReference: {fileID: 0}
-    - target: {fileID: 389871393893194672, guid: 68be620420ca7834f8acdbbf9231264a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2298585846953404112, guid: 68be620420ca7834f8acdbbf9231264a,
         type: 3}

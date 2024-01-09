@@ -178,6 +178,9 @@ public class EnemyAI : LivingObject
     //private List<GameObject> colliderObjects = new List<GameObject>();
 
     FanShape fanShape = null;
+    public Quaternion additionalRotation;
+    public Quaternion additionalRotationOffset;
+
     private bool isDie;
     private int poolIndex;
 
@@ -1225,7 +1228,10 @@ public class EnemyAI : LivingObject
     {
         Vector3 directionToMonster = (monsterPosition - fanShapePosition).normalized;
         Quaternion initialRotation = Quaternion.LookRotation(directionToMonster);
-        Quaternion additionalRotation = Quaternion.identity;
+
+        // 초기화
+        additionalRotation = Quaternion.identity;
+        additionalRotationOffset = Quaternion.identity;
 
         // 식 변경으로 기본값은 180f
 
@@ -1244,7 +1250,12 @@ public class EnemyAI : LivingObject
 
             case 8001003:
                 if (attackPatternType == AttackPatternType.A)
+                {
                     additionalRotation = Quaternion.Euler(0f, 135f, 0f);
+
+                    //Debug.Log(additionalRotation);
+                }
+                    
 
                 else if (attackPatternType == AttackPatternType.B)
                     additionalRotation = Quaternion.Euler(0f, 105f, 0f);
@@ -1294,6 +1305,12 @@ public class EnemyAI : LivingObject
                 break;
         }
 
+        //Debug.Log(additionalRotationOffset);
+
+        //additionalRotationOffset = additionalRotation;
+
+        //Debug.Log(additionalRotationOffset);
+
         return initialRotation * additionalRotation;
     }
 
@@ -1330,6 +1347,8 @@ public class EnemyAI : LivingObject
                 fanShapePositions.Clear(); // D패턴 리스트 초기화2
             }
 
+            // additionalRotation = Quaternion.identity; // 에디셔널 로테이션도 초기화
+
             for (int i = 0; i < currentPattern.pattern.Length; i++)
             {
                 if (currentPattern.pattern[i])
@@ -1349,6 +1368,9 @@ public class EnemyAI : LivingObject
                     fanShapePositions.Add(fanShapeInstance.transform.position);
 
                     fanShapeInstance.transform.rotation = CalculateRotation(enemyType, AttackPatternType, transform.position, fanShapeInstance.transform.position);
+
+                    // 팬쉐이프 참조를 위해 저장 // 수정
+                    additionalRotationOffset = fanShapeInstance.transform.rotation;
 
                     activeFanShapes.Add(fanShapeInstance);
                 }

@@ -384,6 +384,8 @@ MonoBehaviour:
     pattern: 000000000000000100
   - patternName: RangeAttack_D
     pattern: 000000000000000100
+  additionalRotation: {x: 0, y: 0, z: 0, w: 0}
+  additionalRotationOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &5956209694159090163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -479,7 +481,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 1
+  - IsVisible: 0
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5

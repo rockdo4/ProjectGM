@@ -170,6 +170,7 @@ Transform:
   - {fileID: 7378392070745248795}
   - {fileID: 937052815019953169}
   - {fileID: 892469969951784975}
+  - {fileID: 5344681157228331489}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8074644253707970816
@@ -241,6 +242,7 @@ MonoBehaviour:
   - {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe, type: 3}
   - {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe, type: 3}
   - {fileID: 1447846811648923121, guid: cd58d12446aa91f43b65062765bad3fe, type: 3}
+  fanShapePositions: []
   bearAttackPatternPhaseOne: 0100000002000000
   bearAttackPatternPhaseTwo: 0100000002000000030000000200000003000000
   alienAttackPatternPhaseOne: 0100000002000000
@@ -250,6 +252,8 @@ MonoBehaviour:
   IntervalTime: 0.3
   wolfAttackPatternPhaseOne: 010000000200000002000000010000000100000002000000
   wolfAttackPatternPhaseTwo: 07000000080000000100000002000000
+  tutorialWolfAttackPatternPhaseOne: 0100000001000000020000000100000002000000
+  tutorialWolfAttackPatternPhaseTwo: 02000000010000000100000001000000
   spiderAttackPatternPhaseOne: 0200000003000000010000000200000001000000
   spiderAttackPatternPhaseTwo: 0200000003000000020000000100000003000000020000000300000001000000
   dragonAttackPatternPhaseOne: 010000000200000003000000
@@ -326,6 +330,8 @@ MonoBehaviour:
     pattern: 000000000100000000
   - patternName: RangeAttack_D
     pattern: 000000000100000000
+  additionalRotation: {x: 0, y: 0, z: 0, w: 0}
+  additionalRotationOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &4157398534468675736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2834,6 +2840,80 @@ Transform:
   - {fileID: 3018931184119878903}
   m_Father: {fileID: 6321809413717968255}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &303705505083166352
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2298585846953404112}
+    m_Modifications:
+    - target: {fileID: 4571088640042730669, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: m_Name
+      value: EnemyCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.6666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.6666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.9848078
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.17364816
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -180
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0b83dfcb7c943eb4ca8050a4fa50540f, type: 3}
+--- !u!4 &5344681157228331489 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5628063287695478641, guid: 0b83dfcb7c943eb4ca8050a4fa50540f,
+    type: 3}
+  m_PrefabInstance: {fileID: 303705505083166352}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &692207055812069671
 PrefabInstance:
   m_ObjectHideFlags: 0

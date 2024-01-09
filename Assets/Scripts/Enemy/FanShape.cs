@@ -171,16 +171,11 @@ public class FanShape : MonoBehaviour
         if (distanceToPlayer > scaledRadius)
             return false;
 
-        float rotationOffset = 45f; // 오프셋 각도 설정
-        Vector3 rotatedForward = Quaternion.Euler(0, rotationOffset, 0) * transform.forward;
+        Vector3 centerDirection = GetCenterPoint();
+        Vector3 rotatedForward = enemyAi.additionalRotationOffset * centerDirection;
 
-        //Debug.Log(rotatedForward);
         float angleToPlayer = Vector3.Angle(rotatedForward, toPlayer);
-        return angleToPlayer <= angle / 2f;
-
-        //Debug.Log(transform.forward);
-        //float angleToPlayer = Vector3.Angle(transform.forward, toPlayer);
-        //return angleToPlayer <= angle / 2f;
+        return angleToPlayer <= angle / 2f; // 부채꼴이 120도면 중심이 60도
     }
 
     private bool IsPlayerInTriangleArea(Vector3 playerPosition)
@@ -201,7 +196,7 @@ public class FanShape : MonoBehaviour
             return false;
 
         float angleToPlayer = Vector3.Angle(transform.forward, toPlayer);
-        return angleToPlayer <= 90f; // 반원이므로 90도 이내인지 확인
+        return angleToPlayer <= 90f; // 90도 추후
     }
 
 
