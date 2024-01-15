@@ -12,6 +12,6 @@ public class WildTurf : Skill
     {
         Init();
 
-        player.Stat.Defence += Mathf.RoundToInt(player.Stat.Defence * 1.3f);
+        player.Stat.Defence += Mathf.RoundToInt(player.Stat.Defence * 0.3f);
     }
 }
