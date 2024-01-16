@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EffectVirualCameraNoise : EffectBase
+public class EffectCinemachineNoise : EffectBase
 {
     [Header("ÁøÆø")]
     [SerializeField] private float amplitude;

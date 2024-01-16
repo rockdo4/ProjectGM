@@ -237,34 +237,27 @@ public class TouchManager : Singleton<TouchManager>
     }
     public bool UICheck()
     {
-        if (EventSystem.current == null)
+        var eventSystem = EventSystem.current;
+        if (eventSystem == null)
         {
             return false;
         }
 
-        EventSystem eventSystem = EventSystem.current;
-        var result = false;
-#if UNITY_EDITOR
-        if (eventSystem != null && eventSystem.IsPointerOverGameObject())
-        {
-            GameObject ui = eventSystem.currentSelectedGameObject;
-
-            if (ui != null && ui.tag != Tags.ignoreUI)
-            {
-                result = true;
-            }
-        }
+        var isUI = false;
+#if UNITY_EDITOR || UNITY_STANDALONE
+        isUI = eventSystem.IsPointerOverGameObject();
 #elif UNITY_ANDROID || UNITY_IOS
-        if (Input.touchCount > 0 && eventSystem != null && eventSystem.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        isUI = Input.touchCount > 0 && eventSystem.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
+#endif
+        if (isUI)
         {
-            GameObject ui = eventSystem.currentSelectedGameObject;
+            var ui = eventSystem.currentSelectedGameObject;
             if (ui != null && ui.tag != Tags.ignoreUI)
             {
-                result = true;
+                return true;
             }
         }
-#endif
-        return result;
+        return false;
     }
 
     private void OnDisable()

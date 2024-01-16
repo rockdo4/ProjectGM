@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class EffectVignette : EffectBase
+public class EffectVolume : EffectBase
 {
     private Volume volume;
 

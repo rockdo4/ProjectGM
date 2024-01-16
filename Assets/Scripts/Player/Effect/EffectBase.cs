@@ -11,7 +11,7 @@ public abstract class EffectBase : MonoBehaviour
     [SerializeField]
     public float duration;
 
-    public float Timer { get; private set; }
+    public float Timer { get; private set; } = 0f;
     public bool IsPlay { get; protected set; } = false;
 
     [Header("È¿°úÀ½")]
