@@ -87,7 +87,12 @@ public class TutorialManager : MonoBehaviour
             var dialogueText = CsvTableMgr.GetTable<StringTable>().dataTable[dialogueID];
             tutorialText.text = dialogueText;
 
-            if(table[stepKey].dialType == 2)
+            if (table[stepKey].dialType == 1)
+            {
+                StartCoroutine(WaitForSecend());
+            }
+
+            if (table[stepKey].dialType == 2)
             {
                 switch (dialogueType2Count)
                 {
@@ -117,6 +122,17 @@ public class TutorialManager : MonoBehaviour
         {
             Debug.Log("해당 키 값에 대한 데이터가 없습니다.");
         }
+    }
+
+    private IEnumerator WaitForSecend()
+    {
+        Debug.Log("1초");
+
+        touchArea.interactable = false;
+
+        yield return new WaitForSecondsRealtime(1f);
+
+        touchArea.interactable = true;
     }
 
     private IEnumerator WaitForAttackState()
@@ -160,7 +176,7 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("회피 실행완료");
 
         touchArea.interactable = true;
-        blocker.enabled = true;
+        blocker.enabled = true; 
 
         PauseGame();
         NextStep();
