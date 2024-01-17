@@ -132,8 +132,12 @@ public class CreateWeaponPanel : MonoBehaviour, IRenewal
             //Debug.Log("Lack Of Gold");
             return false;
         }
-        // 인벤토리 공간 부족 (추후 추가 필요)
 
+        if (PlayDataManager.data.WeaponInventory.Count > PlayDataManager.weaponsCapacity)
+        {
+            //Debug.Log("Full Of Inventory Count");
+            return false;
+        }
 
         return true;
     }

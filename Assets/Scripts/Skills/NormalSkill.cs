@@ -27,6 +27,7 @@ public class NormalSkill : Skill
             case "체력":
                 player.Stat.HP += Mathf.RoundToInt(skill.value * level);
                 player.HP = player.Stat.HP;
+                InGameManager.Instance.SetHP(player.HP, player.Stat.HP);
                 break;
 
             case "타격점":
