@@ -8,6 +8,10 @@ public class Vampire : Skill
 
     private float timer = 0.0f;
 
+    [Header("ÈíÇ÷ ºñÀ²")]
+    [SerializeField]
+    private float drainValue = 0.03f;
+
     public Vampire(int id, int level)
         : base(id, level)
     {
@@ -25,6 +29,7 @@ public class Vampire : Skill
             return;
         }
         // Player Drain On
+        player.Stat.drainRate = drainValue;
     }
 
     private void Update()

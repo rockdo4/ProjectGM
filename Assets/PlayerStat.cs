@@ -70,7 +70,7 @@ public class PlayerStat : Stat
 
     [Header("피격시 대미지 상쇄 확률")]
     [Range(0f, 1f)]
-    public float blockRate = 0f;
+    public float block = 0f;
 
     [Header("최종 대미지 배율")]
     [Range(0f, 5f)]
@@ -79,6 +79,9 @@ public class PlayerStat : Stat
     [Header("공격 시 회피 포인트 증가 배율")]
     [Range(0f, 1f)]
     public float attackEvadePointRate = 0f;
+
+    [Header("공격 시 흡혈 비율")]
+    public float drainRate = 0f;
 
     public override Attack CreateAttack(LivingObject attacker, LivingObject defender, bool groggy)
     {
@@ -112,6 +115,12 @@ public class PlayerStat : Stat
                 damage = 0;
             }
         }
+
+        if (damage > 0)
+        {
+            player.HP += (int)(damage * player.Stat.drainRate);
+        }
+
         return new Attack((int)damage, critical, groggy);
     }
 }
