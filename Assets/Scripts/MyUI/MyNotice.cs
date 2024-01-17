@@ -51,8 +51,8 @@ public class MyNotice : MonoBehaviour
 
         while (timer < duration) 
         {
-            timer += Time.deltaTime;
-           text.color = Color.Lerp(startColor, Color.clear, timer);
+           timer += Time.deltaTime;
+           text.color = Color.Lerp(startColor, Color.clear, timer / duration);
 
             yield return null;
         }
