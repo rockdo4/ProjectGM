@@ -48,9 +48,6 @@ public class StageManager : MonoBehaviour
 
         PlayDataManager.StageInfoRefresh();
 
-        //next Scene Data
-        PlayerPrefs.DeleteKey(PrefsKey.stageID);
-
         if (stagePrefab == null)
         {
             return;
@@ -74,7 +71,7 @@ public class StageManager : MonoBehaviour
             stage.enemyName.text = stringTable[enemyTable[data.monster_id].name];
             stage.button.onClick.AddListener(() =>
             {
-                PlayerPrefs.SetInt(PrefsKey.stageID, info.Key);
+                TempVariable.stageID = stage.id;
                 if (stageInfoArea != null)
                 {
                     stageArea.SetActive(false);

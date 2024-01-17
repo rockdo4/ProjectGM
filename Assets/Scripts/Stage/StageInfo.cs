@@ -42,15 +42,10 @@ public class StageInfo : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!PlayerPrefs.HasKey(PrefsKey.stageID))
-        {
-            return;
-        }
-
         stageTable ??= CsvTableMgr.GetTable<StageTable>().dataTable;
         stringTable ??= CsvTableMgr.GetTable<StringTable>().dataTable;
 
-        var stageID = PlayerPrefs.GetInt(PrefsKey.stageID);
+        var stageID = TempVariable.stageID;
         var stageInfo = stageTable[stageID];
 
         //Enemy
