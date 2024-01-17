@@ -1,7 +1,6 @@
 using GooglePlayGames;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -74,7 +73,7 @@ public class InGameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        var stageID = PlayerPrefs.GetInt(PrefsKey.stageID);
+        var stageID = TempVariable.stageID;
         var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
 
         if (!stageTable.ContainsKey(stageID))
@@ -108,7 +107,7 @@ public class InGameManager : MonoBehaviour
 
     public void Reward()
     {
-        var stageID = PlayerPrefs.GetInt(PrefsKey.stageID);
+        var stageID = TempVariable.stageID;
         var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
 
         //Material

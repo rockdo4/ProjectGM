@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,7 +17,7 @@ public class GameManager : MonoBehaviour
     private static GameManager m_instance;
 
     public GameObject gameOverUI;
-    public GameObject cancleButton;
+    public GameObject cancelButton;
 
     public static readonly float pauseTimeScale = 0f;
     private float prevTimeScale = 1f;
@@ -68,9 +66,9 @@ public class GameManager : MonoBehaviour
 
     public void GameOver(LivingObject deathObject)
     {
-        if (cancleButton != null)
+        if (cancelButton != null)
         {
-            cancleButton.SetActive(false);
+            cancelButton.SetActive(false);
         }
 
         if (deathObject is Player)

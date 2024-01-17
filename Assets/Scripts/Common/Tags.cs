@@ -8,3 +8,7 @@ public static class PrefsKey
 {
     public static readonly string stageID = "StageID";
 }
+public static class TempVariable
+{
+    public static int stageID = 1101001; // Default
+}

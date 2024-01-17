@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class TakeAttackAndEvade : MonoBehaviour, IAttackable
 {
-    private enum EvadeSuccesss
+    private enum EvadeSuccess
     {
         None, Normal, Just
     }
-    private EvadeSuccesss evade;
+    private EvadeSuccess evade;
     private Player player;
 
     private void Awake()
@@ -28,16 +28,16 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
         EvadeCheck();
         switch (evade)
         {
-            case EvadeSuccesss.None:
+            case EvadeSuccess.None:
                 player.Effects.PlayEffect(PlayerEffectType.Hit);
                 player.IsGroggy = attack.IsGroggy;
                 break;
-            case EvadeSuccesss.Normal:
+            case EvadeSuccess.Normal:
                 player.GetComponent<PlayerController>().LastEvadeState = PlayerController.EvadeState.Normal;
                 player.Effects.PlayEffect(PlayerEffectType.Hit);
                 damage = (int)(damage * player.Stat.evadeDamageRate);
                 break;
-            case EvadeSuccesss.Just:
+            case EvadeSuccess.Just:
                 player.GetComponent<PlayerController>().LastEvadeState = PlayerController.EvadeState.Just;
                 player.Effects.PlayEffect(PlayerEffectType.JustEvade);
                 damage = 0;
@@ -68,21 +68,21 @@ public class TakeAttackAndEvade : MonoBehaviour, IAttackable
     {
         if (player.GetComponent<PlayerController>().CurrentState != PlayerController.State.Evade)
         {
-            evade = EvadeSuccesss.None;
+            evade = EvadeSuccess.None;
             return;
         }
 
         evade = player.evadeTimer switch
         {
-            float x when (x < player.Stat.justEvadeTime) => EvadeSuccesss.Just,
-            float x when (x >= player.Stat.justEvadeTime && x < player.Stat.evadeTime) => EvadeSuccesss.Normal,
-            _ => EvadeSuccesss.None
+            float x when (x < player.Stat.justEvadeTime) => EvadeSuccess.Just,
+            float x when (x >= player.Stat.justEvadeTime && x < player.Stat.evadeTime) => EvadeSuccess.Normal,
+            _ => EvadeSuccess.None
         };
 
         player.evadePoint += evade switch
         {
-            EvadeSuccesss.Just => player.Stat.justEvadePoint,
-            EvadeSuccesss.Normal => player.Stat.evadePoint,
+            EvadeSuccess.Just => player.Stat.justEvadePoint,
+            EvadeSuccess.Normal => player.Stat.evadePoint,
             _ => player.Stat.hitEvadePoint
         };
 
