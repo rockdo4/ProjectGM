@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,7 +8,7 @@ public class TouchManager : Singleton<TouchManager>
     {
         None, Left, Right, Up, Down
     }
-    public SwipeDirection swipeDirection = SwipeDirection.None;
+    public SwipeDirection SwipeDir { get; private set; } = SwipeDirection.None;
     public bool Taped { get; private set; }
     public bool Holded { get; private set; }
     public bool Swiped { get; private set; }
@@ -28,17 +29,13 @@ public class TouchManager : Singleton<TouchManager>
     private float startTime;
 
     #region Events
-    public delegate void OnSwipe();
-    public event OnSwipe SwipeListeners;
+    public Action SwipeListeners;
 
-    public delegate void OnTap();
-    public event OnTap TapListeners;
+    public Action TapListeners;
 
-    public delegate void OnHold();
-    public event OnHold HoldListeners;
+    public Action HoldListeners;
 
-    public delegate void HoldEnd();
-    public event HoldEnd HoldEndListeners;
+    public Action HoldEndListeners;
     #endregion
 
     private float screenDPI;
@@ -108,7 +105,6 @@ public class TouchManager : Singleton<TouchManager>
                     SwipeListeners();
                 }
             }
-
         }
         else if (Input.GetMouseButtonUp(0))
         {
@@ -118,11 +114,6 @@ public class TouchManager : Singleton<TouchManager>
             if (HoldEndListeners != null)
             {
                 HoldEndListeners();
-            }
-
-            if (TapListeners != null)
-            {
-                TapListeners();
             }
             return;
         }
@@ -215,22 +206,22 @@ public class TouchManager : Singleton<TouchManager>
         { // Horizontal
             if (swipe.x > 0)
             {
-                swipeDirection = SwipeDirection.Right;
+                SwipeDir = SwipeDirection.Right;
             }
             else
             {
-                swipeDirection = SwipeDirection.Left;
+                SwipeDir = SwipeDirection.Left;
             }
         }
         else
         { // Vertical
             if (swipe.y > 0)
             {
-                swipeDirection = SwipeDirection.Up;
+                SwipeDir = SwipeDirection.Up;
             }
             else
             {
-                swipeDirection = SwipeDirection.Down;
+                SwipeDir = SwipeDirection.Down;
             }
         }
         Swiped = true;

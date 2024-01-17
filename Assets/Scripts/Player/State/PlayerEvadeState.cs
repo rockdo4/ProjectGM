@@ -20,7 +20,7 @@ public class PlayerEvadeState : PlayerStateBase
 
         controller.MoveWeaponPosition(PlayerController.WeaponPosition.Wing);
         controller.player.evadeTimer = 0f;
-        direction = TouchManager.Instance.swipeDirection switch
+        direction = TouchManager.Instance.SwipeDir switch
         {
             TouchManager.SwipeDirection.Up => Vector3.forward,
             TouchManager.SwipeDirection.Down => Vector3.back,
@@ -29,7 +29,7 @@ public class PlayerEvadeState : PlayerStateBase
             _ => Vector3.zero
         };
 
-        distance = TouchManager.Instance.swipeDirection switch
+        distance = TouchManager.Instance.SwipeDir switch
         {
             TouchManager.SwipeDirection.Up => controller.player.Stat.frontBackEvadeDistance,
             TouchManager.SwipeDirection.Down => controller.player.Stat.frontBackEvadeDistance,
