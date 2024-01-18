@@ -3,19 +3,24 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "IconSO")]
 public class IconSO : ScriptableObject
 {
-    [Header("재료 ID")]
-    public int[] ID;
+    [System.Serializable]
+    public struct IconSOInfo
+    {
+        public int ID;
+        public Sprite IMAGE;
+    }
 
-    [Header("이미지")]
-    public Sprite[] IMAGE;
+    [Header("ID / IMAGE")]
+    [SerializeField]
+    private IconSOInfo[] ARRAY;
 
     public Sprite GetSprite(int id)
     {
-        for (int i = 0; i < ID.Length; i++)
+        for (int i = 0; i < ARRAY.Length; i++)
         {
-            if (ID[i] == id)
+            if (ARRAY[i].ID == id)
             {
-                return IMAGE[i];
+                return ARRAY[i].IMAGE;
             }
         }
         return null;

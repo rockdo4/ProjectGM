@@ -12,40 +12,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6898fb0580f8e344398a677fe9a04bdf, type: 3}
   m_Name: Armor Icon SO
   m_EditorClassIdentifier: 
-  ID: 8d110300f111030055120300b91203001d13030075150300d91503003d160300a1160300051703005d190300c1190300251a0300891a0300ed1a0300451d0300a91d03000d1e0300711e0300d51e03002d21030091210300f521030059220300bd2203001525030079250300dd25030041260300a5260300fd28030061290300c5290300292a03008d2a0300
-  IMAGE:
-  - {fileID: 21300000, guid: a10523550ecbde042ad215c00e4a0524, type: 3}
-  - {fileID: 21300000, guid: 19e9bf15517368f4182df25162b9b5ed, type: 3}
-  - {fileID: 21300000, guid: 61292bc4f61b8f742a617f440a66c5db, type: 3}
-  - {fileID: 21300000, guid: 0d01640b8782ef34dbdd66d35c398f4f, type: 3}
-  - {fileID: 21300000, guid: 95006b7bcb3a8ef4980b06b3ec13c3d4, type: 3}
-  - {fileID: 21300000, guid: 4e31f2f548637714ca35706dabd3c516, type: 3}
-  - {fileID: 21300000, guid: fb2b2e89accd59b41905c471deeb509c, type: 3}
-  - {fileID: 21300000, guid: 020d6306be6312d4c937f28c29555460, type: 3}
-  - {fileID: 21300000, guid: 550af0f5840d20143a0384f5d7f97358, type: 3}
-  - {fileID: 21300000, guid: 190745da72d801140bb460c5046317a6, type: 3}
-  - {fileID: 21300000, guid: 48ea241edf1bf934a96091d6ed6abc27, type: 3}
-  - {fileID: 21300000, guid: ca8c6e2553d498d499606ecfc1a21e82, type: 3}
-  - {fileID: 21300000, guid: fb4dd202dc5982047bb8742de9e987cd, type: 3}
-  - {fileID: 21300000, guid: a53c898328d94af469cb71812c1efa92, type: 3}
-  - {fileID: 21300000, guid: edbe0dc15247dbd4292bc6b2f807008c, type: 3}
-  - {fileID: 21300000, guid: 453fb82b8ba778446bf9789775ed68c1, type: 3}
-  - {fileID: 21300000, guid: 93c828f0f0d089348a52d1f680cad291, type: 3}
-  - {fileID: 21300000, guid: 986953eb6524d29429388d0bbc39a97f, type: 3}
-  - {fileID: 21300000, guid: 4ea57a5f92ef6cf489bbec47b947144c, type: 3}
-  - {fileID: 21300000, guid: c20c174e08c56ee4b9e4bd7899fb9f9e, type: 3}
-  - {fileID: 21300000, guid: 8313a1bd81b605d4e8712a003c7b08a8, type: 3}
-  - {fileID: 21300000, guid: 41654c9b2535f534da1cf64bc5d99b5f, type: 3}
-  - {fileID: 21300000, guid: edb06e6b8a0f6b843ad10e3c77314d7b, type: 3}
-  - {fileID: 21300000, guid: d8c066d90d6fd0743b6c32245063104f, type: 3}
-  - {fileID: 21300000, guid: 701bec40a59cea54caaaeeb84fff28ee, type: 3}
-  - {fileID: 21300000, guid: f0a438e46a7e0b64f9f7bb286ff4403f, type: 3}
-  - {fileID: 21300000, guid: b83ad62fe79586c47bdc56adf9d10c76, type: 3}
-  - {fileID: 21300000, guid: a75690bb358b2ea4697fe3d332188164, type: 3}
-  - {fileID: 21300000, guid: ec7cce4834b1830499dc1dce41ef197d, type: 3}
-  - {fileID: 21300000, guid: 9c5fd450917eb2346ad52e016dcefb4f, type: 3}
-  - {fileID: 21300000, guid: 4ea210cc362fdaf4cae7cd9ebffd211a, type: 3}
-  - {fileID: 21300000, guid: 4d2b89a863b39284bbda8ceecdefdc54, type: 3}
-  - {fileID: 21300000, guid: c5e679b33ab072645bde1d4f1fa98a6f, type: 3}
-  - {fileID: 21300000, guid: 49d1102b1089e914fbff2695860fccef, type: 3}
-  - {fileID: 21300000, guid: 21cbc87ad2bec494d90f726ff14dc644, type: 3}
+  ARRAY:
+  - ID: 201101
+    IMAGE: {fileID: 21300000, guid: a10523550ecbde042ad215c00e4a0524, type: 3}
+  - ID: 201201
+    IMAGE: {fileID: 21300000, guid: 19e9bf15517368f4182df25162b9b5ed, type: 3}
+  - ID: 201301
+    IMAGE: {fileID: 21300000, guid: 61292bc4f61b8f742a617f440a66c5db, type: 3}
+  - ID: 201401
+    IMAGE: {fileID: 21300000, guid: 0d01640b8782ef34dbdd66d35c398f4f, type: 3}
+  - ID: 201501
+    IMAGE: {fileID: 21300000, guid: 95006b7bcb3a8ef4980b06b3ec13c3d4, type: 3}
+  - ID: 202101
+    IMAGE: {fileID: 21300000, guid: 4e31f2f548637714ca35706dabd3c516, type: 3}
+  - ID: 202201
+    IMAGE: {fileID: 21300000, guid: fb2b2e89accd59b41905c471deeb509c, type: 3}
+  - ID: 202301
+    IMAGE: {fileID: 21300000, guid: 020d6306be6312d4c937f28c29555460, type: 3}
+  - ID: 202401
+    IMAGE: {fileID: 21300000, guid: 550af0f5840d20143a0384f5d7f97358, type: 3}
+  - ID: 202501
+    IMAGE: {fileID: 21300000, guid: 190745da72d801140bb460c5046317a6, type: 3}
+  - ID: 203101
+    IMAGE: {fileID: 21300000, guid: 48ea241edf1bf934a96091d6ed6abc27, type: 3}
+  - ID: 203201
+    IMAGE: {fileID: 21300000, guid: ca8c6e2553d498d499606ecfc1a21e82, type: 3}
+  - ID: 203301
+    IMAGE: {fileID: 21300000, guid: fb4dd202dc5982047bb8742de9e987cd, type: 3}
+  - ID: 203401
+    IMAGE: {fileID: 21300000, guid: a53c898328d94af469cb71812c1efa92, type: 3}
+  - ID: 203501
+    IMAGE: {fileID: 21300000, guid: edbe0dc15247dbd4292bc6b2f807008c, type: 3}
+  - ID: 204101
+    IMAGE: {fileID: 21300000, guid: 453fb82b8ba778446bf9789775ed68c1, type: 3}
+  - ID: 204201
+    IMAGE: {fileID: 21300000, guid: 93c828f0f0d089348a52d1f680cad291, type: 3}
+  - ID: 204301
+    IMAGE: {fileID: 21300000, guid: 986953eb6524d29429388d0bbc39a97f, type: 3}
+  - ID: 204401
+    IMAGE: {fileID: 21300000, guid: 4ea57a5f92ef6cf489bbec47b947144c, type: 3}
+  - ID: 204501
+    IMAGE: {fileID: 21300000, guid: c20c174e08c56ee4b9e4bd7899fb9f9e, type: 3}
+  - ID: 205101
+    IMAGE: {fileID: 21300000, guid: 8313a1bd81b605d4e8712a003c7b08a8, type: 3}
+  - ID: 205201
+    IMAGE: {fileID: 21300000, guid: 41654c9b2535f534da1cf64bc5d99b5f, type: 3}
+  - ID: 205301
+    IMAGE: {fileID: 21300000, guid: edb06e6b8a0f6b843ad10e3c77314d7b, type: 3}
+  - ID: 205401
+    IMAGE: {fileID: 21300000, guid: d8c066d90d6fd0743b6c32245063104f, type: 3}
+  - ID: 205501
+    IMAGE: {fileID: 21300000, guid: 701bec40a59cea54caaaeeb84fff28ee, type: 3}
+  - ID: 206101
+    IMAGE: {fileID: 21300000, guid: f0a438e46a7e0b64f9f7bb286ff4403f, type: 3}
+  - ID: 206201
+    IMAGE: {fileID: 21300000, guid: b83ad62fe79586c47bdc56adf9d10c76, type: 3}
+  - ID: 206301
+    IMAGE: {fileID: 21300000, guid: a75690bb358b2ea4697fe3d332188164, type: 3}
+  - ID: 206401
+    IMAGE: {fileID: 21300000, guid: ec7cce4834b1830499dc1dce41ef197d, type: 3}
+  - ID: 206501
+    IMAGE: {fileID: 21300000, guid: 9c5fd450917eb2346ad52e016dcefb4f, type: 3}
+  - ID: 207101
+    IMAGE: {fileID: 21300000, guid: 4ea210cc362fdaf4cae7cd9ebffd211a, type: 3}
+  - ID: 207201
+    IMAGE: {fileID: 21300000, guid: 4d2b89a863b39284bbda8ceecdefdc54, type: 3}
+  - ID: 207301
+    IMAGE: {fileID: 21300000, guid: c5e679b33ab072645bde1d4f1fa98a6f, type: 3}
+  - ID: 207401
+    IMAGE: {fileID: 21300000, guid: 49d1102b1089e914fbff2695860fccef, type: 3}
+  - ID: 207501
+    IMAGE: {fileID: 21300000, guid: 21cbc87ad2bec494d90f726ff14dc644, type: 3}
