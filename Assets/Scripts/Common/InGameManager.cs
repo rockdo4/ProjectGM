@@ -75,16 +75,11 @@ public class InGameManager : MonoBehaviour
 
         var stageID = TempVariable.stageID;
         var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
-
-        if (!stageTable.ContainsKey(stageID))
-        {
-            stageID = 1101001; //default;
-            Debug.LogWarning("Not Found StageInfo!");
-        }
         stageData = stageTable[stageID];
 
         InitPlayer();
         InitEnemy();
+
         SetTimer(stageData.time_limit);
     }
 
@@ -133,6 +128,7 @@ public class InGameManager : MonoBehaviour
             itemDic.Add(stageData.clear5, stageData.clear5_count);
         }
 
+        //Material
         foreach (var mat in itemDic)
         {
             PlayDataManager.IncreaseMat(mat.Key, mat.Value);

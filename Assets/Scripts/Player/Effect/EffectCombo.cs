@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EffectCombo : EffectBase
@@ -17,7 +16,6 @@ public class EffectCombo : EffectBase
     protected override void Update()
     {
         //Not Use baseUpdate
-        return;
     }
 
     public override void Init(Transform targetTransform = null)

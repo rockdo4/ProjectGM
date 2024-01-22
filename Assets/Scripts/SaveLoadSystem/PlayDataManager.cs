@@ -677,16 +677,14 @@ public static class PlayDataManager
 
     public static void StageUnlock(int id)
     {
-        var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
         var unlockList = data.UnlockInfo;
-
-        //이미 클리어 했으면 스킵
-        var unlock = unlockList.Find(x => x.id == id);
-        if (unlock.cleared)
+        var unlock = unlockList.Find(x => x.id == id && !x.cleared);
+        if (unlock == null)
         {
             return;
         }
 
+        var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
         foreach (var stage in stageTable)
         {
             if (stage.Value.unlock != id)
@@ -702,25 +700,22 @@ public static class PlayDataManager
     }
 
     public static void StageInfoRefresh()
-    {
-        //스테이지가 추가/제거 됐는지 확인
+    { //스테이지 테이블 갱신
         var stageTable = CsvTableMgr.GetTable<StageTable>().dataTable;
         var unlockList = data.UnlockInfo;
 
         foreach (var stage in stageTable)
         {
-            //데이터가 있는지 체크
             var unlock = unlockList.Find((x) => x.id == stage.Key);
             if (unlock != null)
             {
                 continue;
             }
 
-            //0보다 작으면 자동 해금
-            var newUnlock = new Unlock(stage.Key, stage.Value.unlock < 0);
+            
+            var newUnlock = new Unlock(stage.Key, stage.Value.unlock <= 0);
             if (!newUnlock.unlocked)
             {
-                //해금 조건이 이미 클리어가 되어있는가
                 var cleared = unlockList.Find(x => x.id == stage.Value.unlock && x.cleared);
                 newUnlock.unlocked = cleared != null;
             }

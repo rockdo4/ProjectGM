@@ -1,6 +1,5 @@
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
-using System;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;

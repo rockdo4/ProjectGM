@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
     public void Win(EnemyAI enemy)
     {    
         Pause(true);
+        gameOverUI.SetActive(false);
         InGameManager.Instance.Reward();
     }
 
