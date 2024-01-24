@@ -163,42 +163,25 @@ public class UpgradeEquipPanel : MonoBehaviour, IRenewal
 
         var ct = CsvTableMgr.GetTable<CraftTable>().dataTable;
 
-        switch (type)
+        Equip newItem = type switch
         {
-            case Equip.EquipType.Weapon:
-                {
-                    var weapon = new Weapon(item.id + 1);
-                    PlayDataManager.Purchase(ct[item.id + 1].gold);
-                    PlayDataManager.DecreaseMat(ct[item.id + 1].lvup_module, ct[item.id + 1].lvup_module_req);
-                    if (item.isEquip)
-                    {
-                        PlayDataManager.WearItem(weapon);
-                    }
-                    PlayDataManager.data.WeaponInventory.Remove(item as Weapon);
-                    PlayDataManager.AddItem(weapon);
-                    PlayDataManager.Save();
+            Equip.EquipType.Weapon => new Weapon(item.id + 1),
+            Equip.EquipType.Armor => new Armor(item.id + 1),
 
-                    item = weapon;
-                }
-                break;
+            _ => null
+        };
 
-            case Equip.EquipType.Armor:
-                {
-                    var armor = new Armor(item.id + 1);
-                    PlayDataManager.Purchase(ct[item.id + 1].gold);
-                    PlayDataManager.DecreaseMat(ct[item.id + 1].lvup_module, ct[item.id + 1].lvup_module_req);
-                    if (item.isEquip)
-                    {
-                        PlayDataManager.WearItem(armor);
-                    }
-                    PlayDataManager.data.ArmorInventory.Remove(item as Armor);
-                    PlayDataManager.AddItem(armor);
-                    PlayDataManager.Save();
-
-                    item = armor;
-                }
-                break;
+        PlayDataManager.Purchase(ct[item.id + 1].gold);
+        PlayDataManager.DecreaseMat(ct[item.id + 1].lvup_module, ct[item.id + 1].lvup_module_req);
+        if (item.isEquip)
+        {
+            PlayDataManager.WearItem(newItem);
         }
+        PlayDataManager.RemoveItem(item);
+        PlayDataManager.AddItem(newItem);
+        PlayDataManager.Save();
+
+        item = newItem;
 
         upgradeParticle.Play();
 

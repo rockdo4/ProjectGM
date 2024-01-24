@@ -449,6 +449,24 @@ public static class PlayDataManager
         AddGold(table[item.id].sellgold * count);
     }
 
+    public static void RemoveItem(Equip item)
+    {
+        switch (item.type)
+        {
+            case Equip.EquipType.None:
+                break;
+
+            case Equip.EquipType.Weapon:
+                data.WeaponInventory.Remove(item as Weapon);
+                break;
+
+            case Equip.EquipType.Armor:
+                data.ArmorInventory.Remove(item as Armor);
+                break;
+        }
+        Save();
+    }
+
     public static bool IsExistItem(SkillCode item)
     {
         return (item != null && data.CodeInventory.Contains(item));
@@ -469,6 +487,23 @@ public static class PlayDataManager
         return data.MatInventory.Find(x => x.id == id);
     }
 
+    public static void AddItem(Equip item)
+    {
+        switch (item.type)
+        {
+            case Equip.EquipType.None:
+                break;
+
+            case Equip.EquipType.Weapon:
+                AddItem(item as Weapon);
+                break;
+
+            case Equip.EquipType.Armor:
+                AddItem(item as Armor);
+                break;
+        }
+    }
+
     public static void AddItem(Weapon weapon)
     {
         if (weapon == null || data.WeaponInventory.Count >= weaponsCapacity)
@@ -477,6 +512,7 @@ public static class PlayDataManager
         }
 
         data.WeaponInventory.Add(weapon);
+        Save();
     }
 
     public static void AddItem(Armor armor)
@@ -487,6 +523,7 @@ public static class PlayDataManager
         }
 
         data.ArmorInventory.Add(armor);
+        Save();
     }
 
     public static int GetSocket()
