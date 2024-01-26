@@ -28,21 +28,29 @@ public class PlayerEffects : MonoBehaviour
     private class EffectInfo
     {
         public PlayerEffectType effectType;
-        public EffectBase[] effects;
+        public GameObject[] newEffects;
+        public List<EffectBase> copyEffects = new List<EffectBase>();
     }
 
     [Header("¿Ã∆Â∆Æ µÓ∑œ")]
     [SerializeField]
     private List<EffectInfo> effectInfos = null;
+    [Header("Effect Transform")]
+    [SerializeField]
+    private Transform targetTransform;
 
     private void Start()
     {
+        var audio = GetComponent<AudioSource>();
         foreach(var info in effectInfos)
         {
-            foreach(var effect in info.effects)
+            foreach(var newEffect in info.newEffects)
             {
+                var effect = Instantiate(newEffect, targetTransform).GetComponent<EffectBase>();
                 effect.Init(transform);
+                effect.SetAudio(audio);
                 effect.gameObject.SetActive(false);
+                info.copyEffects.Add(effect);
             }
         }
     }
@@ -58,7 +66,7 @@ public class PlayerEffects : MonoBehaviour
         {
             return;
         }
-        foreach(var effect in effectInfo.effects)
+        foreach(var effect in effectInfo.copyEffects)
         {
             effect.PlayStart(direction);
         }
@@ -75,7 +83,7 @@ public class PlayerEffects : MonoBehaviour
         {
             return;
         }
-        foreach (var effect in effectInfo.effects)
+        foreach (var effect in effectInfo.copyEffects)
         {
             effect.PlayEnd();
         }

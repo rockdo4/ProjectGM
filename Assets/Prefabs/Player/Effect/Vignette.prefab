@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1208720272600144329
+--- !u!1 &7938091637776984621
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,44 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2616169893505202667}
-  - component: {fileID: 1725046670735061160}
+  - component: {fileID: 6613595629659103750}
+  - component: {fileID: 2104091785902375123}
   m_Layer: 0
-  m_Name: SlowMotion
+  m_Name: Vignette
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2616169893505202667
+--- !u!4 &6613595629659103750
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1208720272600144329}
+  m_GameObject: {fileID: 7938091637776984621}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 270.06, y: 811.65686, z: -167.16833}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -13, y: 0, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1725046670735061160
+--- !u!114 &2104091785902375123
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1208720272600144329}
+  m_GameObject: {fileID: 7938091637776984621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bce1039ba9139e344830605ab0ba767e, type: 3}
+  m_Script: {fileID: 11500000, guid: f5bf0d367bf53b641927cad602c2c368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: -3165942800488051908, guid: 9d781efda23a6104596e3475d9ce73e3,
+    type: 2}
   duration: 1
-  timeScaleValue: 0.5
+  audioClips: []
+  playMode: 0
