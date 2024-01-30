@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6898fb0580f8e344398a677fe9a04bdf, type: 3}
   m_Name: SkillCode Icon SO
   m_EditorClassIdentifier: 
-  ID: 010000000200000003000000
-  IMAGE:
-  - {fileID: 21300000, guid: a936fda618d6b984aae3d04417797631, type: 3}
-  - {fileID: 21300000, guid: b88c1edb817576e4f950c98fe31d923b, type: 3}
-  - {fileID: 21300000, guid: 6dfe3f8b506f4ca449ee70d95e1eaab4, type: 3}
+  ARRAY:
+  - ID: 1
+    IMAGE: {fileID: 21300000, guid: a936fda618d6b984aae3d04417797631, type: 3}
+  - ID: 2
+    IMAGE: {fileID: 21300000, guid: b88c1edb817576e4f950c98fe31d923b, type: 3}
+  - ID: 3
+    IMAGE: {fileID: 21300000, guid: 6dfe3f8b506f4ca449ee70d95e1eaab4, type: 3}
