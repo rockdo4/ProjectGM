@@ -26,6 +26,7 @@ public class PlayerSuperAttackState : PlayerStateBase
         if (!isPlay && animator.GetCurrentAnimatorStateInfo(0).IsName(triggerName))
         {
             isPlay = true;
+            controller.player.Enemy.GetComponent<EnemyAI>().grogyTimer = animator.GetCurrentAnimatorClipInfo(0)[0].clip.length;
         }
         if (!isPlay)
         {
@@ -43,7 +44,6 @@ public class PlayerSuperAttackState : PlayerStateBase
             case Player.AttackState.AfterEnd:
                 break;
             case Player.AttackState.End:
-                controller.player.Enemy.IsGroggy = false;
                 controller.player.GroggyAttack = false;
                 controller.SetState(PlayerController.State.Idle);
                 break;

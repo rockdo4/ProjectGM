@@ -170,7 +170,7 @@ public class EnemyAI : LivingObject
     private bool isPreparingAttack = false;
 
     private int attackIndex = -1;
-    private float grogyTimer = 5f;
+    public float grogyTimer = 5f;
 
     public bool[] attackGrid = new bool[9];
     public List<AttackPattern> savedPatterns = new List<AttackPattern>();
@@ -425,7 +425,6 @@ public class EnemyAI : LivingObject
         if (IsGroggy)
         {
             grogyTimer -= Time.deltaTime;
-
             IsGroggy = true;
 
             if (outlineComponent != null)
