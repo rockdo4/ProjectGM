@@ -130,7 +130,7 @@ public class CreateArmorPanel : MonoBehaviour, IRenewal
 
         PlayDataManager.Purchase(ct[item.id].gold);
         PlayDataManager.DecreaseMat(ct[item.id].mf_module, ct[item.id].mf_module_req);
-        PlayDataManager.data.ArmorInventory.Add(armor);
+        PlayDataManager.AddItem(armor);
         PlayDataManager.Save();
 
         if (InventoryManager.Instance != null)
